@@ -1,6 +1,6 @@
 // Zentrale Angaben zur Marke. Platzhalter in eckigen Klammern vor dem Livegang ersetzen.
 export const site = {
-  name: '[NAME]',
+  name: 'Platz Kompass', // Arbeitsname, wird später geändert
   // [DOMAIN]: muss eine gültige Adresse sein, deshalb hier ein Ersatzwert.
   url: 'https://www.domain-eintragen.de',
   beschreibung:

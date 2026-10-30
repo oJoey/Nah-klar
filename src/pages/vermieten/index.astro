@@ -160,9 +160,9 @@ const nachfrageLink = link('nachfrage') ?? link('platzAnbieten');
     </section>
   )}
 
-  <section class="abschnitt">
+  <section class="abschnitt abschnitt-dunkel">
     <div class="wrap">
-      <div class="karte hoefe">
+      <div class="hoefe">
         <span class="symbol-flaeche"><Icon name="hof" /></span>
         <div>
           <h2>Sie haben einen Hof oder eine Scheune?</h2>
@@ -205,7 +205,7 @@ const nachfrageLink = link('nachfrage') ?? link('platzAnbieten');
   .service { display: grid; gap: 1rem; max-width: 50rem; }
   .service h2 { font-size: clamp(1.6rem, 4vw, 2.25rem); }
   .foto-liste { list-style: none; counter-reset: foto; padding: 0; display: grid; gap: 0.75rem; margin: 1.25rem 0; }
-  .foto-liste li { counter-increment: foto; display: flex; align-items: center; gap: 1rem; background: var(--flaeche); border-radius: var(--r); padding: 1rem 1.25rem; }
+  .foto-liste li { counter-increment: foto; display: flex; align-items: center; gap: 1rem; background: var(--karte); box-shadow: var(--schatten); border-radius: var(--r); padding: 1rem 1.25rem; }
   .foto-liste li::before { content: counter(foto); display: grid; place-items: center; flex: none; width: 2.25rem; height: 2.25rem; border-radius: 50%; background: var(--blau); color: #fff; font-weight: 700; }
   .hoefe { display: grid; gap: 0.5rem; max-width: 50rem; margin-inline: auto; }
   .hoefe h2 { font-size: clamp(1.6rem, 4vw, 2.25rem); }

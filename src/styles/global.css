@@ -1,18 +1,23 @@
 /* Gestaltung: ruhige Flächen statt Kästen, Hierarchie über Größe, Gewicht und Weißraum. */
 :root {
-  --text: #1d1d1f;
-  --text-2: #4f4f55;
-  --blau: #0066cc;
-  --blau-dunkel: #004f9e;
-  --blau-hell: #e8f1fb;
-  --flaeche: #ffffff;
-  --flaeche-2: #f5f5f7;
-  --linie: #d2d2d7;
-  --rand-feld: #86868b;
-  --akzent: #f5a524;
-  --akzent-hell: #fff4e0;
-  --akzent-text: #8a4500;
-  --fokus: #0066cc;
+  /* Farbwelt „Kompass“: Marineblau als Anker, Kobalt für Aktionen, Messing als warmer Akzent, Papier und Sand als Flächen */
+  --text: #13213a;
+  --text-2: #4a5466;
+  --blau: #1e4db7;
+  --blau-dunkel: #163a8c;
+  --blau-hell: #e7eefb;
+  --marine: #0f2340;
+  --marine-text: #c9d3e6;
+  --flaeche: #fbf9f5;
+  --flaeche-2: #f3eee4;
+  --karte: #ffffff;
+  --linie: #e2dccf;
+  --rand-feld: #8c8577;
+  --akzent: #d99a2b;
+  --akzent-hell: #fcf0da;
+  --akzent-text: #8a5200;
+  --messing-hell: #f2b54a;
+  --fokus: #1e4db7;
 
   --r: 18px;
   --r-gross: 28px;
@@ -21,6 +26,7 @@
   --rand-seite: 1rem;
   --abstand: clamp(3.5rem, 9vw, 6.5rem);
   --kopf-hoehe: 4rem;
+  --schatten: 0 1px 2px rgb(19 33 58 / 0.05), 0 8px 24px rgb(19 33 58 / 0.06);
 }
 @media (min-width: 48rem) { :root { --rand-seite: 2rem; } }
 
@@ -104,11 +110,20 @@ ul, ol { padding-left: 1.25rem; }
 
 /* Raster und Flächen (Kacheln ohne Rahmen, nur Fläche) */
 .raster { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr)); list-style: none; padding: 0; margin: 0; }
-.karte { background: var(--flaeche-2); border-radius: var(--r-gross); padding: clamp(1.5rem, 3vw, 2rem); }
-.abschnitt-grau .karte, .abschnitt-blau .karte { background: var(--flaeche); }
+.karte { background: var(--karte); border: 1px solid var(--linie); border-radius: var(--r-gross); padding: clamp(1.5rem, 3vw, 2rem); }
+.abschnitt-grau .karte, .abschnitt-blau .karte { border-color: transparent; box-shadow: var(--schatten); }
 .karte h3 { margin-bottom: 0.5rem; }
 .karte p:last-child { margin-bottom: 0; }
 .karte p { color: var(--text-2); }
+
+/* Dunkler Abschnitt in Marineblau als Blickfang */
+.abschnitt-dunkel { background: var(--marine); color: #fff; }
+.abschnitt-dunkel h2, .abschnitt-dunkel h3 { color: #fff; }
+.abschnitt-dunkel .einleitung, .abschnitt-dunkel .karte p { color: var(--marine-text); }
+.abschnitt-dunkel .karte { background: rgb(255 255 255 / 0.06); border-color: rgb(255 255 255 / 0.12); }
+.abschnitt-dunkel .symbol-flaeche { background: rgb(242 181 74 / 0.14); }
+.abschnitt-dunkel .symbol { color: var(--messing-hell); }
+.abschnitt-dunkel a { color: #fff; }
 
 /* Symbol in getönter Fläche */
 .symbol { width: 1.75rem; height: 1.75rem; color: var(--blau); flex: none; }
@@ -136,7 +151,7 @@ details.klapp > .klapp-inhalt { padding: 0 2.5rem 1.4rem 0; color: var(--text-2)
 details.klapp > .klapp-inhalt p:last-child { margin-bottom: 0; }
 
 /* Formulare */
-.formular-karte { background: var(--flaeche); border-radius: var(--r-gross); padding: clamp(1.25rem, 4vw, 2.25rem); box-shadow: 0 2px 6px rgb(0 0 0 / 0.04), 0 12px 40px rgb(0 0 0 / 0.08); }
+.formular-karte { background: var(--karte); border-radius: var(--r-gross); padding: clamp(1.25rem, 4vw, 2.25rem); box-shadow: 0 2px 6px rgb(0 0 0 / 0.04), 0 12px 40px rgb(0 0 0 / 0.08); }
 .feld { margin-bottom: 1.25rem; }
 .feld > label, fieldset > legend { display: block; font-weight: 600; margin-bottom: 0.4rem; }
 .feld-hilfe { display: block; font-size: 1rem; color: var(--text-2); margin-top: 0.35rem; }
@@ -144,22 +159,22 @@ details.klapp > .klapp-inhalt p:last-child { margin-bottom: 0; }
 input[type='text'], input[type='email'], input[type='tel'], input[type='number'], select, textarea {
   width: 100%; min-height: 3.25rem; padding: 0.65rem 0.95rem;
   font: inherit; font-size: 1.125rem; color: var(--text);
-  background: var(--flaeche); border: 1px solid var(--rand-feld); border-radius: var(--r-klein);
+  background: var(--karte); border: 1px solid var(--rand-feld); border-radius: var(--r-klein);
   transition: border-color 150ms ease, box-shadow 150ms ease;
 }
-select { appearance: none; padding-right: 2.5rem; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%234f4f55' stroke-width='2'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 1rem center; }
-input:focus-visible, select:focus-visible, textarea:focus-visible { outline: none; border-color: var(--blau); box-shadow: 0 0 0 4px rgb(0 102 204 / 0.25); }
+select { appearance: none; padding-right: 2.5rem; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%234a5466' stroke-width='2'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 1rem center; }
+input:focus-visible, select:focus-visible, textarea:focus-visible { outline: none; border-color: var(--blau); box-shadow: 0 0 0 4px rgb(30 77 183 / 0.25); }
 input[type='file'] { font: inherit; font-size: 1rem; min-height: 3rem; max-width: 100%; }
 fieldset { border: 0; padding: 0; margin: 0 0 1.25rem; min-width: 0; }
 .wahl-raster { display: grid; gap: 0.6rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr)); }
 .wahl {
   display: flex; align-items: center; gap: 0.7rem; min-height: 3.5rem; padding: 0.6rem 1rem;
-  border: 1px solid var(--rand-feld); border-radius: var(--r-klein); background: var(--flaeche);
+  border: 1px solid var(--rand-feld); border-radius: var(--r-klein); background: var(--karte);
   cursor: pointer; font-weight: 500; transition: border-color 150ms ease, background-color 150ms ease;
 }
 .wahl input { width: 1.35rem; height: 1.35rem; accent-color: var(--blau); flex: none; margin: 0; }
 .wahl:has(input:checked) { border-color: var(--blau); background: var(--blau-hell); box-shadow: inset 0 0 0 1px var(--blau); }
-.wahl:has(input:focus-visible) { box-shadow: 0 0 0 4px rgb(0 102 204 / 0.25); }
+.wahl:has(input:focus-visible) { box-shadow: 0 0 0 4px rgb(30 77 183 / 0.25); }
 .datenschutz-hinweis { font-size: 1rem; color: var(--text-2); margin: 1.25rem 0 0; }
 .unsichtbar { display: none !important; }
 .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }

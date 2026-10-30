@@ -56,17 +56,17 @@ const gruppen = [
 .schritte { text-align: left; }
   .umschalter {
     display: flex; width: fit-content; margin: 0 auto 2.5rem; padding: 0.25rem;
-    background: rgb(118 118 128 / 0.14); border-radius: 999px;
+    background: rgb(19 33 58 / 0.08); border-radius: 999px;
   }
   .umschalter button {
     min-height: 3rem; padding: 0.5rem 1.5rem; border: 0; border-radius: 999px;
     font: inherit; font-weight: 600; background: transparent; color: var(--text); cursor: pointer;
     transition: background-color 200ms ease, box-shadow 200ms ease;
   }
-  .umschalter button[aria-selected='true'] { background: #fff; box-shadow: 0 1px 3px rgb(0 0 0 / 0.12), 0 4px 10px rgb(0 0 0 / 0.06); }
+  .umschalter button[aria-selected='true'] { background: var(--karte); color: var(--blau); box-shadow: 0 1px 3px rgb(0 0 0 / 0.12), 0 4px 10px rgb(0 0 0 / 0.06); }
   .schritt-liste { list-style: none; counter-reset: schritt; padding: 0; margin: 0 0 1.25rem; display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr)); }
-  .abschnitt-grau .schritt-liste li { background: var(--flaeche); }
-  .schritt-liste li { counter-increment: schritt; background: var(--flaeche-2); border-radius: var(--r-gross); padding: 1.75rem; }
+  .abschnitt-grau .schritt-liste li { background: var(--karte); border-color: transparent; box-shadow: var(--schatten); }
+  .schritt-liste li { counter-increment: schritt; background: var(--karte); border: 1px solid var(--linie); border-radius: var(--r-gross); padding: 1.75rem; }
   .schritt-liste li::before {
     content: counter(schritt); display: block; margin-bottom: 0.75rem;
     font-size: 2.5rem; font-weight: 700; line-height: 1; letter-spacing: -0.03em; color: var(--blau);

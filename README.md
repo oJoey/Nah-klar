@@ -1,4 +1,6 @@
-# [NAME] – Website (Pilot)
+# Platz Kompass – Website (Pilot)
+
+Arbeitsname, wird später geändert (`src/config/site.ts`).
 
 Astro-Website auf Netlify. Phase 1: persönlicher Suchservice, Vermittlung von Hand.
 

@@ -19,7 +19,7 @@ interface Props { kacheln: Kachel[]; }
   .kachel h3 a { color: inherit; text-decoration: none; }
   /* Ganze Fläche klickbar, der Link bleibt für Screenreader eindeutig */
   .kachel h3 a::after { content: ''; position: absolute; inset: 0; border-radius: var(--r-gross); }
-  .kachel:has(a):hover { transform: translateY(-2px); box-shadow: 0 12px 32px rgb(0 0 0 / 0.08); }
+  .kachel:has(a):hover { transform: translateY(-2px); box-shadow: 0 14px 36px rgb(19 33 58 / 0.12); border-color: transparent; }
   .kachel:has(a):active { transform: scale(0.98); transition-duration: 100ms; }
   .kachel:has(a:focus-visible) { outline: 3px solid var(--fokus); outline-offset: 3px; }
   .kachel h3 a:focus-visible { outline: none; }

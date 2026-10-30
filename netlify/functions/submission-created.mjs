@@ -50,7 +50,7 @@ const istEmail = (s) => typeof s === 'string' && /^[^@\s]+@[^@\s]+\.[^@\s]+$/.te
 
 export const handler = async (event) => {
   const { RESEND_API_KEY, MAIL_ABSENDER, MAIL_ANTWORT, NETLIFY_API_TOKEN } = process.env;
-  const marke = process.env.MARKENNAME || '[NAME]';
+  const marke = process.env.MARKENNAME || 'Platz Kompass';
   if (!RESEND_API_KEY || !MAIL_ABSENDER || !NETLIFY_API_TOKEN) {
     console.log('Mailversand nicht eingerichtet – Umgebungsvariablen fehlen.');
     return { statusCode: 200, body: 'nicht eingerichtet' };
