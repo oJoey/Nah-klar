@@ -126,6 +126,7 @@ ul, ol { padding-left: 1.25rem; }
 .abschnitt-kobalt h2, .abschnitt-kobalt .kicker { color: #fff; }
 .abschnitt-kobalt .einleitung { color: var(--marine-text); }
 .abschnitt-kobalt .weiter { color: #fff; }
+.abschnitt-kobalt .formular-karte .weiter { color: var(--blau); }
 
 /* Dunkler Abschnitt in Marineblau als Blickfang */
 .abschnitt-dunkel { background: var(--marine); color: #fff; }
