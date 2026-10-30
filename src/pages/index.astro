@@ -53,7 +53,7 @@ const vermieterSchritte = [
   titel={`Stellplatz mieten und vermieten im Landkreis Böblingen | ${site.name}`}
   beschreibung="Stellplatz, Garage oder Lagerraum von Nachbarn mieten – oder ungenutzten Platz vermieten. Geprüfte Mieter, Mustervertrag, persönlicher Ansprechpartner im Landkreis Böblingen."
 >
-  <section class="abschnitt abschnitt-blau held">
+  <section class="held zentriert">
     <div class="wrap">
       <p class="kicker">Stellplatz mieten und vermieten im Landkreis Böblingen</p>
       <h1>Platz von Nachbarn – für Ihr Fahrzeug und Ihre Sachen.</h1>
@@ -62,30 +62,18 @@ const vermieterSchritte = [
     </div>
   </section>
 
-  <section class="abschnitt" aria-label="Platz suchen">
+  <section class="abschnitt abschnitt-grau suche" aria-label="Platz suchen">
     <div class="wrap">
       <Suchmaske />
     </div>
   </section>
 
-  <section class="abschnitt abschnitt-grau" aria-labelledby="vorteile-titel">
+  <section class="abschnitt" aria-labelledby="vorteile-titel">
     <div class="wrap">
       <h2 id="vorteile-titel" class="sr-only">Ihre Vorteile</h2>
       <ul class="raster vorteile">
         {vorteile.map((v) => (
-          <li><Icon name={v.icon} /><div><h3>{v.titel}</h3><p>{v.text}</p></div></li>
-        ))}
-      </ul>
-    </div>
-  </section>
-
-  <section class="abschnitt">
-    <div class="wrap">
-      <h2>Warum nicht einfach Kleinanzeigen?</h2>
-      <p class="einleitung">Kleinanzeigen sind gut, um schnell einen Kontakt zu finden. Bei einer Miete über viele Monate kommt es auf mehr an:</p>
-      <ul class="raster vergleich">
-        {unterschiede.map((u) => (
-          <li class="karte"><Icon name={u.icon} /><h3>{u.titel}</h3><p>{u.text}</p></li>
+          <li><span class="symbol-flaeche"><Icon name={v.icon} /></span><h3>{v.titel}</h3><p>{v.text}</p></li>
         ))}
       </ul>
     </div>
@@ -93,24 +81,44 @@ const vermieterSchritte = [
 
   <section class="abschnitt abschnitt-grau">
     <div class="wrap">
-      <h2>Welchen Platz suchen Sie?</h2>
-      <Kacheln kacheln={kacheln} />
-      <p class="mt"><a href={link('mieten')}>Alle Infos für Mieter</a></p>
+      <div class="kopfzeile">
+        <h2>Warum nicht einfach Kleinanzeigen?</h2>
+        <p class="einleitung">Kleinanzeigen sind gut, um schnell einen Kontakt zu finden. Bei einer Miete über viele Monate kommt es auf mehr an.</p>
+      </div>
+      <ul class="raster vergleich">
+        {unterschiede.map((u) => (
+          <li class="karte"><span class="symbol-flaeche"><Icon name={u.icon} /></span><h3>{u.titel}</h3><p>{u.text}</p></li>
+        ))}
+      </ul>
     </div>
   </section>
 
   <section class="abschnitt">
     <div class="wrap">
-      <h2>Was bringt Ihr freier Platz?</h2>
-      <p class="einleitung">Für Vermieter: Wählen Sie die Art der Fläche und eine Monatsmiete. Wir zeigen Ihnen, was im Jahr zusammenkommt.</p>
-      <Verdienstrechner />
-      <p class="mt"><a href={link('vermieten')}>Alle Infos für Vermieter</a></p>
+      <div class="kopfzeile">
+        <h2>Welchen Platz suchen Sie?</h2>
+        <p class="einleitung">Sagen Sie uns, was Sie unterstellen möchten. Wir suchen in Ihrer Nähe.</p>
+      </div>
+      <Kacheln kacheln={kacheln} />
+      <p class="zentriert mt"><a class="weiter" href={link('mieten')}>Alle Infos für Mieter</a></p>
     </div>
   </section>
 
-  <section class="abschnitt abschnitt-blau">
+  <section class="abschnitt abschnitt-grau">
     <div class="wrap">
-      <h2>So funktioniert's</h2>
+      <div class="kopfzeile">
+        <p class="kicker">Für Vermieter</p>
+        <h2>Was bringt Ihr freier Platz?</h2>
+        <p class="einleitung">Wählen Sie die Art der Fläche und eine Monatsmiete. Wir zeigen Ihnen, was im Jahr zusammenkommt.</p>
+      </div>
+      <Verdienstrechner />
+      <p class="zentriert mt"><a class="weiter" href={link('vermieten')}>Alle Infos für Vermieter</a></p>
+    </div>
+  </section>
+
+  <section class="abschnitt">
+    <div class="wrap">
+      <div class="kopfzeile"><h2>So funktioniert's</h2></div>
       <Schritte mieter={mieterSchritte} vermieter={vermieterSchritte} />
     </div>
   </section>
@@ -118,13 +126,13 @@ const vermieterSchritte = [
   <Bewertungen />
   <WerkzeugeTeaser />
 
-  <section class="abschnitt">
+  <section class="abschnitt abschnitt-grau">
     <div class="wrap">
       <Faq seite="start" />
     </div>
   </section>
 
-  <section class="abschnitt abschnitt-blau zentriert">
+  <section class="abschnitt zentriert">
     <div class="wrap">
       <h2>Platz anbieten oder Platz finden?</h2>
       <p class="einleitung">Beides geht schnell und ist unverbindlich.</p>
@@ -133,9 +141,12 @@ const vermieterSchritte = [
   </section>
 </Basis>
 <style>
-  .held { padding-block: 2rem 2.5rem; }
-  .vorteile { list-style: none; padding: 0; margin: 0; }
-  .vorteile li { display: flex; gap: 1rem; align-items: flex-start; }
-  .vorteile p { margin: 0; }
-  .vergleich { list-style: none; padding: 0; margin: 0; }
+  .held { padding-block: clamp(3rem, 10vw, 7rem) clamp(3rem, 8vw, 5.5rem); }
+  .held h1 { max-width: 18ch; margin-inline: auto; }
+  .held .einleitung { margin-top: 1.25rem; }
+  .vorteile { gap: 2.5rem 2rem; }
+  .vorteile li { text-align: center; }
+  .vorteile .symbol-flaeche { margin-inline: auto; }
+  .vorteile p { color: var(--text-2); margin: 0; }
+  @media (min-width: 52rem) { .vergleich { grid-template-columns: repeat(2, 1fr); } }
 </style>

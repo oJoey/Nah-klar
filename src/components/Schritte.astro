@@ -53,15 +53,26 @@ const gruppen = [
   });
 </script>
 <style>
-  .umschalter { display: inline-flex; border: 2px solid var(--primaer); border-radius: 12px; padding: 0.25rem; margin-bottom: 1.5rem; background: #fff; }
-  .umschalter button { min-height: 3rem; padding: 0.5rem 1.25rem; border: 0; border-radius: 8px; font: inherit; font-weight: 700; background: transparent; color: var(--primaer); cursor: pointer; }
-  .umschalter button[aria-selected='true'] { background: var(--primaer); color: #fff; }
-  .schritt-liste { list-style: none; counter-reset: schritt; padding: 0; margin: 0 0 1rem; display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr)); }
-  .schritt-liste li { counter-increment: schritt; background: #fff; border: 1px solid var(--rand); border-radius: var(--radius); padding: 1.25rem; }
-  .schritt-liste li::before {
-    content: counter(schritt); display: grid; place-items: center; width: 2.5rem; height: 2.5rem; margin-bottom: 0.6rem;
-    border-radius: 50%; background: var(--primaer); color: #fff; font-weight: 800;
+.schritte { text-align: left; }
+  .umschalter {
+    display: flex; width: fit-content; margin: 0 auto 2.5rem; padding: 0.25rem;
+    background: rgb(118 118 128 / 0.14); border-radius: 999px;
   }
-  .schritt-liste p { margin: 0; }
-  .schritte-gruppe { margin-top: 1rem; }
+  .umschalter button {
+    min-height: 3rem; padding: 0.5rem 1.5rem; border: 0; border-radius: 999px;
+    font: inherit; font-weight: 600; background: transparent; color: var(--text); cursor: pointer;
+    transition: background-color 200ms ease, box-shadow 200ms ease;
+  }
+  .umschalter button[aria-selected='true'] { background: #fff; box-shadow: 0 1px 3px rgb(0 0 0 / 0.12), 0 4px 10px rgb(0 0 0 / 0.06); }
+  .schritt-liste { list-style: none; counter-reset: schritt; padding: 0; margin: 0 0 1.25rem; display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr)); }
+  .abschnitt-grau .schritt-liste li { background: var(--flaeche); }
+  .schritt-liste li { counter-increment: schritt; background: var(--flaeche-2); border-radius: var(--r-gross); padding: 1.75rem; }
+  .schritt-liste li::before {
+    content: counter(schritt); display: block; margin-bottom: 0.75rem;
+    font-size: 2.5rem; font-weight: 700; line-height: 1; letter-spacing: -0.03em; color: var(--blau);
+    font-variant-numeric: tabular-nums;
+  }
+  .schritt-liste p { margin: 0; color: var(--text-2); }
+  .schritte-gruppe { margin-top: 1.5rem; }
+  [role='tabpanel'] > .kostenlos { text-align: center; }
 </style>

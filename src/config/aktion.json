@@ -1,7 +1,7 @@
 {
   "_hinweis": "Aktionsbalken oben auf jeder Seite. Nach dem Enddatum blendet er sich automatisch aus. aktiv=false schaltet ihn sofort ab.",
   "aktiv": true,
-  "text": "Für Mieter: erster Monat ohne Servicegebühr bei Vertragsabschluss bis 30.11.2026.",
+  "text": "Für Mieter: erster Monat ohne Servicegebühr bei Abschluss bis 30.11.2026.",
   "linkText": "Suchauftrag anlegen",
   "link": "suchauftrag",
   "ende": "2026-11-30"

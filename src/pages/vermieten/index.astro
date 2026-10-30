@@ -50,12 +50,12 @@ const nachfrageLink = link('nachfrage') ?? link('platzAnbieten');
   beschreibung="Stellplatz, Garage, Einfahrt, Keller oder Scheune vermieten – mit fairem Nebenverdienst. Für Vermieter immer kostenlos: geprüfte Mieter, Mustervertrag, persönlicher Ansprechpartner."
   brotkruemel={[{ name: 'Vermieten', pfad: '/vermieten/' }]}
 >
-  <section class="abschnitt abschnitt-blau held">
+  <section class="held abschnitt-grau">
     <div class="wrap held-raster">
       <div>
         <p class="kicker">Landkreis Böblingen</p>
         <h1>Stellplatz, Garage oder Scheune vermieten – mit fairem Nebenverdienst</h1>
-        <p class="kostenlos-gross">Für Vermieter immer kostenlos</p>
+        <p class="kostenlos-pille">Für Vermieter immer kostenlos</p>
         <ul class="haken">
           <li>Geprüfte Mieter aus der Region</li>
           <li>Mustervertrag und Kaution</li>
@@ -96,38 +96,42 @@ const nachfrageLink = link('nachfrage') ?? link('platzAnbieten');
 
   <section class="abschnitt">
     <div class="wrap">
-      <h2>Welchen Platz haben Sie frei?</h2>
-      <p class="einleitung">Ob Garage, Einfahrt, Keller oder Scheune – gefragt ist vieles. Ein Stellplatz für ein Wohnmobil bringt laut unseren Richtwerten am meisten, ist aber nur eine von vielen Möglichkeiten.</p>
+      <div class="kopfzeile">
+        <h2>Welchen Platz haben Sie frei?</h2>
+        <p class="einleitung">Ob Garage, Einfahrt, Keller oder Scheune – gefragt ist vieles. Ein Stellplatz für ein Wohnmobil bringt laut unseren Richtwerten am meisten, ist aber nur eine von vielen Möglichkeiten.</p>
+      </div>
       <Kacheln kacheln={kacheln} />
     </div>
   </section>
 
   <section class="abschnitt abschnitt-grau">
     <div class="wrap">
-      <h2>Was bringt Ihr Platz im Jahr?</h2>
+      <div class="kopfzeile"><h2>Was bringt Ihr Platz im Jahr?</h2></div>
       <Verdienstrechner ausfuehrlich />
     </div>
   </section>
 
   <section class="abschnitt">
     <div class="wrap">
-      <h2>Ihre Fragen, unsere Antworten</h2>
-      <p class="einleitung">Die häufigsten Bedenken – und wie wir sie lösen.</p>
-      <div class="sorgen">
+      <div class="kopfzeile">
+        <h2>Ihre Bedenken, unsere Antworten</h2>
+        <p class="einleitung">Was Vermieter am häufigsten fragen – und wie wir es lösen.</p>
+      </div>
+      <div class="sorgen klapp-liste">
         {sorgen.map((s) => (
           <details class="klapp"><summary>{s.titel}</summary><div class="klapp-inhalt"><p>{s.text}</p></div></details>
         ))}
       </div>
-      <p><SmartLink seite="sicherheit">Mehr zur Sicherheit</SmartLink></p>
+      <p class="zentriert mt"><SmartLink seite="sicherheit" class="weiter">Mehr zur Sicherheit</SmartLink></p>
     </div>
   </section>
 
-  <section class="abschnitt abschnitt-blau">
+  <section class="abschnitt abschnitt-grau">
     <div class="wrap service">
-      <Icon name="kamera" class="symbol service-symbol" />
+      <span class="symbol-flaeche"><Icon name="kamera" /></span>
       <div>
         <h2>Rundum-Service: Sie schicken 3 Fotos, wir erledigen den Rest</h2>
-        <ol>
+        <ol class="foto-liste">
           <li>Die Zufahrt von der Straße aus</li>
           <li>Die Fläche selbst, möglichst bei Tageslicht</li>
           <li>Tor, Tür oder Eingang</li>
@@ -139,7 +143,7 @@ const nachfrageLink = link('nachfrage') ?? link('platzAnbieten');
 
   <section class="abschnitt">
     <div class="wrap">
-      <h2>So vermieten Sie Ihren Platz</h2>
+      <div class="kopfzeile"><h2>So vermieten Sie Ihren Platz</h2></div>
       <Schritte vermieter={schritte} />
     </div>
   </section>
@@ -159,11 +163,11 @@ const nachfrageLink = link('nachfrage') ?? link('platzAnbieten');
   <section class="abschnitt">
     <div class="wrap">
       <div class="karte hoefe">
-        <Icon name="hof" />
+        <span class="symbol-flaeche"><Icon name="hof" /></span>
         <div>
           <h2>Sie haben einen Hof oder eine Scheune?</h2>
           <p>Auf größeren Flächen ist oft Platz für mehrere Wohnmobile, Wohnwagen oder Anhänger. Wir vermitteln auch mehrere Plätze auf einer Fläche und stimmen Zufahrt und Zeiten mit Ihnen ab.</p>
-          <p><a href={link('vermietenScheune')}>{istLive('vermietenScheune') ? seiten.vermietenScheune.titel : 'Hof oder Scheune anbieten'}</a></p>
+          <p><a class="weiter" href={link('vermietenScheune')}>{istLive('vermietenScheune') ? seiten.vermietenScheune.titel : 'Hof oder Scheune anbieten'}</a></p>
         </div>
       </div>
     </div>
@@ -175,7 +179,7 @@ const nachfrageLink = link('nachfrage') ?? link('platzAnbieten');
     </div>
   </section>
 
-  <section class="abschnitt abschnitt-blau zentriert">
+  <section class="abschnitt zentriert">
     <div class="wrap">
       <h2>Bereit? Melden Sie Ihren Platz.</h2>
       <p class="einleitung">Online in zwei Minuten – oder rufen Sie uns an. {site.ansprechpartner}.</p>
@@ -190,15 +194,21 @@ const nachfrageLink = link('nachfrage') ?? link('platzAnbieten');
   <FormSkript />
 </Basis>
 <style>
-  .held { padding-block: 2rem 2.5rem; }
-  .held-raster { display: grid; gap: 1.5rem; }
-  @media (min-width: 56rem) { .held-raster { grid-template-columns: 1.1fr 1fr; align-items: start; } }
-  .kostenlos-gross { display: inline-block; background: var(--akzent-hell); border: 2px solid var(--akzent); color: var(--akzent-text); font-weight: 800; font-size: 1.25rem; padding: 0.4rem 0.9rem; border-radius: 8px; }
-  .formular-titel { font-size: 1.35rem; }
-  .sorgen { max-width: 48rem; }
-  .service { display: flex; gap: 1.25rem; align-items: flex-start; }
-  .service :global(.service-symbol) { width: 3rem; height: 3rem; color: var(--primaer); flex: none; }
-  .hoefe { display: flex; gap: 1rem; align-items: flex-start; }
-  .kontakt-zeile { display: flex; flex-wrap: wrap; gap: 0.75rem; justify-content: center; margin-top: 1.5rem; }
-  .kontakt-zeile :global(.symbol-klein) { width: 1.4rem; height: 1.4rem; }
+  .held { padding-block: clamp(1.5rem, 6vw, 4.5rem) clamp(3rem, 8vw, 5rem); }
+  .held-raster { display: grid; gap: 2rem; }
+  @media (min-width: 56rem) { .held-raster { grid-template-columns: 1.1fr 1fr; align-items: center; gap: 4rem; } }
+  .held h1 { margin-bottom: 1.25rem; }
+  .held .kostenlos-pille { margin-bottom: 1.5rem; }
+  .held .haken li { font-size: 1.2rem; }
+  .formular-titel { font-size: 1.5rem; letter-spacing: -0.02em; }
+  .sorgen { max-width: 50rem; margin-inline: auto; }
+  .service { display: grid; gap: 1rem; max-width: 50rem; }
+  .service h2 { font-size: clamp(1.6rem, 4vw, 2.25rem); }
+  .foto-liste { list-style: none; counter-reset: foto; padding: 0; display: grid; gap: 0.75rem; margin: 1.25rem 0; }
+  .foto-liste li { counter-increment: foto; display: flex; align-items: center; gap: 1rem; background: var(--flaeche); border-radius: var(--r); padding: 1rem 1.25rem; }
+  .foto-liste li::before { content: counter(foto); display: grid; place-items: center; flex: none; width: 2.25rem; height: 2.25rem; border-radius: 50%; background: var(--blau); color: #fff; font-weight: 700; }
+  .hoefe { display: grid; gap: 0.5rem; max-width: 50rem; margin-inline: auto; }
+  .hoefe h2 { font-size: clamp(1.6rem, 4vw, 2.25rem); }
+  .kontakt-zeile { display: flex; flex-wrap: wrap; gap: 0.75rem; justify-content: center; margin-top: 2rem; }
+  .kontakt-zeile :global(.symbol-klein) { width: 1.3rem; height: 1.3rem; }
 </style>

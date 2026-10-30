@@ -12,7 +12,7 @@ import { mietArten, zeitraeume } from '../../data/arten';
   beschreibung="Kostenloser Suchauftrag für Stellplatz, Garage, Winterplatz oder Lagerraum im Landkreis Böblingen. Ohne Konto, keine Werbemails, jederzeit löschbar."
   brotkruemel={[{ name: 'Mieten', pfad: '/mieten/' }, { name: 'Suchauftrag', pfad: '/suchauftrag/' }]}
 >
-  <section class="abschnitt">
+  <section class="abschnitt abschnitt-grau formular-seite">
     <div class="wrap schmal">
       <h1>Suchauftrag anlegen</h1>
       <p class="einleitung">Sagen Sie uns, was Sie suchen. Wir fragen in Ihrer Nähe nach und melden uns mit passenden Plätzen.</p>
@@ -96,6 +96,8 @@ import { mietArten, zeitraeume } from '../../data/arten';
   <FormSkript />
 </Basis>
 <style>
+  .formular-seite { padding-top: clamp(1.5rem, 5vw, 3.5rem); }
+  .formular-seite h1 { font-size: clamp(2.1rem, 6vw, 3.25rem); }
   .schmal { max-width: 46rem; }
   .versprechen { display: flex; flex-wrap: wrap; gap: 0.25rem 1.5rem; font-weight: 600; }
   .optional-titel { font-weight: 700; color: var(--text-leise); border-top: 1px solid var(--rand); padding-top: 1.25rem; }

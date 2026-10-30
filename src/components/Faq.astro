@@ -15,8 +15,8 @@ const schema = {
   })),
 };
 ---
-<h2>{titel}</h2>
-<div class="faq">
+<div class="kopfzeile"><h2>{titel}</h2></div>
+<div class="faq klapp-liste">
   {eintraege.map((e) => (
     <details class="klapp">
       <summary>{e.data.frage}</summary>
@@ -26,5 +26,5 @@ const schema = {
 </div>
 <script type="application/ld+json" set:html={jsonLd(schema)} />
 <style>
-  .faq { max-width: 48rem; }
+.faq { max-width: 50rem; margin-inline: auto; }
 </style>

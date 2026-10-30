@@ -11,10 +11,10 @@ import { flaechenArten } from '../../data/arten';
   beschreibung="Melden Sie Ihren freien Platz im Landkreis Böblingen. Für Vermieter immer kostenlos – Sie bestimmen den Preis, wir finden geprüfte Mieter."
   brotkruemel={[{ name: 'Vermieten', pfad: '/vermieten/' }, { name: 'Platz anbieten', pfad: '/platz-anbieten/' }]}
 >
-  <section class="abschnitt">
+  <section class="abschnitt abschnitt-grau formular-seite">
     <div class="wrap schmal">
       <h1>Platz anbieten</h1>
-      <p class="kostenlos-band">Für Vermieter immer kostenlos</p>
+      <p class="kostenlos-pille">Für Vermieter immer kostenlos</p>
       <p class="einleitung">Ein paar Angaben genügen. Wir melden uns persönlich, {site.antwortzeit}. Lieber telefonieren? <a href={telefonHref}>{site.telefonAnzeige}</a></p>
 
       <form class="formular-karte" name="platz-anbieten" method="POST" action="/platz-anbieten/danke/" enctype="multipart/form-data" data-netlify="true" netlify-honeypot="bot-feld" data-formular>
@@ -76,6 +76,7 @@ import { flaechenArten } from '../../data/arten';
   <FormSkript />
 </Basis>
 <style>
+  .formular-seite { padding-top: clamp(1.5rem, 5vw, 3.5rem); }
+  .formular-seite h1 { font-size: clamp(2.1rem, 6vw, 3.25rem); }
   .schmal { max-width: 46rem; }
-  .kostenlos-band { display: inline-block; background: var(--akzent-hell); border: 2px solid var(--akzent); color: var(--akzent-text); font-weight: 800; padding: 0.35rem 0.9rem; border-radius: 8px; }
 </style>

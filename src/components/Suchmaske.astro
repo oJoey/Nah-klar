@@ -31,10 +31,12 @@ const { titel = 'Was suchen Sie?' } = Astro.props;
   <p class="unter-hinweis">Weiter zum Suchauftrag – kostenlos und ohne Konto.</p>
 </form>
 <style>
-  .suchmaske-titel { font-size: 1.35rem; }
+.suchmaske-titel { font-size: 1.4rem; letter-spacing: -0.015em; }
   .suchmaske-felder { display: grid; gap: 0 1rem; }
   .suchmaske .feld { margin-bottom: 1rem; }
+  .suchmaske .unter-hinweis { margin-top: 0; }
   @media (min-width: 56rem) {
     .suchmaske-felder { grid-template-columns: 1.3fr 1fr 1fr auto; align-items: end; }
+    .suchmaske-knopf .btn { min-height: 3.25rem; }
   }
 </style>

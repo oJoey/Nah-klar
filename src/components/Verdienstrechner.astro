@@ -10,7 +10,7 @@ const euro = (n: number) => n.toLocaleString('de-DE') + ' €';
 const vollerRechner = link('verdienstrechner');
 ---
 <div class="rechner formular-karte" data-richtwerte={JSON.stringify(arten)}>
-  <div class="rechner-felder">
+  <div>
     <div class="feld">
       <label for="rechner-art">Art der Fläche</label>
       <select id="rechner-art" name="art">
@@ -30,14 +30,16 @@ const vollerRechner = link('verdienstrechner');
       </div>
     )}
   </div>
+  <div class="rechner-ausgabe">
   <p class="rechner-ergebnis">
-    Möglicher Jahresertrag: <output for="rechner-art rechner-miete" aria-live="polite" data-ergebnis>ca. {euro(startMiete * 12)}</output>
+    Möglicher Jahresertrag<output for="rechner-art rechner-miete" aria-live="polite" data-ergebnis>ca. {euro(startMiete * 12)}</output>
   </p>
   <p class="unter-hinweis">
     Schätzung, keine Zusage. Die Richtwerte sind Erfahrungswerte, der tatsächliche Preis hängt von Lage und Ausstattung ab. Sie bestimmen den Preis selbst und erhalten die volle Miete.
   </p>
   <p class="unter-hinweis kostenlos">Für Vermieter immer kostenlos</p>
-  {vollerRechner && <p class="mt"><a href={vollerRechner}>Zum ausführlichen Verdienstrechner</a></p>}
+  {vollerRechner && <p class="mt"><a class="weiter" href={vollerRechner}>Zum ausführlichen Verdienstrechner</a></p>}
+  </div>
 </div>
 <script>
   document.querySelectorAll<HTMLElement>('.rechner').forEach((box) => {
@@ -66,8 +68,13 @@ const vollerRechner = link('verdienstrechner');
   });
 </script>
 <style>
-  .rechner-felder { display: grid; gap: 0 1rem; }
-  @media (min-width: 48rem) { .rechner-felder { grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr)); } }
-  .rechner-ergebnis { font-size: 1.3rem; font-weight: 700; color: var(--blau-900); margin-bottom: 0.25rem; }
-  .rechner-ergebnis output { color: var(--primaer); font-size: 1.6rem; }
+.rechner { display: grid; gap: 2rem; }
+  @media (min-width: 52rem) { .rechner { grid-template-columns: 1.1fr 1fr; align-items: center; padding: 2.5rem; } }
+  .rechner-ergebnis { margin: 0; font-size: 1.15rem; font-weight: 600; color: var(--text-2); }
+  .rechner-ergebnis output {
+    display: block; margin-top: 0.25rem; color: var(--text);
+    font-size: clamp(2.75rem, 8vw, 4rem); font-weight: 700; letter-spacing: -0.035em; line-height: 1.05;
+    font-variant-numeric: tabular-nums;
+  }
+  .rechner-ausgabe { background: var(--flaeche-2); border-radius: var(--r); padding: 1.5rem; }
 </style>
