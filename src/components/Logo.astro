@@ -4,11 +4,11 @@ interface Props { groesse?: number; hell?: boolean; }
 const { groesse = 30, hell = false } = Astro.props;
 ---
 <svg width={groesse} height={groesse} viewBox="0 0 32 32" aria-hidden="true" focusable="false">
-  <circle cx="16" cy="16" r="15" fill={hell ? '#ffffff' : '#1f4e79'} />
-  <circle cx="16" cy="16" r="11.5" fill="none" stroke={hell ? '#1f4e79' : '#ffffff'} stroke-opacity="0.25" />
+  <circle cx="16" cy="16" r="15" fill={hell ? '#ffffff' : '#272343'} />
+  <circle cx="16" cy="16" r="11.5" fill="none" stroke={hell ? '#272343' : '#ffffff'} stroke-opacity="0.25" />
   <g transform="rotate(35 16 16)">
-    <path d="M16 6l3.6 10h-7.2z" fill="#e08a2e" />
-    <path d="M16 26l-3.6-10h7.2z" fill={hell ? '#1f4e79' : '#ffffff'} />
+    <path d="M16 6l3.6 10h-7.2z" fill="#ffd803" />
+    <path d="M16 26l-3.6-10h7.2z" fill={hell ? '#272343' : '#ffffff'} />
   </g>
-  <circle cx="16" cy="16" r="1.5" fill={hell ? '#ffffff' : '#1f4e79'} />
+  <circle cx="16" cy="16" r="1.5" fill={hell ? '#ffffff' : '#272343'} />
 </svg>
