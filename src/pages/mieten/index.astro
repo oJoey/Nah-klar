@@ -17,6 +17,7 @@ const kacheln = mietArten.map((a) => ({
   text: a.nutzen,
   icon: a.icon,
   href: link(a.seite),
+  bild: a.bild,
   linkText: link(a.seite)?.startsWith('/suchauftrag/') ? 'Suchauftrag anlegen' : 'Mehr erfahren',
 }));
 
@@ -38,12 +39,12 @@ const schritte = [
       <h1>Abstellplatz und Stellplatz mieten im Landkreis Böblingen</h1>
       <p class="einleitung">Sie klicken sich nicht durch Inserate. Sie sagen uns, welchen Platz Sie brauchen. Wir fragen gezielt bei Vermietern in Ihrer Nähe nach und melden uns mit passenden Vorschlägen.</p>
       <div class="held-knoepfe">
-        <a class="btn btn-primaer btn-gross" href={link('suchauftrag')}>Platz finden</a>
+        <a class="btn btn-rahmen btn-gross" href={link('suchauftrag')}>Platz finden</a>
         <p class="unter-hinweis">Suchauftrag in 1 Minute, kostenlos</p>
       </div>
       <p class="vermieter-zeile">Sie haben selbst Platz übrig? <a href={link('platzAnbieten')}>Platz anbieten</a> · <span class="kostenlos">Für Vermieter immer kostenlos</span></p>
       </div>
-      <Bildplatz name="mieten" alt="Freier Stellplatz bei Privatleuten" />
+      <Bildplatz name="mieten" ersatz="hof" alt="Blick durch eine Hofeinfahrt auf eine Scheune" />
     </div>
   </section>
 

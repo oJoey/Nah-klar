@@ -35,6 +35,7 @@ const kacheln = mietArten.map((a) => ({
   text: a.nutzen,
   icon: a.icon,
   href: link(a.seite),
+  bild: a.bild,
   linkText: link(a.seite)?.startsWith('/suchauftrag/') ? 'Suchauftrag anlegen' : 'Mehr erfahren',
 }));
 
@@ -63,7 +64,7 @@ const vermieterSchritte = [
         <p class="einleitung">Stellplätze, Garagen und Lagerraum bei Privatleuten in Ihrer Nähe. {texte.heroVersprechen}</p>
         <ButtonPaar />
       </div>
-      <Bildplatz name="start" alt="Freier Stellplatz bei Privatleuten" />
+      <Bildplatz name="start" ersatz="garage" alt="Doppelgarage mit Ziegeldach" />
     </div>
   </section>
 

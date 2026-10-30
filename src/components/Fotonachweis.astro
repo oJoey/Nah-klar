@@ -1,0 +1,19 @@
+---
+import type { Nachweis } from '../lib/bilder';
+interface Props { nachweis?: Nachweis; }
+const { nachweis } = Astro.props;
+---
+{nachweis && (
+  <span class="fotonachweis">
+    Foto: <a href={nachweis.quelle} rel="noopener">{nachweis.fotograf}</a>,
+    <a href={nachweis.lizenzUrl} rel="license noopener">{nachweis.lizenz}</a>
+  </span>
+)}
+<style>
+  .fotonachweis {
+    position: absolute; right: 0.5rem; bottom: 0.5rem; z-index: 2;
+    font-size: 0.75rem; line-height: 1.3; color: #fff;
+    background: rgb(0 0 0 / 0.55); padding: 0.15rem 0.55rem; border-radius: 999px;
+  }
+  .fotonachweis a { color: #fff; }
+</style>

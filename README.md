@@ -35,7 +35,12 @@ Eine neue Seite live schalten: Seite anlegen und in `src/config/seiten.ts` `live
 3. Bei Resend die Absender-Domain bestätigen.
 4. Benachrichtigung über neue Einsendungen an Sie selbst: Forms → Form notifications.
 
-## Eigene Fotos einbauen
+## Fotos
 
-Fotos (ohne Personen) als `start.jpg` bzw. `mieten.jpg` nach `src/assets/bilder/` legen.
-Sie ersetzen dann automatisch die Karten-Illustration im Kopfbereich und werden beim Bauen verkleinert und optimiert.
+Aktuell sind Übergangsfotos von Wikimedia Commons eingebaut (`src/assets/bilder/`, Nachweise in `src/data/bildnachweise.json`, Liste im Impressum).
+
+Eigene Fotos (ohne Personen und Kennzeichen) haben Vorrang:
+- `start.jpg` ersetzt das Bild im Kopfbereich der Startseite,
+- `mieten.jpg` das auf `/mieten/`, `vermieten-hof.jpg` das im Hof-Abschnitt auf `/vermieten/`.
+
+Für die Kacheln den Namen in `src/data/arten.ts` (Feld `bild`) anpassen. Wird ein Commons-Foto entfernt, auch den Eintrag in `bildnachweise.json` löschen.

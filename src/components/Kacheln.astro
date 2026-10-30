@@ -1,14 +1,26 @@
 ---
+import { Image } from 'astro:assets';
 import Icon from './Icon.astro';
+import Fotonachweis from './Fotonachweis.astro';
+import { bild } from '../lib/bilder';
 import type { IconName } from '../lib/icons';
-export type Kachel = { titel: string; text: string; icon: IconName; href: string | null; linkText: string };
+export type Kachel = { titel: string; text: string; icon: IconName; href: string | null; linkText: string; bild?: string };
 interface Props { kacheln: Kachel[]; kompakt?: boolean; }
 const { kacheln, kompakt = false } = Astro.props;
 ---
 <ul class:list={['raster kacheln', { kompakt }]}>
   {kacheln.map((k) => (
     <li class="karte kachel">
-      <span class="symbol-flaeche"><Icon name={k.icon} /></span>
+      {(() => {
+        const b = bild(k.bild);
+        return (
+          <div class="kachel-medien">
+            {b ? <Image src={b.src} alt="" width={640} quality={72} widths={[360, 640]} sizes="(min-width: 60rem) 25vw, 100vw" /> : <Icon name={k.icon} />}
+            {b && <span class="kachel-symbol"><Icon name={k.icon} /></span>}
+            <Fotonachweis nachweis={b?.nachweis} />
+          </div>
+        );
+      })()}
       <h3>{k.href ? <a href={k.href}>{k.titel}</a> : k.titel}</h3>
       <p>{k.text}</p>
       {k.href && <span class="kachel-link" aria-hidden="true">{k.linkText}</span>}
@@ -16,10 +28,19 @@ const { kacheln, kompakt = false } = Astro.props;
   ))}
 </ul>
 <style>
-  .kachel { position: relative; display: flex; flex-direction: column; transition: transform 200ms ease, box-shadow 200ms ease; }
+  .kachel { position: relative; display: flex; flex-direction: column; overflow: hidden; padding-top: 0; transition: transform 200ms ease, box-shadow 200ms ease; }
   .kachel h3 a { color: inherit; text-decoration: none; }
   /* Ganze Fläche klickbar, der Link bleibt für Screenreader eindeutig */
-  .kachel h3 a::after { content: ''; position: absolute; inset: 0; border-radius: var(--r-gross); }
+  .kachel h3 a::after { content: ''; position: absolute; inset: 0; border-radius: var(--r-gross); z-index: 1; }
+  .kachel-medien {
+    position: relative; aspect-ratio: 16 / 10; margin: 0 calc(-1 * clamp(1.5rem, 3vw, 2rem)) 1.25rem;
+    display: grid; place-items: center; background: var(--blau-hell); color: var(--blau);
+  }
+  .kachel-medien :global(img) { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
+  .kachel-medien :global(.fotonachweis) { top: 0.5rem; bottom: auto; }
+  .kachel-medien > :global(.symbol) { width: 3.5rem; height: 3.5rem; }
+  .kachel-symbol { position: absolute; left: 1rem; bottom: -1.25rem; display: grid; place-items: center; width: 3rem; height: 3rem; border-radius: 14px; background: var(--karte); box-shadow: var(--schatten); }
+  .kachel-medien:has(.kachel-symbol) { margin-bottom: 2rem; }
   .kachel:has(a):hover { transform: translateY(-2px); box-shadow: 0 14px 36px rgb(19 33 58 / 0.12); border-color: transparent; }
   .kachel:has(a):active { transform: scale(0.98); transition-duration: 100ms; }
   .kachel:has(a:focus-visible) { outline: 3px solid var(--fokus); outline-offset: 3px; }
@@ -27,8 +48,8 @@ const { kacheln, kompakt = false } = Astro.props;
   .kachel-link { margin-top: auto; padding-top: 1rem; font-weight: 600; color: var(--blau); }
   .kachel-link::after { content: ' ›'; }
   .kompakt { grid-template-columns: repeat(auto-fit, minmax(min(100%, 13rem), 1fr)); }
-  .kompakt .kachel { padding: 1.25rem 1.25rem 1.4rem; }
-  .kompakt .symbol-flaeche { margin-bottom: 0.9rem; }
+  .kompakt .kachel { padding: 0 1.25rem 1.4rem; }
+  .kompakt .kachel-medien { margin-inline: -1.25rem; }
   .kompakt h3 { font-size: 1.15rem; }
   .kompakt p { font-size: 1rem; }
   .kompakt .kachel-link { display: none; }

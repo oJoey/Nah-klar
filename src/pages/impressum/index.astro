@@ -1,6 +1,7 @@
 ---
 import Basis from '../../layouts/Basis.astro';
 import { site } from '../../config/site';
+import { alleNachweise } from '../../lib/bilder';
 // PLATZHALTER: Vor dem Livegang vollständig ausfüllen und noindex entfernen.
 ---
 <Basis titel="Impressum" beschreibung={`Impressum von ${site.name}.`} brotkruemel={[{ name: 'Impressum', pfad: '/impressum/' }]} noindex>
@@ -16,6 +17,13 @@ import { site } from '../../config/site';
       <p>[VERTRETUNGSBERECHTIGTE PERSON]</p>
       <h2>Umsatzsteuer-ID</h2>
       <p>[USt-IdNr., falls vorhanden]</p>
+      <h2>Bildnachweise</h2>
+      <p>Die Fotos stammen von Wikimedia Commons. Sie wurden für diese Website verkleinert und zugeschnitten.</p>
+      <ul>
+        {alleNachweise.map(([, n]) => (
+          <li><a href={n.quelle} rel="noopener">{n.titel}</a> – Foto: {n.fotograf}, Lizenz: <a href={n.lizenzUrl} rel="license noopener">{n.lizenz}</a></li>
+        ))}
+      </ul>
     </div>
   </section>
 </Basis>

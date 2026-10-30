@@ -1,0 +1,37 @@
+{
+  "carport": {
+    "fotograf": "Triplec85",
+    "lizenz": "CC BY-SA 4.0",
+    "lizenzUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "quelle": "https://commons.wikimedia.org/wiki/File:Begr%C3%BCnter_Carport_im_Hang_in_Tauberbischofsheim.jpg",
+    "titel": "Begrünter Carport im Hang in Tauberbischofsheim.jpg"
+  },
+  "stellplatz": {
+    "fotograf": "Elgaard",
+    "lizenz": "CC BY 4.0",
+    "lizenzUrl": "https://creativecommons.org/licenses/by/4.0",
+    "quelle": "https://commons.wikimedia.org/wiki/File:Wohnmobil-Stellplatz_Sportzentrum_Ottersberg_02.jpg",
+    "titel": "Wohnmobil-Stellplatz Sportzentrum Ottersberg 02.jpg"
+  },
+  "garage": {
+    "fotograf": "TeWeBs",
+    "lizenz": "CC BY-SA 4.0",
+    "lizenzUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "quelle": "https://commons.wikimedia.org/wiki/File:BS_Doppelgarage.JPG",
+    "titel": "BS Doppelgarage.JPG"
+  },
+  "hof": {
+    "fotograf": "3268zauber",
+    "lizenz": "CC BY-SA 3.0",
+    "lizenzUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+    "quelle": "https://commons.wikimedia.org/wiki/File:Hofeinfahrt_Landwirtschaft.JPG",
+    "titel": "Hofeinfahrt Landwirtschaft.JPG"
+  },
+  "anhaenger": {
+    "fotograf": "Johann Jaritz",
+    "lizenz": "CC BY-SA 4.0",
+    "lizenzUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "quelle": "https://commons.wikimedia.org/wiki/File:P%C3%B6rtschach_10.-Oktober-Stra%C3%9Fe_Abstellplatz_f%C3%BCr_Bootsanh%C3%A4nger_Segelboot_26122022_3322.jpg",
+    "titel": "Pörtschach 10.-Oktober-Straße Abstellplatz für Bootsanhänger Segelboot 26122022 3322.jpg"
+  }
+}

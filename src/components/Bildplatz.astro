@@ -3,14 +3,14 @@
 // Sonst erscheint eine Illustration im Kartenstil mit Markierungen – keine erfundenen Inserate.
 import { Image } from 'astro:assets';
 import Icon from './Icon.astro';
+import Fotonachweis from './Fotonachweis.astro';
 import type { IconName } from '../lib/icons';
+import { bild } from '../lib/bilder';
 
-interface Props { name: string; alt: string; class?: string; }
-const { name, alt, class: klasse } = Astro.props;
-
-const dateien = import.meta.glob<{ default: ImageMetadata }>('../assets/bilder/*.{jpg,jpeg,png,webp}', { eager: true });
-const treffer = Object.entries(dateien).find(([pfad]) => pfad.split('/').pop()!.replace(/\.\w+$/, '') === name);
-const foto = treffer?.[1].default;
+interface Props { name: string; ersatz?: string; alt: string; class?: string; }
+const { name, ersatz, alt, class: klasse } = Astro.props;
+const treffer = bild(name, ersatz);
+const foto = treffer?.src;
 
 const marken: { icon: IconName; text: string; x: number; y: number }[] = [
   { icon: 'garage', text: 'Garage', x: 24, y: 30 },
@@ -21,7 +21,8 @@ const marken: { icon: IconName; text: string; x: number; y: number }[] = [
 ---
 <div class:list={['bildplatz', klasse]}>
   {foto ? (
-    <Image src={foto} alt={alt} widths={[480, 800, 1200]} sizes="(min-width: 56rem) 50vw, 100vw" loading="eager" />
+    <Image src={foto} alt={alt} width={1200} quality={72} widths={[480, 800, 1200]} sizes="(min-width: 60rem) 45vw, 100vw" loading="eager" />
+    <Fotonachweis nachweis={treffer?.nachweis} />
   ) : (
     <div class="karte-bild" role="img" aria-label="Illustration: Plätze für Auto, Wohnwagen, Lager und Anhänger in der Nachbarschaft">
       {marken.map((m) => (

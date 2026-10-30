@@ -6,6 +6,7 @@ import Schritte from '../../components/Schritte.astro';
 import Faq from '../../components/Faq.astro';
 import Icon from '../../components/Icon.astro';
 import SmartLink from '../../components/SmartLink.astro';
+import Bildplatz from '../../components/Bildplatz.astro';
 import FormVersteckt from '../../components/FormVersteckt.astro';
 import FormSkript from '../../components/FormSkript.astro';
 import Datenschutzhinweis from '../../components/Datenschutzhinweis.astro';
@@ -21,6 +22,7 @@ const kacheln = flaechenArten.map((a) => ({
   text: a.nutzen,
   icon: a.icon,
   href: link(a.seite),
+  bild: a.bild,
   linkText: istLive(a.seite) ? 'Mehr erfahren' : 'Jetzt anbieten',
 }));
 
@@ -163,7 +165,7 @@ const nachfrageLink = link('nachfrage') ?? link('platzAnbieten');
   <section class="abschnitt abschnitt-dunkel">
     <div class="wrap">
       <div class="hoefe">
-        <span class="symbol-flaeche"><Icon name="hof" /></span>
+        <Bildplatz name="vermieten-hof" ersatz="hof" alt="Blick durch eine Hofeinfahrt auf eine Scheune" />
         <div>
           <h2>Sie haben einen Hof oder eine Scheune?</h2>
           <p>Auf größeren Flächen ist oft Platz für mehrere Autos, Anhänger, Wohnwagen oder Wohnmobile. Wir vermitteln auch mehrere Plätze auf einer Fläche und stimmen Zufahrt und Zeiten mit Ihnen ab.</p>
@@ -207,7 +209,8 @@ const nachfrageLink = link('nachfrage') ?? link('platzAnbieten');
   .foto-liste { list-style: none; counter-reset: foto; padding: 0; display: grid; gap: 0.75rem; margin: 1.25rem 0; }
   .foto-liste li { counter-increment: foto; display: flex; align-items: center; gap: 1rem; background: var(--karte); box-shadow: var(--schatten); border-radius: var(--r); padding: 1rem 1.25rem; }
   .foto-liste li::before { content: counter(foto); display: grid; place-items: center; flex: none; width: 2.25rem; height: 2.25rem; border-radius: 50%; background: var(--blau); color: #fff; font-weight: 700; }
-  .hoefe { display: grid; gap: 0.5rem; max-width: 50rem; margin-inline: auto; }
+  .hoefe { display: grid; gap: 2rem; align-items: center; }
+  @media (min-width: 56rem) { .hoefe { grid-template-columns: 1fr 1fr; gap: 4rem; } }
   .hoefe h2 { font-size: clamp(1.6rem, 4vw, 2.25rem); }
   .kontakt-zeile { display: flex; flex-wrap: wrap; gap: 0.75rem; justify-content: center; margin-top: 2rem; }
   .kontakt-zeile :global(.symbol-klein) { width: 1.3rem; height: 1.3rem; }
