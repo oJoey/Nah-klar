@@ -1,10 +1,35 @@
 {
   "_hinweis": "STARTWERTE ZUM ÜBERSCHREIBEN – bitte mit echten Erfahrungswerten ersetzen. Monatsmiete in Euro, die der Vermieter erhält.",
   "arten": [
-    { "wert": "wohnmobil", "titel": "Stellplatz für Wohnmobil oder Wohnwagen", "von": 60, "bis": 120 },
-    { "wert": "garage", "titel": "Garage", "von": 50, "bis": 90 },
-    { "wert": "einfahrt", "titel": "Auto-Stellplatz oder Einfahrt", "von": 30, "bis": 60 },
-    { "wert": "keller-raum", "titel": "Keller oder Lagerraum", "von": 30, "bis": 80 },
-    { "wert": "anhaenger", "titel": "Platz für Anhänger oder Boot", "von": 25, "bis": 50 }
+    {
+      "wert": "garage",
+      "titel": "Garage",
+      "von": 50,
+      "bis": 90
+    },
+    {
+      "wert": "einfahrt",
+      "titel": "Auto-Stellplatz oder Einfahrt",
+      "von": 30,
+      "bis": 60
+    },
+    {
+      "wert": "keller-raum",
+      "titel": "Keller oder Lagerraum",
+      "von": 30,
+      "bis": 80
+    },
+    {
+      "wert": "wohnmobil",
+      "titel": "Stellplatz für Wohnmobil oder Wohnwagen",
+      "von": 60,
+      "bis": 120
+    },
+    {
+      "wert": "anhaenger",
+      "titel": "Platz für Anhänger oder Boot",
+      "von": 25,
+      "bis": 50
+    }
   ]
 }

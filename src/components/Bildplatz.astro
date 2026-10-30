@@ -13,8 +13,8 @@ const treffer = Object.entries(dateien).find(([pfad]) => pfad.split('/').pop()!.
 const foto = treffer?.[1].default;
 
 const marken: { icon: IconName; text: string; x: number; y: number }[] = [
-  { icon: 'wohnmobil', text: 'Wohnmobil', x: 24, y: 30 },
-  { icon: 'garage', text: 'Garage', x: 70, y: 22 },
+  { icon: 'garage', text: 'Garage', x: 24, y: 30 },
+  { icon: 'wohnmobil', text: 'Wohnwagen', x: 70, y: 22 },
   { icon: 'lager', text: 'Lager', x: 58, y: 64 },
   { icon: 'anhaenger', text: 'Anhänger', x: 20, y: 72 },
 ];
@@ -23,7 +23,7 @@ const marken: { icon: IconName; text: string; x: number; y: number }[] = [
   {foto ? (
     <Image src={foto} alt={alt} widths={[480, 800, 1200]} sizes="(min-width: 56rem) 50vw, 100vw" loading="eager" />
   ) : (
-    <div class="karte-bild" role="img" aria-label="Illustration: Plätze für Wohnmobil, Garage, Lager und Anhänger in der Nachbarschaft">
+    <div class="karte-bild" role="img" aria-label="Illustration: Plätze für Auto, Wohnwagen, Lager und Anhänger in der Nachbarschaft">
       {marken.map((m) => (
         <span class="marke-pin" style={`left:${m.x}%;top:${m.y}%`}>
           <span class="pin-kreis"><Icon name={m.icon} /></span>
