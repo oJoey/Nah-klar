@@ -1,0 +1,46 @@
+---
+// Bildplatz: Liegt ein Foto unter src/assets/bilder/<name>.(jpg|png|webp), wird es gezeigt (optimiert).
+// Sonst erscheint eine Illustration im Kartenstil mit Markierungen – keine erfundenen Inserate.
+import { Image } from 'astro:assets';
+import Icon from './Icon.astro';
+import type { IconName } from '../lib/icons';
+
+interface Props { name: string; alt: string; class?: string; }
+const { name, alt, class: klasse } = Astro.props;
+
+const dateien = import.meta.glob<{ default: ImageMetadata }>('../assets/bilder/*.{jpg,jpeg,png,webp}', { eager: true });
+const treffer = Object.entries(dateien).find(([pfad]) => pfad.split('/').pop()!.replace(/\.\w+$/, '') === name);
+const foto = treffer?.[1].default;
+
+const marken: { icon: IconName; text: string; x: number; y: number }[] = [
+  { icon: 'wohnmobil', text: 'Wohnmobil', x: 24, y: 30 },
+  { icon: 'garage', text: 'Garage', x: 70, y: 22 },
+  { icon: 'lager', text: 'Lager', x: 58, y: 64 },
+  { icon: 'anhaenger', text: 'Anhänger', x: 20, y: 72 },
+];
+---
+<div class:list={['bildplatz', klasse]}>
+  {foto ? (
+    <Image src={foto} alt={alt} widths={[480, 800, 1200]} sizes="(min-width: 56rem) 50vw, 100vw" loading="eager" />
+  ) : (
+    <div class="karte-bild" role="img" aria-label="Illustration: Plätze für Wohnmobil, Garage, Lager und Anhänger in der Nachbarschaft">
+      {marken.map((m) => (
+        <span class="marke-pin" style={`left:${m.x}%;top:${m.y}%`}>
+          <span class="pin-kreis"><Icon name={m.icon} /></span>
+          <span class="pin-text">{m.text}</span>
+        </span>
+      ))}
+      <span class="kompass-punkt" style="left:44%;top:46%" />
+    </div>
+  )}
+</div>
+<style>
+  .bildplatz { position: relative; border-radius: var(--r-gross); overflow: hidden; aspect-ratio: 4 / 3; background: var(--marine); box-shadow: 0 20px 50px rgb(19 33 58 / 0.18); }
+  .bildplatz :global(img) { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .karte-bild { position: absolute; inset: 0; background: url('/bilder/karte.svg') center / cover no-repeat; }
+  .marke-pin { position: absolute; transform: translate(-50%, -50%); display: flex; flex-direction: column; align-items: center; gap: 0.35rem; }
+  .pin-kreis { display: grid; place-items: center; width: 3.25rem; height: 3.25rem; border-radius: 50%; background: #fff; box-shadow: 0 6px 18px rgb(0 0 0 / 0.3); }
+  .pin-kreis :global(.symbol) { width: 1.6rem; height: 1.6rem; color: var(--blau); }
+  .pin-text { font-size: 0.875rem; font-weight: 600; color: #fff; background: rgb(15 35 64 / 0.75); padding: 0.1rem 0.6rem; border-radius: 999px; }
+  .kompass-punkt { position: absolute; width: 1.25rem; height: 1.25rem; transform: translate(-50%, -50%); border-radius: 50%; background: var(--messing-hell); box-shadow: 0 0 0 8px rgb(242 181 74 / 0.25), 0 0 0 18px rgb(242 181 74 / 0.1); }
+</style>

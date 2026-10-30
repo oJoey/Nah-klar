@@ -9,6 +9,8 @@ import Schritte from '../components/Schritte.astro';
 import Bewertungen from '../components/Bewertungen.astro';
 import WerkzeugeTeaser from '../components/WerkzeugeTeaser.astro';
 import Faq from '../components/Faq.astro';
+import Bildplatz from '../components/Bildplatz.astro';
+import { telefonHref } from '../config/site';
 import { site } from '../config/site';
 import { link } from '../config/seiten';
 import { mietArten } from '../data/arten';
@@ -53,18 +55,24 @@ const vermieterSchritte = [
   titel={`Stellplatz mieten und vermieten im Landkreis Böblingen | ${site.name}`}
   beschreibung="Stellplatz, Garage oder Lagerraum von Nachbarn mieten – oder ungenutzten Platz vermieten. Geprüfte Mieter, Mustervertrag, persönlicher Ansprechpartner im Landkreis Böblingen."
 >
-  <section class="held zentriert">
-    <div class="wrap">
-      <p class="kicker">Stellplatz mieten und vermieten im Landkreis Böblingen</p>
-      <h1>Platz von Nachbarn – für Ihr Fahrzeug und Ihre Sachen.</h1>
-      <p class="einleitung">Stellplätze, Garagen und Lagerraum bei Privatleuten in Ihrer Nähe. {texte.heroVersprechen}</p>
-      <ButtonPaar />
+  <section class="held">
+    <div class="wrap held-raster">
+      <div>
+        <p class="kicker">Stellplatz mieten und vermieten im Landkreis Böblingen</p>
+        <h1>Platz von Nachbarn – für Ihr Fahrzeug und Ihre Sachen.</h1>
+        <p class="einleitung">Stellplätze, Garagen und Lagerraum bei Privatleuten in Ihrer Nähe. {texte.heroVersprechen}</p>
+        <ButtonPaar />
+      </div>
+      <Bildplatz name="start" alt="Hof mit abgestelltem Wohnwagen im Landkreis Böblingen" />
     </div>
   </section>
 
-  <section class="abschnitt abschnitt-grau suche" aria-label="Platz suchen">
+  <section class="suche" aria-label="Platz suchen">
     <div class="wrap">
       <Suchmaske />
+      <h2 class="kategorien-titel">Was möchten Sie unterstellen?</h2>
+      <Kacheln kacheln={kacheln} kompakt />
+      <p class="zentriert mt"><a class="weiter" href={link('mieten')}>Alle Infos für Mieter</a></p>
     </div>
   </section>
 
@@ -79,7 +87,7 @@ const vermieterSchritte = [
     </div>
   </section>
 
-  <section class="abschnitt abschnitt-dunkel">
+  <section class="abschnitt abschnitt-grau">
     <div class="wrap">
       <div class="kopfzeile">
         <h2>Warum nicht einfach Kleinanzeigen?</h2>
@@ -93,18 +101,7 @@ const vermieterSchritte = [
     </div>
   </section>
 
-  <section class="abschnitt">
-    <div class="wrap">
-      <div class="kopfzeile">
-        <h2>Welchen Platz suchen Sie?</h2>
-        <p class="einleitung">Sagen Sie uns, was Sie unterstellen möchten. Wir suchen in Ihrer Nähe.</p>
-      </div>
-      <Kacheln kacheln={kacheln} />
-      <p class="zentriert mt"><a class="weiter" href={link('mieten')}>Alle Infos für Mieter</a></p>
-    </div>
-  </section>
-
-  <section class="abschnitt abschnitt-grau">
+  <section class="abschnitt abschnitt-kobalt">
     <div class="wrap">
       <div class="kopfzeile">
         <p class="kicker">Für Vermieter</p>
@@ -128,7 +125,7 @@ const vermieterSchritte = [
 
   <section class="abschnitt abschnitt-grau">
     <div class="wrap">
-      <Faq seite="start" />
+      <Faq seite="start"><p>Noch etwas offen? {site.ansprechpartner}: <a href={telefonHref}>{site.telefonAnzeige}</a></p></Faq>
     </div>
   </section>
 
@@ -141,9 +138,14 @@ const vermieterSchritte = [
   </section>
 </Basis>
 <style>
-  .held { padding-block: clamp(3rem, 10vw, 7rem) clamp(3rem, 8vw, 5.5rem); background: radial-gradient(ellipse 90% 70% at 50% 0%, var(--blau-hell), transparent 70%), var(--flaeche); }
-  .held h1 { max-width: 18ch; margin-inline: auto; }
+  .held { padding-block: clamp(1.5rem, 6vw, 4.5rem) clamp(5rem, 12vw, 8rem); background: radial-gradient(ellipse 80% 60% at 20% 0%, var(--blau-hell), transparent 70%), var(--flaeche); }
+  .held-raster { display: grid; gap: 2.5rem; align-items: center; }
+  @media (min-width: 60rem) { .held-raster { grid-template-columns: 1.1fr 1fr; gap: 4rem; } .held h1 { font-size: clamp(2.6rem, 4.6vw, 3.9rem); } }
   .held .einleitung { margin-top: 1.25rem; }
+  /* Suche schiebt sich über die Kante des Kopfbereichs */
+  .suche { background: var(--flaeche-2); padding-bottom: var(--abstand); }
+  .suche :global(.suchmaske) { position: relative; transform: translateY(-3.5rem); margin-bottom: -1rem; }
+  .kategorien-titel { text-align: center; font-size: clamp(1.6rem, 4vw, 2.25rem); margin-bottom: 1.75rem; }
   .vorteile { gap: 2.5rem 2rem; }
   .vorteile li { text-align: center; }
   .vorteile .symbol-flaeche { margin-inline: auto; }

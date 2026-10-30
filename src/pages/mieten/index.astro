@@ -6,6 +6,7 @@ import Schritte from '../../components/Schritte.astro';
 import Kennzahlen from '../../components/Kennzahlen.astro';
 import Faq from '../../components/Faq.astro';
 import SmartLink from '../../components/SmartLink.astro';
+import Bildplatz from '../../components/Bildplatz.astro';
 import { link } from '../../config/seiten';
 import { zahlung } from '../../config/zahlung';
 import { mietArten } from '../../data/arten';
@@ -31,8 +32,9 @@ const schritte = [
   beschreibung="Abstellplatz, Garage, Winterplatz fürs Wohnmobil oder Lagerraum privat mieten im Landkreis Böblingen. Kostenloser Suchauftrag – wir suchen aktiv in Ihrer Nähe."
   brotkruemel={[{ name: 'Mieten', pfad: '/mieten/' }]}
 >
-  <section class="held zentriert">
-    <div class="wrap">
+  <section class="held">
+    <div class="wrap held-raster">
+      <div>
       <h1>Abstellplatz und Stellplatz mieten im Landkreis Böblingen</h1>
       <p class="einleitung">Sie klicken sich nicht durch Inserate. Sie sagen uns, welchen Platz Sie brauchen. Wir fragen gezielt bei Vermietern in Ihrer Nähe nach und melden uns mit passenden Vorschlägen.</p>
       <div class="held-knoepfe">
@@ -40,6 +42,8 @@ const schritte = [
         <p class="unter-hinweis">Suchauftrag in 1 Minute, kostenlos</p>
       </div>
       <p class="vermieter-zeile">Sie haben selbst Platz übrig? <a href={link('platzAnbieten')}>Platz anbieten</a> · <span class="kostenlos">Für Vermieter immer kostenlos</span></p>
+      </div>
+      <Bildplatz name="mieten" alt="Stellplatz in einer Einfahrt im Landkreis Böblingen" />
     </div>
   </section>
 
@@ -102,7 +106,8 @@ const schritte = [
 </Basis>
 <style>
   .held { padding-block: clamp(2rem, 8vw, 5rem) clamp(3rem, 8vw, 5rem); background: radial-gradient(ellipse 90% 70% at 50% 0%, var(--blau-hell), transparent 70%), var(--flaeche); }
-  .held h1 { max-width: 20ch; margin-inline: auto; }
+  .held-raster { display: grid; gap: 2.5rem; align-items: center; }
+  @media (min-width: 60rem) { .held-raster { grid-template-columns: 1.1fr 1fr; gap: 4rem; } .held h1 { font-size: clamp(2.6rem, 4.6vw, 3.9rem); } }
   .held .einleitung { margin-top: 1.25rem; }
   .held-knoepfe { margin-top: 2rem; }
   .vermieter-zeile { margin-top: 1.5rem; font-size: 1rem; color: var(--text-2); }

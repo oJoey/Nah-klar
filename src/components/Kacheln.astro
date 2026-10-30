@@ -2,10 +2,11 @@
 import Icon from './Icon.astro';
 import type { IconName } from '../lib/icons';
 export type Kachel = { titel: string; text: string; icon: IconName; href: string | null; linkText: string };
-interface Props { kacheln: Kachel[]; }
+interface Props { kacheln: Kachel[]; kompakt?: boolean; }
+const { kacheln, kompakt = false } = Astro.props;
 ---
-<ul class="raster kacheln">
-  {Astro.props.kacheln.map((k) => (
+<ul class:list={['raster kacheln', { kompakt }]}>
+  {kacheln.map((k) => (
     <li class="karte kachel">
       <span class="symbol-flaeche"><Icon name={k.icon} /></span>
       <h3>{k.href ? <a href={k.href}>{k.titel}</a> : k.titel}</h3>
@@ -25,5 +26,11 @@ interface Props { kacheln: Kachel[]; }
   .kachel h3 a:focus-visible { outline: none; }
   .kachel-link { margin-top: auto; padding-top: 1rem; font-weight: 600; color: var(--blau); }
   .kachel-link::after { content: ' ›'; }
+  .kompakt { grid-template-columns: repeat(auto-fit, minmax(min(100%, 13rem), 1fr)); }
+  .kompakt .kachel { padding: 1.25rem 1.25rem 1.4rem; }
+  .kompakt .symbol-flaeche { margin-bottom: 0.9rem; }
+  .kompakt h3 { font-size: 1.15rem; }
+  .kompakt p { font-size: 1rem; }
+  .kompakt .kachel-link { display: none; }
   @media (prefers-reduced-motion: reduce) { .kachel:has(a):hover, .kachel:has(a):active { transform: none; } }
 </style>

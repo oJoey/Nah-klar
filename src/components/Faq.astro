@@ -15,7 +15,8 @@ const schema = {
   })),
 };
 ---
-<div class="kopfzeile"><h2>{titel}</h2></div>
+<div class="faq-raster">
+<div class="faq-kopf"><h2>{titel}</h2><slot /></div>
 <div class="faq klapp-liste">
   {eintraege.map((e) => (
     <details class="klapp">
@@ -24,7 +25,10 @@ const schema = {
     </details>
   ))}
 </div>
+</div>
 <script type="application/ld+json" set:html={jsonLd(schema)} />
 <style>
-.faq { max-width: 50rem; margin-inline: auto; }
+  .faq-raster { display: grid; gap: 1.5rem; }
+  @media (min-width: 56rem) { .faq-raster { grid-template-columns: 1fr 1.6fr; gap: 4rem; align-items: start; } }
+  .faq-kopf :global(p) { color: var(--text-2); }
 </style>

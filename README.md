@@ -34,3 +34,8 @@ Eine neue Seite live schalten: Seite anlegen und in `src/config/seiten.ts` `live
 2. Umgebungsvariablen: `RESEND_API_KEY`, `MAIL_ABSENDER`, `MAIL_ANTWORT` (optional), `MARKENNAME`, `NETLIFY_API_TOKEN`.
 3. Bei Resend die Absender-Domain bestätigen.
 4. Benachrichtigung über neue Einsendungen an Sie selbst: Forms → Form notifications.
+
+## Eigene Fotos einbauen
+
+Fotos (ohne Personen) als `start.jpg` bzw. `mieten.jpg` nach `src/assets/bilder/` legen.
+Sie ersetzen dann automatisch die Karten-Illustration im Kopfbereich und werden beim Bauen verkleinert und optimiert.
