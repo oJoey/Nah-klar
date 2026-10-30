@@ -1,0 +1,67 @@
+---
+// Vier Schritte, optional umschaltbar zwischen Mieter und Vermieter.
+export type Schritt = { titel: string; text: string };
+interface Props { mieter?: Schritt[]; vermieter?: Schritt[]; }
+const { mieter, vermieter } = Astro.props;
+const umschaltbar = !!(mieter && vermieter);
+const gruppen = [
+  { id: 'mieter', titel: 'Für Mieter', schritte: mieter },
+  { id: 'vermieter', titel: 'Für Vermieter', schritte: vermieter },
+].filter((g) => g.schritte);
+---
+<div class="schritte" data-umschalter={umschaltbar ? '' : undefined}>
+  {umschaltbar && (
+    <div class="umschalter" role="tablist" aria-label="Ablauf anzeigen für" hidden>
+      {gruppen.map((g, i) => (
+        <button type="button" role="tab" id={`tab-${g.id}`} aria-controls={`ablauf-${g.id}`} aria-selected={i === 0 ? 'true' : 'false'} tabindex={i === 0 ? 0 : -1}>{g.titel}</button>
+      ))}
+    </div>
+  )}
+  {gruppen.map((g) => (
+    <div id={`ablauf-${g.id}`} role={umschaltbar ? 'tabpanel' : undefined} aria-labelledby={umschaltbar ? `tab-${g.id}` : undefined}>
+      {umschaltbar && <h3 class="schritte-gruppe">{g.titel}</h3>}
+      <ol class="schritt-liste">
+        {g.schritte!.map((s) => <li><h3>{s.titel}</h3><p>{s.text}</p></li>)}
+      </ol>
+      {g.id === 'vermieter' && <p class="kostenlos">Für Vermieter immer kostenlos</p>}
+    </div>
+  ))}
+</div>
+<script>
+  // Ohne JavaScript sind beide Abläufe sichtbar; mit JavaScript wird umgeschaltet.
+  document.querySelectorAll<HTMLElement>('[data-umschalter]').forEach((box) => {
+    const leiste = box.querySelector<HTMLElement>('[role=tablist]')!;
+    const tabs = [...box.querySelectorAll<HTMLButtonElement>('[role=tab]')];
+    const zeige = (tab: HTMLButtonElement) => {
+      tabs.forEach((t) => {
+        const an = t === tab;
+        t.setAttribute('aria-selected', String(an));
+        t.tabIndex = an ? 0 : -1;
+        document.getElementById(t.getAttribute('aria-controls')!)!.hidden = !an;
+      });
+    };
+    leiste.hidden = false;
+    box.querySelectorAll('.schritte-gruppe').forEach((h) => h.classList.add('sr-only'));
+    tabs.forEach((t, i) => {
+      t.addEventListener('click', () => zeige(t));
+      t.addEventListener('keydown', (e) => {
+        const d = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0;
+        if (d) { const n = tabs[(i + d + tabs.length) % tabs.length]; zeige(n); n.focus(); }
+      });
+    });
+    zeige(tabs[0]);
+  });
+</script>
+<style>
+  .umschalter { display: inline-flex; border: 2px solid var(--primaer); border-radius: 12px; padding: 0.25rem; margin-bottom: 1.5rem; background: #fff; }
+  .umschalter button { min-height: 3rem; padding: 0.5rem 1.25rem; border: 0; border-radius: 8px; font: inherit; font-weight: 700; background: transparent; color: var(--primaer); cursor: pointer; }
+  .umschalter button[aria-selected='true'] { background: var(--primaer); color: #fff; }
+  .schritt-liste { list-style: none; counter-reset: schritt; padding: 0; margin: 0 0 1rem; display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr)); }
+  .schritt-liste li { counter-increment: schritt; background: #fff; border: 1px solid var(--rand); border-radius: var(--radius); padding: 1.25rem; }
+  .schritt-liste li::before {
+    content: counter(schritt); display: grid; place-items: center; width: 2.5rem; height: 2.5rem; margin-bottom: 0.6rem;
+    border-radius: 50%; background: var(--primaer); color: #fff; font-weight: 800;
+  }
+  .schritt-liste p { margin: 0; }
+  .schritte-gruppe { margin-top: 1rem; }
+</style>

@@ -1,0 +1,31 @@
+---
+// Füllt Formulare aus der Adresszeile vor (?ort=, ?art=, ?zeitraum=) und übernimmt die gemerkte Herkunft.
+---
+<script>
+  const params = new URLSearchParams(location.search);
+  let herkunft = '';
+  try {
+    const h = JSON.parse(sessionStorage.getItem('herkunft') ?? '{}');
+    herkunft = Object.entries(h).map(([k, v]) => `${k}=${v}`).join('; ');
+  } catch {}
+
+  document.querySelectorAll<HTMLFormElement>('form[data-formular]').forEach((form) => {
+    const quelle = form.querySelector<HTMLInputElement>('[name=quelle]');
+    if (quelle) quelle.value = herkunft || 'direkt';
+
+    for (const [k, v] of params) {
+      if (!['ort', 'art', 'zeitraum'].includes(k)) continue;
+      form.querySelectorAll<HTMLInputElement | HTMLSelectElement>(`[name="${k}"]`).forEach((feld) => {
+        if (feld instanceof HTMLInputElement && feld.type === 'radio') feld.checked = feld.value === v;
+        else if (feld instanceof HTMLSelectElement) { if ([...feld.options].some((o) => o.value === v)) feld.value = v; }
+        else feld.value = v.slice(0, 60);
+      });
+    }
+
+    // Verständliche Meldung für das Feld „Telefon oder E-Mail“
+    form.querySelectorAll<HTMLInputElement>('[data-kontakt]').forEach((feld) => {
+      feld.addEventListener('invalid', () => feld.setCustomValidity('Bitte geben Sie eine Telefonnummer oder E-Mail-Adresse an.'));
+      feld.addEventListener('input', () => feld.setCustomValidity(''));
+    });
+  });
+</script>

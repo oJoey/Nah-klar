@@ -1,0 +1,25 @@
+---
+import aktion from '../config/aktion.json';
+import { link, type SeitenSchluessel } from '../config/seiten';
+// Beim Bauen prüfen; im Browser zusätzlich, damit der Balken auch ohne neuen Build verschwindet.
+const ende = new Date(`${aktion.ende}T23:59:59+01:00`);
+const sichtbar = aktion.aktiv && new Date() <= ende;
+const href = link(aktion.link as SeitenSchluessel);
+---
+{sichtbar && (
+  <div class="aktion" data-ende={ende.toISOString()}>
+    <p class="wrap">
+      {aktion.text}{' '}{href && <a href={href}>{aktion.linkText}</a>}
+    </p>
+  </div>
+  <script is:inline>
+    document.querySelectorAll('.aktion[data-ende]').forEach(function (el) {
+      if (new Date() > new Date(el.dataset.ende)) el.remove();
+    });
+  </script>
+)}
+<style>
+  .aktion { background: var(--akzent-hell); border-bottom: 3px solid var(--akzent); color: #3d2600; }
+  .aktion p { margin-block: 0; padding-block: 0.55rem; font-size: 1rem; font-weight: 600; }
+  .aktion a { color: #3d2600; }
+</style>

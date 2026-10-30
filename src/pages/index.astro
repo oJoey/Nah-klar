@@ -1,0 +1,141 @@
+---
+import Basis from '../layouts/Basis.astro';
+import ButtonPaar from '../components/ButtonPaar.astro';
+import Suchmaske from '../components/Suchmaske.astro';
+import Icon from '../components/Icon.astro';
+import Kacheln from '../components/Kacheln.astro';
+import Verdienstrechner from '../components/Verdienstrechner.astro';
+import Schritte from '../components/Schritte.astro';
+import Bewertungen from '../components/Bewertungen.astro';
+import WerkzeugeTeaser from '../components/WerkzeugeTeaser.astro';
+import Faq from '../components/Faq.astro';
+import { site } from '../config/site';
+import { link } from '../config/seiten';
+import { mietArten } from '../data/arten';
+import { texte } from '../lib/texte';
+import type { IconName } from '../lib/icons';
+
+const vorteile: { icon: IconName; titel: string; text: string }[] = [
+  { icon: 'ort', titel: 'In Ihrer Nähe', text: 'Platz bei Privatleuten in Ihrem Ort oder im Nachbarort.' },
+  { icon: 'schild', titel: 'Geprüft und geregelt', text: 'Geprüfte Mieter, Mustervertrag und Kaution für jede Miete.' },
+  { icon: 'person', titel: 'Persönlich', text: `${site.ansprechpartner}, per Telefon oder WhatsApp.` },
+];
+
+const unterschiede: { icon: IconName; titel: string; text: string }[] = [
+  { icon: 'schild', titel: 'Geprüfte Mieter', text: 'Ausweis, bei Fahrzeugen auch Fahrzeugschein und Versicherung, prüfen wir vor dem ersten Treffen.' },
+  { icon: 'vertrag', titel: 'Mustervertrag', text: 'Klare Regeln zu Kaution, Kündigung und Zufahrt – für beide Seiten.' },
+  { icon: 'euro', titel: texte.live ? 'Automatische Zahlung mit Erinnerung' : 'Klare Zahlungsregeln mit Erinnerung', text: `${texte.zahlungLang} Bei offenen Zahlungen ${texte.erinnern}.` },
+  { icon: 'person', titel: 'Persönlicher Ansprechpartner', text: `Ein fester Ansprechpartner im ${site.region}, der sich um Fragen und Probleme kümmert.` },
+];
+
+const kacheln = mietArten.map((a) => ({
+  titel: a.titel,
+  text: a.nutzen,
+  icon: a.icon,
+  href: link(a.seite),
+  linkText: link(a.seite)?.startsWith('/suchauftrag/') ? 'Suchauftrag anlegen' : 'Mehr erfahren',
+}));
+
+const mieterSchritte = [
+  { titel: 'Suchauftrag anlegen', text: 'In einer Minute: Ort, Art und Zeitraum. Kostenlos und ohne Konto.' },
+  { titel: 'Vorschlag erhalten', text: 'Wir melden uns mit passenden Plätzen, mit Fotos, Preis und Ortsteil.' },
+  { titel: 'Besichtigen', text: 'Sie schauen sich den Platz an und lernen den Vermieter kennen.' },
+  { titel: texte.mieterSchritt4, text: texte.mieterSchritt4Text },
+];
+const vermieterSchritte = [
+  { titel: 'Platz melden', text: 'Kurzes Formular oder Anruf. Dauert zwei Minuten.' },
+  { titel: 'Fotos schicken', text: 'Drei Fotos nach Anleitung – Beschreibung und Vertrag erstellen wir.' },
+  { titel: 'Mieter kennenlernen', text: 'Wir schlagen geprüfte Mieter vor. Sie entscheiden, wer einzieht.' },
+  { titel: 'Miete erhalten', text: texte.vermieterSchritt4Text },
+];
+---
+<Basis
+  titel={`Stellplatz mieten und vermieten im Landkreis Böblingen | ${site.name}`}
+  beschreibung="Stellplatz, Garage oder Lagerraum von Nachbarn mieten – oder ungenutzten Platz vermieten. Geprüfte Mieter, Mustervertrag, persönlicher Ansprechpartner im Landkreis Böblingen."
+>
+  <section class="abschnitt abschnitt-blau held">
+    <div class="wrap">
+      <p class="kicker">Stellplatz mieten und vermieten im Landkreis Böblingen</p>
+      <h1>Platz von Nachbarn – für Ihr Fahrzeug und Ihre Sachen.</h1>
+      <p class="einleitung">Stellplätze, Garagen und Lagerraum bei Privatleuten in Ihrer Nähe. {texte.heroVersprechen}</p>
+      <ButtonPaar />
+    </div>
+  </section>
+
+  <section class="abschnitt" aria-label="Platz suchen">
+    <div class="wrap">
+      <Suchmaske />
+    </div>
+  </section>
+
+  <section class="abschnitt abschnitt-grau" aria-labelledby="vorteile-titel">
+    <div class="wrap">
+      <h2 id="vorteile-titel" class="sr-only">Ihre Vorteile</h2>
+      <ul class="raster vorteile">
+        {vorteile.map((v) => (
+          <li><Icon name={v.icon} /><div><h3>{v.titel}</h3><p>{v.text}</p></div></li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <section class="abschnitt">
+    <div class="wrap">
+      <h2>Warum nicht einfach Kleinanzeigen?</h2>
+      <p class="einleitung">Kleinanzeigen sind gut, um schnell einen Kontakt zu finden. Bei einer Miete über viele Monate kommt es auf mehr an:</p>
+      <ul class="raster vergleich">
+        {unterschiede.map((u) => (
+          <li class="karte"><Icon name={u.icon} /><h3>{u.titel}</h3><p>{u.text}</p></li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <section class="abschnitt abschnitt-grau">
+    <div class="wrap">
+      <h2>Welchen Platz suchen Sie?</h2>
+      <Kacheln kacheln={kacheln} />
+      <p class="mt"><a href={link('mieten')}>Alle Infos für Mieter</a></p>
+    </div>
+  </section>
+
+  <section class="abschnitt">
+    <div class="wrap">
+      <h2>Was bringt Ihr freier Platz?</h2>
+      <p class="einleitung">Für Vermieter: Wählen Sie die Art der Fläche und eine Monatsmiete. Wir zeigen Ihnen, was im Jahr zusammenkommt.</p>
+      <Verdienstrechner />
+      <p class="mt"><a href={link('vermieten')}>Alle Infos für Vermieter</a></p>
+    </div>
+  </section>
+
+  <section class="abschnitt abschnitt-blau">
+    <div class="wrap">
+      <h2>So funktioniert's</h2>
+      <Schritte mieter={mieterSchritte} vermieter={vermieterSchritte} />
+    </div>
+  </section>
+
+  <Bewertungen />
+  <WerkzeugeTeaser />
+
+  <section class="abschnitt">
+    <div class="wrap">
+      <Faq seite="start" />
+    </div>
+  </section>
+
+  <section class="abschnitt abschnitt-blau zentriert">
+    <div class="wrap">
+      <h2>Platz anbieten oder Platz finden?</h2>
+      <p class="einleitung">Beides geht schnell und ist unverbindlich.</p>
+      <ButtonPaar />
+    </div>
+  </section>
+</Basis>
+<style>
+  .held { padding-block: 2rem 2.5rem; }
+  .vorteile { list-style: none; padding: 0; margin: 0; }
+  .vorteile li { display: flex; gap: 1rem; align-items: flex-start; }
+  .vorteile p { margin: 0; }
+  .vergleich { list-style: none; padding: 0; margin: 0; }
+</style>

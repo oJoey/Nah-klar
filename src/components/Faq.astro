@@ -1,0 +1,30 @@
+---
+import { getCollection } from 'astro:content';
+import { absaetze, klartext, jsonLd } from '../lib/texte';
+interface Props { seite: 'start' | 'mieten' | 'vermieten'; titel?: string; }
+const { seite, titel = 'Häufige Fragen' } = Astro.props;
+const eintraege = (await getCollection('faq', (e) => e.data.seiten.includes(seite)))
+  .sort((a, b) => a.data.reihenfolge - b.data.reihenfolge);
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: eintraege.map((e) => ({
+    '@type': 'Question',
+    name: e.data.frage,
+    acceptedAnswer: { '@type': 'Answer', text: klartext(e.body ?? '') },
+  })),
+};
+---
+<h2>{titel}</h2>
+<div class="faq">
+  {eintraege.map((e) => (
+    <details class="klapp">
+      <summary>{e.data.frage}</summary>
+      <div class="klapp-inhalt" set:html={absaetze(e.body ?? '')} />
+    </details>
+  ))}
+</div>
+<script type="application/ld+json" set:html={jsonLd(schema)} />
+<style>
+  .faq { max-width: 48rem; }
+</style>

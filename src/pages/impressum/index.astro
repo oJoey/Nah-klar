@@ -1,0 +1,21 @@
+---
+import Basis from '../../layouts/Basis.astro';
+import { site } from '../../config/site';
+// PLATZHALTER: Vor dem Livegang vollständig ausfüllen und noindex entfernen.
+---
+<Basis titel="Impressum" beschreibung={`Impressum von ${site.name}.`} brotkruemel={[{ name: 'Impressum', pfad: '/impressum/' }]} noindex>
+  <section class="abschnitt">
+    <div class="wrap">
+      <h1>Impressum</h1>
+      <p class="hinweis">Platzhalter – wird vor dem Livegang ausgefüllt.</p>
+      <h2>Angaben gemäß § 5 DDG</h2>
+      <p>[NAME / FIRMA]<br />[STRASSE HAUSNUMMER]<br />[PLZ ORT]</p>
+      <h2>Kontakt</h2>
+      <p>Telefon: {site.telefonAnzeige}<br />E-Mail: [E-MAIL]</p>
+      <h2>Vertreten durch</h2>
+      <p>[VERTRETUNGSBERECHTIGTE PERSON]</p>
+      <h2>Umsatzsteuer-ID</h2>
+      <p>[USt-IdNr., falls vorhanden]</p>
+    </div>
+  </section>
+</Basis>

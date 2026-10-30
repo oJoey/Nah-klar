@@ -1,0 +1,28 @@
+// Zentrale Angaben zur Marke. Platzhalter in eckigen Klammern vor dem Livegang ersetzen.
+export const site = {
+  name: '[NAME]',
+  // [DOMAIN]: muss eine gültige Adresse sein, deshalb hier ein Ersatzwert.
+  url: 'https://www.domain-eintragen.de',
+  beschreibung:
+    'Privatleute im Landkreis Böblingen vermieten ungenutzten Platz – Einfahrt, Hof, Scheune, Garage oder Keller – an Nachbarn mit Wohnmobil, Auto, Anhänger oder Lagergut.',
+  region: 'Landkreis Böblingen',
+  bundesland: 'Baden-Württemberg',
+  ansprechpartner: 'Ihr Ansprechpartner im Landkreis Böblingen',
+
+  telefonAnzeige: '[TELEFON]',
+  telefonLink: '+490000000000', // [TELEFON] im Format +49…, ohne Leerzeichen
+  whatsappNummer: '490000000000', // [TELEFON] für WhatsApp: 49…, ohne + und Leerzeichen
+
+  // Wie schnell wir uns nach einer Anfrage melden. Bitte nur eintragen, was Sie sicher einhalten.
+  antwortzeit: 'innerhalb von zwei Werktagen',
+
+  // Stripe Connect: erst auf true setzen, wenn Lastschrift und Auszahlung tatsächlich laufen.
+  // Solange false, versprechen die Texte nichts Automatisches.
+  zahlungLive: false,
+
+  // Umami Cloud (ohne Cookies). Leer lassen = keine Statistik.
+  umamiWebsiteId: '',
+};
+
+export const whatsappLink = `https://wa.me/${site.whatsappNummer}`;
+export const telefonHref = `tel:${site.telefonLink}`;

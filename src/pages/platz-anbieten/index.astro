@@ -1,0 +1,81 @@
+---
+import Basis from '../../layouts/Basis.astro';
+import FormVersteckt from '../../components/FormVersteckt.astro';
+import FormSkript from '../../components/FormSkript.astro';
+import Datenschutzhinweis from '../../components/Datenschutzhinweis.astro';
+import { site, telefonHref } from '../../config/site';
+import { flaechenArten } from '../../data/arten';
+---
+<Basis
+  titel="Platz anbieten – Garage, Einfahrt, Keller oder Scheune vermieten"
+  beschreibung="Melden Sie Ihren freien Platz im Landkreis Böblingen. Für Vermieter immer kostenlos – Sie bestimmen den Preis, wir finden geprüfte Mieter."
+  brotkruemel={[{ name: 'Vermieten', pfad: '/vermieten/' }, { name: 'Platz anbieten', pfad: '/platz-anbieten/' }]}
+>
+  <section class="abschnitt">
+    <div class="wrap schmal">
+      <h1>Platz anbieten</h1>
+      <p class="kostenlos-band">Für Vermieter immer kostenlos</p>
+      <p class="einleitung">Ein paar Angaben genügen. Wir melden uns persönlich, {site.antwortzeit}. Lieber telefonieren? <a href={telefonHref}>{site.telefonAnzeige}</a></p>
+
+      <form class="formular-karte" name="platz-anbieten" method="POST" action="/platz-anbieten/danke/" enctype="multipart/form-data" data-netlify="true" netlify-honeypot="bot-feld" data-formular>
+        <FormVersteckt name="platz-anbieten" />
+
+        <fieldset>
+          <legend>Art der Fläche <span class="pflicht">(Pflicht)</span></legend>
+          <div class="wahl-raster">
+            {flaechenArten.map((a, i) => (
+              <label class="wahl"><input type="radio" name="art" value={a.wert} required={i === 0} /> {a.kurz}</label>
+            ))}
+            <label class="wahl"><input type="radio" name="art" value="sonstiges" /> Sonstiges</label>
+          </div>
+        </fieldset>
+
+        <div class="feld">
+          <label for="pa-plz">PLZ <span class="pflicht">(Pflicht)</span></label>
+          <input id="pa-plz" name="plz" type="text" inputmode="numeric" autocomplete="postal-code" required pattern="[0-9]{5}" maxlength="5" />
+        </div>
+
+        <div class="feld">
+          <label for="pa-groesse">Größe oder Maße</label>
+          <input id="pa-groesse" name="groesse" type="text" maxlength="80" placeholder="z. B. 3 × 6 m oder Platz für 2 Wohnwagen" />
+          <span class="feld-hilfe">Ungefähr reicht. Wir messen bei Bedarf gemeinsam nach.</span>
+        </div>
+
+        <div class="feld">
+          <label for="pa-preis">Wunschpreis pro Monat in Euro</label>
+          <input id="pa-preis" name="wunschpreis" type="number" inputmode="numeric" min="0" max="2000" step="5" />
+          <span class="feld-hilfe">Sie bestimmen den Preis. Unsicher? Lassen Sie das Feld leer, wir beraten Sie.</span>
+        </div>
+
+        <div class="feld">
+          <label for="pa-name">Name <span class="pflicht">(Pflicht)</span></label>
+          <input id="pa-name" name="name" type="text" autocomplete="name" required maxlength="80" />
+        </div>
+
+        <div class="feld">
+          <label for="pa-kontakt">Telefon oder E-Mail <span class="pflicht">(Pflicht)</span></label>
+          <input id="pa-kontakt" name="kontakt" type="text" autocomplete="email" required maxlength="100" data-kontakt
+            pattern="\s*([^@\s]+@[^@\s]+\.[^@\s]+|[+0-9][0-9 \/\(\)\-]{5,})\s*" />
+          <span class="feld-hilfe">Mit E-Mail-Adresse erhalten Sie sofort eine Bestätigung.</span>
+        </div>
+
+        <fieldset>
+          <legend>Fotos (optional)</legend>
+          <p class="feld-hilfe">Am besten: 1. Zufahrt von der Straße, 2. die Fläche selbst, 3. Tor oder Eingang. Zusammen höchstens 8 MB.</p>
+          <div class="feld"><label for="pa-foto1" class="sr-only">Foto 1</label><input id="pa-foto1" name="foto1" type="file" accept="image/*" /></div>
+          <div class="feld"><label for="pa-foto2" class="sr-only">Foto 2</label><input id="pa-foto2" name="foto2" type="file" accept="image/*" /></div>
+          <div class="feld"><label for="pa-foto3" class="sr-only">Foto 3</label><input id="pa-foto3" name="foto3" type="file" accept="image/*" /></div>
+        </fieldset>
+
+        <button class="btn btn-primaer btn-gross btn-voll" type="submit">Platz anbieten</button>
+        <p class="unter-hinweis kostenlos">Für Vermieter immer kostenlos</p>
+        <Datenschutzhinweis />
+      </form>
+    </div>
+  </section>
+  <FormSkript />
+</Basis>
+<style>
+  .schmal { max-width: 46rem; }
+  .kostenlos-band { display: inline-block; background: var(--akzent-hell); border: 2px solid var(--akzent); color: var(--akzent-text); font-weight: 800; padding: 0.35rem 0.9rem; border-radius: 8px; }
+</style>

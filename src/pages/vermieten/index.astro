@@ -1,0 +1,204 @@
+---
+import Basis from '../../layouts/Basis.astro';
+import Kacheln from '../../components/Kacheln.astro';
+import Verdienstrechner from '../../components/Verdienstrechner.astro';
+import Schritte from '../../components/Schritte.astro';
+import Faq from '../../components/Faq.astro';
+import Icon from '../../components/Icon.astro';
+import SmartLink from '../../components/SmartLink.astro';
+import FormVersteckt from '../../components/FormVersteckt.astro';
+import FormSkript from '../../components/FormSkript.astro';
+import Datenschutzhinweis from '../../components/Datenschutzhinweis.astro';
+import { site, telefonHref, whatsappLink } from '../../config/site';
+import { link, seiten, istLive } from '../../config/seiten';
+import { zahlung } from '../../config/zahlung';
+import { flaechenArten } from '../../data/arten';
+import { sichtbareKennzahlen } from '../../lib/kennzahlen';
+import { texte } from '../../lib/texte';
+
+const kacheln = flaechenArten.map((a) => ({
+  titel: a.titel,
+  text: a.nutzen,
+  icon: a.icon,
+  href: link(a.seite),
+  linkText: istLive(a.seite) ? 'Mehr erfahren' : 'Jetzt anbieten',
+}));
+
+const sorgen = [
+  { titel: 'Zahlung: Kommt die Miete pünktlich?', text: texte.live
+      ? `Die Miete wird am ${zahlung.abbuchungTag}. des Monats automatisch per Lastschrift beim Mieter eingezogen. Am ${zahlung.auszahlungTag}. überweisen wir sie auf Ihr Konto.`
+      : texte.zahlungLang },
+  { titel: 'Ausfall: Was, wenn der Mieter nicht zahlt?', text: texte.serviceGarantie },
+  { titel: 'Schäden: Wer kommt dafür auf?', text: `Jeder Mieter zahlt eine Kaution von einer Monatsmiete, mindestens ${zahlung.kautionMinEuro} €, direkt an Sie. Bei Ein- und Auszug wird der Zustand mit Fotos festgehalten. Bei Fahrzeugen muss der Mieter eine gültige Kfz-Versicherung nachweisen.` },
+  { titel: 'Fremde auf dem Grundstück?', text: 'Wir prüfen jeden Mieter vorab: Ausweis, bei Fahrzeugen auch Fahrzeugschein und Versicherung. Sie lernen den Mieter bei der Besichtigung kennen und entscheiden selbst, ob Sie vermieten.' },
+  { titel: 'Steuer: Was muss ich beachten?', text: 'Sie erhalten jedes Jahr eine Übersicht Ihrer Einnahmen. Als Plattform sind wir gesetzlich verpflichtet, Vermieter und Einnahmen jährlich an das Bundeszentralamt für Steuern zu melden (DAC7). Eine Steuerberatung bieten wir nicht an.' },
+  { titel: 'Nachbarn: Gibt es Ärger?', text: 'Zufahrtszeiten und Regeln, etwa keine Reparaturen auf dem Hof, legen Sie im Vertrag fest. So wissen alle, woran sie sind.' },
+];
+
+const schritte = [
+  { titel: 'Platz melden', text: 'Mit dem kurzen Formular oben oder per Anruf. Dauert zwei Minuten.' },
+  { titel: 'Fotos schicken', text: 'Drei Fotos nach unserer Anleitung. Beschreibung und Vertrag erstellen wir.' },
+  { titel: 'Mieter kennenlernen', text: 'Wir schlagen Ihnen geprüfte Mieter vor. Sie entscheiden, wer einzieht.' },
+  { titel: 'Miete erhalten', text: texte.vermieterSchritt4Text },
+];
+
+const nachfrage = sichtbareKennzahlen(['suchende', 'suchendeWohnmobil']);
+const nachfrageLink = link('nachfrage') ?? link('platzAnbieten');
+---
+<Basis
+  titel="Stellplatz, Garage oder Scheune vermieten im Landkreis Böblingen"
+  beschreibung="Stellplatz, Garage, Einfahrt, Keller oder Scheune vermieten – mit fairem Nebenverdienst. Für Vermieter immer kostenlos: geprüfte Mieter, Mustervertrag, persönlicher Ansprechpartner."
+  brotkruemel={[{ name: 'Vermieten', pfad: '/vermieten/' }]}
+>
+  <section class="abschnitt abschnitt-blau held">
+    <div class="wrap held-raster">
+      <div>
+        <p class="kicker">Landkreis Böblingen</p>
+        <h1>Stellplatz, Garage oder Scheune vermieten – mit fairem Nebenverdienst</h1>
+        <p class="kostenlos-gross">Für Vermieter immer kostenlos</p>
+        <ul class="haken">
+          <li>Geprüfte Mieter aus der Region</li>
+          <li>Mustervertrag und Kaution</li>
+          <li>Sie schicken 3 Fotos, den Rest erledigen wir</li>
+        </ul>
+      </div>
+      <form class="formular-karte" name="platz-kurz" method="POST" action="/platz-anbieten/danke/" data-netlify="true" netlify-honeypot="bot-feld" data-formular>
+        <h2 class="formular-titel">Platz unverbindlich melden</h2>
+        <FormVersteckt name="platz-kurz" />
+        <div class="feld">
+          <label for="kurz-plz">PLZ <span class="pflicht">(Pflicht)</span></label>
+          <input id="kurz-plz" name="plz" type="text" inputmode="numeric" autocomplete="postal-code" required pattern="[0-9]{5}" maxlength="5" />
+        </div>
+        <div class="feld">
+          <label for="kurz-art">Art der Fläche <span class="pflicht">(Pflicht)</span></label>
+          <select id="kurz-art" name="art" required>
+            <option value="">Bitte wählen</option>
+            {flaechenArten.map((a) => <option value={a.wert}>{a.kurz}</option>)}
+            <option value="sonstiges">Sonstiges</option>
+          </select>
+        </div>
+        <div class="feld">
+          <label for="kurz-name">Name <span class="pflicht">(Pflicht)</span></label>
+          <input id="kurz-name" name="name" type="text" autocomplete="name" required maxlength="80" />
+        </div>
+        <div class="feld">
+          <label for="kurz-kontakt">Telefon oder E-Mail <span class="pflicht">(Pflicht)</span></label>
+          <input id="kurz-kontakt" name="kontakt" type="text" autocomplete="email" required maxlength="100" data-kontakt
+            pattern="\s*([^@\s]+@[^@\s]+\.[^@\s]+|[+0-9][0-9 \/\(\)\-]{5,})\s*" />
+          <span class="feld-hilfe">Wir melden uns persönlich, {site.antwortzeit}.</span>
+        </div>
+        <button class="btn btn-primaer btn-gross btn-voll" type="submit">Platz anbieten</button>
+        <p class="unter-hinweis kostenlos">Für Vermieter immer kostenlos</p>
+        <Datenschutzhinweis />
+      </form>
+    </div>
+  </section>
+
+  <section class="abschnitt">
+    <div class="wrap">
+      <h2>Welchen Platz haben Sie frei?</h2>
+      <p class="einleitung">Ob Garage, Einfahrt, Keller oder Scheune – gefragt ist vieles. Ein Stellplatz für ein Wohnmobil bringt laut unseren Richtwerten am meisten, ist aber nur eine von vielen Möglichkeiten.</p>
+      <Kacheln kacheln={kacheln} />
+    </div>
+  </section>
+
+  <section class="abschnitt abschnitt-grau">
+    <div class="wrap">
+      <h2>Was bringt Ihr Platz im Jahr?</h2>
+      <Verdienstrechner ausfuehrlich />
+    </div>
+  </section>
+
+  <section class="abschnitt">
+    <div class="wrap">
+      <h2>Ihre Fragen, unsere Antworten</h2>
+      <p class="einleitung">Die häufigsten Bedenken – und wie wir sie lösen.</p>
+      <div class="sorgen">
+        {sorgen.map((s) => (
+          <details class="klapp"><summary>{s.titel}</summary><div class="klapp-inhalt"><p>{s.text}</p></div></details>
+        ))}
+      </div>
+      <p><SmartLink seite="sicherheit">Mehr zur Sicherheit</SmartLink></p>
+    </div>
+  </section>
+
+  <section class="abschnitt abschnitt-blau">
+    <div class="wrap service">
+      <Icon name="kamera" class="symbol service-symbol" />
+      <div>
+        <h2>Rundum-Service: Sie schicken 3 Fotos, wir erledigen den Rest</h2>
+        <ol>
+          <li>Die Zufahrt von der Straße aus</li>
+          <li>Die Fläche selbst, möglichst bei Tageslicht</li>
+          <li>Tor, Tür oder Eingang</li>
+        </ol>
+        <p>Daraus erstellen wir die Beschreibung für Mieter und bereiten den Mustervertrag vor. Sie prüfen alles und geben es frei.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="abschnitt">
+    <div class="wrap">
+      <h2>So vermieten Sie Ihren Platz</h2>
+      <Schritte vermieter={schritte} />
+    </div>
+  </section>
+
+  {nachfrage.length > 0 && nachfrageLink && (
+    <section class="abschnitt abschnitt-grau">
+      <div class="wrap">
+        <h2>Nachfrage in Ihrer Nähe</h2>
+        <ul class="haken">
+          {nachfrage.map((k) => <li><strong>{k.wert}</strong> {k.text}</li>)}
+        </ul>
+        <p><a href={nachfrageLink}>{istLive('nachfrage') ? 'Nachfrage nach Orten ansehen' : 'Jetzt Platz anbieten'}</a></p>
+      </div>
+    </section>
+  )}
+
+  <section class="abschnitt">
+    <div class="wrap">
+      <div class="karte hoefe">
+        <Icon name="hof" />
+        <div>
+          <h2>Sie haben einen Hof oder eine Scheune?</h2>
+          <p>Auf größeren Flächen ist oft Platz für mehrere Wohnmobile, Wohnwagen oder Anhänger. Wir vermitteln auch mehrere Plätze auf einer Fläche und stimmen Zufahrt und Zeiten mit Ihnen ab.</p>
+          <p><a href={link('vermietenScheune')}>{istLive('vermietenScheune') ? seiten.vermietenScheune.titel : 'Hof oder Scheune anbieten'}</a></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="abschnitt abschnitt-grau">
+    <div class="wrap">
+      <Faq seite="vermieten" />
+    </div>
+  </section>
+
+  <section class="abschnitt abschnitt-blau zentriert">
+    <div class="wrap">
+      <h2>Bereit? Melden Sie Ihren Platz.</h2>
+      <p class="einleitung">Online in zwei Minuten – oder rufen Sie uns an. {site.ansprechpartner}.</p>
+      <p><a class="btn btn-primaer btn-gross" href={link('platzAnbieten')}>Platz anbieten</a></p>
+      <p class="unter-hinweis kostenlos">Für Vermieter immer kostenlos</p>
+      <p class="kontakt-zeile">
+        <a class="btn btn-rahmen" href={telefonHref}><Icon name="telefon" class="symbol-klein" /> {site.telefonAnzeige}</a>
+        <a class="btn btn-rahmen" href={whatsappLink} rel="noopener"><Icon name="chat" class="symbol-klein" /> WhatsApp</a>
+      </p>
+    </div>
+  </section>
+  <FormSkript />
+</Basis>
+<style>
+  .held { padding-block: 2rem 2.5rem; }
+  .held-raster { display: grid; gap: 1.5rem; }
+  @media (min-width: 56rem) { .held-raster { grid-template-columns: 1.1fr 1fr; align-items: start; } }
+  .kostenlos-gross { display: inline-block; background: var(--akzent-hell); border: 2px solid var(--akzent); color: var(--akzent-text); font-weight: 800; font-size: 1.25rem; padding: 0.4rem 0.9rem; border-radius: 8px; }
+  .formular-titel { font-size: 1.35rem; }
+  .sorgen { max-width: 48rem; }
+  .service { display: flex; gap: 1.25rem; align-items: flex-start; }
+  .service :global(.service-symbol) { width: 3rem; height: 3rem; color: var(--primaer); flex: none; }
+  .hoefe { display: flex; gap: 1rem; align-items: flex-start; }
+  .kontakt-zeile { display: flex; flex-wrap: wrap; gap: 0.75rem; justify-content: center; margin-top: 1.5rem; }
+  .kontakt-zeile :global(.symbol-klein) { width: 1.4rem; height: 1.4rem; }
+</style>

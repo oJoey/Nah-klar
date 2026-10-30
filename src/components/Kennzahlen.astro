@@ -1,0 +1,24 @@
+---
+// Zeigt nur Kennzahlen mit einem Wert ab 3. Gibt es keine, wird der ganze Block ausgeblendet.
+import { sichtbareKennzahlen, type KennzahlSchluessel } from '../lib/kennzahlen';
+interface Props { schluessel: KennzahlSchluessel[]; titel?: string; }
+const { schluessel, titel } = Astro.props;
+const liste = sichtbareKennzahlen(schluessel);
+---
+{liste.length > 0 && (
+  <section class="abschnitt" aria-label={titel ?? 'Aktuelle Zahlen'}>
+    <div class="wrap">
+      {titel && <h2>{titel}</h2>}
+      <ul class="raster kennzahlen">
+        {liste.map((k) => (
+          <li class="karte"><strong>{k.wert.toLocaleString('de-DE')}</strong> {k.text}</li>
+        ))}
+      </ul>
+      <p class="unter-hinweis">Stand: {new Date(liste[0].stand).toLocaleDateString('de-DE')}</p>
+    </div>
+  </section>
+)}
+<style>
+  .kennzahlen { list-style: none; padding: 0; margin: 0; }
+  .kennzahlen strong { display: block; font-size: 2.2rem; color: var(--primaer); line-height: 1.1; }
+</style>

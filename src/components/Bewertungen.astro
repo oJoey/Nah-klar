@@ -1,0 +1,27 @@
+---
+// Nur echte Bewertungen in src/data/bewertungen.json eintragen.
+// Format: { "text": "...", "name": "Vorname N.", "ort": "Sindelfingen", "rolle": "Vermieter", "datum": "2026-11-15" }
+// Solange die Liste leer ist, erscheint nichts.
+import bewertungen from '../data/bewertungen.json';
+type Bewertung = { text: string; name: string; ort: string; rolle: string; datum: string };
+const liste = bewertungen as Bewertung[];
+---
+{liste.length > 0 && (
+  <section class="abschnitt">
+    <div class="wrap">
+      <h2>Das sagen Mieter und Vermieter</h2>
+      <ul class="raster bewertungen">
+        {liste.map((b) => (
+          <li class="karte">
+            <blockquote><p>„{b.text}“</p></blockquote>
+            <p class="unter-hinweis">{b.name}, {b.rolle} aus {b.ort}</p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+)}
+<style>
+  .bewertungen { list-style: none; padding: 0; margin: 0; }
+  blockquote { margin: 0; }
+</style>

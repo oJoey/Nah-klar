@@ -1,0 +1,85 @@
+---
+import '../styles/global.css';
+import { site, telefonHref } from '../config/site';
+import { jsonLd } from '../lib/texte';
+import Aktionsbalken from '../components/Aktionsbalken.astro';
+import Kopf from '../components/Kopf.astro';
+import Fuss from '../components/Fuss.astro';
+import Brotkruemel, { type Kruemel } from '../components/Brotkruemel.astro';
+
+interface Props {
+  titel: string;
+  beschreibung: string;
+  brotkruemel?: Kruemel[];
+  noindex?: boolean;
+}
+const { titel, beschreibung, brotkruemel, noindex = false } = Astro.props;
+const canonical = new URL(Astro.url.pathname, site.url).href;
+const volltitel = Astro.url.pathname === '/' ? titel : `${titel} | ${site.name}`;
+
+const organisation = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  '@id': `${site.url}/#organisation`,
+  name: site.name,
+  url: site.url,
+  telephone: site.telefonLink,
+  description: site.beschreibung,
+  areaServed: { '@type': 'AdministrativeArea', name: site.region },
+  contactPoint: { '@type': 'ContactPoint', telephone: site.telefonLink, contactType: 'customer service', areaServed: 'DE', availableLanguage: 'de' },
+};
+const website = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: site.name,
+  url: site.url,
+  inLanguage: 'de-DE',
+  publisher: { '@id': `${site.url}/#organisation` },
+};
+---
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{volltitel}</title>
+    <meta name="description" content={beschreibung} />
+    <link rel="canonical" href={canonical} />
+    {noindex && <meta name="robots" content="noindex, follow" />}
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="de_DE" />
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:title" content={titel} />
+    <meta property="og:description" content={beschreibung} />
+    <meta property="og:url" content={canonical} />
+    <meta name="theme-color" content="#0a4ea8" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <script type="application/ld+json" set:html={jsonLd(organisation)} />
+    <script type="application/ld+json" set:html={jsonLd(website)} />
+    <script is:inline>
+      // Herkunft merken (UTM, Flyer-Quelle), damit sie im Formular mitgeschickt werden kann.
+      try {
+        var p = new URLSearchParams(location.search), o = {};
+        ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term', 'quelle', 'ref'].forEach(function (k) {
+          var v = p.get(k); if (v) o[k] = v.slice(0, 80);
+        });
+        if (Object.keys(o).length) { o.einstieg = location.pathname; sessionStorage.setItem('herkunft', JSON.stringify(o)); }
+      } catch (e) {}
+    </script>
+    {site.umamiWebsiteId && <script is:inline defer src="https://cloud.umami.is/script.js" data-website-id={site.umamiWebsiteId}></script>}
+  </head>
+  <body>
+    <a class="sr-only sprung" href="#inhalt">Zum Inhalt springen</a>
+    <Aktionsbalken />
+    <Kopf />
+    {brotkruemel && <Brotkruemel pfadListe={brotkruemel} />}
+    <main id="inhalt">
+      <slot />
+    </main>
+    <Fuss />
+  </body>
+</html>
+<style>
+  .sprung:focus { position: static; width: auto; height: auto; margin: 0; clip: auto; display: block; padding: 0.75rem 1rem; background: var(--blau-900); color: #fff; }
+</style>

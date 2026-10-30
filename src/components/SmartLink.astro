@@ -1,0 +1,8 @@
+---
+// Link auf eine Seite aus src/config/seiten.ts. Nicht-live → Ersatzziel oder gar nichts.
+import { link, type SeitenSchluessel } from '../config/seiten';
+interface Props { seite: SeitenSchluessel; class?: string; }
+const { seite, class: klasse } = Astro.props;
+const href = link(seite);
+---
+{href && <a href={href} class={klasse}><slot /></a>}

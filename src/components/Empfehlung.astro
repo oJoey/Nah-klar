@@ -1,0 +1,17 @@
+---
+// PLATZHALTER: Ein persönlicher Empfehlungslink braucht später eine Kennung je Person.
+// Bis dahin wird ein allgemeiner Link mit ?quelle=empfehlung geteilt.
+import { site } from '../config/site';
+const teilLink = new URL('/vermieten/?quelle=empfehlung', site.url).href;
+const whatsapp = `https://wa.me/?text=${encodeURIComponent(`Hast du ungenutzten Platz? Hier kannst du ihn kostenlos anbieten: ${teilLink}`)}`;
+---
+<div class="karte empfehlung">
+  <h2>Kennen Sie jemanden mit freiem Platz?</h2>
+  <p>Eine Garage, eine Einfahrt oder eine Scheune, die kaum genutzt wird? Leiten Sie diesen Link weiter:</p>
+  <p class="teil-link">{teilLink}</p>
+  <p><a class="btn btn-rahmen" href={whatsapp} rel="noopener">Per WhatsApp teilen</a></p>
+</div>
+<style>
+  .empfehlung { margin-top: 2rem; }
+  .teil-link { font-weight: 700; word-break: break-all; background: var(--flaeche-2); padding: 0.5rem 0.75rem; border-radius: 8px; }
+</style>

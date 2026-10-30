@@ -1,0 +1,17 @@
+---
+import { link } from '../config/seiten';
+interface Props { finden?: boolean; }
+const { finden = true } = Astro.props;
+---
+<div class="button-paar">
+  <div>
+    <a class="btn btn-primaer btn-gross" href={link('platzAnbieten')}>Platz anbieten</a>
+    <p class="unter-hinweis kostenlos">Für Vermieter immer kostenlos</p>
+  </div>
+  {finden && (
+    <div>
+      <a class="btn btn-rahmen btn-gross" href={link('suchauftrag')}>Platz finden</a>
+      <p class="unter-hinweis">Suchauftrag in 1 Minute, kostenlos</p>
+    </div>
+  )}
+</div>

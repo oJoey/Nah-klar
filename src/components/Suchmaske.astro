@@ -1,0 +1,40 @@
+---
+import { mietArten, zeitraeume } from '../data/arten';
+import { link } from '../config/seiten';
+interface Props { titel?: string; }
+const { titel = 'Was suchen Sie?' } = Astro.props;
+---
+<form class="suchmaske formular-karte" method="get" action={link('suchauftrag')}>
+  <h2 class="suchmaske-titel">{titel}</h2>
+  <div class="suchmaske-felder">
+    <div class="feld">
+      <label for="such-ort">PLZ oder Ort</label>
+      <input id="such-ort" name="ort" type="text" autocomplete="postal-code" placeholder="z. B. 71032 oder Böblingen" />
+    </div>
+    <div class="feld">
+      <label for="such-art">Art</label>
+      <select id="such-art" name="art">
+        {mietArten.map((a) => <option value={a.wert}>{a.kurz}</option>)}
+      </select>
+    </div>
+    <div class="feld">
+      <label for="such-zeitraum">Zeitraum</label>
+      <select id="such-zeitraum" name="zeitraum">
+        <option value="">egal</option>
+        {zeitraeume.map((z) => <option value={z.wert}>{z.titel}</option>)}
+      </select>
+    </div>
+    <div class="feld suchmaske-knopf">
+      <button class="btn btn-primaer btn-voll" type="submit">Platz finden</button>
+    </div>
+  </div>
+  <p class="unter-hinweis">Weiter zum Suchauftrag – kostenlos und ohne Konto.</p>
+</form>
+<style>
+  .suchmaske-titel { font-size: 1.35rem; }
+  .suchmaske-felder { display: grid; gap: 0 1rem; }
+  .suchmaske .feld { margin-bottom: 1rem; }
+  @media (min-width: 56rem) {
+    .suchmaske-felder { grid-template-columns: 1.3fr 1fr 1fr auto; align-items: end; }
+  }
+</style>

@@ -1,0 +1,22 @@
+---
+// Erscheint automatisch, sobald mindestens ein Werkzeug oder Ratgeber live ist.
+import { seiten, istLive, type SeitenSchluessel } from '../config/seiten';
+const teaser: { seite: SeitenSchluessel; text: string }[] = [
+  { seite: 'einwinterung', text: 'Schritt für Schritt: So machen Sie Wohnmobil und Wohnwagen winterfest.' },
+  { seite: 'strassenCheck', text: 'Passt Ihr Wohnwagen durch die Zufahrt? Breite, Höhe und Gewicht prüfen.' },
+  { seite: 'winterplatzVergleich', text: 'Halle, Scheune oder Carport: Welcher Winterplatz passt zu Ihrem Fahrzeug?' },
+];
+const live = teaser.filter((t) => istLive(t.seite));
+---
+{live.length > 0 && (
+  <section class="abschnitt abschnitt-grau">
+    <div class="wrap">
+      <h2>Werkzeuge und Ratgeber</h2>
+      <ul class="raster" style="list-style:none;padding:0;margin:0">
+        {live.map((t) => (
+          <li class="karte"><h3><a href={seiten[t.seite].pfad}>{seiten[t.seite].titel}</a></h3><p>{t.text}</p></li>
+        ))}
+      </ul>
+    </div>
+  </section>
+)}

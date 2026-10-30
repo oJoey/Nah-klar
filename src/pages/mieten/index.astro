@@ -1,0 +1,100 @@
+---
+import Basis from '../../layouts/Basis.astro';
+import Suchmaske from '../../components/Suchmaske.astro';
+import Kacheln from '../../components/Kacheln.astro';
+import Schritte from '../../components/Schritte.astro';
+import Kennzahlen from '../../components/Kennzahlen.astro';
+import Faq from '../../components/Faq.astro';
+import SmartLink from '../../components/SmartLink.astro';
+import { link } from '../../config/seiten';
+import { zahlung } from '../../config/zahlung';
+import { mietArten } from '../../data/arten';
+import { texte } from '../../lib/texte';
+
+const kacheln = mietArten.map((a) => ({
+  titel: a.titel,
+  text: a.nutzen,
+  icon: a.icon,
+  href: link(a.seite),
+  linkText: link(a.seite)?.startsWith('/suchauftrag/') ? 'Suchauftrag anlegen' : 'Mehr erfahren',
+}));
+
+const schritte = [
+  { titel: 'Suchauftrag anlegen', text: 'Sie sagen uns Ort, Art und Zeitraum. Dauert eine Minute, kostenlos und ohne Konto.' },
+  { titel: 'Vorschlag erhalten', text: 'Wir schicken Ihnen passende Plätze mit Fotos, Preis und Ortsteil. Die Adresse folgt zur Besichtigung.' },
+  { titel: 'Besichtigen', text: 'Sie schauen sich den Platz in Ruhe an und lernen den Vermieter kennen.' },
+  { titel: texte.mieterSchritt4, text: texte.mieterSchritt4Text },
+];
+---
+<Basis
+  titel="Abstellplatz und Stellplatz mieten im Landkreis Böblingen"
+  beschreibung="Abstellplatz, Garage, Winterplatz fürs Wohnmobil oder Lagerraum privat mieten im Landkreis Böblingen. Kostenloser Suchauftrag – wir suchen aktiv in Ihrer Nähe."
+  brotkruemel={[{ name: 'Mieten', pfad: '/mieten/' }]}
+>
+  <section class="abschnitt abschnitt-blau">
+    <div class="wrap">
+      <h1>Abstellplatz und Stellplatz mieten im Landkreis Böblingen</h1>
+      <p class="einleitung">Bei uns klicken Sie sich nicht durch Inserate. Sie sagen uns, welchen Platz Sie brauchen. Wir fragen gezielt bei Vermietern in Ihrer Nähe nach und melden uns mit passenden Vorschlägen.</p>
+      <p><a class="btn btn-rahmen btn-gross" href={link('suchauftrag')}>Platz finden</a></p>
+      <p class="unter-hinweis">Suchauftrag in 1 Minute, kostenlos · Sie haben Platz übrig? <a href={link('platzAnbieten')}>Platz anbieten</a> – <span class="kostenlos">Für Vermieter immer kostenlos</span></p>
+    </div>
+  </section>
+
+  <section class="abschnitt" aria-label="Platz suchen">
+    <div class="wrap">
+      <Suchmaske />
+    </div>
+  </section>
+
+  <section class="abschnitt abschnitt-grau">
+    <div class="wrap">
+      <h2>Welchen Platz suchen Sie?</h2>
+      <Kacheln kacheln={kacheln} />
+    </div>
+  </section>
+
+  <section class="abschnitt">
+    <div class="wrap">
+      <h2>So kommen Sie zu Ihrem Platz</h2>
+      <Schritte mieter={schritte} />
+    </div>
+  </section>
+
+  <section class="abschnitt abschnitt-grau">
+    <div class="wrap">
+      <h2>Was es kostet</h2>
+      <ul class="haken kosten">
+        <li><strong>Suchauftrag:</strong> kostenlos und unverbindlich.</li>
+        <li><strong>Monatspreis:</strong> ein fester Betrag, unsere Servicegebühr von etwa {texte.prozent} ist schon enthalten. {texte.zahlweiseMieter}</li>
+        <li><strong>Kaution:</strong> eine Monatsmiete, mindestens {zahlung.kautionMinEuro} €, direkt an den Vermieter.</li>
+        <li><strong>Rückzahlung:</strong> innerhalb von {zahlung.kautionRueckzahlungWochen} Wochen nach dem Auszug, abzüglich belegter Schäden.</li>
+        <li><strong>Laufzeit:</strong> monatlich kündbar mit einem Monat Frist.</li>
+      </ul>
+      <p>
+        <SmartLink seite="preise">Alle Preise im Detail</SmartLink>
+        <SmartLink seite="sicherheit">So sorgen wir für Sicherheit</SmartLink>
+      </p>
+    </div>
+  </section>
+
+  <Kennzahlen schluessel={['suchende', 'plaetze', 'preisGarage']} titel="Aktuell im Landkreis Böblingen" />
+
+  <section class="abschnitt">
+    <div class="wrap">
+      <Faq seite="mieten" />
+    </div>
+  </section>
+
+  <section class="abschnitt abschnitt-blau zentriert">
+    <div class="wrap">
+      <h2>Sagen Sie uns, was Sie suchen</h2>
+      <p class="einleitung">Wir melden uns mit passenden Plätzen in Ihrer Nähe.</p>
+      <p><a class="btn btn-primaer btn-gross" href={link('suchauftrag')}>Suchauftrag anlegen</a></p>
+      <p class="unter-hinweis">Kostenlos, ohne Konto, jederzeit löschbar.</p>
+    </div>
+  </section>
+</Basis>
+<style>
+  .kosten { max-width: 48rem; }
+  p :global(a + a) { margin-left: 1.5rem; }
+</style>

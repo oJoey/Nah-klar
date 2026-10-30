@@ -1,0 +1,9 @@
+---
+// Pflichtteile für Netlify Forms: Formularname, Honeypot gegen Spam, Herkunft (UTM/Flyer).
+interface Props { name: string; }
+---
+<input type="hidden" name="form-name" value={Astro.props.name} />
+<input type="hidden" name="quelle" value="" />
+<p class="unsichtbar" aria-hidden="true">
+  <label>Bitte nicht ausfüllen: <input name="bot-feld" tabindex="-1" autocomplete="off" /></label>
+</p>

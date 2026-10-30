@@ -1,0 +1,24 @@
+---
+import Basis from '../../layouts/Basis.astro';
+import { site } from '../../config/site';
+// PLATZHALTER: Vor dem Livegang vollständig ausfüllen und noindex entfernen.
+// Zu nennen u. a.: Netlify (Hosting, Formulare), Resend (Bestätigungsmails), Umami Cloud (Statistik ohne Cookies), später Stripe.
+---
+<Basis titel="Datenschutz" beschreibung={`Datenschutzerklärung von ${site.name}.`} brotkruemel={[{ name: 'Datenschutz', pfad: '/datenschutz/' }]} noindex>
+  <section class="abschnitt">
+    <div class="wrap">
+      <h1>Datenschutzerklärung</h1>
+      <p class="hinweis">Platzhalter – wird vor dem Livegang ausgefüllt.</p>
+      <h2>Verantwortlich</h2>
+      <p>[NAME / FIRMA, ANSCHRIFT, E-MAIL]</p>
+      <h2>Formulare</h2>
+      <p>[Zweck, Rechtsgrundlage, Speicherdauer, Empfänger: Netlify Forms, Resend]</p>
+      <h2>Hosting</h2>
+      <p>[Netlify]</p>
+      <h2>Reichweitenmessung</h2>
+      <p>[Umami Cloud, ohne Cookies]</p>
+      <h2>Ihre Rechte</h2>
+      <p>[Auskunft, Berichtigung, Löschung, Widerspruch, Beschwerde bei der Aufsichtsbehörde]</p>
+    </div>
+  </section>
+</Basis>

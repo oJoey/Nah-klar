@@ -1,0 +1,26 @@
+---
+import { site } from '../config/site';
+import { jsonLd } from '../lib/texte';
+export type Kruemel = { name: string; pfad: string };
+interface Props { pfadListe: Kruemel[]; }
+const liste: Kruemel[] = [{ name: 'Startseite', pfad: '/' }, ...Astro.props.pfadListe];
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: liste.map((k, i) => ({ '@type': 'ListItem', position: i + 1, name: k.name, item: new URL(k.pfad, site.url).href })),
+};
+---
+<nav class="wrap kruemel" aria-label="Brotkrümel">
+  <ol>
+    {liste.map((k, i) => (
+      <li>{i < liste.length - 1 ? <a href={k.pfad}>{k.name}</a> : <span aria-current="page">{k.name}</span>}</li>
+    ))}
+  </ol>
+</nav>
+<script type="application/ld+json" set:html={jsonLd(schema)} />
+<style>
+  .kruemel ol { list-style: none; display: flex; flex-wrap: wrap; gap: 0.25rem; padding: 0.75rem 0 0; margin: 0; font-size: 1rem; }
+  .kruemel li + li::before { content: '›'; margin-right: 0.35rem; color: var(--text-leise); }
+  .kruemel a { display: inline-block; padding-block: 0.6rem; }
+  .kruemel span { display: inline-block; padding-block: 0.6rem; color: var(--text-leise); }
+</style>

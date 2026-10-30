@@ -1,0 +1,30 @@
+---
+import Basis from '../../../layouts/Basis.astro';
+import Empfehlung from '../../../components/Empfehlung.astro';
+import { site, telefonHref, whatsappLink } from '../../../config/site';
+import { link } from '../../../config/seiten';
+
+const erwartung = [
+  { art: 'Wohnmobil und Wohnwagen', text: 'Wir fragen gezielt bei Höfen, Scheunen und großen Grundstücken in Ihrer Umgebung nach.' },
+  { art: 'Garage und Auto-Stellplatz', text: 'Garagen sind vielerorts knapp. Es kann länger dauern, bis ein passender Platz frei wird.' },
+  { art: 'Lagerraum', text: 'Freie Lagerräume sind seltener. Auch hier kann es etwas länger dauern.' },
+  { art: 'Anhänger und Boot', text: 'Oft passt eine Einfahrt oder Hoffläche. Je genauer die Maße, desto besser.' },
+];
+---
+<Basis titel="Danke für Ihren Suchauftrag" beschreibung="Ihr Suchauftrag ist bei uns angekommen." noindex>
+  <section class="abschnitt">
+    <div class="wrap schmal">
+      <h1>Danke, Ihr Suchauftrag ist angekommen.</h1>
+      <p class="einleitung">Wir melden uns {site.antwortzeit} bei Ihnen. Wenn Sie eine E-Mail-Adresse angegeben haben, erhalten Sie gleich eine Bestätigung mit Ihren Angaben.</p>
+      <h2>Womit Sie rechnen können</h2>
+      <p>Wie schnell wir einen Platz finden, hängt vom Ort und von der Art ab. Wir sagen Ihnen ehrlich, wie es in Ihrer Gegend aussieht.</p>
+      <ul class="haken">
+        {erwartung.map((e) => <li><strong>{e.art}:</strong> {e.text}</li>)}
+      </ul>
+      <p>Fragen? {site.ansprechpartner}: <a href={telefonHref}>{site.telefonAnzeige}</a> oder <a href={whatsappLink} rel="noopener">WhatsApp</a>.</p>
+      <Empfehlung />
+      <p class="mt"><a href={link('start')}>Zur Startseite</a></p>
+    </div>
+  </section>
+</Basis>
+<style>.schmal { max-width: 46rem; }</style>
