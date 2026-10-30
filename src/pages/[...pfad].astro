@@ -1,0 +1,67 @@
+---
+// Platzhalterseiten für alles, was in src/config/seiten.ts als entwurf markiert ist.
+import Basis from '../layouts/Basis.astro';
+import ButtonPaar from '../components/ButtonPaar.astro';
+import Verdienstrechner from '../components/Verdienstrechner.astro';
+import Faq from '../components/Faq.astro';
+import { site, telefonHref, whatsappLink } from '../config/site';
+import { seiten, entwuerfe, link, type SeitenSchluessel } from '../config/seiten';
+import { entwurfTexte } from '../data/entwuerfe';
+
+export function getStaticPaths() {
+  return entwuerfe.map(([schluessel, s]) => ({ params: { pfad: s.pfad.replace(/^\/|\/$/g, '') }, props: { schluessel } }));
+}
+
+const { schluessel } = Astro.props as { schluessel: SeitenSchluessel };
+const seite = seiten[schluessel];
+const text = entwurfTexte[schluessel] ?? { einleitung: '' };
+const kruemel = [
+  ...(text.eltern ? [{ name: seiten[text.eltern].titel, pfad: seiten[text.eltern].pfad }] : []),
+  { name: seite.titel, pfad: seite.pfad },
+];
+const verwandt = (text.verwandt ?? []).map((k) => ({ titel: seiten[k].titel, href: link(k) })).filter((v) => v.href);
+const mitKontakt = schluessel === 'kontakt' || schluessel === 'hilfe';
+---
+<Basis titel={seite.titel} beschreibung={text.einleitung || `${seite.titel} – ${site.name}`} brotkruemel={kruemel} noindex>
+  <section class="abschnitt abschnitt-grau">
+    <div class="wrap schmal">
+      <h1>{seite.titel}</h1>
+      <p class="einleitung">{text.einleitung}</p>
+      {schluessel !== 'verdienstrechner' && !mitKontakt && (
+        <p class="hinweis"><strong>Diese Seite wird gerade erstellt.</strong> Bis dahin helfen wir Ihnen gern persönlich: <a href={telefonHref}>{site.telefonAnzeige}</a> oder <a href={whatsappLink} rel="noopener">WhatsApp</a>.</p>
+      )}
+    </div>
+  </section>
+
+  {schluessel === 'verdienstrechner' && (
+    <section class="abschnitt"><div class="wrap"><Verdienstrechner ausfuehrlich /></div></section>
+  )}
+
+  {mitKontakt && (
+    <section class="abschnitt">
+      <div class="wrap kontakt-raster">
+        <a class="karte kontakt-karte" href={telefonHref}><strong>Telefon</strong><span>{site.telefonAnzeige}</span></a>
+        <a class="karte kontakt-karte" href={whatsappLink} rel="noopener"><strong>WhatsApp</strong><span>{site.telefonAnzeige}</span></a>
+      </div>
+    </section>
+  )}
+  {schluessel === 'hilfe' && (
+    <section class="abschnitt abschnitt-grau"><div class="wrap"><Faq seite="start" /></div></section>
+  )}
+
+  <section class="abschnitt zentriert">
+    <div class="wrap">
+      <h2>Platz anbieten oder Platz finden?</h2>
+      <ButtonPaar />
+      {verwandt.length > 0 && (
+        <p class="mt verwandt">Auch interessant: {verwandt.map((v, i) => <>{i > 0 && ' · '}<a href={v.href}>{v.titel}</a></>)}</p>
+      )}
+    </div>
+  </section>
+</Basis>
+<style>
+  .kontakt-raster { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr)); max-width: 44rem; }
+  .kontakt-karte { display: grid; gap: 0.25rem; text-decoration: none; color: var(--text); }
+  .kontakt-karte strong { color: var(--haupt); font-size: 1.2rem; }
+  .verwandt { color: var(--text-2); }
+</style>

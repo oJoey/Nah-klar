@@ -1,6 +1,7 @@
 // Alle geplanten Seiten. Links gehen nur auf Seiten mit live: true.
 // Ist eine Seite noch nicht live, wird auf „ersatz“ verlinkt – oder der Link wird ausgeblendet.
-type Seite = { pfad: string; live: boolean; titel: string; ersatz?: string };
+// entwurf: Seite existiert als Platzhalter (noindex, nicht in der Sitemap), Inhalt folgt.
+type Seite = { pfad: string; live: boolean; titel: string; ersatz?: string; entwurf?: boolean };
 
 export const seiten = {
   start: { pfad: '/', live: true, titel: 'Startseite' },
@@ -12,22 +13,22 @@ export const seiten = {
   datenschutz: { pfad: '/datenschutz/', live: true, titel: 'Datenschutz' },
 
   // Menü und Fußbereich
-  werkzeuge: { pfad: '/werkzeuge/', live: false, titel: 'Werkzeuge & Ratgeber' },
-  regionen: { pfad: '/regionen/', live: false, titel: 'Regionen' },
-  hilfe: { pfad: '/hilfe/', live: false, titel: 'Hilfe & Kontakt' },
-  soFunktionierts: { pfad: '/so-funktionierts/', live: false, titel: "So funktioniert's" },
-  sicherheit: { pfad: '/sicherheit/', live: false, titel: 'Sicherheit' },
-  preise: { pfad: '/preise/', live: false, titel: 'Preise' },
-  ueberUns: { pfad: '/ueber-uns/', live: false, titel: 'Über uns' },
-  kontakt: { pfad: '/kontakt/', live: false, titel: 'Kontakt' },
-  agb: { pfad: '/agb/', live: false, titel: 'AGB' },
+  werkzeuge: { pfad: '/werkzeuge/', live: true, entwurf: true, titel: 'Werkzeuge & Ratgeber' },
+  regionen: { pfad: '/regionen/', live: true, entwurf: true, titel: 'Regionen' },
+  hilfe: { pfad: '/hilfe/', live: true, entwurf: true, titel: 'Hilfe & Kontakt' },
+  soFunktionierts: { pfad: '/so-funktionierts/', live: true, entwurf: true, titel: "So funktioniert's" },
+  sicherheit: { pfad: '/sicherheit/', live: true, entwurf: true, titel: 'Sicherheit' },
+  preise: { pfad: '/preise/', live: true, entwurf: true, titel: 'Preise' },
+  ueberUns: { pfad: '/ueber-uns/', live: true, entwurf: true, titel: 'Über uns' },
+  kontakt: { pfad: '/kontakt/', live: true, entwurf: true, titel: 'Kontakt' },
+  agb: { pfad: '/agb/', live: true, entwurf: true, titel: 'AGB' },
 
   // Werkzeuge und Ratgeber
-  verdienstrechner: { pfad: '/werkzeuge/verdienstrechner/', live: false, titel: 'Verdienstrechner' },
-  einwinterung: { pfad: '/ratgeber/einwinterung-checkliste/', live: false, titel: 'Einwinterungs-Checkliste' },
-  strassenCheck: { pfad: '/werkzeuge/strassen-check-wohnwagen/', live: false, titel: 'Straßen-Check Wohnwagen' },
-  winterplatzVergleich: { pfad: '/ratgeber/winterplatz-vergleich/', live: false, titel: 'Winterplatz-Vergleich' },
-  nachfrage: { pfad: '/vermieten/nachfrage/', live: false, titel: 'Nachfrage in Ihrer Nähe' },
+  verdienstrechner: { pfad: '/werkzeuge/verdienstrechner/', live: true, entwurf: true, titel: 'Verdienstrechner' },
+  einwinterung: { pfad: '/ratgeber/einwinterung-checkliste/', live: true, entwurf: true, titel: 'Einwinterungs-Checkliste' },
+  strassenCheck: { pfad: '/werkzeuge/strassen-check-wohnwagen/', live: true, entwurf: true, titel: 'Straßen-Check Wohnwagen' },
+  winterplatzVergleich: { pfad: '/ratgeber/winterplatz-vergleich/', live: true, entwurf: true, titel: 'Winterplatz-Vergleich' },
+  nachfrage: { pfad: '/vermieten/nachfrage/', live: true, entwurf: true, titel: 'Nachfrage in Ihrer Nähe' },
 
   // Kategorieseiten Mieten (Ersatz: Suchauftrag mit vorausgewählter Art)
   mietenWohnmobil: { pfad: '/mieten/wohnmobil-wohnwagen-stellplatz/', live: false, titel: 'Wohnmobil und Wohnwagen', ersatz: '/suchauftrag/?art=wohnmobil-wohnwagen' },
@@ -51,3 +52,5 @@ export function link(k: SeitenSchluessel): string | null {
   const s: Seite = seiten[k];
   return s.live ? s.pfad : (s.ersatz ?? null);
 }
+
+export const entwuerfe = (Object.entries(seiten) as [SeitenSchluessel, Seite][]).filter(([, s]) => s.entwurf);

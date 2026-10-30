@@ -28,6 +28,8 @@ npm run dev
 
 Eine neue Seite live schalten: Seite anlegen und in `src/config/seiten.ts` `live: true` setzen.
 
+Seiten mit `entwurf: true` sind Platzhalter (Text in `src/data/entwuerfe.ts`): verlinkt, aber `noindex` und nicht in der Sitemap. Wenn eine richtige Seite dafür gebaut ist, `entwurf` entfernen.
+
 ## Netlify einrichten
 
 1. Formular-Erkennung aktivieren (Forms → Enable form detection).

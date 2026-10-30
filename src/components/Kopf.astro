@@ -56,7 +56,7 @@ const aktiv = (k: SeitenSchluessel) => aktuell.startsWith(seiten[k].pfad);
   .nav-gross { display: none; }
   .nav-gross ul { display: flex; gap: 0.25rem; list-style: none; margin: 0; padding: 0; }
   .nav-gross a {
-    display: flex; align-items: center; min-height: 3rem; padding-inline: 0.9rem;
+    display: flex; align-items: center; min-height: 3rem; padding-inline: 0.8rem; white-space: nowrap;
     color: var(--text); text-decoration: none; font-size: 1.05rem; border-radius: 999px;
     transition: background-color 150ms ease;
   }
@@ -89,12 +89,11 @@ const aktiv = (k: SeitenSchluessel) => aktuell.startsWith(seiten[k].pfad);
   }
   .nav-link[aria-current='page'] { color: var(--blau); }
 
-  @media (min-width: 56rem) {
+  @media (min-width: 75rem) {
     .marke { margin-right: 1.5rem; }
     .nav-gross { display: block; margin-right: auto; }
     .nav-klein { display: none; }
-    .kopf-cta { flex-direction: row-reverse; gap: 0.9rem; padding-bottom: 0; }
-    .kopf-kostenlos { position: static; transform: none; font-size: 0.9375rem; }
+    .kopf-kostenlos { font-size: 0.875rem; left: auto; right: 0; transform: none; }
   }
   @media (prefers-reduced-transparency: reduce) {
     .kopf, .nav-klein > nav { background: var(--flaeche); backdrop-filter: none; -webkit-backdrop-filter: none; }

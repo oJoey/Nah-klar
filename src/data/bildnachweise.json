@@ -1,11 +1,4 @@
 {
-  "carport": {
-    "fotograf": "Triplec85",
-    "lizenz": "CC BY-SA 4.0",
-    "lizenzUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-    "quelle": "https://commons.wikimedia.org/wiki/File:Begr%C3%BCnter_Carport_im_Hang_in_Tauberbischofsheim.jpg",
-    "titel": "Begrünter Carport im Hang in Tauberbischofsheim.jpg"
-  },
   "stellplatz": {
     "fotograf": "Elgaard",
     "lizenz": "CC BY 4.0",
@@ -33,5 +26,26 @@
     "lizenzUrl": "https://creativecommons.org/licenses/by-sa/4.0",
     "quelle": "https://commons.wikimedia.org/wiki/File:P%C3%B6rtschach_10.-Oktober-Stra%C3%9Fe_Abstellplatz_f%C3%BCr_Bootsanh%C3%A4nger_Segelboot_26122022_3322.jpg",
     "titel": "Pörtschach 10.-Oktober-Straße Abstellplatz für Bootsanhänger Segelboot 26122022 3322.jpg"
+  },
+  "garage-einfahrt": {
+    "fotograf": "Zapfbay",
+    "lizenz": "CC BY-SA 4.0",
+    "lizenzUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "quelle": "https://commons.wikimedia.org/wiki/File:ZAPF-Doppelgarage.jpg",
+    "titel": "ZAPF-Doppelgarage.jpg"
+  },
+  "wohnmobil": {
+    "fotograf": "Elgaard",
+    "lizenz": "CC0",
+    "lizenzUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+    "quelle": "https://commons.wikimedia.org/wiki/File:Wohnmobil_Stellplatz_Seegraben-Aschersleben_tree.jpg",
+    "titel": "Wohnmobil Stellplatz Seegraben-Aschersleben tree.jpg"
+  },
+  "lager": {
+    "fotograf": "MoveON moving",
+    "lizenz": "CC BY-SA 4.0",
+    "lizenzUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "quelle": "https://commons.wikimedia.org/wiki/File:Moving-boxes.jpg",
+    "titel": "Moving-boxes.jpg"
   }
 }
