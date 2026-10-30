@@ -1,23 +1,26 @@
 /* Gestaltung: ruhige Flächen statt Kästen, Hierarchie über Größe, Gewicht und Weißraum. */
 :root {
-  /* Farbwelt „Kompass“: Marineblau als Anker, Kobalt für Aktionen, Messing als warmer Akzent, Papier und Sand als Flächen */
-  --text: #13213a;
-  --text-2: #4a5466;
-  --blau: #1e4db7;
-  --blau-dunkel: #163a8c;
-  --blau-hell: #e7eefb;
-  --marine: #0f2340;
-  --marine-text: #c9d3e6;
-  --flaeche: #fbf9f5;
-  --flaeche-2: #f3eee4;
+  /* Farbpalette: Hauptfarbe Blau (Logo, Überschriften), helles Blau für Flächen, Orange als Akzent (Buttons) */
+  --haupt: #1f4e79;
+  --text: #1e2329;
+  --text-2: #4a5562;
+  --blau: #1f4e79;          /* Hauptfarbe: Überschriften, Links, Rahmen-Button, dunkle Bänder */
+  --blau-dunkel: #163a5c;
+  --blau-hell: #e8f0f8;     /* Helles Blau: Flächen, Hintergründe */
+  --marine: #1f4e79;
+  --marine-text: #c8d6e5;
+  --flaeche: #ffffff;
+  --flaeche-2: #e8f0f8;
   --karte: #ffffff;
-  --linie: #e2dccf;
-  --rand-feld: #8c8577;
-  --akzent: #d99a2b;
-  --akzent-hell: #fcf0da;
-  --akzent-text: #8a5200;
-  --messing-hell: #f2b54a;
-  --fokus: #1e4db7;
+  --linie: #d9dee4;         /* Neutral: Linien, Kartenränder */
+  --rand-feld: #7a8591;     /* Eingabefelder brauchen mind. 3:1 gegen Weiß, daher dunkler als --linie */
+  --akzent: #e08a2e;        /* Akzent: Buttons, Hervorhebungen */
+  --akzent-hover: #f09a3e;
+  --akzent-auf: #1e2329;    /* Schrift auf Orange: Weiß wäre zu kontrastarm (2,7:1) */
+  --akzent-hell: #fcebd7;
+  --akzent-text: #9a5300;   /* Orange als Textfarbe, lesbar auf Weiß und Hellblau */
+  --messing-hell: #f3b36b;  /* helles Orange auf dunklem Blau */
+  --fokus: #1f4e79;
 
   --r: 18px;
   --r-gross: 28px;
@@ -47,7 +50,7 @@ img, svg { max-width: 100%; }
 /* Typografie: große Schrift enger laufen lassen, Fließtext neutral */
 h1, h2, h3 { color: var(--text); margin: 0 0 0.75rem; text-wrap: balance; font-weight: 700; }
 /* Überschriften in einer weichen Serifenschrift (selbst gehostet), Fließtext in der Systemschrift */
-h1, h2 { font-family: 'Fraunces', Georgia, 'Times New Roman', serif; font-weight: 600; }
+h1, h2 { font-family: 'Fraunces', Georgia, 'Times New Roman', serif; font-weight: 600; color: var(--haupt); }
 h1 { font-size: clamp(2.4rem, 7.5vw, 4.25rem); line-height: 1.05; letter-spacing: -0.02em; }
 h2 { font-size: clamp(1.9rem, 5vw, 3rem); line-height: 1.1; letter-spacing: -0.015em; }
 h3 { font-size: 1.3rem; line-height: 1.25; letter-spacing: -0.012em; font-weight: 650; }
@@ -87,8 +90,8 @@ ul, ol { padding-left: 1.25rem; }
   -webkit-tap-highlight-color: transparent;
 }
 .btn:active { transform: scale(0.97); }
-.btn-primaer { background: var(--blau); color: #fff; }
-.btn-primaer:hover { background: var(--blau-dunkel); border-color: var(--blau-dunkel); color: #fff; }
+.btn-primaer { background: var(--akzent); border-color: var(--akzent); color: var(--akzent-auf); }
+.btn-primaer:hover { background: var(--akzent-hover); border-color: var(--akzent-hover); color: var(--akzent-auf); }
 .btn-rahmen { background: transparent; color: var(--blau); }
 .btn-rahmen:hover { background: var(--blau-hell); color: var(--blau-dunkel); }
 .btn-gross { min-height: 3.5rem; font-size: 1.2rem; padding-inline: 2rem; }
@@ -121,7 +124,7 @@ ul, ol { padding-left: 1.25rem; }
 /* Kräftiges blaues Band als Blickfang */
 .abschnitt-kobalt { background: var(--blau); color: #fff; }
 .abschnitt-kobalt h2, .abschnitt-kobalt .kicker { color: #fff; }
-.abschnitt-kobalt .einleitung { color: #dfe7fa; }
+.abschnitt-kobalt .einleitung { color: var(--marine-text); }
 .abschnitt-kobalt .weiter { color: #fff; }
 
 /* Dunkler Abschnitt in Marineblau als Blickfang */
@@ -171,7 +174,7 @@ input[type='text'], input[type='email'], input[type='tel'], input[type='number']
   transition: border-color 150ms ease, box-shadow 150ms ease;
 }
 select { appearance: none; padding-right: 2.5rem; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%234a5466' stroke-width='2'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 1rem center; }
-input:focus-visible, select:focus-visible, textarea:focus-visible { outline: none; border-color: var(--blau); box-shadow: 0 0 0 4px rgb(30 77 183 / 0.25); }
+input:focus-visible, select:focus-visible, textarea:focus-visible { outline: none; border-color: var(--blau); box-shadow: 0 0 0 4px rgb(31 78 121 / 0.25); }
 input[type='file'] { font: inherit; font-size: 1rem; min-height: 3rem; max-width: 100%; }
 fieldset { border: 0; padding: 0; margin: 0 0 1.25rem; min-width: 0; }
 .wahl-raster { display: grid; gap: 0.6rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr)); }
@@ -182,7 +185,7 @@ fieldset { border: 0; padding: 0; margin: 0 0 1.25rem; min-width: 0; }
 }
 .wahl input { width: 1.35rem; height: 1.35rem; accent-color: var(--blau); flex: none; margin: 0; }
 .wahl:has(input:checked) { border-color: var(--blau); background: var(--blau-hell); box-shadow: inset 0 0 0 1px var(--blau); }
-.wahl:has(input:focus-visible) { box-shadow: 0 0 0 4px rgb(30 77 183 / 0.25); }
+.wahl:has(input:focus-visible) { box-shadow: 0 0 0 4px rgb(31 78 121 / 0.25); }
 .datenschutz-hinweis { font-size: 1rem; color: var(--text-2); margin: 1.25rem 0 0; }
 .unsichtbar { display: none !important; }
 .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }

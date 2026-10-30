@@ -40,7 +40,7 @@ const aktiv = (k: SeitenSchluessel) => aktuell.startsWith(seiten[k].pfad);
   /* Durchscheinende Leiste: Inhalt scrollt darunter durch */
   .kopf {
     position: sticky; top: 0; z-index: 20;
-    background: rgb(251 249 245 / 0.82);
+    background: rgb(255 255 255 / 0.85);
     backdrop-filter: saturate(180%) blur(20px);
     -webkit-backdrop-filter: saturate(180%) blur(20px);
     border-bottom: 1px solid var(--linie);
@@ -76,7 +76,7 @@ const aktiv = (k: SeitenSchluessel) => aktuell.startsWith(seiten[k].pfad);
   .nav-klein[open] > summary { background: var(--flaeche-2); }
   .nav-klein > nav {
     position: absolute; left: 0; right: 0; top: 100%;
-    background: rgb(251 249 245 / 0.98);
+    background: rgb(255 255 255 / 0.98);
     backdrop-filter: saturate(180%) blur(20px); -webkit-backdrop-filter: saturate(180%) blur(20px);
     border-bottom: 1px solid rgb(0 0 0 / 0.08); box-shadow: 0 24px 40px rgb(0 0 0 / 0.08);
   }
