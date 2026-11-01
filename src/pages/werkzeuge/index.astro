@@ -1,0 +1,58 @@
+---
+import Ratgeber from '../../layouts/Ratgeber.astro';
+import Icon from '../../components/Icon.astro';
+import { seiten, istLive, type SeitenSchluessel } from '../../config/seiten';
+import type { IconName } from '../../lib/icons';
+
+const gruppen: { titel: string; eintraege: { seite: SeitenSchluessel; icon: IconName; art: string; text: string }[] }[] = [
+  { titel: 'Für Mieter', eintraege: [
+    { seite: 'strassenCheck', icon: 'anhaenger', art: 'Werkzeug', text: 'Darf Ihr Wohnwagen oder Anhänger an der Straße stehen? Ein paar Fragen, eine klare Antwort.' },
+    { seite: 'einwinterung', icon: 'liste', art: 'Checkliste', text: 'Wohnmobil und Wohnwagen winterfest machen: Punkt für Punkt zum Abhaken und Ausdrucken.' },
+    { seite: 'winterplatzVergleich', icon: 'hof', art: 'Ratgeber', text: 'Halle, Garage, überdacht oder im Freien: Vor- und Nachteile und Richtpreise im Vergleich.' },
+  ]},
+  { titel: 'Für Vermieter', eintraege: [
+    { seite: 'verdienstrechner', icon: 'euro', art: 'Werkzeug', text: 'Was bringt Ihr freier Platz im Jahr? Art, Ausstattung und Größe wählen, Ergebnis sofort.' },
+  ]},
+];
+---
+<Ratgeber
+  seite="werkzeuge"
+  titel="Werkzeuge und Ratgeber rund ums Unterstellen und Vermieten"
+  beschreibung="Straßen-Check für Wohnwagen, Einwinterungs-Checkliste, Winterplatz-Vergleich und Verdienstrechner: kostenlose Werkzeuge rund um Stellplatz, Garage und Lagerraum."
+  kicker="Werkzeuge und Ratgeber"
+  einleitung="Kostenlose Hilfen rund ums Unterstellen und Vermieten, ohne Anmeldung."
+  stand="2026-11-01"
+>
+  <Fragment slot="h1">Gut vorbereitet <span class="markiert">unterstellen</span></Fragment>
+  {gruppen.map((g, i) => (
+    <section class:list={['abschnitt', { 'abschnitt-grau': i % 2 === 1 }]}>
+      <div class="wrap">
+        <h2 class="gruppen-titel">{g.titel}</h2>
+        <ul class="raster werkzeug-liste">
+          {g.eintraege.filter((e) => istLive(e.seite)).map((e) => (
+            <li class="werkzeug-karte">
+              <span class="werkzeug-symbol" aria-hidden="true"><Icon name={e.icon} /></span>
+              <p class="werkzeug-art">{e.art}</p>
+              <h3><a href={seiten[e.seite].pfad}>{seiten[e.seite].titel}</a></h3>
+              <p>{e.text}</p>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+  ))}
+</Ratgeber>
+<style>
+  .gruppen-titel { font-size: clamp(1.5rem, 3vw, 2rem); }
+  .werkzeug-liste { gap: 1.25rem; }
+  .werkzeug-karte { position: relative; padding: 1.5rem; border: 1.5px solid var(--ueberschrift); border-radius: var(--r-gross); background: var(--hintergrund); box-shadow: 4px 4px 0 var(--ueberschrift); transition: transform 200ms var(--ease-out), box-shadow 200ms var(--ease-out); }
+  @media (hover: hover) { .werkzeug-karte:hover { transform: translate(-2px, -2px); box-shadow: 6px 6px 0 var(--ueberschrift); } }
+  .werkzeug-symbol { display: grid; place-items: center; width: 3.5rem; height: 3.5rem; border-radius: var(--r); background: var(--ueberschrift); margin-bottom: 1rem; }
+  .werkzeug-symbol :global(.symbol) { color: var(--akzent); }
+  .werkzeug-art { margin: 0 0 0.25rem; font-size: 0.875rem; font-weight: 700; }
+  .werkzeug-karte h3 a { color: inherit; text-decoration: none; }
+  .werkzeug-karte h3 a::after { content: ''; position: absolute; inset: 0; border-radius: var(--r-gross); }
+  .werkzeug-karte:has(a:focus-visible) { outline: 3px solid var(--ueberschrift); outline-offset: 3px; }
+  .werkzeug-karte p:last-child { margin: 0; }
+  @media (prefers-reduced-motion: reduce) { .werkzeug-karte:hover { transform: none; } }
+</style>

@@ -1,0 +1,131 @@
+---
+import Ratgeber from '../../layouts/Ratgeber.astro';
+
+// Checkliste zum Abhaken. Jeder Punkt hat eine feste ID, damit der Browser den Fortschritt speichern kann.
+const gruppen = [
+  { id: 'wasser', titel: 'Wasser und Sanitär', punkte: [
+    ['wasser-frisch', 'Frischwassertank vollständig leeren.'],
+    ['wasser-boiler', 'Boiler entleeren, Ablassventil (z. B. Frostwächter) offen lassen.'],
+    ['wasser-haehne', 'Alle Wasserhähne öffnen und in Mittelstellung offen lassen, damit Restwasser abläuft.'],
+    ['wasser-pumpe', 'Wasserpumpe und Wasserfilter entleeren, Leitungen nach Möglichkeit mit Luft ausblasen.'],
+    ['wasser-ab', 'Abwassertank leeren und spülen, Ablassschieber offen lassen.'],
+    ['wasser-wc', 'Toilettenkassette leeren, reinigen und mit geöffnetem Schieber lagern.'],
+  ]},
+  { id: 'gas', titel: 'Gas', punkte: [
+    ['gas-ventile', 'Gasflaschen zudrehen und alle Absperrhähne im Fahrzeug schließen.'],
+    ['gas-lagern', 'Mit dem Vermieter klären, ob Gasflaschen im Fahrzeug bleiben dürfen. In vielen Hallen und Scheunen ist das nicht erlaubt. Gasflaschen nie in Kellern oder Räumen unter Erdgleiche lagern.'],
+  ]},
+  { id: 'strom', titel: 'Batterie und Elektrik', punkte: [
+    ['strom-laden', 'Aufbau- und Starterbatterie voll laden.'],
+    ['strom-trennen', 'Batterie-Hauptschalter aus oder Minuspol abklemmen, damit sich die Batterie nicht entlädt.'],
+    ['strom-erhalt', 'Wenn der Platz Strom hat: Erhaltungsladung nach Herstellerangabe nutzen. Sonst Batterie alle paar Wochen nachladen.'],
+    ['strom-kuehl', 'Kühlschrank ausschalten, reinigen und Tür einen Spalt offen lassen (gegen Schimmel und Geruch).'],
+  ]},
+  { id: 'innen', titel: 'Innenraum', punkte: [
+    ['innen-essen', 'Alle Lebensmittel und Getränke ausräumen, auch Konserven (können bei Frost platzen).'],
+    ['innen-textil', 'Bettzeug, Handtücher und Kleidung mitnehmen, Polster hochkant stellen.'],
+    ['innen-feucht', 'Luftentfeuchter (z. B. Granulat) aufstellen, Schränke und Klappen leicht geöffnet lassen.'],
+    ['innen-wert', 'Wertsachen und Papiere aus dem Fahrzeug nehmen.'],
+  ]},
+  { id: 'aussen', titel: 'Außen, Reifen und Fahrwerk', punkte: [
+    ['aussen-waschen', 'Fahrzeug waschen, Dichtungen und Gummis pflegen (z. B. mit Pflegestift).'],
+    ['aussen-dicht', 'Fenster, Dachluken und Außenklappen auf Dichtigkeit prüfen und schließen.'],
+    ['aussen-reifen', 'Reifendruck etwas über den Normalwert erhöhen (gegen Standplatten) oder Fahrzeug nach Herstellerangabe aufbocken.'],
+    ['aussen-bremse', 'Handbremse lösen, damit sie nicht festrostet. Fahrzeug stattdessen mit Unterlegkeilen sichern, beim Wohnmobil zusätzlich Gang einlegen.'],
+    ['aussen-plane', 'Nur atmungsaktive Abdeckplanen verwenden. Dichte Planen halten Feuchtigkeit fest.'],
+    ['aussen-tank', 'Beim Wohnmobil den Tank möglichst voll machen, das verringert Kondenswasser im Tank.'],
+  ]},
+  { id: 'papiere', titel: 'Papiere und Versicherung', punkte: [
+    ['papiere-kennzeichen', 'Klären: Saisonkennzeichen, Abmeldung oder angemeldet lassen.'],
+    ['papiere-versicherung', 'Bei Abmeldung prüfen, ob die Ruheversicherung der Kfz-Versicherung greift und was der Abstellplatz dafür erfüllen muss.'],
+    ['papiere-vertrag', 'Mit dem Vermieter Zugangszeiten und Kontakt für den Winter absprechen.'],
+  ]},
+  { id: 'kontrolle', titel: 'Während des Winters', punkte: [
+    ['kontrolle-besuch', 'Alle paar Wochen vorbeischauen: Feuchtigkeit, Batterie, Spuren von Mäusen.'],
+    ['kontrolle-lueften', 'An trockenen Tagen kurz lüften.'],
+  ]},
+] as const;
+const gesamt = gruppen.reduce((s, g) => s + g.punkte.length, 0);
+---
+<Ratgeber
+  seite="einwinterung"
+  titel="Wohnmobil und Wohnwagen einwintern: Checkliste zum Abhaken"
+  beschreibung="Wohnmobil oder Wohnwagen winterfest machen: Wasser, Gas, Batterie, Reifen, Innenraum und Papiere. Checkliste zum Abhaken und Ausdrucken."
+  kicker="Ratgeber · Checkliste"
+  einleitung={`${gesamt} Punkte, damit Ihr Wohnmobil oder Wohnwagen gut durch den Winter kommt. Zum Abhaken am Handy oder zum Ausdrucken.`}
+  stand="2026-11-01"
+  verwandt={['winterplatzVergleich', 'strassenCheck', 'mieten']}
+>
+  <Fragment slot="h1">Wohnmobil und Wohnwagen <span class="markiert">einwintern</span></Fragment>
+
+  <section class="abschnitt">
+    <div class="wrap checkliste-raster">
+      <div class="inhalt" data-checkliste data-gesamt={gesamt}>
+        <div class="fortschritt-box nicht-drucken" aria-live="polite">
+          <p><strong data-erledigt>0</strong> von {gesamt} erledigt</p>
+          <div class="balken"><span data-balken></span></div>
+          <div class="checkliste-knoepfe">
+            <button class="btn btn-rahmen" type="button" data-drucken>Drucken</button>
+            <button class="btn btn-rahmen" type="button" data-zuruecksetzen>Zurücksetzen</button>
+          </div>
+        </div>
+        {gruppen.map((g) => (
+          <fieldset class="check-gruppe">
+            <legend><h2>{g.titel}</h2></legend>
+            {g.punkte.map(([id, text]) => (
+              <label class="check-punkt"><input type="checkbox" data-id={id} /><span>{text}</span></label>
+            ))}
+          </fieldset>
+        ))}
+        <div class="hinweis-box">
+          <p><strong>Wichtig:</strong> Die Angaben des Herstellers Ihres Fahrzeugs gehen vor, besonders bei Heizung, Boiler und Lithium-Batterien.</p>
+        </div>
+      </div>
+      <aside class="checkliste-seite nicht-drucken">
+        <div class="karte">
+          <h3>Noch keinen Winterplatz?</h3>
+          <p>Halle, Scheune oder überdachter Stellplatz bei Privatleuten in Ihrer Nähe.</p>
+          <a class="btn btn-primaer btn-voll" href="/suchauftrag/?mieter_art=wohnmobil-wohnwagen">Winterplatz finden</a>
+        </div>
+      </aside>
+    </div>
+  </section>
+</Ratgeber>
+<script>
+  // Fortschritt nur im Browser dieser Person speichern (kein Konto, keine Übertragung)
+  const box = document.querySelector<HTMLElement>('[data-checkliste]');
+  if (box) {
+    const SCHLUESSEL = 'checkliste-einwinterung';
+    const felder = [...box.querySelectorAll<HTMLInputElement>('input[data-id]')];
+    let gespeichert: string[] = [];
+    try { gespeichert = JSON.parse(localStorage.getItem(SCHLUESSEL) ?? '[]'); } catch {}
+    felder.forEach((f) => (f.checked = gespeichert.includes(f.dataset.id!)));
+    const zeige = () => {
+      const an = felder.filter((f) => f.checked);
+      box.querySelector('[data-erledigt]')!.textContent = String(an.length);
+      box.querySelector<HTMLElement>('[data-balken]')!.style.transform = `scaleX(${an.length / felder.length})`;
+      try { localStorage.setItem(SCHLUESSEL, JSON.stringify(an.map((f) => f.dataset.id))); } catch {}
+    };
+    box.addEventListener('change', zeige);
+    box.querySelector('[data-drucken]')!.addEventListener('click', () => print());
+    box.querySelector('[data-zuruecksetzen]')!.addEventListener('click', () => { felder.forEach((f) => (f.checked = false)); zeige(); });
+    zeige();
+  }
+</script>
+<style>
+  .checkliste-raster { display: grid; gap: 2.5rem; }
+  @media (min-width: 64rem) { .checkliste-raster { grid-template-columns: minmax(0, 46rem) 18rem; justify-content: space-between; align-items: start; } .checkliste-seite { position: sticky; top: calc(var(--kopf-hoehe) + 1.5rem); } }
+  .fortschritt-box { position: sticky; top: var(--kopf-hoehe); z-index: 2; background: var(--hintergrund); padding: 1rem 0; margin-bottom: 1rem; border-bottom: 1px solid var(--linie); }
+  .fortschritt-box p { margin: 0 0 0.5rem; }
+  .balken { height: 8px; border-radius: 4px; background: var(--sekundaer); overflow: hidden; }
+  .balken span { display: block; height: 100%; background: var(--ueberschrift); transform-origin: left; transform: scaleX(0); transition: transform 300ms var(--ease-out); }
+  .checkliste-knoepfe { display: flex; gap: 0.5rem; margin-top: 0.75rem; }
+  .checkliste-knoepfe .btn { min-height: 2.5rem; padding: 0.35rem 0.9rem; font-size: 0.95rem; }
+  .check-gruppe { border: 0; padding: 0; margin: 0 0 1.5rem; }
+  .check-gruppe legend { padding: 0; }
+  .check-gruppe h2 { margin: 1.5rem 0 0.75rem; font-size: clamp(1.4rem, 3vw, 1.75rem); }
+  .check-punkt { display: flex; gap: 0.85rem; align-items: flex-start; padding: 0.75rem 0; border-bottom: 1px solid var(--linie); cursor: pointer; }
+  .check-punkt input { flex: none; width: 1.4rem; height: 1.4rem; margin-top: 0.15rem; accent-color: var(--ueberschrift); }
+  .check-punkt:has(input:checked) span { text-decoration: line-through; text-decoration-color: var(--ueberschrift); opacity: 0.6; }
+  @media (prefers-reduced-motion: reduce) { .balken span { transition: none; } }
+</style>

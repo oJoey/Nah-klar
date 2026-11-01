@@ -1,0 +1,35 @@
+---
+import Ratgeber from '../../layouts/Ratgeber.astro';
+import Verdienstrechner from '../../components/Verdienstrechner.astro';
+import richtwerte from '../../data/richtwerte.json';
+import { site } from '../../config/site';
+---
+<Ratgeber
+  seite="verdienstrechner"
+  titel="Verdienstrechner: Was bringt Ihr Stellplatz, Ihre Garage oder Scheune?"
+  beschreibung="Stellplatz, Garage, Halle oder Lagerraum vermieten: Mit dem Verdienstrechner sehen Sie sofort, welcher Ertrag pro Monat und Jahr realistisch ist."
+  kicker="Werkzeug · Verdienstrechner"
+  einleitung="Wählen Sie Art, Ausstattung und Größe Ihres Platzes. Der Rechner zeigt, was im Monat und im Jahr realistisch ist."
+  stand="2026-11-01"
+  verwandt={['vermieten', 'winterplatzVergleich']}
+  fuer="vermieter"
+>
+  <Fragment slot="h1">Was bringt Ihr <span class="markiert">freier Platz</span>?</Fragment>
+  <section class="abschnitt">
+    <div class="wrap"><Verdienstrechner ausfuehrlich /></div>
+  </section>
+  <section class="abschnitt abschnitt-grau">
+    <div class="wrap inhalt">
+      <h2>So rechnet der Rechner</h2>
+      <p>Für Stellplätze, Garagen und Hallen zählt vor allem, welches Fahrzeug auf den Platz passt. Deshalb rechnen wir in Größenklassen: bis 5 m für Autos, bis 7 m für Wohnwagen und kleine Wohnmobile, bis 9 m für große Wohnmobile und darüber für Gespanne. Lagerräume rechnen wir nach Quadratmetern.</p>
+      <p>Die Werte sind Richtwerte für den {richtwerte.region}, abgeglichen mit aktuellen Angeboten. In der Stadt und in sehr gefragten Lagen ist oft mehr drin, auf dem Land etwas weniger.</p>
+      <h2>Was Sie bekommen</h2>
+      <ul>
+        <li>Sie bestimmen den Preis selbst und erhalten die volle Miete.</li>
+        <li>{site.name} ist für Vermieter immer kostenlos.</li>
+        <li>Jede Fläche wird von Hand geprüft, bevor wir sie vorschlagen. Mustervertrag und Kaution sind geregelt.</li>
+      </ul>
+      <p class="unter-hinweis">Einnahmen aus der Vermietung sind grundsätzlich steuerpflichtig. Eine Steuerberatung bieten wir nicht an.</p>
+    </div>
+  </section>
+</Ratgeber>

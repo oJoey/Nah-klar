@@ -13,7 +13,7 @@ export const seiten = {
   datenschutz: { pfad: '/datenschutz/', live: true, titel: 'Datenschutz' },
 
   // Menü und Fußbereich
-  werkzeuge: { pfad: '/werkzeuge/', live: true, entwurf: true, titel: 'Werkzeuge & Ratgeber' },
+  werkzeuge: { pfad: '/werkzeuge/', live: true, titel: 'Werkzeuge & Ratgeber' },
   regionen: { pfad: '/regionen/', live: true, entwurf: true, titel: 'Regionen' },
   hilfe: { pfad: '/hilfe/', live: true, entwurf: true, titel: 'Hilfe & Kontakt' },
   soFunktionierts: { pfad: '/so-funktionierts/', live: true, entwurf: true, titel: "So funktioniert's" },
@@ -24,10 +24,10 @@ export const seiten = {
   agb: { pfad: '/agb/', live: true, entwurf: true, titel: 'AGB' },
 
   // Werkzeuge und Ratgeber
-  verdienstrechner: { pfad: '/werkzeuge/verdienstrechner/', live: true, entwurf: true, titel: 'Verdienstrechner' },
-  einwinterung: { pfad: '/ratgeber/einwinterung-checkliste/', live: true, entwurf: true, titel: 'Einwinterungs-Checkliste' },
-  strassenCheck: { pfad: '/werkzeuge/strassen-check-wohnwagen/', live: true, entwurf: true, titel: 'Straßen-Check Wohnwagen' },
-  winterplatzVergleich: { pfad: '/ratgeber/winterplatz-vergleich/', live: true, entwurf: true, titel: 'Winterplatz-Vergleich' },
+  verdienstrechner: { pfad: '/werkzeuge/verdienstrechner/', live: true, titel: 'Verdienstrechner' },
+  einwinterung: { pfad: '/ratgeber/einwinterung-checkliste/', live: true, titel: 'Einwinterungs-Checkliste' },
+  strassenCheck: { pfad: '/werkzeuge/strassen-check-wohnwagen/', live: true, titel: 'Straßen-Check Wohnwagen' },
+  winterplatzVergleich: { pfad: '/ratgeber/winterplatz-vergleich/', live: true, titel: 'Winterplatz-Vergleich' },
   // Später: prüft Breite, Höhe und Gewicht gegen die Zufahrt eines Platzes
   passtWohnmobil: { pfad: '/werkzeuge/passt-mein-wohnmobil/', live: false, titel: 'Passt mein Wohnmobil?' },
   nachfrage: { pfad: '/vermieten/nachfrage/', live: true, entwurf: true, titel: 'Nachfrage in Ihrer Nähe' },

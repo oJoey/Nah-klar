@@ -10,6 +10,6 @@ export default defineConfig({
   trailingSlash: 'always',
   build: { format: 'directory' },
   integrations: [
-    sitemap({ filter: (url) => !url.includes('/danke/') && !entwurfPfade.some((p) => new URL(url).pathname === p) }),
+    sitemap({ filter: (url) => !url.includes('/danke/') && !url.includes('/daten-loeschen/') && !entwurfPfade.some((p) => new URL(url).pathname === p) }),
   ],
 });

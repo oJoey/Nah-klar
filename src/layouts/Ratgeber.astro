@@ -1,0 +1,84 @@
+---
+// Layout für Ratgeber und Werkzeuge: Kopfbereich wie auf den Hauptseiten, Artikel-Daten für Google,
+// verwandte Seiten und ein Abschluss mit passendem Button (Mieter oder Vermieter).
+import Basis from './Basis.astro';
+import { site } from '../config/site';
+import { seiten, link, type SeitenSchluessel } from '../config/seiten';
+import { jsonLd } from '../lib/texte';
+
+interface Props {
+  seite: SeitenSchluessel;
+  titel: string;          // <title> für Google
+  beschreibung: string;   // Meta-Beschreibung
+  kicker: string;
+  einleitung: string;
+  stand: string;          // z. B. '2026-11-01'
+  verwandt?: SeitenSchluessel[];
+  fuer?: 'mieter' | 'vermieter';
+}
+const { seite, titel, beschreibung, kicker, einleitung, stand, verwandt = [], fuer = 'mieter' } = Astro.props;
+const s = seiten[seite];
+const kruemel = seite === 'werkzeuge' ? [{ name: s.titel, pfad: s.pfad }] : [{ name: seiten.werkzeuge.titel, pfad: seiten.werkzeuge.pfad }, { name: s.titel, pfad: s.pfad }];
+const standText = new Date(stand).toLocaleDateString('de-DE', { month: 'long', year: 'numeric' });
+const weitere = verwandt.map((k) => ({ titel: seiten[k].titel, href: link(k) })).filter((v) => v.href);
+const artikel = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: titel,
+  description: beschreibung,
+  dateModified: stand,
+  inLanguage: 'de-DE',
+  publisher: { '@id': `${site.url}/#organisation` },
+  mainEntityOfPage: new URL(s.pfad, site.url).href,
+};
+const cta = fuer === 'vermieter'
+  ? { titel: 'Sie haben Platz frei?', text: 'Bieten Sie ihn in zwei Minuten an. Für Vermieter immer kostenlos.', knopf: 'Platz anbieten', href: link('platzAnbieten') }
+  : { titel: 'Sie suchen einen Platz?', text: 'Legen Sie einen Suchauftrag an. Wir melden uns mit passenden Plätzen in Ihrer Nähe.', knopf: 'Platz finden', href: link('suchauftrag') };
+---
+<Basis titel={titel} beschreibung={beschreibung} brotkruemel={kruemel}>
+  <script type="application/ld+json" set:html={jsonLd(artikel)} />
+  <section class="ratgeber-kopf abschnitt-grau">
+    <div class="held-muster" aria-hidden="true"></div>
+    <div class="wrap">
+      <p class="kicker">{kicker}</p>
+      <h1><slot name="h1" /></h1>
+      <p class="einleitung">{einleitung}</p>
+      <p class="stand">Stand: {standText}</p>
+    </div>
+  </section>
+
+  <slot />
+
+  {weitere.length > 0 && (
+    <section class="abschnitt">
+      <div class="wrap">
+        <h2 class="weitere-titel">Auch interessant</h2>
+        <ul class="weitere">
+          {weitere.map((w) => <li><a class="weiter" href={w.href}>{w.titel}</a></li>)}
+        </ul>
+      </div>
+    </section>
+  )}
+
+  <section class="abschnitt abschnitt-dunkel">
+    <div class="wrap ratgeber-cta">
+      <div>
+        <h2>{cta.titel}</h2>
+        <p class="einleitung">{cta.text}</p>
+      </div>
+      <a class="btn btn-primaer btn-gross" href={cta.href}>{cta.knopf}</a>
+    </div>
+  </section>
+</Basis>
+<style>
+  .ratgeber-kopf { position: relative; overflow: hidden; padding-block: clamp(2rem, 6vw, 4.5rem); }
+  .ratgeber-kopf .wrap { position: relative; }
+  .ratgeber-kopf h1 { max-width: 20ch; }
+  .ratgeber-kopf .einleitung { margin-bottom: 0.75rem; }
+  .stand { margin: 0; font-size: 0.95rem; font-weight: 600; color: var(--text); }
+  .weitere-titel { font-size: clamp(1.5rem, 3vw, 2rem); }
+  .weitere { list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: 0.5rem 2rem; }
+  .ratgeber-cta { display: grid; gap: 1.5rem; align-items: center; }
+  .ratgeber-cta .einleitung { margin: 0; }
+  @media (min-width: 52rem) { .ratgeber-cta { grid-template-columns: 1fr auto; gap: 3rem; } }
+</style>

@@ -234,3 +234,17 @@ fieldset > legend { font-size: 1.05rem; margin-bottom: 0.6rem; }
   *, *::before, *::after { transition-duration: 0.01ms !important; }
   .btn:active, .btn-primaer:active, .chip:active { transform: none; }
 }
+
+/* Textseiten (Ratgeber): angenehme Zeilenlänge, ruhige Abstände */
+.inhalt { max-width: 46rem; }
+.inhalt h2 { margin-top: 2.5rem; font-size: clamp(1.6rem, 3.5vw, 2.1rem); }
+.inhalt h2:first-child { margin-top: 0; }
+.inhalt h3 { margin-top: 1.75rem; }
+.inhalt li { margin-bottom: 0.4rem; }
+.hinweis-box { background: var(--tertiaer); border-radius: var(--r); padding: 1.1rem 1.25rem; margin: 1.5rem 0; }
+.hinweis-box p:last-child { margin: 0; }
+@media print {
+  .kopf, .fuss, .aktion, .brotkruemel, .abschnitt-dunkel, .nicht-drucken { display: none !important; }
+  .abschnitt, .ratgeber-kopf { padding-block: 0.5rem !important; background: none !important; }
+  .held-muster { display: none; }
+}

@@ -1,0 +1,102 @@
+---
+import Ratgeber from '../../layouts/Ratgeber.astro';
+import Chips from '../../components/Chips.astro';
+
+const fragen = [
+  { name: 'fahrzeug', titel: 'Was möchten Sie abstellen?', optionen: [{ wert: 'anhaenger', titel: 'Wohnwagen oder Anhänger ohne Zugfahrzeug' }, { wert: 'wohnmobil', titel: 'Wohnmobil' }] },
+  { name: 'zugelassen', titel: 'Ist das Fahrzeug zugelassen und versichert?', optionen: [{ wert: 'ja', titel: 'Ja' }, { wert: 'nein', titel: 'Nein, abgemeldet' }] },
+  { name: 'gewicht', titel: 'Zulässige Gesamtmasse', wenn: 'anhaenger', optionen: [{ wert: 'leicht', titel: 'bis 2 t' }, { wert: 'schwer', titel: 'über 2 t' }] },
+  { name: 'gewicht_wm', titel: 'Zulässige Gesamtmasse', wenn: 'wohnmobil', optionen: [{ wert: 'leicht', titel: 'bis 7,5 t' }, { wert: 'schwer', titel: 'über 7,5 t' }] },
+  { name: 'gebiet', titel: 'Wo soll es stehen?', optionen: [{ wert: 'wohngebiet', titel: 'Innerorts im Wohngebiet' }, { wert: 'innerorts', titel: 'Innerorts, kein Wohngebiet' }, { wert: 'ausserorts', titel: 'Außerorts' }] },
+  { name: 'dauer', titel: 'Wie lange?', wenn: 'anhaenger', optionen: [{ wert: 'kurz', titel: 'bis zu 2 Wochen' }, { wert: 'lang', titel: 'länger als 2 Wochen' }] },
+  { name: 'schild', titel: 'Gibt es dort ein Schild, das den Parkplatz ausdrücklich für Anhänger bzw. Lkw freigibt?', optionen: [{ wert: 'nein', titel: 'Nein' }, { wert: 'ja', titel: 'Ja' }] },
+];
+---
+<Ratgeber
+  seite="strassenCheck"
+  titel="Wohnwagen an der Straße parken: Was ist erlaubt? (2-Wochen-Regel)"
+  beschreibung="Darf Ihr Wohnwagen, Anhänger oder Wohnmobil an der Straße stehen? Der Straßen-Check prüft die 2-Wochen-Regel und das Nachtparkverbot im Wohngebiet nach § 12 StVO."
+  kicker="Werkzeug · Straßen-Check"
+  einleitung="Ein paar kurze Fragen, eine klare Antwort: Darf Ihr Wohnwagen, Anhänger oder Wohnmobil auf der öffentlichen Straße stehen, und wie lange?"
+  stand="2026-11-01"
+  verwandt={['einwinterung', 'winterplatzVergleich', 'mieten']}
+>
+  <Fragment slot="h1">Darf mein Wohnwagen an der <span class="markiert">Straße</span> stehen?</Fragment>
+
+  <section class="abschnitt">
+    <div class="wrap check-raster">
+      <form class="formular-karte check" data-check onsubmit="return false">
+        {fragen.map((f) => (
+          <fieldset class="form-gruppe" data-frage={f.name} data-wenn-fahrzeug={f.wenn}>
+            <legend>{f.titel}</legend>
+            <Chips name={f.name} optionen={f.optionen} />
+          </fieldset>
+        ))}
+      </form>
+      <div class="ergebnis" data-ergebnis aria-live="polite">
+        <p class="ergebnis-leer">Beantworten Sie die Fragen, hier erscheint die Antwort.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="abschnitt abschnitt-grau">
+    <div class="wrap inhalt">
+      <h2>Die Regeln im Überblick</h2>
+      <h3>Anhänger und Wohnwagen: höchstens zwei Wochen</h3>
+      <p>Anhänger ohne Zugfahrzeug, also auch Wohnwagen, dürfen auf öffentlichen Straßen nicht länger als zwei Wochen geparkt werden (§ 12 Abs. 3b StVO). Das gilt nicht auf Parkplätzen, die ausdrücklich für Anhänger freigegeben sind.</p>
+      <h3>Schwere Fahrzeuge im Wohngebiet: nicht nachts und nicht am Wochenende</h3>
+      <p>Innerhalb geschlossener Ortschaften dürfen Anhänger über 2 t und Kraftfahrzeuge über 7,5 t zulässiger Gesamtmasse in reinen und allgemeinen Wohngebieten nicht regelmäßig von 22 bis 6 Uhr sowie an Sonn- und Feiertagen parken (§ 12 Abs. 3a StVO). Auch hier gilt eine Ausnahme für entsprechend gekennzeichnete Parkplätze.</p>
+      <h3>Wohnmobile bis 7,5 t: wie ein Pkw</h3>
+      <p>Ein zugelassenes Wohnmobil ist kein Anhänger. Für Wohnmobile bis 7,5 t gilt die 2-Wochen-Regel nicht, es gelten die normalen Parkregeln, etwa Halteverbote, Parkscheiben oder Anwohnerparken.</p>
+      <h3>Abgemeldete Fahrzeuge gehören nicht auf die Straße</h3>
+      <p>Wer einen Wohnwagen über den Winter abmeldet, darf ihn nicht im öffentlichen Straßenraum abstellen. Dafür braucht es einen privaten Stellplatz.</p>
+      <div class="hinweis-box">
+        <p>Diese Übersicht ist eine Orientierung. Eine Rechtsauskunft können wir nicht geben. Örtliche Schilder und Regeln der Gemeinde gehen vor.</p>
+      </div>
+    </div>
+  </section>
+</Ratgeber>
+<script>
+  type Antwort = { stufe: 'ja' | 'teils' | 'nein'; titel: string; text: string };
+  const form = document.querySelector<HTMLFormElement>('[data-check]');
+  const ziel = document.querySelector<HTMLElement>('[data-ergebnis]');
+  if (form && ziel) {
+    const wert = (n: string) => form.querySelector<HTMLInputElement>(`[name="${n}"]:checked`)?.value;
+    const bewerte = (): Antwort | null => {
+      const fz = wert('fahrzeug');
+      if (!fz) return null;
+      if (wert('zugelassen') === 'nein') return { stufe: 'nein', titel: 'Nein, nicht auf der Straße.', text: 'Abgemeldete Fahrzeuge dürfen nicht im öffentlichen Straßenraum abgestellt werden. Sie brauchen einen privaten Stellplatz.' };
+      const gewicht = wert(fz === 'anhaenger' ? 'gewicht' : 'gewicht_wm');
+      const gebiet = wert('gebiet'); const schild = wert('schild'); const dauer = wert('dauer');
+      if (!wert('zugelassen') || !gewicht || !gebiet || !schild || (fz === 'anhaenger' && !dauer)) return null;
+      if (schild === 'ja') return { stufe: 'ja', titel: 'Ja, auf diesem Parkplatz.', text: 'Auf ausdrücklich freigegebenen Parkplätzen gelten weder die 2-Wochen-Regel noch das Nachtparkverbot im Wohngebiet. Beachten Sie die Regeln auf dem Schild.' };
+      if (fz === 'anhaenger' && dauer === 'lang') return { stufe: 'nein', titel: 'Nein, höchstens zwei Wochen.', text: 'Anhänger und Wohnwagen ohne Zugfahrzeug dürfen höchstens zwei Wochen auf öffentlichen Straßen parken (§ 12 Abs. 3b StVO). Für längere Zeit brauchen Sie einen privaten Stellplatz.' };
+      const nacht = gewicht === 'schwer' && gebiet === 'wohngebiet';
+      if (nacht) return { stufe: 'teils', titel: 'Nur eingeschränkt.', text: `Im Wohngebiet ist regelmäßiges Parken von 22 bis 6 Uhr und an Sonn- und Feiertagen nicht erlaubt (§ 12 Abs. 3a StVO).${fz === 'anhaenger' ? ' Zusätzlich gilt: höchstens zwei Wochen.' : ''}` };
+      if (fz === 'anhaenger') return { stufe: 'ja', titel: 'Ja, bis zu zwei Wochen.', text: 'Danach muss der Wohnwagen oder Anhänger von der Straße. Die normalen Parkregeln (Halteverbote, Parkscheiben) gelten zusätzlich.' };
+      return { stufe: 'ja', titel: 'Ja, wie ein Pkw.', text: 'Für Wohnmobile bis 7,5 t gibt es kein Zeitlimit durch die 2-Wochen-Regel. Es gelten die normalen Parkregeln wie Halteverbote, Parkscheiben oder Anwohnerparken.' };
+    };
+    const zeige = () => {
+      const fz = wert('fahrzeug');
+      form.querySelectorAll<HTMLElement>('[data-wenn-fahrzeug]').forEach((f) => (f.hidden = f.dataset.wennFahrzeug !== fz));
+      const a = bewerte();
+      if (!a) { ziel.innerHTML = '<p class="ergebnis-leer">Beantworten Sie die Fragen, hier erscheint die Antwort.</p>'; return; }
+      const knopf = a.stufe === 'ja' ? '' : '<a class="btn btn-primaer btn-voll" href="/suchauftrag/?mieter_art=wohnmobil-wohnwagen">Privaten Stellplatz finden</a>';
+      ziel.innerHTML = `<div class="antwort antwort-${a.stufe}"><p class="antwort-titel">${a.titel}</p><p>${a.text}</p>${knopf}</div>`;
+    };
+    form.addEventListener('change', zeige);
+    zeige();
+  }
+</script>
+<style>
+  .check-raster { display: grid; gap: 2rem; }
+  @media (min-width: 60rem) { .check-raster { grid-template-columns: 1.2fr 1fr; align-items: start; } .ergebnis { position: sticky; top: calc(var(--kopf-hoehe) + 1.5rem); } }
+  .check [hidden] { display: none; }
+  .ergebnis :global(.ergebnis-leer) { padding: 1.5rem; border: 1.5px dashed var(--linie); border-radius: var(--r-gross); margin: 0; }
+  .ergebnis :global(.antwort) { padding: 1.5rem; border-radius: var(--r-gross); border: 1.5px solid var(--ueberschrift); box-shadow: 6px 6px 0 var(--ueberschrift); background: var(--hintergrund); }
+  .ergebnis :global(.antwort-titel) { font-size: 1.6rem; font-weight: 800; letter-spacing: -0.02em; color: var(--ueberschrift); margin-bottom: 0.5rem; }
+  .ergebnis :global(.antwort-ja) { background: var(--sekundaer); }
+  .ergebnis :global(.antwort-teils) { background: var(--tertiaer); }
+  .ergebnis :global(.antwort-nein) { background: var(--hintergrund); }
+  .ergebnis :global(.antwort .btn) { margin-top: 0.5rem; }
+</style>

@@ -1,0 +1,78 @@
+---
+import Ratgeber from '../../layouts/Ratgeber.astro';
+import richtwerte from '../../data/richtwerte.json';
+
+// Preise je Monat aus den Richtwerten, Klasse „bis 7 m“ (typischer Wohnwagen) und „bis 9 m“ (großes Wohnmobil)
+const preis = (art: string, klasse: string) => {
+  const p = richtwerte.arten.find((a) => a.wert === art)?.preise?.[klasse as '7'];
+  return p ? `${p[0]} bis ${p[1]} €` : 'selten verfügbar';
+};
+const plaetze = [
+  { art: 'halle-scheune', titel: 'Halle oder Scheune', schutz: 'Sehr gut', sonne: 'Sehr gut', feucht: 'Auf Lüftung achten, in dichten Hallen bildet sich Kondenswasser', zugang: 'Nach Absprache, oft eingeschränkt, wenn mehrere Fahrzeuge hintereinander stehen', hoehe: 'Meist auch für hohe Wohnmobile, Torhöhe prüfen' },
+  { art: 'garage', titel: 'Garage', schutz: 'Sehr gut', sonne: 'Sehr gut', feucht: 'Regelmäßig lüften', zugang: 'Meist jederzeit', hoehe: 'Tor selten höher als 2,5 m, eher für Pkw und kleine Wohnwagen' },
+  { art: 'stellplatz-ueberdacht', titel: 'Stellplatz überdacht', schutz: 'Gut, bei Schlagregen von der Seite eingeschränkt', sonne: 'Gut', feucht: 'Gut belüftet', zugang: 'Meist jederzeit', hoehe: 'Dachhöhe prüfen' },
+  { art: 'stellplatz-frei', titel: 'Stellplatz im Freien', schutz: 'Keiner, Schnee vom Dach räumen', sonne: 'Keiner, UV-Licht setzt Dichtungen und Fenstern zu', feucht: 'Gut belüftet, nur atmungsaktive Plane', zugang: 'Meist jederzeit', hoehe: 'Keine Begrenzung' },
+].map((p) => ({ ...p, preis7: preis(p.art, '7'), preis9: preis(p.art, '9') }));
+const zeilen: [string, keyof (typeof plaetze)[number]][] = [
+  ['Schutz vor Regen und Schnee', 'schutz'], ['Schutz vor Sonne', 'sonne'], ['Feuchtigkeit', 'feucht'], ['Zugang', 'zugang'], ['Für hohe Fahrzeuge', 'hoehe'],
+  ['Preis bis 7 m (Wohnwagen)', 'preis7'], ['Preis bis 9 m (großes Wohnmobil)', 'preis9'],
+];
+---
+<Ratgeber
+  seite="winterplatzVergleich"
+  titel="Winterplatz für Wohnmobil und Wohnwagen: Halle, Garage oder Carport?"
+  beschreibung="Halle, Scheune, Garage, überdachter Stellplatz oder Freifläche: Welcher Winterplatz passt zu Ihrem Wohnmobil oder Wohnwagen? Vergleich mit Vor- und Nachteilen und Richtpreisen."
+  kicker="Ratgeber · Vergleich"
+  einleitung="Halle, Garage, überdacht oder im Freien: Was schützt Ihr Fahrzeug wirklich, was kostet es, und worauf sollten Sie achten?"
+  stand="2026-11-01"
+  verwandt={['einwinterung', 'strassenCheck', 'mieten']}
+>
+  <Fragment slot="h1">Welcher <span class="markiert">Winterplatz</span> passt zu Ihrem Fahrzeug?</Fragment>
+
+  <section class="abschnitt">
+    <div class="wrap">
+      <div class="tabelle-huelle">
+        <table class="vergleich-tabelle">
+          <thead><tr><td></td>{plaetze.map((p) => <th scope="col">{p.titel}</th>)}</tr></thead>
+          <tbody>
+            {zeilen.map(([titel, k]) => <tr><th scope="row">{titel}</th>{plaetze.map((p) => <td>{p[k]}</td>)}</tr>)}
+          </tbody>
+        </table>
+      </div>
+      <p class="unter-hinweis">Preise pro Platz und Monat, Richtwerte für den {richtwerte.region}. Der tatsächliche Preis hängt von Lage und Ausstattung ab.</p>
+    </div>
+  </section>
+
+  <section class="abschnitt abschnitt-grau">
+    <div class="wrap inhalt">
+      <h2>Was passt zu wem?</h2>
+      <h3>Neues oder hochwertiges Wohnmobil: Halle oder Scheune</h3>
+      <p>Der beste Schutz vor Nässe, Schnee und UV-Licht. Achten Sie auf Lüftung und klären Sie, wie oft Sie an Ihr Fahrzeug kommen. In Hallen mit mehreren Fahrzeugen steht man oft hintereinander.</p>
+      <h3>Kleiner Wohnwagen oder Oldtimer: Garage</h3>
+      <p>Abschließbar und trocken, Zugang meist jederzeit. Messen Sie vorher Höhe und Breite des Tors, Garagen sind oft nur 2,0 bis 2,5 m hoch.</p>
+      <h3>Gutes Mittelmaß: überdachter Stellplatz</h3>
+      <p>Schützt vor Schnee auf dem Dach und vor der Sonne, ist gut belüftet und günstiger als eine Halle. Bei Schlagregen von der Seite wird das Fahrzeug trotzdem nass.</p>
+      <h3>Günstig und flexibel: Stellplatz im Freien</h3>
+      <p>Für robuste Fahrzeuge und kurze Zeiträume. Ein befestigter Untergrund ist besser als Wiese, weil das Fahrzeug nicht einsinkt und weniger Feuchtigkeit von unten kommt. Nur atmungsaktive Abdeckplanen verwenden.</p>
+      <h2>Darauf sollten Sie bei jedem Platz achten</h2>
+      <ul>
+        <li>Zufahrt: Kommen Sie mit Ihrem Gespann gut hinein und wieder heraus?</li>
+        <li>Zugang: Jederzeit oder nur nach Absprache?</li>
+        <li>Gasflaschen: Dürfen sie im Fahrzeug bleiben? In vielen Hallen nicht.</li>
+        <li>Strom: Gibt es eine Steckdose für die Erhaltungsladung der Batterie?</li>
+        <li>Versicherung: Passt der Platz zu den Bedingungen Ihrer Ruheversicherung?</li>
+        <li>Vertrag: Kaution, Kündigungsfrist und Zugangszeiten schriftlich festhalten.</li>
+      </ul>
+    </div>
+  </section>
+</Ratgeber>
+<style>
+  .tabelle-huelle { overflow-x: auto; margin-bottom: 0.75rem; }
+  .vergleich-tabelle { width: 100%; min-width: 48rem; border-collapse: collapse; font-size: 1rem; }
+  .vergleich-tabelle th, .vergleich-tabelle td { text-align: left; vertical-align: top; padding: 0.9rem 0.85rem; border-bottom: 1px solid var(--linie); }
+  .vergleich-tabelle thead th { background: var(--ueberschrift); color: var(--hintergrund); font-weight: 800; }
+  .vergleich-tabelle thead th:first-of-type { border-radius: var(--r) 0 0 0; }
+  .vergleich-tabelle thead th:last-child { border-radius: 0 var(--r) 0 0; }
+  .vergleich-tabelle tbody th { font-weight: 700; color: var(--ueberschrift); width: 17%; }
+  .vergleich-tabelle tbody tr:nth-child(even) td { background: var(--sekundaer); }
+</style>
