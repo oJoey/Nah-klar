@@ -37,7 +37,7 @@ const vollerRechner = link('verdienstrechner');
   <p class="unter-hinweis">
     Schätzung, keine Zusage. Die Richtwerte sind Erfahrungswerte, der tatsächliche Preis hängt von Lage und Ausstattung ab. Sie bestimmen den Preis selbst und erhalten die volle Miete.
   </p>
-  <p class="unter-hinweis kostenlos">Für Vermieter immer kostenlos</p>
+  {ausfuehrlich && <p class="unter-hinweis kostenlos">Für Vermieter immer kostenlos</p>}
   {vollerRechner && <p class="mt"><a class="weiter" href={vollerRechner}>Zum ausführlichen Verdienstrechner</a></p>}
   </div>
 </div>
