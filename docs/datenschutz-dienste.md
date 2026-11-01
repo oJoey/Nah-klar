@@ -26,5 +26,6 @@ Stand: Website mit Netlify-Hosting, Netlify Forms und (vorbereitet) Resend. Bitt
 
 ## Vor dem Livegang
 
+- Impressum und Datenschutz füllen (`src/pages/impressum/`, `src/pages/datenschutz/`), danach `noindex` entfernen. Weitere Aufgaben vor dem Livegang: `docs/stripe-connect.md`.
 - Auftragsverarbeitungsverträge (DPA) mit Netlify und Resend abschließen (beide online im Konto).
 - Bei Resend die Absender-Domain bestätigen, `RESEND_API_KEY`, `MAIL_ABSENDER`, `NETLIFY_API_TOKEN` in Netlify setzen, dann in `src/config/site.ts` `bestaetigungsmail: true`.

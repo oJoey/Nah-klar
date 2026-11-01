@@ -28,11 +28,11 @@ export const site = {
   // Kleinunternehmer nach § 19 UStG: keine Umsatzsteuer auf Service- und Vermittlungsgebühr.
   // Auf false setzen, wenn die Grenze überschritten wird (25.000 € Umsatz im Vorjahr bzw. 100.000 € im laufenden Jahr) → 19 % USt.
   kleinunternehmer: true,
-  // Einmalige Vermittlungsgebühr für Mieter, fällig erst bei Vertragsabschluss. Vorerst nicht erhoben (Entscheidung offen).
-  vermittlungsgebuehr: { aktiv: false, garageAutoLager: 19, wohnmobilAnhaengerBoot: 39 },
+  // Einmalige Vermittlungsgebühr für Mieter, fällig erst bei Vertragsabschluss. Erhoben ab 01.02.2027 (nach Ende der Startaktion).
+  vermittlungsgebuehr: { aktiv: true, garageAutoLager: 19, wohnmobilAnhaengerBoot: 39 },
   // Startaktion: Vermittlungsgebühr entfällt. Endet automatisch nach dem Enddatum (Balken und Texte), auch ohne neuen Build.
-  // Nur zusammen mit vermittlungsgebuehr.aktiv: true einschalten – sonst wird mit dem Erlass einer Gebühr geworben, die es nicht gibt.
-  startaktion: { aktiv: false, ende: '2026-11-30', text: 'Startaktion: Bis 30.11. entfällt die Vermittlungsgebühr' },
+  // Starttermin verschieben: nur ende ändern (und das Datum im text). Nur zusammen mit vermittlungsgebuehr.aktiv: true einschalten – sonst wird mit dem Erlass einer Gebühr geworben, die es nicht gibt.
+  startaktion: { aktiv: true, ende: '2027-01-31', text: 'Startaktion: Bis 31.01. entfällt die Vermittlungsgebühr' },
 
   // Prüfung der Mieter (Ausweis, Fahrzeugschein, Versicherung). Erst auf true setzen, wenn Sie das wirklich bei jedem Mieter machen.
   mieterPruefung: false,

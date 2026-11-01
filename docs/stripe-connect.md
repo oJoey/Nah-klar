@@ -79,11 +79,11 @@ Tabelle `mietverhaeltnisse`: `id`, `flaeche_id`, `suchauftrag_id`, `miete`, `mon
 - **Kleinunternehmer nach § 19 UStG:** keine Umsatzsteuer auf Service- und Vermittlungsgebühr.
 - Auf allen Rechnungen und Belegen der Hinweis: „Gemäß § 19 UStG wird keine Umsatzsteuer berechnet.“ (Text zentral: `texte.ustHinweis`)
 - Schalter `kleinunternehmer` in `src/config/site.ts`. Bei Überschreiten der Grenze (**25.000 € im Vorjahr bzw. 100.000 € im laufenden Jahr**) auf `false` → 19 % USt; Stripe Invoices dann mit Steuersatz 19 % (`tax_rates`) und Gesamtpreis inkl. USt.
-- **Mit Steuerberatung klären:** Stripe-Gebühren kommen von Stripe Payments Europe (Irland). Für solche Leistungen gilt das Reverse-Charge-Verfahren (§ 13b UStG), und nach unserem Verständnis greift die Kleinunternehmerregelung dafür nicht – d. h. auf die Stripe-Gebühren könnte trotzdem Umsatzsteuer anfallen, die gemeldet werden muss.
+- **Offen, selbst klären:** Stripe-Gebühren kommen von Stripe Payments Europe (Irland). Für solche Leistungen gilt das Reverse-Charge-Verfahren (§ 13b UStG), und nach unserem Verständnis greift die Kleinunternehmerregelung dafür nicht – d. h. auf die Stripe-Gebühren könnte trotzdem Umsatzsteuer anfallen, die gemeldet werden muss.
 
-## AGB und Mustervertrag – Punkte für die anwaltliche Prüfung
+## Checkliste AGB und Mustervertrag
 
-Vor `zahlungLive: true` vom Anwalt prüfen lassen:
+AGB und Mustervertrag erstelle ich selbst. Vor `zahlungLive: true` müssen die Texte diese Punkte abdecken:
 
 1. **Empfangsvollmacht / Zahlungsweg:** Vermieter bevollmächtigt die Plattform, die Miete im eigenen Namen bzw. als Empfangsbote einzuziehen; Zahlung an die Plattform wirkt schuldbefreiend für den Mieter.
 2. **SEPA-Lastschriftmandat:** Einzug am 1., Pre-Notification-Frist, Gesamtpreis (Miete + Servicegebühr) als ein Betrag.
@@ -99,10 +99,11 @@ Vor `zahlungLive: true` vom Anwalt prüfen lassen:
 
 ## Vor dem Livegang (Aufgaben)
 
-- **Domain** einrichten – Stripe verlangt beim Einrichten eine Website mit Impressum.
-- **Anwalt:** AGB und Mustervertrag (Liste oben).
-- **Steuerberatung:** Reverse Charge auf Stripe-Gebühren, Kleinunternehmerregelung.
+- **Domain festlegen** – Voraussetzung für Stripe (verlangt beim Einrichten eine Website mit Impressum).
+- **Impressum und Datenschutz füllen** (`src/pages/impressum/`, `src/pages/datenschutz/`, danach `noindex` entfernen).
+- **AGB und Mustervertrag selbst erstellen**, anhand der Checkliste oben.
 - **BZSt:** Registrierung als Plattformbetreiber vor dem ersten Geldfluss.
+- **Reverse Charge bei Stripe-Gebühren klären** (§ 13b UStG, siehe Umsatzsteuer).
 
 ## Reihenfolge beim Bau
 
