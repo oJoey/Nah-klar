@@ -4,4 +4,4 @@ seiten: [start, mieten]
 reihenfolge: 50
 ---
 
-Nein. Sie füllen nur den kurzen Suchauftrag aus. Ihre Angaben können Sie jederzeit löschen lassen.
+Nein. Für Mieter und Vermieter genügt ein Formular.

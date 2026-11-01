@@ -1,0 +1,86 @@
+---
+// Suchauftrag für Mieter: 3 Schritte, fast nur Auswahl. Feldnamen = spätere Datenbankspalten (siehe docs/plan-inserate.md).
+import Chips from './Chips.astro';
+import FormVersteckt from './FormVersteckt.astro';
+import Datenschutzhinweis from './Datenschutzhinweis.astro';
+import o from '../data/optionen.json';
+import { zahlung } from '../config/zahlung';
+const fahrzeuge = o.mieter_art.filter((a) => a.groesse === 'fahrzeug').map((a) => a.wert).join(',');
+const mitHoehe = o.mieter_art.filter((a) => a.hoehe).map((a) => a.wert).join(',');
+const lager = o.mieter_art.filter((a) => a.groesse === 'flaeche').map((a) => a.wert).join(',');
+---
+<form class="formular-karte" name="suchauftrag" method="POST" action="/suchauftrag/danke/" data-netlify="true" netlify-honeypot="bot-feld" data-formular data-mehrstufig>
+  <FormVersteckt name="suchauftrag" />
+  <ol class="fortschritt" hidden><li>Was</li><li>Wo und Wünsche</li><li>Kontakt</li></ol>
+
+  <fieldset class="form-schritt">
+    <h3 tabindex="-1">Was möchten Sie unterstellen?</h3>
+    <fieldset class="form-gruppe">
+      <legend class="sr-only">Art</legend>
+      <Chips name="mieter_art" optionen={o.mieter_art} pflicht gross />
+    </fieldset>
+    <fieldset class="form-gruppe" data-wenn="mieter_art" data-werte={fahrzeuge}>
+      <legend>Länge des Fahrzeugs</legend>
+      <Chips name="laenge_max" optionen={o.laenge_max} pflichtWennSichtbar />
+    </fieldset>
+    <fieldset class="form-gruppe" data-wenn="mieter_art" data-werte={mitHoehe}>
+      <legend>Höhe des Fahrzeugs</legend>
+      <Chips name="hoehe_max" optionen={o.hoehe_max} pflichtWennSichtbar />
+    </fieldset>
+    <fieldset class="form-gruppe" data-wenn="mieter_art" data-werte={lager}>
+      <legend>Benötigte Fläche</legend>
+      <Chips name="flaeche_max" optionen={o.flaeche_max} pflichtWennSichtbar />
+    </fieldset>
+    <div class="form-knoepfe"><button class="btn btn-primaer btn-gross" type="button" data-weiter hidden>Weiter</button></div>
+  </fieldset>
+
+  <fieldset class="form-schritt">
+    <h3 tabindex="-1">Wo, und was ist Ihnen wichtig?</h3>
+    <div class="feld">
+      <label for="sa-ort">PLZ oder Ort</label>
+      <input id="sa-ort" name="ort" type="text" autocomplete="postal-code" required maxlength="60" placeholder="z. B. 71032 oder Böblingen" />
+    </div>
+    <fieldset class="form-gruppe">
+      <legend>Umkreis</legend>
+      <Chips name="umkreis_km" optionen={o.umkreis_km} vorwahl="10" />
+    </fieldset>
+    <fieldset class="form-gruppe">
+      <legend>Wünsche <span class="optional">(optional, Mehrfachauswahl)</span></legend>
+      <Chips name="wuensche" optionen={o.wuensche} mehrfach />
+    </fieldset>
+    <fieldset class="form-gruppe">
+      <legend>Budget pro Monat</legend>
+      <Chips name="budget_max" optionen={o.budget_max} vorwahl="egal" />
+    </fieldset>
+    <fieldset class="form-gruppe">
+      <legend>Ab wann?</legend>
+      <Chips name="ab_wann" optionen={o.ab_wann} vorwahl="sofort" />
+    </fieldset>
+    <div class="form-knoepfe">
+      <button class="btn btn-rahmen btn-gross" type="button" data-zurueck hidden>Zurück</button>
+      <button class="btn btn-primaer btn-gross" type="button" data-weiter hidden>Weiter</button>
+    </div>
+  </fieldset>
+
+  <fieldset class="form-schritt">
+    <h3 tabindex="-1">Wohin dürfen wir Vorschläge schicken?</h3>
+    <div class="feld">
+      <label for="sa-vorname">Vorname</label>
+      <input id="sa-vorname" name="vorname" type="text" autocomplete="given-name" required maxlength="60" />
+    </div>
+    <div class="feld">
+      <label for="sa-email">E-Mail</label>
+      <input id="sa-email" name="email" type="email" autocomplete="email" required maxlength="100" />
+    </div>
+    <div class="feld">
+      <label for="sa-telefon">Telefon <span class="optional">(optional, für schnellere Rückmeldung)</span></label>
+      <input id="sa-telefon" name="telefon" type="tel" autocomplete="tel" maxlength="30" />
+    </div>
+    <p class="hinweis">Gut zu wissen: Bei einer Miete zahlen Sie eine Kaution von einer Monatsmiete (mindestens {zahlung.kautionMinEuro} €) direkt an den Vermieter.</p>
+    <div class="form-knoepfe">
+      <button class="btn btn-rahmen btn-gross" type="button" data-zurueck hidden>Zurück</button>
+      <button class="btn btn-primaer btn-gross" type="submit">Suchauftrag absenden</button>
+    </div>
+    <Datenschutzhinweis />
+  </fieldset>
+</form>

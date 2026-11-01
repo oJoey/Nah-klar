@@ -14,6 +14,7 @@ export const site = {
   telefonAnzeige: '07031 123456',
   telefonLink: '+497031123456', // im Format +49…, ohne Leerzeichen
   whatsappNummer: '497031123456', // für WhatsApp: 49…, ohne + und Leerzeichen
+  email: '[EMAIL]', // Kontaktadresse, z. B. hallo@deine-domain.de
 
   // Wie schnell wir uns nach einer Anfrage melden. Bitte nur eintragen, was Sie sicher einhalten.
   antwortzeit: 'innerhalb von zwei Werktagen',
@@ -22,9 +23,17 @@ export const site = {
   // Solange false, versprechen die Texte nichts Automatisches.
   zahlungLive: false,
 
+  // Prüfung der Mieter (Ausweis, Fahrzeugschein, Versicherung). Erst auf true setzen, wenn Sie das wirklich bei jedem Mieter machen.
+  mieterPruefung: false,
+
+  // Bestätigungsmail nach dem Absenden (Resend). Erst auf true setzen, wenn RESEND_API_KEY und Domain eingerichtet sind –
+  // vorher verspricht die Danke-Seite keine Mail.
+  bestaetigungsmail: false,
+
   // Umami Cloud (ohne Cookies). Leer lassen = keine Statistik.
   umamiWebsiteId: '',
 };
 
 export const whatsappLink = `https://wa.me/${site.whatsappNummer}`;
 export const telefonHref = `tel:${site.telefonLink}`;
+export const emailHref = `mailto:${site.email}`;

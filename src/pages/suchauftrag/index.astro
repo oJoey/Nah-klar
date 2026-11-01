@@ -1,11 +1,8 @@
 ---
 import Basis from '../../layouts/Basis.astro';
-import FormVersteckt from '../../components/FormVersteckt.astro';
+import SuchauftragFormular from '../../components/SuchauftragFormular.astro';
 import FormSkript from '../../components/FormSkript.astro';
-import Datenschutzhinweis from '../../components/Datenschutzhinweis.astro';
 import { link } from '../../config/seiten';
-import { zahlung } from '../../config/zahlung';
-import { mietArten, zeitraeume } from '../../data/arten';
 ---
 <Basis
   titel="Suchauftrag anlegen – Stellplatz, Garage oder Lagerraum"
@@ -15,82 +12,9 @@ import { mietArten, zeitraeume } from '../../data/arten';
   <section class="abschnitt abschnitt-grau formular-seite">
     <div class="wrap schmal">
       <h1>Suchauftrag anlegen</h1>
-      <p class="einleitung">Sagen Sie uns, was Sie suchen. Wir fragen in Ihrer Nähe nach und melden uns mit passenden Plätzen.</p>
-      <ul class="haken versprechen">
-        <li>Kostenlos und ohne Konto</li>
-        <li>Keine Werbemails</li>
-        <li>Jederzeit löschbar</li>
-      </ul>
-
-      <form class="formular-karte" name="suchauftrag" method="POST" action="/suchauftrag/danke/" data-netlify="true" netlify-honeypot="bot-feld" data-formular>
-        <FormVersteckt name="suchauftrag" />
-
-        <fieldset>
-          <legend>Was möchten Sie unterstellen? <span class="pflicht">(Pflicht)</span></legend>
-          <div class="wahl-raster">
-            {mietArten.map((a, i) => (
-              <label class="wahl"><input type="radio" name="art" value={a.wert} required={i === 0} /> {a.kurz}</label>
-            ))}
-          </div>
-        </fieldset>
-
-        <div class="feld">
-          <label for="sa-ort">PLZ oder Ort <span class="pflicht">(Pflicht)</span></label>
-          <input id="sa-ort" name="ort" type="text" autocomplete="postal-code" required maxlength="60" placeholder="z. B. 70173 oder Stuttgart" />
-        </div>
-
-        <div class="feld">
-          <label for="sa-email">E-Mail <span class="pflicht">(Pflicht)</span></label>
-          <input id="sa-email" name="email" type="email" autocomplete="email" required maxlength="100" />
-          <span class="feld-hilfe">Hierhin schicken wir Ihnen passende Vorschläge.</span>
-        </div>
-
-        <p class="optional-titel">Optional – hilft uns, schneller das Richtige zu finden:</p>
-
-        <fieldset>
-          <legend>Ab wann?</legend>
-          <div class="wahl-raster">
-            {zeitraeume.map((z) => <label class="wahl"><input type="radio" name="zeitraum" value={z.wert} /> {z.titel}</label>)}
-          </div>
-        </fieldset>
-
-        <div class="feld">
-          <label for="sa-umkreis">Wie weit würden Sie fahren?</label>
-          <select id="sa-umkreis" name="umkreis">
-            <option value="">keine Angabe</option>
-            <option value="5">bis 5 km</option>
-            <option value="10">bis 10 km</option>
-            <option value="20">bis 20 km</option>
-            <option value="30">bis 30 km</option>
-          </select>
-        </div>
-
-        <div class="feld">
-          <label for="sa-budget">Budget pro Monat in Euro</label>
-          <input id="sa-budget" name="budget" type="number" inputmode="numeric" min="0" max="2000" step="5" />
-        </div>
-
-        <div class="feld">
-          <label for="sa-masse">Fahrzeugmaße (Länge × Breite × Höhe)</label>
-          <input id="sa-masse" name="masse" type="text" maxlength="60" placeholder="z. B. 7 × 2,3 × 3 m" />
-          <span class="feld-hilfe">Nur bei Fahrzeugen. Ungefähre Angaben reichen.</span>
-        </div>
-
-        <div class="feld">
-          <label for="sa-telefon">Telefon</label>
-          <input id="sa-telefon" name="telefon" type="tel" autocomplete="tel" maxlength="30" />
-          <span class="feld-hilfe">Für eine schnellere Vermittlung.</span>
-        </div>
-
-        <div class="hinweis">
-          <p><strong>Gut zu wissen:</strong> Wenn Sie einen Platz mieten, zahlen Sie eine Kaution von einer Monatsmiete (mindestens {zahlung.kautionMinEuro} €) direkt an den Vermieter. Sie erhalten sie nach dem Auszug zurück, abzüglich belegter Schäden.</p>
-        </div>
-
-        <button class="btn btn-primaer btn-gross btn-voll mt" type="submit">Suchauftrag absenden</button>
-        <Datenschutzhinweis />
-      </form>
-
-      <p class="mt">Sie möchten selbst Platz vermieten? <a href={link('platzAnbieten')}>Platz anbieten</a> – <span class="kostenlos">Für Vermieter immer kostenlos</span></p>
+      <p class="einleitung">In einer Minute, ohne Konto. Wir melden uns mit passenden Plätzen, mit Fotos, Preis und Ortsteil.</p>
+      <SuchauftragFormular />
+      <p class="mt">Sie möchten selbst Platz vermieten? <a href={link('vermieten')}>Fläche melden</a>, für Vermieter kostenlos.</p>
     </div>
   </section>
   <FormSkript />
@@ -99,6 +23,4 @@ import { mietArten, zeitraeume } from '../../data/arten';
   .formular-seite { padding-top: clamp(1.5rem, 5vw, 3.5rem); }
   .formular-seite h1 { font-size: clamp(2.1rem, 6vw, 3.25rem); }
   .schmal { max-width: 46rem; }
-  .versprechen { display: flex; flex-wrap: wrap; gap: 0.25rem 1.5rem; font-weight: 600; }
-  .optional-titel { font-weight: 700; color: var(--text-leise); border-top: 1px solid var(--rand); padding-top: 1.25rem; }
 </style>

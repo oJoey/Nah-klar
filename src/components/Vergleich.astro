@@ -1,0 +1,38 @@
+---
+// Vergleich in zwei Spalten: Kleinanzeigen (Kreuz) gegen uns (Haken). Auf dem Handy zeilenweise.
+import { site } from '../config/site';
+export type VergleichZeile = { punkt: string; anzeige: string; wir: string };
+interface Props { zeilen: VergleichZeile[] }
+const { zeilen } = Astro.props;
+---
+<table class="vergleich">
+  <thead><tr><td></td><th scope="col">Kleinanzeigen</th><th scope="col" class="wir">{site.name}</th></tr></thead>
+  <tbody>
+    {zeilen.map((v) => (
+      <tr>
+        <th scope="row">{v.punkt}</th>
+        <td data-spalte="Kleinanzeigen"><span class="kreuz" aria-label="nein">✕</span> {v.anzeige}</td>
+        <td class="wir" data-spalte={site.name}><span class="haken-zeichen" aria-label="ja">✓</span> {v.wir}</td>
+      </tr>
+    ))}
+  </tbody>
+</table>
+<style>
+  .vergleich { width: 100%; border-collapse: collapse; font-size: 1.05rem; }
+  .vergleich th, .vergleich td { text-align: left; vertical-align: top; padding: 1.1rem 1rem; border-bottom: 1px solid var(--linie); }
+  .vergleich thead th { font-size: 1.1rem; font-weight: 800; color: var(--haupt); border-bottom: 2px solid var(--haupt); }
+  .vergleich tbody th { font-weight: 700; color: var(--haupt); width: 28%; }
+  .vergleich td { color: var(--text-2); }
+  .vergleich .wir { background: var(--blau-hell); color: var(--text); }
+  .vergleich thead .wir { background: var(--haupt); color: #fff; border-radius: var(--r) var(--r) 0 0; }
+  .kreuz, .haken-zeichen { display: inline-grid; place-items: center; width: 1.4rem; height: 1.4rem; margin-right: 0.35rem; border-radius: 50%; font-size: 0.8rem; font-weight: 800; vertical-align: 0.1em; }
+  .kreuz { background: #f3d6d6; color: #8a1c1c; }
+  .haken-zeichen { background: var(--akzent); color: var(--haupt); }
+  @media (max-width: 47.99rem) {
+    .vergleich thead { display: none; }
+    .vergleich tr { display: grid; border-bottom: 1px solid var(--linie); padding-block: 0.75rem; }
+    .vergleich th, .vergleich td { border: 0; padding: 0.35rem 0.75rem; width: auto; }
+    .vergleich .wir { border-radius: var(--r-klein); }
+    .vergleich td::before { content: attr(data-spalte); display: block; font-size: 0.8125rem; font-weight: 700; color: var(--text-2); margin-bottom: 0.15rem; }
+  }
+</style>

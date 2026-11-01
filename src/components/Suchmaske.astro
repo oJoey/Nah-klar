@@ -1,5 +1,5 @@
 ---
-import { mietArten, zeitraeume } from '../data/arten';
+import o from '../data/optionen.json';
 import { link } from '../config/seiten';
 interface Props { titel?: string; }
 const { titel = 'Was suchen Sie?' } = Astro.props;
@@ -9,19 +9,18 @@ const { titel = 'Was suchen Sie?' } = Astro.props;
   <div class="suchmaske-felder">
     <div class="feld">
       <label for="such-ort">PLZ oder Ort</label>
-      <input id="such-ort" name="ort" type="text" autocomplete="postal-code" placeholder="z. B. 70173 oder Stuttgart" />
+      <input id="such-ort" name="ort" type="text" autocomplete="postal-code" placeholder="z. B. 71032 oder Böblingen" />
     </div>
     <div class="feld">
       <label for="such-art">Art</label>
-      <select id="such-art" name="art">
-        {mietArten.map((a) => <option value={a.wert}>{a.kurz}</option>)}
+      <select id="such-art" name="mieter_art">
+        {o.mieter_art.map((a) => <option value={a.wert}>{a.titel}</option>)}
       </select>
     </div>
     <div class="feld">
-      <label for="such-zeitraum">Zeitraum</label>
-      <select id="such-zeitraum" name="zeitraum">
-        <option value="">egal</option>
-        {zeitraeume.map((z) => <option value={z.wert}>{z.titel}</option>)}
+      <label for="such-zeitraum">Ab wann</label>
+      <select id="such-zeitraum" name="ab_wann">
+        {o.ab_wann.map((z) => <option value={z.wert}>{z.titel}</option>)}
       </select>
     </div>
     <div class="feld suchmaske-knopf">

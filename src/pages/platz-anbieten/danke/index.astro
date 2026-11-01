@@ -7,18 +7,17 @@ import { link } from '../../../config/seiten';
 <Basis titel="Danke für Ihr Angebot" beschreibung="Ihre Flächenmeldung ist bei uns angekommen." noindex>
   <section class="abschnitt">
     <div class="wrap schmal">
-      <h1>Danke, Ihr Platz ist bei uns gemeldet.</h1>
-      <p class="einleitung">Wir melden uns {site.antwortzeit} persönlich bei Ihnen. Wenn Sie eine E-Mail-Adresse angegeben haben, erhalten Sie gleich eine Bestätigung.</p>
+      <h1>Danke, Ihre Fläche ist bei uns gemeldet.</h1>
+      <p class="einleitung">Wir melden uns {site.antwortzeit} persönlich bei Ihnen.{site.bestaetigungsmail && ' Eine Bestätigung mit Ihren Angaben ist per E-Mail unterwegs.'}</p>
       <h2>So geht es weiter</h2>
       <ol>
-        <li>Wir besprechen mit Ihnen Fläche, Preis und Ihre Wünsche.</li>
-        <li>Sie schicken uns 3 Fotos (Zufahrt, Fläche, Eingang), falls noch nicht geschehen.</li>
-        <li>Wir suchen passende, geprüfte Mieter. Sie entscheiden, wer einzieht.</li>
+        <li>Wir prüfen Fotos und Angaben und besprechen mit Ihnen Preis und Wünsche.</li>
+        <li>Wir schlagen Ihnen passende Mieter vor. Sie entscheiden, wer einzieht.</li>
+        <li>Besichtigung, Mustervertrag, Kaution – dann läuft die Miete.</li>
       </ol>
       <p>Ehrlich gesagt: Wie schnell wir einen Mieter finden, hängt von Art und Lage ab. Wir sagen Ihnen offen, wie die Nachfrage in Ihrer Gegend aussieht.</p>
       <p class="kostenlos">Für Vermieter immer kostenlos</p>
       <p>Lieber gleich sprechen? <a href={telefonHref}>{site.telefonAnzeige}</a> oder <a href={whatsappLink} rel="noopener">WhatsApp</a>.</p>
-      <p><a href={link('platzAnbieten')}>Weitere Angaben oder Fotos nachreichen</a></p>
       <Empfehlung />
     </div>
   </section>

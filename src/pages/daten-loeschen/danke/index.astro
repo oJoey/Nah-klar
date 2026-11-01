@@ -1,0 +1,13 @@
+---
+import Basis from '../../../layouts/Basis.astro';
+import { link } from '../../../config/seiten';
+---
+<Basis titel="Löschanfrage erhalten" beschreibung="Ihre Löschanfrage ist angekommen." noindex>
+  <section class="abschnitt">
+    <div class="wrap schmal">
+      <h1>Ihre Löschanfrage ist angekommen.</h1>
+      <p class="einleitung">Wir löschen Ihre Angaben in den nächsten Tagen. Sie erhalten keine weiteren Vorschläge mehr.</p>
+      <p><a href={link('start')}>Zur Startseite</a></p>
+    </div>
+  </section>
+</Basis>

@@ -1,0 +1,23 @@
+---
+// Auswahl als Chips (Radio = eine Auswahl, Checkbox = Mehrfachauswahl).
+// pflicht bei Radio: erstes Feld bekommt required (Browser prüft die ganze Gruppe).
+// pflichtWennSichtbar: required wird per Skript gesetzt, sobald die Gruppe sichtbar ist.
+type Option = { wert: string; titel: string };
+interface Props { name: string; optionen: Option[]; mehrfach?: boolean; pflicht?: boolean; pflichtWennSichtbar?: boolean; gross?: boolean; vorwahl?: string }
+const { name, optionen, mehrfach = false, pflicht = false, pflichtWennSichtbar = false, gross = false, vorwahl } = Astro.props;
+---
+<div class:list={['chips', { 'chips-gross': gross }]}>
+  {optionen.map((o, i) => (
+    <label class="chip">
+      <input
+        type={mehrfach ? 'checkbox' : 'radio'}
+        name={mehrfach ? `${name}[]` : name}
+        value={o.wert}
+        required={!mehrfach && pflicht && i === 0}
+        data-pflicht={!mehrfach && pflichtWennSichtbar && i === 0 ? '' : undefined}
+        checked={vorwahl === o.wert}
+      />
+      {o.titel}
+    </label>
+  ))}
+</div>

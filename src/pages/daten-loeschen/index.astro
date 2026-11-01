@@ -1,0 +1,27 @@
+---
+// Löschanfrage (Weg a): Link aus jeder Mail führt hierher, die E-Mail-Adresse ist vorausgefüllt.
+// Die Löschung selbst erfolgt von Hand in Netlify. Automatik: siehe docs/plan-inserate.md (Weg b).
+import Basis from '../../layouts/Basis.astro';
+import FormVersteckt from '../../components/FormVersteckt.astro';
+import FormSkript from '../../components/FormSkript.astro';
+import { site, emailHref } from '../../config/site';
+---
+<Basis titel="Daten löschen" beschreibung="Suchauftrag oder gemeldete Fläche löschen lassen." noindex>
+  <section class="abschnitt abschnitt-grau">
+    <div class="wrap schmal">
+      <h1>Daten löschen lassen</h1>
+      <p class="einleitung">Wir löschen Ihren Suchauftrag bzw. Ihre gemeldete Fläche und alle zugehörigen Angaben, in der Regel innerhalb weniger Tage. Sie bekommen keine weiteren Vorschläge.</p>
+      <form class="formular-karte" name="loeschanfrage" method="POST" action="/daten-loeschen/danke/" data-netlify="true" netlify-honeypot="bot-feld" data-formular>
+        <FormVersteckt name="loeschanfrage" />
+        <div class="feld">
+          <label for="dl-email">E-Mail-Adresse, mit der Sie das Formular ausgefüllt haben</label>
+          <input id="dl-email" name="email" type="email" autocomplete="email" required maxlength="100" />
+        </div>
+        <button class="btn btn-primaer btn-gross btn-voll" type="submit">Löschung beantragen</button>
+      </form>
+      <p class="mt">Alternativ per E-Mail an <a href={emailHref}>{site.email}</a>.</p>
+    </div>
+  </section>
+  <FormSkript />
+</Basis>
+<style>.schmal { max-width: 40rem; }</style>

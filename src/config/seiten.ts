@@ -33,16 +33,16 @@ export const seiten = {
   nachfrage: { pfad: '/vermieten/nachfrage/', live: true, entwurf: true, titel: 'Nachfrage in Ihrer Nähe' },
 
   // Kategorieseiten Mieten (Ersatz: Suchauftrag mit vorausgewählter Art)
-  mietenWohnmobil: { pfad: '/mieten/wohnmobil-wohnwagen-stellplatz/', live: false, titel: 'Wohnmobil und Wohnwagen', ersatz: '/suchauftrag/?art=wohnmobil-wohnwagen' },
-  mietenGarage: { pfad: '/mieten/garage-auto-stellplatz/', live: false, titel: 'Garage und Auto', ersatz: '/suchauftrag/?art=garage-auto' },
-  mietenLager: { pfad: '/mieten/lagerraum/', live: false, titel: 'Lagerraum', ersatz: '/suchauftrag/?art=lager' },
-  mietenAnhaenger: { pfad: '/mieten/anhaenger-boot/', live: false, titel: 'Anhänger und Boot', ersatz: '/suchauftrag/?art=anhaenger-boot' },
+  mietenWohnmobil: { pfad: '/mieten/wohnmobil-wohnwagen-stellplatz/', live: false, titel: 'Wohnmobil und Wohnwagen', ersatz: '/suchauftrag/?mieter_art=wohnmobil-wohnwagen' },
+  mietenGarage: { pfad: '/mieten/garage-auto-stellplatz/', live: false, titel: 'Garage und Auto', ersatz: '/suchauftrag/?mieter_art=auto-motorrad' },
+  mietenLager: { pfad: '/mieten/lagerraum/', live: false, titel: 'Lagerraum', ersatz: '/suchauftrag/?mieter_art=lagergut' },
+  mietenAnhaenger: { pfad: '/mieten/anhaenger-boot/', live: false, titel: 'Anhänger und Boot', ersatz: '/suchauftrag/?mieter_art=anhaenger-boot' },
 
   // Unterseiten Vermieten (Ersatz: Formular mit vorausgewählter Fläche)
-  vermietenGarage: { pfad: '/vermieten/garage/', live: false, titel: 'Garage vermieten', ersatz: '/platz-anbieten/?art=garage' },
-  vermietenEinfahrt: { pfad: '/vermieten/einfahrt/', live: false, titel: 'Einfahrt vermieten', ersatz: '/platz-anbieten/?art=einfahrt' },
-  vermietenKeller: { pfad: '/vermieten/keller-raum/', live: false, titel: 'Keller und Raum vermieten', ersatz: '/platz-anbieten/?art=keller-raum' },
-  vermietenScheune: { pfad: '/vermieten/scheune-hofflaeche/', live: false, titel: 'Scheune und Hof vermieten', ersatz: '/platz-anbieten/?art=scheune-hof' },
+  vermietenGarage: { pfad: '/vermieten/garage/', live: false, titel: 'Garage vermieten', ersatz: '/platz-anbieten/?flaechen_art=garage' },
+  vermietenEinfahrt: { pfad: '/vermieten/einfahrt/', live: false, titel: 'Einfahrt vermieten', ersatz: '/platz-anbieten/?flaechen_art=stellplatz-frei' },
+  vermietenKeller: { pfad: '/vermieten/keller-raum/', live: false, titel: 'Keller und Raum vermieten', ersatz: '/platz-anbieten/?flaechen_art=lagerraum' },
+  vermietenScheune: { pfad: '/vermieten/scheune-hofflaeche/', live: false, titel: 'Scheune und Hof vermieten', ersatz: '/platz-anbieten/?flaechen_art=halle-scheune' },
 } satisfies Record<string, Seite>;
 
 export type SeitenSchluessel = keyof typeof seiten;

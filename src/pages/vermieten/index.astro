@@ -2,14 +2,14 @@
 import Basis from '../../layouts/Basis.astro';
 import Kacheln from '../../components/Kacheln.astro';
 import Verdienstrechner from '../../components/Verdienstrechner.astro';
-import Schritte from '../../components/Schritte.astro';
+import Ablauf from '../../components/Ablauf.astro';
+import Vergleich from '../../components/Vergleich.astro';
+import FlaecheMelden from '../../components/FlaecheMelden.astro';
 import Faq from '../../components/Faq.astro';
 import Icon from '../../components/Icon.astro';
 import SmartLink from '../../components/SmartLink.astro';
 import Bildplatz from '../../components/Bildplatz.astro';
-import FormVersteckt from '../../components/FormVersteckt.astro';
 import FormSkript from '../../components/FormSkript.astro';
-import Datenschutzhinweis from '../../components/Datenschutzhinweis.astro';
 import { site, telefonHref, whatsappLink } from '../../config/site';
 import { link, seiten, istLive } from '../../config/seiten';
 import { zahlung } from '../../config/zahlung';
@@ -31,24 +31,30 @@ const sorgen = [
       ? `Die Miete wird am ${zahlung.abbuchungTag}. des Monats automatisch per Lastschrift beim Mieter eingezogen. Am ${zahlung.auszahlungTag}. überweisen wir sie auf Ihr Konto.`
       : texte.zahlungLang },
   { titel: 'Ausfall: Was, wenn der Mieter nicht zahlt?', text: texte.serviceGarantie },
-  { titel: 'Schäden: Wer kommt dafür auf?', text: `Jeder Mieter zahlt eine Kaution von einer Monatsmiete, mindestens ${zahlung.kautionMinEuro} €, direkt an Sie. Bei Ein- und Auszug wird der Zustand mit Fotos festgehalten. Bei Fahrzeugen muss der Mieter eine gültige Kfz-Versicherung nachweisen.` },
-  { titel: 'Fremde auf dem Grundstück?', text: 'Wir prüfen jeden Mieter vorab: Ausweis, bei Fahrzeugen auch Fahrzeugschein und Versicherung. Sie lernen den Mieter bei der Besichtigung kennen und entscheiden selbst, ob Sie vermieten.' },
+  { titel: 'Schäden: Wer kommt dafür auf?', text: `Jeder Mieter zahlt eine Kaution von einer Monatsmiete, mindestens ${zahlung.kautionMinEuro} €, direkt an Sie. Bei Ein- und Auszug wird der Zustand mit Fotos festgehalten.${site.mieterPruefung ? ' Bei Fahrzeugen muss der Mieter eine gültige Kfz-Versicherung nachweisen.' : ''}` },
+  { titel: 'Fremde auf dem Grundstück?', text: site.mieterPruefung
+      ? 'Wir prüfen jeden Mieter vorab: Ausweis, bei Fahrzeugen auch Fahrzeugschein und Versicherung. Sie lernen den Mieter bei der Besichtigung kennen und entscheiden selbst, ob Sie vermieten.'
+      : 'Sie lernen jeden Interessenten bei der Besichtigung kennen und entscheiden selbst, ob Sie vermieten. Anfragen laufen gebündelt über uns, Ihre Telefonnummer steht nirgends öffentlich.' },
   { titel: 'Steuer: Was muss ich beachten?', text: 'Sie erhalten jedes Jahr eine Übersicht Ihrer Einnahmen. Als Plattform sind wir gesetzlich verpflichtet, Vermieter und Einnahmen jährlich an das Bundeszentralamt für Steuern zu melden (DAC7). Eine Steuerberatung bieten wir nicht an.' },
   { titel: 'Nachbarn: Gibt es Ärger?', text: 'Zufahrtszeiten und Regeln, etwa keine Reparaturen auf dem Hof, legen Sie im Vertrag fest. So wissen alle, woran sie sind.' },
 ];
 
-// Kam früher von der Startseite: Argumente, die nur für Vermieter zählen.
-const vorteile = [
-  { icon: 'schild' as const, titel: 'Geprüfte Mieter', text: 'Ausweis, bei Fahrzeugen auch Fahrzeugschein und Versicherung, prüfen wir vor dem ersten Treffen.' },
-  { icon: 'vertrag' as const, titel: 'Mustervertrag', text: 'Klare Regeln zu Kaution, Kündigung und Zufahrt – für beide Seiten.' },
-  { icon: 'euro' as const, titel: texte.live ? 'Automatische Zahlung mit Erinnerung' : 'Klare Zahlungsregeln mit Erinnerung', text: `${texte.zahlungLang} Bei offenen Zahlungen ${texte.erinnern}.` },
-  { icon: 'person' as const, titel: 'Persönlicher Ansprechpartner', text: 'Ein fester Ansprechpartner, der sich um Fragen und Probleme kümmert.' },
+// Vergleich aus Sicht der Vermieter. Zeilen mit Schalter erscheinen nur, wenn die Leistung wirklich angeboten wird.
+const vergleich = [
+  { punkt: 'Jede Fläche von Hand geprüft', anzeige: 'Sie schreiben und prüfen alles selbst', wir: 'Wir prüfen Fotos und Angaben jeder Fläche, bevor wir sie vorschlagen' },
+  { punkt: 'Schriftlicher Mustervertrag', anzeige: 'Meist per Handschlag', wir: 'Regeln zu Zufahrt, Kündigung und Zahlung' },
+  { punkt: 'Kaution verpflichtend', anzeige: 'Verhandeln Sie selbst', wir: `Eine Monatsmiete, mindestens ${zahlung.kautionMinEuro} €` },
+  ...(site.zahlungLive ? [{ punkt: 'Miete per Lastschrift', anzeige: 'Sie laufen dem Geld hinterher', wir: 'Automatisch jeden Monat' }] : []),
+  { punkt: 'Persönlicher Ansprechpartner', anzeige: 'Niemand, wenn es Ärger gibt', wir: 'Per Telefon und WhatsApp' },
+  { punkt: 'Keine Telefonketten mit Fremden', anzeige: 'Ihre Nummer steht öffentlich', wir: 'Anfragen gebündelt über uns' },
+  ...(site.mieterPruefung ? [{ punkt: 'Geprüfte Mieter', anzeige: 'Sie wissen nicht, wer anruft', wir: 'Ausweis, Fahrzeugschein, Versicherung' }] : []),
 ];
 
 const schritte = [
-  { titel: 'Platz melden', text: 'Mit dem kurzen Formular oben oder per Anruf. Dauert zwei Minuten.' },
-  { titel: 'Fotos schicken', text: 'Drei Fotos nach unserer Anleitung. Beschreibung und Vertrag erstellen wir.' },
-  { titel: 'Mieter kennenlernen', text: 'Wir schlagen Ihnen geprüfte Mieter vor. Sie entscheiden, wer einzieht.' },
+  { titel: 'Fläche melden', text: 'Drei kurze Schritte im Formular oder ein Anruf.' },
+  { titel: 'Prüfung von Hand', text: 'Wir prüfen Fotos und Angaben und melden uns bei Rückfragen.' },
+  { titel: 'Passende Mieter', text: 'Wir schlagen Ihnen Interessenten vor. Sie entscheiden, wer einzieht.' },
+  { titel: 'Besichtigung und Vertrag', text: 'Sie lernen den Mieter kennen und unterschreiben den Mustervertrag.' },
   { titel: 'Miete erhalten', text: texte.vermieterSchritt4Text },
 ];
 
@@ -57,7 +63,7 @@ const nachfrageLink = link('nachfrage') ?? link('platzAnbieten');
 ---
 <Basis
   titel="Stellplatz, Garage oder Scheune vermieten in Baden-Württemberg"
-  beschreibung="Stellplatz, Garage, Einfahrt, Keller oder Scheune vermieten – mit fairem Nebenverdienst. Für Vermieter immer kostenlos: geprüfte Mieter, Mustervertrag, persönlicher Ansprechpartner."
+  beschreibung="Stellplatz, Garage, Einfahrt, Lagerraum oder Scheune vermieten – mit fairem Nebenverdienst. Für Vermieter immer kostenlos: jede Fläche von Hand geprüft, Mustervertrag, persönlicher Ansprechpartner."
   brotkruemel={[{ name: 'Vermieten', pfad: '/vermieten/' }]}
 >
   <section class="held abschnitt-grau">
@@ -67,40 +73,12 @@ const nachfrageLink = link('nachfrage') ?? link('platzAnbieten');
         <h1>Stellplatz, Garage oder Scheune vermieten – mit fairem Nebenverdienst</h1>
         <p class="kostenlos-pille">Für Vermieter immer kostenlos</p>
         <ul class="haken">
-          <li>Geprüfte Mieter aus der Region</li>
+          <li>Jede Fläche von Hand geprüft</li>
           <li>Mustervertrag und Kaution</li>
-          <li>Sie schicken 3 Fotos, den Rest erledigen wir</li>
+          <li>Persönlicher Ansprechpartner per Telefon und WhatsApp</li>
         </ul>
       </div>
-      <form class="formular-karte" name="platz-kurz" method="POST" action="/platz-anbieten/danke/" data-netlify="true" netlify-honeypot="bot-feld" data-formular>
-        <h2 class="formular-titel">Platz unverbindlich melden</h2>
-        <FormVersteckt name="platz-kurz" />
-        <div class="feld">
-          <label for="kurz-plz">PLZ <span class="pflicht">(Pflicht)</span></label>
-          <input id="kurz-plz" name="plz" type="text" inputmode="numeric" autocomplete="postal-code" required pattern="[0-9]{5}" maxlength="5" />
-        </div>
-        <div class="feld">
-          <label for="kurz-art">Art der Fläche <span class="pflicht">(Pflicht)</span></label>
-          <select id="kurz-art" name="art" required>
-            <option value="">Bitte wählen</option>
-            {flaechenArten.map((a) => <option value={a.wert}>{a.kurz}</option>)}
-            <option value="sonstiges">Sonstiges</option>
-          </select>
-        </div>
-        <div class="feld">
-          <label for="kurz-name">Name <span class="pflicht">(Pflicht)</span></label>
-          <input id="kurz-name" name="name" type="text" autocomplete="name" required maxlength="80" />
-        </div>
-        <div class="feld">
-          <label for="kurz-kontakt">Telefon oder E-Mail <span class="pflicht">(Pflicht)</span></label>
-          <input id="kurz-kontakt" name="kontakt" type="text" autocomplete="email" required maxlength="100" data-kontakt
-            pattern="\s*([^@\s]+@[^@\s]+\.[^@\s]+|[+0-9][0-9 \/\(\)\-]{5,})\s*" />
-          <span class="feld-hilfe">Wir melden uns persönlich, {site.antwortzeit}.</span>
-        </div>
-        <button class="btn btn-primaer btn-gross btn-voll" type="submit">Platz anbieten</button>
-        <p class="unter-hinweis kostenlos">Für Vermieter immer kostenlos</p>
-        <Datenschutzhinweis />
-      </form>
+      <FlaecheMelden id="flaeche-melden" />
     </div>
   </section>
 
@@ -114,28 +92,25 @@ const nachfrageLink = link('nachfrage') ?? link('platzAnbieten');
     </div>
   </section>
 
-  <section class="abschnitt abschnitt-grau">
+  <Ablauf titel="So vermieten Sie Ihre Fläche" schritte={schritte} />
+
+  <section class="abschnitt">
     <div class="wrap">
       <div class="kopfzeile">
         <h2>Warum nicht einfach Kleinanzeigen?</h2>
-        <p class="einleitung">Dort finden Sie schnell einen Interessenten. Wer aber monatelang auf Ihrem Grundstück parkt, sollte geprüft und vertraglich gebunden sein.</p>
+        <p class="einleitung">Dort finden Sie schnell einen Interessenten. Wer aber monatelang auf Ihrem Grundstück parkt, sollte vertraglich gebunden sein.</p>
       </div>
-      <ul class="raster vorteile-v">
-        {vorteile.map((v) => (
-          <li><span class="symbol-flaeche"><Icon name={v.icon} /></span><h3>{v.titel}</h3><p>{v.text}</p></li>
-        ))}
-      </ul>
+      <Vergleich zeilen={vergleich} />
     </div>
   </section>
 
-  <section class="abschnitt">
+  <section class="abschnitt abschnitt-grau">
     <div class="wrap">
       <div class="kopfzeile"><h2>Was bringt Ihr Platz im Jahr?</h2></div>
       <Verdienstrechner ausfuehrlich />
     </div>
   </section>
-
-  <section class="abschnitt abschnitt-grau">
+  <section class="abschnitt">
     <div class="wrap">
       <div class="kopfzeile">
         <h2>Ihre Bedenken, unsere Antworten</h2>
@@ -149,8 +124,7 @@ const nachfrageLink = link('nachfrage') ?? link('platzAnbieten');
       <p class="zentriert mt"><SmartLink seite="sicherheit" class="weiter">Mehr zur Sicherheit</SmartLink></p>
     </div>
   </section>
-
-  <section class="abschnitt">
+  <section class="abschnitt abschnitt-grau">
     <div class="wrap service">
       <span class="symbol-flaeche"><Icon name="kamera" /></span>
       <div>
@@ -165,12 +139,10 @@ const nachfrageLink = link('nachfrage') ?? link('platzAnbieten');
     </div>
   </section>
 
-  <section class="abschnitt abschnitt-grau">
-    <div class="wrap">
-      <div class="kopfzeile"><h2>So vermieten Sie Ihren Platz</h2></div>
-      <Schritte vermieter={schritte} />
-    </div>
-  </section>
+
+
+
+
 
   {nachfrage.length > 0 && nachfrageLink && (
     <section class="abschnitt">
@@ -207,7 +179,7 @@ const nachfrageLink = link('nachfrage') ?? link('platzAnbieten');
     <div class="wrap">
       <h2>Bereit? Melden Sie Ihren Platz.</h2>
       <p class="einleitung">Online in zwei Minuten – oder rufen Sie uns an. {site.ansprechpartner}.</p>
-      <p><a class="btn btn-primaer btn-gross" href={link('platzAnbieten')}>Platz anbieten</a></p>
+      <p><a class="btn btn-primaer btn-gross" href="#flaeche-melden">Fläche melden</a></p>
       <p class="unter-hinweis kostenlos">Für Vermieter immer kostenlos</p>
       <p class="kontakt-zeile">
         <a class="btn btn-rahmen" href={telefonHref}><Icon name="telefon" class="symbol-klein" /> {site.telefonAnzeige}</a>
@@ -218,10 +190,6 @@ const nachfrageLink = link('nachfrage') ?? link('platzAnbieten');
   <FormSkript />
 </Basis>
 <style>
-  .vorteile-v { gap: 2rem; }
-  .vorteile-v li { border-top: 2px solid var(--haupt); padding-top: 1.25rem; }
-  .vorteile-v p { color: var(--text-2); margin: 0; }
-  @media (min-width: 52rem) { .vorteile-v { grid-template-columns: repeat(4, 1fr); } }
   .held { padding-block: clamp(1.5rem, 6vw, 4.5rem) clamp(3rem, 8vw, 5rem); }
   .held-raster { display: grid; gap: 2rem; }
   @media (min-width: 56rem) { .held-raster { grid-template-columns: 1.1fr 1fr; align-items: center; gap: 4rem; } }

@@ -1,9 +1,11 @@
 ---
 import aktion from '../config/aktion.json';
+import { site } from '../config/site';
 import { link, type SeitenSchluessel } from '../config/seiten';
 // Beim Bauen prüfen; im Browser zusätzlich, damit der Balken auch ohne neuen Build verschwindet.
 const ende = new Date(`${aktion.ende}T23:59:59+01:00`);
-const sichtbar = aktion.aktiv && new Date() <= ende;
+// Nur sichtbar, wenn die Servicegebühr tatsächlich erhoben wird (site.zahlungLive).
+const sichtbar = site.zahlungLive && aktion.aktiv && new Date() <= ende;
 const href = link(aktion.link as SeitenSchluessel);
 ---
 {sichtbar && (

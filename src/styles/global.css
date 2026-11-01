@@ -8,6 +8,7 @@
   --blau-dunkel: #1b1830;
   --blau-hell: #e3f6f5;     /* Sekundär: Flächen, Hintergründe */
   --tertiaer: #bae8e8;      /* Tertiär: Symbolflächen, Markierungen */
+  --sand: #f5eee1;          /* warmer heller Ton für den Vermieter-Block */
   --marine: #272343;
   --marine-text: #bae8e8;
   --flaeche: #fffffe;
@@ -195,6 +196,18 @@ fieldset { border: 0; padding: 0; margin: 0 0 1.25rem; min-width: 0; }
 .unsichtbar { display: none !important; }
 .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
 
+/* Auswahl als Chips: Radio/Checkbox im Label, gut zu treffen am Handy */
+.chips { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.chip { position: relative; display: inline-flex; align-items: center; min-height: 3rem; padding: 0.55rem 1.05rem; border: 1.5px solid var(--rand-feld); border-radius: var(--r); background: var(--karte); font-weight: 600; cursor: pointer; transition: border-color 150ms ease, background-color 150ms ease, transform 160ms var(--ease-out); -webkit-tap-highlight-color: transparent; user-select: none; }
+.chip input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+.chip:has(input:checked) { border-color: var(--haupt); background: var(--haupt); color: #fff; }
+.chip:has(input:focus-visible) { outline: 3px solid var(--fokus); outline-offset: 2px; }
+.chip:active { transform: scale(0.97); }
+@media (hover: hover) { .chip:hover { border-color: var(--haupt); } }
+.chips-gross .chip { flex: 1 1 12rem; min-height: 3.5rem; }
+fieldset > legend { font-size: 1.05rem; margin-bottom: 0.6rem; }
+.optional { color: var(--text-2); font-weight: 400; font-size: 1rem; }
+
 /* Liste mit Häkchen */
 .haken { list-style: none; padding: 0; margin: 0 0 1rem; }
 .haken li { padding-left: 2rem; position: relative; margin-bottom: 0.6rem; }
@@ -202,5 +215,5 @@ fieldset { border: 0; padding: 0; margin: 0 0 1.25rem; min-width: 0; }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { transition-duration: 0.01ms !important; }
-  .btn:active, .btn-primaer:active { transform: none; }
+  .btn:active, .btn-primaer:active, .chip:active { transform: none; }
 }

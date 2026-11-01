@@ -1,35 +1,19 @@
 {
-  "_hinweis": "STARTWERTE ZUM ÜBERSCHREIBEN – bitte mit echten Erfahrungswerten ersetzen. Monatsmiete in Euro, die der Vermieter erhält.",
+  "_hinweis": "STARTWERTE ZUM ANPASSEN. Monatsmiete in Euro, die der Vermieter erhält: je Meter Länge (einheit m) bzw. je m² (einheit qm). Zuschläge in Prozent, gelten nur für Stellplätze.",
   "arten": [
-    {
-      "wert": "garage",
-      "titel": "Garage",
-      "von": 50,
-      "bis": 90
-    },
-    {
-      "wert": "einfahrt",
-      "titel": "Auto-Stellplatz oder Einfahrt",
-      "von": 30,
-      "bis": 60
-    },
-    {
-      "wert": "keller-raum",
-      "titel": "Keller oder Lagerraum",
-      "von": 30,
-      "bis": 80
-    },
-    {
-      "wert": "wohnmobil",
-      "titel": "Stellplatz für Wohnmobil oder Wohnwagen",
-      "von": 60,
-      "bis": 120
-    },
-    {
-      "wert": "anhaenger",
-      "titel": "Platz für Anhänger oder Boot",
-      "von": 25,
-      "bis": 50
-    }
+    { "wert": "stellplatz-frei", "titel": "Stellplatz im Freien", "einheit": "m", "von": 6, "bis": 9, "ausstattung": true },
+    { "wert": "stellplatz-ueberdacht", "titel": "Überdacht / Carport", "einheit": "m", "von": 9, "bis": 13, "ausstattung": true },
+    { "wert": "garage", "titel": "Garage", "einheit": "m", "von": 9, "bis": 14 },
+    { "wert": "halle-scheune", "titel": "Halle / Scheune", "einheit": "m", "von": 11, "bis": 16 },
+    { "wert": "lagerraum", "titel": "Lagerraum", "einheit": "qm", "von": 6, "bis": 12 }
+  ],
+  "groesse": {
+    "m": { "min": 5, "max": 12, "schritt": 0.5, "start": 6, "titel": "Länge des Platzes" },
+    "qm": { "min": 2, "max": 50, "schritt": 1, "start": 10, "titel": "Fläche" }
+  },
+  "zuschlaege": [
+    { "wert": "abschliessbar", "titel": "umzäunt / abschließbar", "prozent": 10 },
+    { "wert": "strom", "titel": "Strom", "prozent": 5 },
+    { "wert": "befestigt", "titel": "befestigter Untergrund", "prozent": 5 }
   ]
 }

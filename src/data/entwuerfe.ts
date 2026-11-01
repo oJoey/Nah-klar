@@ -25,7 +25,7 @@ export const entwurfTexte: Partial<Record<SeitenSchluessel, Entwurf>> = {
   nachfrage: { einleitung: 'Wo in Baden-Württemberg gerade Plätze gesucht werden.', eltern: 'vermieten', verwandt: ['vermieten', 'verdienstrechner'] },
   hilfe: { einleitung: 'Antworten auf häufige Fragen – und ein persönlicher Ansprechpartner, wenn etwas offen bleibt.', verwandt: ['kontakt', 'soFunktionierts'] },
   soFunktionierts: { einleitung: 'Vom Suchauftrag bis zum Vertrag: So läuft die Vermittlung für Mieter und Vermieter.', verwandt: ['mieten', 'vermieten'] },
-  sicherheit: { einleitung: 'Geprüfte Mieter, Mustervertrag, Kaution und Fotos bei Ein- und Auszug.', verwandt: ['vermieten', 'preise'] },
+  sicherheit: { einleitung: 'Jede Fläche von Hand geprüft, Mustervertrag, Kaution und Fotos bei Ein- und Auszug.', verwandt: ['vermieten', 'preise'] },
   preise: { einleitung: 'Für Vermieter immer kostenlos. Mieter zahlen einen festen Monatspreis inklusive Servicegebühr.', verwandt: ['mieten', 'vermieten'] },
   ueberUns: { einleitung: 'Nachbarn helfen sich: ungenutzter Platz gegen einen fairen Nebenverdienst.', verwandt: ['soFunktionierts', 'kontakt'] },
   kontakt: { einleitung: 'Ihr persönlicher Ansprechpartner – per Telefon oder WhatsApp.', verwandt: ['hilfe'] },

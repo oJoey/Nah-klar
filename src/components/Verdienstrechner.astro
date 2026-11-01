@@ -1,81 +1,116 @@
 ---
+// Verdienstrechner: Art → Ausstattung (nur Stellplätze) → Größe. Ergebnis sofort, Werte aus src/data/richtwerte.json.
+// „Fläche jetzt melden“ übernimmt Art, Ausstattung und Größe ins Formular.
 import richtwerte from '../data/richtwerte.json';
 import { link } from '../config/seiten';
 interface Props { ausfuehrlich?: boolean; }
 const { ausfuehrlich = false } = Astro.props;
-const arten = richtwerte.arten;
+const { arten, groesse, zuschlaege } = richtwerte;
 const start = arten[0];
-const startMiete = Math.round((start.von + start.bis) / 2);
-const euro = (n: number) => n.toLocaleString('de-DE') + ' €';
-const vollerRechner = link('verdienstrechner');
+const g = groesse[start.einheit as 'm' | 'qm'];
+const id = 'r' + Math.random().toString(36).slice(2, 7);
+const vollerRechner = ausfuehrlich ? null : link('verdienstrechner');
+const formular = link('platzAnbieten') ?? '/platz-anbieten/';
 ---
-<div class="rechner-huelle"><div class="rechner formular-karte" data-richtwerte={JSON.stringify(arten)}>
-  <div>
-    <div class="feld">
-      <label for="rechner-art">Art der Fläche</label>
-      <select id="rechner-art" name="art">
-        {arten.map((a) => <option value={a.wert}>{a.titel}</option>)}
-      </select>
-    </div>
-    <div class="feld">
-      <label for="rechner-miete">Monatsmiete in Euro</label>
-      <input id="rechner-miete" name="miete" type="number" inputmode="numeric" min="0" max="2000" step="5" value={startMiete} />
-      <span class="feld-hilfe" data-richtwert>Richtwert: {start.von}–{start.bis} € pro Monat (Schätzung)</span>
-    </div>
-    {ausfuehrlich && (
+<div class="rechner-huelle">
+  <div class="rechner formular-karte" data-rechner data-richtwerte={JSON.stringify(richtwerte)} data-formular-link={formular}>
+    <div class="rechner-eingabe">
+      <fieldset>
+        <legend>Art der Fläche</legend>
+        <div class="chips">
+          {arten.map((a, i) => <label class="chip"><input type="radio" name={`${id}-art`} value={a.wert} checked={i === 0} data-art /> {a.titel}</label>)}
+        </div>
+      </fieldset>
+      <fieldset data-ausstattung>
+        <legend>Ausstattung <span class="optional">(Mehrfachauswahl)</span></legend>
+        <div class="chips">
+          {zuschlaege.map((z) => <label class="chip"><input type="checkbox" value={z.wert} data-zuschlag={z.prozent} /> {z.titel}</label>)}
+        </div>
+      </fieldset>
       <div class="feld">
-        <label for="rechner-anzahl">Anzahl Plätze</label>
-        <input id="rechner-anzahl" name="anzahl" type="number" inputmode="numeric" min="1" max="20" value="1" />
-        <span class="feld-hilfe">Zum Beispiel mehrere Stellplätze auf einem Hof</span>
+        <label for={`${id}-groesse`}><span data-groesse-titel>{g.titel}</span>: <output data-groesse-wert>{g.start} m</output></label>
+        <input id={`${id}-groesse`} type="range" min={g.min} max={g.max} step={g.schritt} value={g.start} data-groesse />
       </div>
-    )}
+      {ausfuehrlich && (
+        <div class="feld">
+          <label for={`${id}-anzahl`}>Anzahl Plätze: <output data-anzahl-wert>1</output></label>
+          <input id={`${id}-anzahl`} type="range" min="1" max="10" step="1" value="1" data-anzahl />
+        </div>
+      )}
+    </div>
+    <div class="rechner-ausgabe" aria-live="polite">
+      <p class="rechner-label">Möglicher Ertrag im Jahr</p>
+      <p class="rechner-jahr" data-jahr>–</p>
+      <p class="rechner-monat" data-monat>–</p>
+      <p class="unter-hinweis">Schätzung, keine Zusage. Sie bestimmen den Preis selbst und erhalten die volle Miete.</p>
+      <a class="btn btn-primaer btn-voll" href={formular} data-melden>Fläche jetzt melden</a>
+      {vollerRechner && <p class="rechner-mehr"><a class="weiter" href={vollerRechner}>Ausführlicher Verdienstrechner</a></p>}
+    </div>
   </div>
-  <div class="rechner-ausgabe">
-  <p class="rechner-ergebnis">
-    Möglicher Jahresertrag<output for="rechner-art rechner-miete" aria-live="polite" data-ergebnis>ca. {euro(startMiete * 12)}</output>
-  </p>
-  <p class="unter-hinweis">
-    Schätzung, keine Zusage. Die Richtwerte sind Erfahrungswerte, der tatsächliche Preis hängt von Lage und Ausstattung ab. Sie bestimmen den Preis selbst und erhalten die volle Miete.
-  </p>
-  {ausfuehrlich && <p class="unter-hinweis kostenlos">Für Vermieter immer kostenlos</p>}
-  {vollerRechner && <p class="mt"><a class="weiter" href={vollerRechner}>Zum ausführlichen Verdienstrechner</a></p>}
-  </div>
-</div></div>
+</div>
 <script>
-  document.querySelectorAll<HTMLElement>('.rechner').forEach((box) => {
-    const werte: { wert: string; von: number; bis: number }[] = JSON.parse(box.dataset.richtwerte ?? '[]');
-    const art = box.querySelector<HTMLSelectElement>('[name=art]')!;
-    const miete = box.querySelector<HTMLInputElement>('[name=miete]')!;
-    const anzahl = box.querySelector<HTMLInputElement>('[name=anzahl]');
-    const ergebnis = box.querySelector<HTMLOutputElement>('[data-ergebnis]')!;
-    const richtwert = box.querySelector<HTMLElement>('[data-richtwert]')!;
-    const fmt = new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 });
+  type Art = { wert: string; einheit: 'm' | 'qm'; von: number; bis: number; ausstattung?: boolean };
+  type G = { min: number; max: number; schritt: number; start: number; titel: string };
+  const euro = (n: number) => n.toLocaleString('de-DE');
+
+  document.querySelectorAll<HTMLElement>('[data-rechner]').forEach((box) => {
+    const daten = JSON.parse(box.dataset.richtwerte!) as { arten: Art[]; groesse: Record<'m' | 'qm', G> };
+    const q = <T extends Element>(s: string) => box.querySelector<T>(s)!;
+    const regler = q<HTMLInputElement>('[data-groesse]');
+    const anzahl = box.querySelector<HTMLInputElement>('[data-anzahl]');
+    const ausstattung = q<HTMLFieldSetElement>('[data-ausstattung]');
+    let einheit: 'm' | 'qm' | null = null;
+
     const rechne = () => {
-      const m = Math.max(0, Number(miete.value) || 0);
-      const n = anzahl ? Math.max(1, Number(anzahl.value) || 1) : 1;
-      ergebnis.textContent = 'ca. ' + fmt.format(m * n * 12);
-    };
-    art.addEventListener('change', () => {
-      const w = werte.find((x) => x.wert === art.value);
-      if (w) {
-        miete.value = String(Math.round((w.von + w.bis) / 2));
-        richtwert.textContent = `Richtwert: ${w.von}–${w.bis} € pro Monat (Schätzung)`;
+      const art = daten.arten.find((a) => a.wert === q<HTMLInputElement>('[data-art]:checked').value)!;
+      if (art.einheit !== einheit) {
+        // Einheit gewechselt: Regler auf die passende Spanne setzen
+        const g = daten.groesse[art.einheit];
+        Object.assign(regler, { min: g.min, max: g.max, step: g.schritt, value: g.start });
+        q('[data-groesse-titel]').textContent = g.titel;
+        einheit = art.einheit;
       }
-      rechne();
-    });
-    miete.addEventListener('input', rechne);
-    anzahl?.addEventListener('input', rechne);
+      ausstattung.hidden = !art.ausstattung;
+      const gewaehlt = art.ausstattung ? [...ausstattung.querySelectorAll<HTMLInputElement>('input:checked')] : [];
+      const faktor = 1 + gewaehlt.reduce((s, c) => s + Number(c.dataset.zuschlag) / 100, 0);
+      const groesse = Number(regler.value);
+      const stueck = Number(anzahl?.value ?? 1);
+      const von = Math.round(art.von * groesse * faktor * stueck);
+      const bis = Math.round(art.bis * groesse * faktor * stueck);
+      const runde10 = (n: number) => Math.round(n / 10) * 10;
+
+      q('[data-groesse-wert]').textContent = art.einheit === 'm' ? `${groesse.toLocaleString('de-DE')} m` : `${groesse} m²`;
+      if (anzahl) q('[data-anzahl-wert]').textContent = anzahl.value;
+      q('[data-jahr]').textContent = `ca. ${euro(runde10(von * 12))}–${euro(runde10(bis * 12))} €`;
+      q('[data-monat]').textContent = `${euro(von)}–${euro(bis)} € im Monat`;
+
+      const p = new URLSearchParams({ flaechen_art: art.wert });
+      const liste = gewaehlt.map((c) => c.value);
+      if (art.wert === 'stellplatz-ueberdacht') liste.push('ueberdacht');
+      if (liste.length) p.set('ausstattung', liste.join(','));
+      p.set(art.einheit === 'm' ? 'laenge_m' : 'flaeche_qm', String(groesse));
+      if (anzahl && stueck > 1) p.set('anzahl_plaetze', stueck > 3 ? 'mehr' : String(stueck));
+      p.set('wunschpreis', String(Math.round((von + bis) / 2 / stueck / 5) * 5));
+      q<HTMLAnchorElement>('[data-melden]').href = `${box.dataset.formularLink}?${p}`;
+    };
+    box.addEventListener('input', rechne);
+    box.addEventListener('change', rechne);
+    rechne();
   });
 </script>
 <style>
-.rechner { display: grid; gap: 2rem; }
   .rechner-huelle { container-type: inline-size; }
-  @container (min-width: 44rem) { .rechner { grid-template-columns: 1.1fr 1fr; align-items: center; padding: 2.5rem; } }
-  .rechner-ergebnis { margin: 0; font-size: 1.15rem; font-weight: 600; color: var(--text-2); }
-  .rechner-ergebnis output {
-    display: block; margin-top: 0.25rem; color: var(--text);
-    font-size: clamp(2.75rem, 8vw, 4rem); font-weight: 700; letter-spacing: -0.035em; line-height: 1.05;
-    font-variant-numeric: tabular-nums;
-  }
+  .rechner { display: grid; gap: 1.75rem; }
+  @container (min-width: 46rem) { .rechner { grid-template-columns: 1.2fr 1fr; align-items: start; padding: 2.25rem; } }
+  .rechner fieldset { margin-bottom: 1.25rem; }
+  .rechner fieldset[hidden] { display: none; }
+  .rechner .chip { min-height: 2.75rem; padding: 0.45rem 0.85rem; font-size: 1rem; }
+  input[type='range'] { width: 100%; min-height: 2.75rem; accent-color: var(--haupt); cursor: pointer; }
+  .rechner label output { font-weight: 800; color: var(--haupt); }
   .rechner-ausgabe { background: var(--blau-hell); border-radius: var(--r); padding: 1.5rem; }
+  .rechner-label { margin: 0; font-weight: 700; color: var(--text-2); }
+  .rechner-jahr { margin: 0.25rem 0 0; font-size: clamp(2rem, 5vw, 2.75rem); font-weight: 800; letter-spacing: -0.03em; line-height: 1.1; color: var(--haupt); font-variant-numeric: tabular-nums; }
+  .rechner-monat { margin: 0.25rem 0 1rem; font-weight: 600; color: var(--text); font-variant-numeric: tabular-nums; }
+  .rechner-ausgabe .btn { margin-top: 1rem; }
+  .rechner-mehr { margin: 0.5rem 0 0; }
 </style>

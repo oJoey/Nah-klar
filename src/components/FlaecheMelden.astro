@@ -1,0 +1,111 @@
+---
+// „Fläche melden“ für Vermieter: 3 Schritte. Feldnamen = spätere Datenbankspalten (siehe docs/plan-inserate.md).
+import Chips from './Chips.astro';
+import FormVersteckt from './FormVersteckt.astro';
+import Datenschutzhinweis from './Datenschutzhinweis.astro';
+import o from '../data/optionen.json';
+interface Props { id?: string }
+const { id = 'fm' } = Astro.props;
+const mitMassen = o.flaechen_art.filter((a) => a.wert !== 'lagerraum').map((a) => a.wert).join(',');
+---
+<form id={id} class="formular-karte" name="flaeche-melden" method="POST" action="/platz-anbieten/danke/" enctype="multipart/form-data" data-netlify="true" netlify-honeypot="bot-feld" data-formular data-mehrstufig>
+  <FormVersteckt name="flaeche-melden" />
+  <ol class="fortschritt" hidden><li>Fläche</li><li>Ausstattung</li><li>Adresse und Kontakt</li></ol>
+
+  <fieldset class="form-schritt">
+    <h3 tabindex="-1">Welche Fläche haben Sie frei?</h3>
+    <fieldset class="form-gruppe">
+      <legend class="sr-only">Art der Fläche</legend>
+      <Chips name="flaechen_art" optionen={o.flaechen_art} pflicht gross />
+    </fieldset>
+    <fieldset class="form-gruppe">
+      <legend>Geeignet für <span class="optional">(Mehrfachauswahl)</span></legend>
+      <Chips name="geeignet_fuer" optionen={o.geeignet_fuer} mehrfach />
+    </fieldset>
+    <div class="form-gruppe" data-wenn="flaechen_art" data-werte={mitMassen}>
+      <div class="feld-paar">
+        <div class="feld"><label for={`${id}-laenge`}>Länge in m</label><input id={`${id}-laenge`} name="laenge_m" type="number" inputmode="decimal" min="1" max="100" step="0.5" data-pflicht /></div>
+        <div class="feld"><label for={`${id}-breite`}>Breite in m</label><input id={`${id}-breite`} name="breite_m" type="number" inputmode="decimal" min="1" max="100" step="0.5" /></div>
+      </div>
+      <fieldset class="form-gruppe">
+        <legend>Maximale Durchfahrtshöhe</legend>
+        <Chips name="durchfahrt_hoehe" optionen={o.durchfahrt_hoehe} />
+      </fieldset>
+    </div>
+    <div class="feld" data-wenn="flaechen_art" data-werte="lagerraum">
+      <label for={`${id}-qm`}>Fläche in m²</label>
+      <input id={`${id}-qm`} name="flaeche_qm" type="number" inputmode="decimal" min="1" max="1000" step="1" data-pflicht />
+    </div>
+    <fieldset class="form-gruppe">
+      <legend>Anzahl Plätze</legend>
+      <Chips name="anzahl_plaetze" optionen={o.anzahl_plaetze} vorwahl="1" />
+    </fieldset>
+    <div class="form-knoepfe"><button class="btn btn-primaer btn-gross" type="button" data-weiter hidden>Weiter</button></div>
+  </fieldset>
+
+  <fieldset class="form-schritt">
+    <h3 tabindex="-1">Ausstattung und Fotos</h3>
+    <fieldset class="form-gruppe">
+      <legend>Ausstattung <span class="optional">(Mehrfachauswahl)</span></legend>
+      <Chips name="ausstattung" optionen={o.ausstattung} mehrfach />
+    </fieldset>
+    <div class="form-gruppe" data-fotos>
+      <p class="gruppen-titel">Fotos <span class="optional">(optional, bis zu 5)</span></p>
+      <p class="feld-hilfe">Zufahrt, Fläche, ein Foto mit Zollstock genügt.</p>
+      <div data-foto-js hidden>
+        <label class="btn btn-rahmen" for={`${id}-fotos`}>Fotos auswählen</label>
+        <input id={`${id}-fotos`} class="sr-only" type="file" accept="image/*" multiple data-foto-auswahl />
+        <p class="foto-liste" data-foto-liste aria-live="polite"></p>
+      </div>
+      <div data-foto-ersatz>
+        {[1, 2, 3, 4, 5].map((n) => (
+          <div class="feld"><label for={`${id}-foto${n}`} class="sr-only">Foto {n}</label><input id={`${id}-foto${n}`} name={`foto_${n}`} type="file" accept="image/*" data-foto-ziel /></div>
+        ))}
+      </div>
+    </div>
+    <div class="feld">
+      <label for={`${id}-preis`}>Wunschpreis pro Monat in € <span class="optional">(optional)</span></label>
+      <input id={`${id}-preis`} name="wunschpreis" type="number" inputmode="numeric" min="0" max="5000" step="5" />
+      <span class="feld-hilfe">Vom Verdienstrechner übernommen oder frei gewählt. Unsicher? Leer lassen, wir beraten Sie.</span>
+    </div>
+    <div class="form-knoepfe">
+      <button class="btn btn-rahmen btn-gross" type="button" data-zurueck hidden>Zurück</button>
+      <button class="btn btn-primaer btn-gross" type="button" data-weiter hidden>Weiter</button>
+    </div>
+  </fieldset>
+
+  <fieldset class="form-schritt">
+    <h3 tabindex="-1">Wo ist die Fläche, wie erreichen wir Sie?</h3>
+    <div class="feld">
+      <label for={`${id}-strasse`}>Straße und Hausnummer</label>
+      <input id={`${id}-strasse`} name="strasse" type="text" autocomplete="street-address" required maxlength="100" />
+    </div>
+    <div class="feld-plz">
+      <div class="feld"><label for={`${id}-plz`}>PLZ</label><input id={`${id}-plz`} name="plz" type="text" inputmode="numeric" autocomplete="postal-code" required pattern="[0-9]{5}" maxlength="5" /></div>
+      <div class="feld"><label for={`${id}-ort`}>Ort</label><input id={`${id}-ort`} name="ort" type="text" autocomplete="address-level2" required maxlength="60" /></div>
+    </div>
+    <p class="feld-hilfe adresse-hinweis">Wird nicht veröffentlicht. Interessenten erfahren nur den Ortsteil.</p>
+    <div class="feld-paar">
+      <div class="feld"><label for={`${id}-vorname`}>Vorname</label><input id={`${id}-vorname`} name="vorname" type="text" autocomplete="given-name" required maxlength="60" /></div>
+      <div class="feld"><label for={`${id}-nachname`}>Nachname</label><input id={`${id}-nachname`} name="nachname" type="text" autocomplete="family-name" required maxlength="60" /></div>
+    </div>
+    <div class="feld">
+      <label for={`${id}-email`}>E-Mail</label>
+      <input id={`${id}-email`} name="email" type="email" autocomplete="email" required maxlength="100" />
+    </div>
+    <div class="feld">
+      <label for={`${id}-telefon`}>Telefon</label>
+      <input id={`${id}-telefon`} name="telefon" type="tel" autocomplete="tel" required maxlength="30" />
+    </div>
+    <div class="form-knoepfe">
+      <button class="btn btn-rahmen btn-gross" type="button" data-zurueck hidden>Zurück</button>
+      <button class="btn btn-primaer btn-gross" type="submit">Fläche melden</button>
+    </div>
+    <p class="unter-hinweis">Für Vermieter immer kostenlos.</p>
+    <Datenschutzhinweis />
+  </fieldset>
+</form>
+<style>
+  .adresse-hinweis { margin: -0.5rem 0 1.25rem; }
+  @media (max-width: 30rem) { .feld-paar { grid-template-columns: 1fr; } }
+</style>

@@ -1,5 +1,10 @@
 ---
-// Füllt Formulare aus der Adresszeile vor (?ort=, ?art=, ?zeitraum=) und übernimmt die gemerkte Herkunft.
+// Gemeinsames Skript für alle Formulare:
+// - füllt Felder aus der Adresszeile vor (?ort=…&mieter_art=…&ausstattung=a,b)
+// - blendet Feldgruppen je nach Auswahl ein (data-wenn="feld" data-werte="a,b")
+// - mehrstufige Formulare mit Fortschritt (form[data-mehrstufig] > .form-schritt)
+// - verkleinert Fotos im Browser, damit 5 Bilder unter die Netlify-Grenze von 8 MB passen
+// Ohne JavaScript sind alle Schritte und Felder sichtbar und das Formular funktioniert trotzdem.
 ---
 <script>
   const params = new URLSearchParams(location.search);
@@ -9,23 +14,126 @@
     herkunft = Object.entries(h).map(([k, v]) => `${k}=${v}`).join('; ');
   } catch {}
 
+  const MAX_GESAMT = 7.5 * 1024 * 1024;
+
+  async function verkleinere(datei: File): Promise<File> {
+    if (!datei.type.startsWith('image/') || datei.size < 400 * 1024) return datei;
+    try {
+      const bild = await createImageBitmap(datei);
+      const f = Math.min(1, 1600 / Math.max(bild.width, bild.height));
+      const c = document.createElement('canvas');
+      c.width = Math.round(bild.width * f); c.height = Math.round(bild.height * f);
+      c.getContext('2d')!.drawImage(bild, 0, 0, c.width, c.height);
+      const blob = await new Promise<Blob | null>((r) => c.toBlob(r, 'image/jpeg', 0.8));
+      if (!blob) return datei;
+      return new File([blob], datei.name.replace(/\.\w+$/, '') + '.jpg', { type: 'image/jpeg' });
+    } catch { return datei; }
+  }
+
   document.querySelectorAll<HTMLFormElement>('form[data-formular]').forEach((form) => {
     const quelle = form.querySelector<HTMLInputElement>('[name=quelle]');
     if (quelle) quelle.value = herkunft || 'direkt';
 
+    // Vorausfüllen
     for (const [k, v] of params) {
-      if (!['ort', 'art', 'zeitraum'].includes(k)) continue;
-      form.querySelectorAll<HTMLInputElement | HTMLSelectElement>(`[name="${k}"]`).forEach((feld) => {
-        if (feld instanceof HTMLInputElement && feld.type === 'radio') feld.checked = feld.value === v;
+      if (['form-name', 'bot-feld', 'quelle'].includes(k)) continue;
+      const werte = v.split(',').map((w) => w.slice(0, 60));
+      form.querySelectorAll<HTMLInputElement | HTMLSelectElement>(`[name="${k}"], [name="${k}[]"]`).forEach((feld) => {
+        if (feld instanceof HTMLInputElement && (feld.type === 'radio' || feld.type === 'checkbox')) feld.checked = werte.includes(feld.value);
         else if (feld instanceof HTMLSelectElement) { if ([...feld.options].some((o) => o.value === v)) feld.value = v; }
-        else feld.value = v.slice(0, 60);
+        else if (feld instanceof HTMLInputElement && feld.type !== 'file') feld.value = v.slice(0, 60);
       });
     }
 
-    // Verständliche Meldung für das Feld „Telefon oder E-Mail“
-    form.querySelectorAll<HTMLInputElement>('[data-kontakt]').forEach((feld) => {
-      feld.addEventListener('invalid', () => feld.setCustomValidity('Bitte geben Sie eine Telefonnummer oder E-Mail-Adresse an.'));
-      feld.addEventListener('input', () => feld.setCustomValidity(''));
+    // Bedingte Feldgruppen
+    const gruppen = [...form.querySelectorAll<HTMLElement>('[data-wenn]')];
+    const aktualisiere = () => {
+      for (const g of gruppen) {
+        const gewaehlt = form.querySelector<HTMLInputElement>(`[name="${g.dataset.wenn}"]:checked`)?.value;
+        const an = !!gewaehlt && g.dataset.werte!.split(',').includes(gewaehlt);
+        g.hidden = !an;
+        g.querySelectorAll<HTMLInputElement>('input, select').forEach((f) => {
+          f.disabled = !an;
+          if (f.hasAttribute('data-pflicht')) f.required = an;
+        });
+      }
+    };
+    if (gruppen.length) { form.addEventListener('change', aktualisiere); aktualisiere(); }
+
+    // Mehrstufig
+    if (form.hasAttribute('data-mehrstufig')) {
+      const schritte = [...form.querySelectorAll<HTMLElement>('.form-schritt')];
+      const punkte = [...form.querySelectorAll<HTMLElement>('.fortschritt li')];
+      form.querySelector<HTMLElement>('.fortschritt')!.hidden = false;
+      form.querySelectorAll<HTMLElement>('[data-weiter], [data-zurueck]').forEach((b) => (b.hidden = false));
+      let aktiv = 0;
+      const zeige = (i: number, scrollen = true) => {
+        aktiv = i;
+        schritte.forEach((s, j) => (s.hidden = j !== i));
+        punkte.forEach((p, j) => { p.toggleAttribute('data-aktiv', j === i); p.toggleAttribute('data-fertig', j < i); });
+        punkte[i]?.setAttribute('aria-current', 'step');
+        punkte.forEach((p, j) => j !== i && p.removeAttribute('aria-current'));
+        if (scrollen) {
+          const ruhig = matchMedia('(prefers-reduced-motion: reduce)').matches;
+          form.scrollIntoView({ behavior: ruhig ? 'auto' : 'smooth', block: 'start' });
+          schritte[i].querySelector<HTMLElement>('legend, h3')?.focus({ preventScroll: true });
+        }
+      };
+      const gueltig = (s: HTMLElement) => {
+        const felder = [...s.querySelectorAll<HTMLInputElement>('input, select, textarea')].filter((f) => !f.disabled);
+        const falsch = felder.find((f) => !f.checkValidity());
+        if (falsch) { falsch.reportValidity(); return false; }
+        return true;
+      };
+      form.addEventListener('click', (e) => {
+        const t = (e.target as HTMLElement).closest('[data-weiter], [data-zurueck]');
+        if (!t) return;
+        e.preventDefault();
+        if (t.hasAttribute('data-weiter')) { if (gueltig(schritte[aktiv])) zeige(aktiv + 1); }
+        else zeige(aktiv - 1);
+      });
+      zeige(0, false);
+    }
+
+    // Fotos: eine Auswahl, verkleinert verteilt auf foto_1 … foto_5
+    form.querySelectorAll<HTMLElement>('[data-fotos]').forEach((box) => {
+      const auswahl = box.querySelector<HTMLInputElement>('[data-foto-auswahl]')!;
+      const ziele = [...box.querySelectorAll<HTMLInputElement>('[data-foto-ziel]')];
+      const liste = box.querySelector<HTMLElement>('[data-foto-liste]')!;
+      box.querySelector<HTMLElement>('[data-foto-ersatz]')!.hidden = true;
+      auswahl.closest<HTMLElement>('[data-foto-js]')!.hidden = false;
+      auswahl.addEventListener('change', async () => {
+        const dateien = [...(auswahl.files ?? [])].slice(0, ziele.length);
+        liste.textContent = dateien.length ? 'Fotos werden vorbereitet …' : '';
+        const klein = await Promise.all(dateien.map(verkleinere));
+        const gesamt = klein.reduce((s, d) => s + d.size, 0);
+        ziele.forEach((z, i) => {
+          const dt = new DataTransfer();
+          if (klein[i] && gesamt <= MAX_GESAMT) dt.items.add(klein[i]);
+          z.files = dt.files;
+        });
+        if (gesamt > MAX_GESAMT) { liste.textContent = 'Die Fotos sind zusammen zu groß. Bitte wählen Sie weniger Bilder.'; auswahl.value = ''; return; }
+        const mehr = (auswahl.files?.length ?? 0) > ziele.length ? ` (nur die ersten ${ziele.length} werden übernommen)` : '';
+        liste.textContent = klein.length ? `${klein.length} Foto${klein.length > 1 ? 's' : ''} ausgewählt, zusammen ${(gesamt / 1024 / 1024).toFixed(1).replace('.', ',')} MB${mehr}` : '';
+      });
     });
   });
 </script>
+<style is:global>
+  .fortschritt { display: flex; gap: 0.5rem; list-style: none; margin: 0 0 1.75rem; padding: 0; counter-reset: s; }
+  .fortschritt li { flex: 1; font-size: 0.875rem; font-weight: 700; color: var(--text-2); counter-increment: s; }
+  .fortschritt li::before { content: ''; display: block; height: 5px; border-radius: 3px; background: var(--linie); margin-bottom: 0.45rem; }
+  .fortschritt li[data-aktiv], .fortschritt li[data-fertig] { color: var(--haupt); }
+  .fortschritt li[data-aktiv]::before, .fortschritt li[data-fertig]::before { background: var(--haupt); }
+  .form-schritt { border: 0; padding: 0; margin: 0 0 1.5rem; min-width: 0; }
+  .form-schritt[hidden], [data-wenn][hidden] { display: none; }
+  .form-schritt > h3 { font-size: 1.35rem; margin-bottom: 1.25rem; outline: none; }
+  .form-gruppe { margin-bottom: 1.5rem; }
+  .form-gruppe > legend, .form-gruppe > .gruppen-titel { display: block; font-weight: 700; margin-bottom: 0.6rem; }
+  .form-knoepfe { display: flex; gap: 0.75rem; margin-top: 1.5rem; }
+  .form-knoepfe .btn { flex: 1; }
+  .form-knoepfe [data-zurueck] { flex: 0 0 auto; }
+  .feld-paar { display: grid; gap: 0 1rem; grid-template-columns: 1fr 1fr; }
+  .feld-plz { display: grid; gap: 0 1rem; grid-template-columns: 7rem 1fr; }
+  .foto-liste { margin: 0.5rem 0 0; font-size: 1rem; color: var(--text-2); }
+</style>

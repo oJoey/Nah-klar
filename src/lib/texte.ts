@@ -9,8 +9,8 @@ export const texte = {
   live,
   prozent,
   heroVersprechen: live
-    ? 'Geprüfte Mieter, schriftlicher Vertrag, Miete automatisch per Lastschrift.'
-    : 'Geprüfte Mieter, schriftlicher Vertrag, klare Regeln für Miete und Kaution.',
+    ? 'Jede Fläche von Hand geprüft, Mustervertrag, Miete automatisch per Lastschrift.'
+    : 'Jede Fläche von Hand geprüft, Mustervertrag, klare Regeln für Miete und Kaution.',
   erinnern: live ? 'erinnern wir automatisch' : 'erinnern wir den Mieter',
   serviceGarantie: `Bei offenen Zahlungen ${live ? 'erinnern wir automatisch' : 'erinnern wir den Mieter'}, wir stellen Vorlagen für die Kündigung bereit und suchen kostenlos einen neuen Mieter.`,
   zahlungKurz: live ? 'Automatische Zahlung' : 'Klare Zahlungsregeln',
@@ -36,6 +36,10 @@ export function ersetze(text: string): string {
     .replaceAll('{TELEFON}', site.telefonAnzeige)
     .replaceAll('{REGION}', site.region)
     .replaceAll('{IN_REGION}', site.regionIn)
+    .replaceAll('{EMAIL}', site.email)
+    .replaceAll('{MIETER_PRUEFUNG}', site.mieterPruefung
+      ? 'Vor der Besichtigung prüfen wir jeden Mieter: Ausweis, bei Fahrzeugen auch Fahrzeugschein und Nachweis der Kfz-Versicherung.'
+      : 'Sie lernen jeden Interessenten bei der Besichtigung kennen und entscheiden selbst, ob Sie vermieten.')
     .replaceAll('{PROZENT}', prozent)
     .replaceAll('{KAUTION_MIN}', String(zahlung.kautionMinEuro))
     .replaceAll('{RUECKZAHLUNG_WOCHEN}', String(zahlung.kautionRueckzahlungWochen))

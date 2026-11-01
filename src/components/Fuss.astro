@@ -1,9 +1,8 @@
 ---
-import { site, telefonHref, whatsappLink } from '../config/site';
+import { site, telefonHref, whatsappLink, emailHref } from '../config/site';
 import Logo from './Logo.astro';
 import { seiten, istLive, type SeitenSchluessel } from '../config/seiten';
-const fussLinks: SeitenSchluessel[] = ['soFunktionierts', 'sicherheit', 'preise', 'ueberUns', 'kontakt', 'impressum', 'datenschutz', 'agb'];
-const ratgeberLinks: SeitenSchluessel[] = ['werkzeuge', 'verdienstrechner', 'einwinterung', 'strassenCheck', 'winterplatzVergleich', 'regionen'];
+const fussLinks: SeitenSchluessel[] = ['werkzeuge', 'soFunktionierts', 'sicherheit', 'preise', 'ueberUns', 'kontakt', 'impressum', 'datenschutz', 'agb'];
 ---
 <footer class="fuss">
   <div class="wrap">
@@ -18,14 +17,9 @@ const ratgeberLinks: SeitenSchluessel[] = ['werkzeuge', 'verdienstrechner', 'ein
         <ul class="fuss-liste">
           <li><a href={telefonHref}>Telefon: {site.telefonAnzeige}</a></li>
           <li><a href={whatsappLink} rel="noopener">WhatsApp: {site.telefonAnzeige}</a></li>
+          <li><a href={emailHref}>E-Mail: {site.email}</a></li>
         </ul>
       </div>
-      <nav aria-label="Ratgeber und Werkzeuge">
-        <h2 class="fuss-titel">Ratgeber & Werkzeuge</h2>
-        <ul class="fuss-liste">
-          {ratgeberLinks.filter(istLive).map((k) => <li><a href={seiten[k].pfad}>{seiten[k].titel}</a></li>)}
-        </ul>
-      </nav>
       <nav aria-label="Weitere Seiten">
         <h2 class="fuss-titel">Informationen</h2>
         <ul class="fuss-liste">
