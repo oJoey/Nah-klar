@@ -35,6 +35,7 @@ export function ersetze(text: string): string {
     .replaceAll('{NAME}', site.name)
     .replaceAll('{TELEFON}', site.telefonAnzeige)
     .replaceAll('{REGION}', site.region)
+    .replaceAll('{IN_REGION}', site.regionIn)
     .replaceAll('{PROZENT}', prozent)
     .replaceAll('{KAUTION_MIN}', String(zahlung.kautionMinEuro))
     .replaceAll('{RUECKZAHLUNG_WOCHEN}', String(zahlung.kautionRueckzahlungWochen))

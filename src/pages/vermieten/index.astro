@@ -42,7 +42,7 @@ const vorteile = [
   { icon: 'schild' as const, titel: 'Geprüfte Mieter', text: 'Ausweis, bei Fahrzeugen auch Fahrzeugschein und Versicherung, prüfen wir vor dem ersten Treffen.' },
   { icon: 'vertrag' as const, titel: 'Mustervertrag', text: 'Klare Regeln zu Kaution, Kündigung und Zufahrt – für beide Seiten.' },
   { icon: 'euro' as const, titel: texte.live ? 'Automatische Zahlung mit Erinnerung' : 'Klare Zahlungsregeln mit Erinnerung', text: `${texte.zahlungLang} Bei offenen Zahlungen ${texte.erinnern}.` },
-  { icon: 'person' as const, titel: 'Persönlicher Ansprechpartner', text: `Ein fester Ansprechpartner im ${site.region}, der sich um Fragen und Probleme kümmert.` },
+  { icon: 'person' as const, titel: 'Persönlicher Ansprechpartner', text: 'Ein fester Ansprechpartner, der sich um Fragen und Probleme kümmert.' },
 ];
 
 const schritte = [
@@ -56,14 +56,14 @@ const nachfrage = sichtbareKennzahlen(['suchende', 'suchendeWohnmobil']);
 const nachfrageLink = link('nachfrage') ?? link('platzAnbieten');
 ---
 <Basis
-  titel="Stellplatz, Garage oder Scheune vermieten im Landkreis Böblingen"
+  titel="Stellplatz, Garage oder Scheune vermieten in Baden-Württemberg"
   beschreibung="Stellplatz, Garage, Einfahrt, Keller oder Scheune vermieten – mit fairem Nebenverdienst. Für Vermieter immer kostenlos: geprüfte Mieter, Mustervertrag, persönlicher Ansprechpartner."
   brotkruemel={[{ name: 'Vermieten', pfad: '/vermieten/' }]}
 >
   <section class="held abschnitt-grau">
     <div class="wrap held-raster">
       <div>
-        <p class="kicker">Landkreis Böblingen</p>
+        <p class="kicker">Baden-Württemberg</p>
         <h1>Stellplatz, Garage oder Scheune vermieten – mit fairem Nebenverdienst</h1>
         <p class="kostenlos-pille">Für Vermieter immer kostenlos</p>
         <ul class="haken">

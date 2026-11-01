@@ -23,7 +23,7 @@ const unterschiede: { icon: IconName; titel: string; text: string }[] = [
   { icon: 'schild', titel: 'Geprüfte Vermieter und Plätze', text: 'Wir kennen jeden Platz von Fotos und sprechen vorab mit dem Vermieter. Sie besichtigen nur, was zu Ihren Angaben passt.' },
   { icon: 'vertrag', titel: 'Mustervertrag mit klaren Regeln', text: 'Zufahrt, Kündigung und Zahlung sind schriftlich geregelt. Kein Handschlag-Deal, bei dem später jeder etwas anderes meint.' },
   { icon: 'euro', titel: 'Kaution geregelt', text: `Eine Monatsmiete, mindestens ${zahlung.kautionMinEuro} €. Zustand mit Fotos bei Ein- und Auszug, Rückzahlung innerhalb von ${zahlung.kautionRueckzahlungWochen} Wochen.` },
-  { icon: 'person', titel: 'Fester Ansprechpartner', text: `Jemand aus dem ${site.region}, erreichbar per Telefon oder WhatsApp – auch nach dem Einzug.` },
+  { icon: 'person', titel: 'Fester Ansprechpartner', text: 'Ein Mensch, den Sie per Telefon oder WhatsApp erreichen – auch nach dem Einzug.' },
 ];
 
 const kacheln = mietArten.map((a) => ({
@@ -42,14 +42,14 @@ const mieterSchritte = [
 ];
 ---
 <Basis
-  titel={`Stellplatz, Garage und Lagerraum mieten im Landkreis Böblingen | ${site.name}`}
-  beschreibung="Stellplatz, Garage, Wohnmobil-Winterplatz oder Lagerraum bei Privatleuten im Landkreis Böblingen mieten. Mustervertrag, geregelte Kaution, persönlicher Ansprechpartner."
+  titel={`Stellplatz, Garage und Lagerraum mieten in Baden-Württemberg | ${site.name}`}
+  beschreibung="Stellplatz, Garage, Wohnmobil-Winterplatz oder Lagerraum bei Privatleuten in Baden-Württemberg mieten. Mustervertrag, geregelte Kaution, persönlicher Ansprechpartner."
 >
   <section class="held">
     <div class="wrap">
       <div class="held-raster">
         <div>
-          <p class="kicker">Stellplatz, Garage und Lagerraum mieten im Landkreis Böblingen</p>
+          <p class="kicker">Stellplatz, Garage und Lagerraum mieten in Baden-Württemberg</p>
           <h1>Platz gesucht? Ihre Nachbarn haben welchen.</h1>
           <p class="einleitung">Für Wohnmobil, Auto, Anhänger oder Kisten – bei Privatleuten in Ihrem Ort, mit Vertrag und festem Ansprechpartner.</p>
         </div>

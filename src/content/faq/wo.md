@@ -4,6 +4,4 @@ seiten: [start]
 reihenfolge: 30
 ---
 
-Aktiv vermitteln wir zuerst im {REGION}, zum Beispiel in Böblingen, Sindelfingen, Herrenberg, Leonberg, Holzgerlingen und Weil der Stadt.
-
-Suchaufträge und Flächen aus ganz Baden-Württemberg nehmen wir gern an. Wir melden uns, sobald wir in Ihrer Gegend vermitteln.
+In ganz Baden-Württemberg, von Mannheim bis zum Bodensee. Wie schnell wir einen Platz finden, hängt davon ab, wie viele Angebote es in Ihrer Gegend gibt. Nach Ihrem Suchauftrag sagen wir Ihnen ehrlich, wie die Chancen stehen.

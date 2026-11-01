@@ -26,8 +26,8 @@
   --r: 10px;
   --r-gross: 16px;
   --r-klein: 8px;
-  --schrift: 'Instrument Sans Variable', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
-  --schrift-titel: 'Bricolage Grotesque Variable', 'Instrument Sans Variable', system-ui, sans-serif;
+  --schrift: 'Manrope Variable', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+  --schrift-titel: var(--schrift);
   --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
   --breite: 76rem;
   --rand-seite: 1rem;
@@ -44,7 +44,6 @@ body {
   font-family: var(--schrift);
   font-size: 1.125rem; /* 18 px */
   line-height: 1.6;
-  font-feature-settings: 'ss01';
   color: var(--text);
   background: var(--flaeche);
   -webkit-font-smoothing: antialiased;
@@ -54,11 +53,11 @@ img, svg { max-width: 100%; }
 
 /* Typografie: große Schrift enger laufen lassen, Fließtext neutral */
 h1, h2, h3 { color: var(--text); margin: 0 0 0.75rem; text-wrap: balance; font-weight: 700; }
-/* Überschriften in einer kräftigen Grotesk (selbst gehostet), Fließtext in einer ruhigen Grotesk */
+/* Eine Schrift für alles: Manrope (selbst gehostet), Hierarchie über Größe und Gewicht */
 h1, h2, h3 { font-family: var(--schrift-titel); color: var(--haupt); font-optical-sizing: auto; }
-h1 { font-size: clamp(2.5rem, 7.5vw, 4.5rem); line-height: 1; letter-spacing: -0.035em; font-weight: 700; }
-h2 { font-size: clamp(1.9rem, 4.6vw, 3rem); line-height: 1.05; letter-spacing: -0.03em; font-weight: 650; }
-h3 { font-size: 1.3rem; line-height: 1.2; letter-spacing: -0.015em; font-weight: 600; }
+h1 { font-size: clamp(2.5rem, 7.5vw, 4.5rem); line-height: 1.02; letter-spacing: -0.035em; font-weight: 800; }
+h2 { font-size: clamp(1.9rem, 4.6vw, 3rem); line-height: 1.08; letter-spacing: -0.03em; font-weight: 750; }
+h3 { font-size: 1.3rem; line-height: 1.25; letter-spacing: -0.015em; font-weight: 700; }
 p { margin: 0 0 1rem; text-wrap: pretty; }
 a { color: var(--blau); text-underline-offset: 0.18em; text-decoration-thickness: 1px; }
 a:hover { color: var(--blau-dunkel); }

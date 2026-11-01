@@ -4,10 +4,11 @@ export const site = {
   // [DOMAIN]: muss eine gültige Adresse sein, deshalb hier ein Ersatzwert.
   url: 'https://www.domain-eintragen.de',
   beschreibung:
-    'Privatleute im Landkreis Böblingen vermieten ungenutzten Platz – Einfahrt, Hof, Scheune, Garage oder Keller – an Nachbarn mit Wohnmobil, Auto, Anhänger oder Lagergut.',
-  region: 'Landkreis Böblingen',
+    'Privatleute in Baden-Württemberg vermieten ungenutzten Platz – Einfahrt, Hof, Scheune, Garage oder Keller – an Nachbarn mit Wohnmobil, Auto, Anhänger oder Lagergut.',
+  region: 'Baden-Württemberg',
+  regionIn: 'in Baden-Württemberg', // für Sätze wie „Platz in Baden-Württemberg“
   bundesland: 'Baden-Württemberg',
-  ansprechpartner: 'Ihr Ansprechpartner im Landkreis Böblingen',
+  ansprechpartner: 'Ihr persönlicher Ansprechpartner',
 
   // BEISPIELNUMMER: vor dem Livegang an allen drei Stellen durch die echte Mobilnummer ersetzen.
   telefonAnzeige: '07031 123456',
