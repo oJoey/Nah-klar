@@ -27,15 +27,13 @@ const kacheln = flaechenArten.map((a) => ({
 }));
 
 const sorgen = [
-  { titel: 'Zahlung: Kommt die Miete pünktlich?', text: texte.live
-      ? `Die Miete wird am ${zahlung.abbuchungTag}. des Monats automatisch per Lastschrift beim Mieter eingezogen. Am ${zahlung.auszahlungTag}. überweisen wir sie auf Ihr Konto.`
-      : texte.zahlungLang },
+  { titel: 'Zahlung: Kommt die Miete pünktlich?', text: texte.zahlungPuenktlich },
   { titel: 'Ausfall: Was, wenn der Mieter nicht zahlt?', text: texte.serviceGarantie },
   { titel: 'Schäden: Wer kommt dafür auf?', text: `Jeder Mieter zahlt eine Kaution von einer Monatsmiete, mindestens ${zahlung.kautionMinEuro} €, direkt an Sie. Bei Ein- und Auszug wird der Zustand mit Fotos festgehalten.${site.mieterPruefung ? ' Bei Fahrzeugen muss der Mieter eine gültige Kfz-Versicherung nachweisen.' : ''}` },
   { titel: 'Fremde auf dem Grundstück?', text: site.mieterPruefung
       ? 'Wir prüfen jeden Mieter vorab: Ausweis, bei Fahrzeugen auch Fahrzeugschein und Versicherung. Sie lernen den Mieter bei der Besichtigung kennen und entscheiden selbst, ob Sie vermieten.'
       : 'Sie lernen jeden Interessenten bei der Besichtigung kennen und entscheiden selbst, ob Sie vermieten. Anfragen laufen gebündelt über uns, Ihre Telefonnummer steht nirgends öffentlich.' },
-  { titel: 'Steuer: Was muss ich beachten?', text: 'Sie erhalten jedes Jahr eine Übersicht Ihrer Einnahmen. Als Plattform sind wir gesetzlich verpflichtet, Vermieter und Einnahmen jährlich an das Bundeszentralamt für Steuern zu melden (DAC7). Eine Steuerberatung bieten wir nicht an.' },
+  { titel: 'Steuer: Was muss ich beachten?', text: texte.steuer },
   { titel: 'Nachbarn: Gibt es Ärger?', text: 'Zufahrtszeiten und Regeln, etwa keine Reparaturen auf dem Hof, legen Sie im Vertrag fest. So wissen alle, woran sie sind.' },
 ];
 
@@ -62,7 +60,7 @@ const nachfrage = sichtbareKennzahlen(['suchende', 'suchendeWohnmobil']);
 const nachfrageLink = link('nachfrage') ?? link('platzAnbieten');
 ---
 <Basis
-  titel="Stellplatz, Garage oder Scheune vermieten in Baden-Württemberg"
+  titel="Stellplatz, Garage oder Lagerraum vermieten in Baden-Württemberg"
   beschreibung="Stellplatz, Garage, Einfahrt, Lagerraum oder Scheune vermieten – mit fairem Nebenverdienst. Für Vermieter immer kostenlos: jede Fläche von Hand geprüft, Mustervertrag, persönlicher Ansprechpartner."
   brotkruemel={[{ name: 'Vermieten', pfad: '/vermieten/' }]}
 >
@@ -70,7 +68,7 @@ const nachfrageLink = link('nachfrage') ?? link('platzAnbieten');
     <div class="wrap held-raster">
       <div>
         <p class="kicker">Baden-Württemberg</p>
-        <h1>Stellplatz, Garage oder Scheune vermieten – mit fairem Nebenverdienst</h1>
+        <h1>Stellplatz, Garage oder Lagerraum vermieten – mit fairem Nebenverdienst</h1>
         <p class="kostenlos-pille">Für Vermieter immer kostenlos</p>
         <ul class="haken">
           <li>Jede Fläche von Hand geprüft</li>
@@ -85,7 +83,7 @@ const nachfrageLink = link('nachfrage') ?? link('platzAnbieten');
   <section class="abschnitt">
     <div class="wrap">
       <div class="kopfzeile">
-        <h2>Welchen Platz haben Sie frei?</h2>
+        <h2>Diese Flächen sind gefragt</h2>
         <p class="einleitung">Eine Garage, ein freier Platz in der Einfahrt oder ein trockener Keller reichen schon. Gesucht werden Plätze für Autos, Anhänger, Wohnwagen und Lagergut.</p>
       </div>
       <Kacheln kacheln={kacheln} />

@@ -12,7 +12,9 @@ export const texte = {
     ? 'Jede Fläche von Hand geprüft, Mustervertrag, Miete automatisch per Lastschrift.'
     : 'Jede Fläche von Hand geprüft, Mustervertrag, klare Regeln für Miete und Kaution.',
   erinnern: live ? 'erinnern wir automatisch' : 'erinnern wir den Mieter',
-  serviceGarantie: `Bei offenen Zahlungen ${live ? 'erinnern wir automatisch' : 'erinnern wir den Mieter'}, wir stellen Vorlagen für die Kündigung bereit und suchen kostenlos einen neuen Mieter.`,
+  serviceGarantie: live
+    ? 'Bei offenen Zahlungen erinnern wir automatisch, wir stellen Vorlagen für die Kündigung bereit und suchen kostenlos einen neuen Mieter.'
+    : 'Bei Problemen mit der Zahlung helfen wir persönlich weiter, stellen Vorlagen für die Kündigung bereit und suchen kostenlos einen neuen Mieter.',
   zahlungKurz: live ? 'Automatische Zahlung' : 'Klare Zahlungsregeln',
   zahlungLang: live
     ? `Die Miete wird am ${zahlung.abbuchungTag}. des Monats per Lastschrift eingezogen und am ${zahlung.auszahlungTag}. an den Vermieter überwiesen.`
@@ -25,8 +27,21 @@ export const texte = {
     ? 'Sie unterschreiben den Mustervertrag und erteilen das Lastschriftmandat. Danach können Sie einziehen.'
     : 'Sie unterschreiben den Mustervertrag, zahlen die Kaution direkt an den Vermieter und können einziehen.',
   vermieterSchritt4Text: live
-    ? `Sie unterschreiben den Vertrag. Die Miete kommt jeden Monat am ${zahlung.auszahlungTag}. auf Ihr Konto.`
-    : 'Sie unterschreiben den Vertrag und erhalten die Kaution direkt vom Mieter.',
+    ? 'Die Kaution erhalten Sie direkt vom Mieter, die Miete kommt jeden Monat automatisch auf Ihr Konto.'
+    : 'Die Kaution erhalten Sie direkt vom Mieter, die Miete jeden Monat wie im Vertrag vereinbart.',
+  // Alles, was eine Zahlungsabwicklung über uns voraussetzt, hängt an zahlungLive:
+  zahlungPuenktlich: live
+    ? 'Die Miete wird jeden Monat automatisch per Lastschrift eingezogen und an Sie ausgezahlt.'
+    : 'Höhe, Termin und Weg der Zahlung stehen im Mietvertrag – für beide Seiten nachlesbar.',
+  steuer: live
+    ? 'Sie erhalten jedes Jahr eine Übersicht Ihrer Einnahmen. Als Plattform, über die die Miete läuft, sind wir gesetzlich verpflichtet, Vermieter und Einnahmen jährlich an das Bundeszentralamt für Steuern zu melden. Eine Steuerberatung bieten wir nicht an.'
+    : 'Einnahmen aus der Vermietung sind grundsätzlich steuerpflichtig. Eine Steuerberatung bieten wir nicht an.',
+  vermieterKosten: live
+    ? `Nichts. ${site.name} ist für Vermieter immer kostenlos, Sie erhalten die volle vereinbarte Miete. Die Servicegebühr zahlt der Mieter mit seinem Monatspreis.`
+    : `Nichts. ${site.name} ist für Vermieter immer kostenlos, Sie erhalten die volle vereinbarte Miete.`,
+  mieterKosten: live
+    ? `Sie zahlen einen festen Monatspreis. Darin ist unsere Servicegebühr von etwa ${prozent} bereits enthalten, es kommt nichts dazu.`
+    : 'Den Monatspreis sehen Sie bei jedem Vorschlag. Er steht im Mietvertrag, den Sie mit dem Vermieter schließen.',
 };
 
 /** Ersetzt Platzhalter in Markdown-Texten (z. B. FAQ) durch aktuelle Werte. */
@@ -44,6 +59,9 @@ export function ersetze(text: string): string {
     .replaceAll('{KAUTION_MIN}', String(zahlung.kautionMinEuro))
     .replaceAll('{RUECKZAHLUNG_WOCHEN}', String(zahlung.kautionRueckzahlungWochen))
     .replaceAll('{SERVICEGARANTIE}', texte.serviceGarantie)
+    .replaceAll('{STEUER}', texte.steuer)
+    .replaceAll('{VERMIETER_KOSTEN}', texte.vermieterKosten)
+    .replaceAll('{MIETER_KOSTEN}', texte.mieterKosten)
     .replaceAll('{ZAHLWEISE_MIETER}', texte.zahlweiseMieter);
 }
 

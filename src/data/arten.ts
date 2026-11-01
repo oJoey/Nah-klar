@@ -16,5 +16,5 @@ export const flaechenArten: Art[] = [
   { wert: 'garage', titel: 'Garage', kurz: 'Garage', icon: 'garage', nutzen: 'Für Auto oder Motorrad – oder als trockenes Lager.', seite: 'vermietenGarage', bild: 'garage' },
   { wert: 'stellplatz-frei', titel: 'Einfahrt oder Stellplatz', kurz: 'Einfahrt / Stellplatz', icon: 'einfahrt', nutzen: 'Freie Fläche für Auto, Anhänger oder Wohnwagen.', seite: 'vermietenEinfahrt', bild: 'stellplatz' },
   { wert: 'lagerraum', titel: 'Keller und Raum', kurz: 'Keller / Raum', icon: 'keller', nutzen: 'Trockener Raum für Kisten, Möbel oder Reifen.', seite: 'vermietenKeller', bild: 'lager' },
-  { wert: 'halle-scheune', titel: 'Scheune und Hof', kurz: 'Scheune / Hof', icon: 'hof', nutzen: 'Platz für mehrere Autos, Anhänger oder Wohnmobile – laut unseren Richtwerten oft der höchste Ertrag.', seite: 'vermietenScheune', bild: 'hof' },
+  { wert: 'halle-scheune', titel: 'Scheune und Hof', kurz: 'Scheune / Hof', icon: 'hof', nutzen: 'Platz für mehrere Autos, Anhänger oder Wohnmobile – bringt oft den höchsten Ertrag, weil mehrere Plätze möglich sind.', seite: 'vermietenScheune', bild: 'hof' },
 ];
