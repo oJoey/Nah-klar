@@ -67,6 +67,12 @@ const website = {
         });
         if (Object.keys(o).length) { o.einstieg = location.pathname; sessionStorage.setItem('herkunft', JSON.stringify(o)); }
       } catch (e) {}
+      // Startaktion zeitgesteuert: nach dem Enddatum Aktionstexte entfernen, Folgetexte zeigen – auch ohne neuen Build.
+      document.addEventListener('DOMContentLoaded', function () {
+        var jetzt = new Date();
+        document.querySelectorAll('[data-aktion-bis]').forEach(function (el) { if (jetzt > new Date(el.getAttribute('data-aktion-bis'))) el.remove(); });
+        document.querySelectorAll('[data-aktion-ab]').forEach(function (el) { if (jetzt > new Date(el.getAttribute('data-aktion-ab'))) el.hidden = false; });
+      });
     </script>
     {site.umamiWebsiteId && <script is:inline defer src="https://cloud.umami.is/script.js" data-website-id={site.umamiWebsiteId}></script>}
   </head>

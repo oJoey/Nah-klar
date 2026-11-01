@@ -10,6 +10,8 @@
 //                      Ohne diese Prüfung könnte jeder die Funktion direkt aufrufen und Mails an fremde Adressen auslösen.
 
 import optionen from '../../src/data/optionen.json' with { type: 'json' };
+// Gebührentexte zentral aus texte.ts – wird von esbuild mitgebündelt, das Datum der Startaktion wird beim Versand geprüft.
+import { texte, vermittlungText } from '../../src/lib/texte.ts';
 
 // Beschriftungen für die Mail – Feldnamen wie in den Formularen (= spätere Datenbankspalten).
 const BESCHRIFTUNG = {
@@ -90,10 +92,15 @@ export const handler = async (event) => {
   const seite = (process.env.URL || '').replace(/\/$/, '');
   const loeschLink = vorlage.ohneLoeschLink || !seite ? '' : `${seite}/daten-loeschen/?email=${encodeURIComponent(empfaenger)}`;
 
+  // Kosten nur in der Mail an Mieter
+  const kosten = einsendung.form_name === 'suchauftrag'
+    ? [texte.mieterKosten, vermittlungText(new Date(), wert('mieter_art')), 'Der Suchauftrag selbst ist kostenlos und unverbindlich.'].filter(Boolean)
+    : [];
   const mitAngaben = zeilen.length > 0;
   const text = [
     anrede, '', vorlage.einleitung,
     ...(mitAngaben ? ['', 'Ihre Angaben:', ...zeilen.map(([t, w]) => `- ${t}: ${w}`), '', 'So geht es weiter:', ...vorlage.schritte.map((s, i) => `${i + 1}. ${s}`)] : []),
+    ...(kosten.length ? ['', 'Was es kostet:', ...kosten] : []),
     '', vorlage.schluss,
     ...(loeschLink ? ['', `Suchauftrag bzw. Angaben löschen: ${loeschLink}`] : []),
     '', 'Freundliche Grüße', marke,
@@ -104,6 +111,7 @@ export const handler = async (event) => {
 ${mitAngaben ? `<p><strong>Ihre Angaben:</strong></p>
 <table style="border-collapse:collapse">${zeilen.map(([t, w]) => `<tr><td style="padding:4px 12px 4px 0;color:#485063">${esc(t)}</td><td style="padding:4px 0">${esc(w)}</td></tr>`).join('')}</table>
 <p><strong>So geht es weiter:</strong></p><ol>${vorlage.schritte.map((s) => `<li>${esc(s)}</li>`).join('')}</ol>` : ''}
+${kosten.length ? `<p><strong>Was es kostet:</strong></p>${kosten.map((k) => `<p>${esc(k)}</p>`).join('')}` : ''}
 <p>${esc(vorlage.schluss)}</p><p>Freundliche Grüße<br>${esc(marke)}</p>
 ${loeschLink ? `<p style="font-size:14px;color:#485063"><a href="${esc(loeschLink)}" style="color:#485063">Suchauftrag bzw. Angaben löschen</a></p>` : ''}</div>`;
 

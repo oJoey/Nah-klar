@@ -19,9 +19,16 @@ export const site = {
   // Wie schnell wir uns nach einer Anfrage melden. Bitte nur eintragen, was Sie sicher einhalten.
   antwortzeit: 'innerhalb von zwei Werktagen',
 
-  // Stripe Connect: erst auf true setzen, wenn Lastschrift und Auszahlung tatsächlich laufen.
-  // Solange false, versprechen die Texte nichts Automatisches.
+  // GEBÜHREN – Rangfolge: zahlungLive vor servicegebuehrManuell. Alle Texte dazu in src/lib/texte.ts.
+  // Stripe Connect: true = Servicegebühr im Gesamtpreis, Miete per Lastschrift eingezogen und ausgezahlt.
+  // Erst auf true setzen, wenn Lastschrift und Auszahlung tatsächlich laufen.
   zahlungLive: false,
+  // Übergang ohne Stripe: Mieter zahlen die Miete direkt an den Vermieter und die Servicegebühr (ca. 10 %) monatlich an uns.
+  servicegebuehrManuell: true,
+  // Einmalige Vermittlungsgebühr für Mieter, fällig erst bei Vertragsabschluss.
+  vermittlungsgebuehr: { aktiv: false, garageAutoLager: 19, wohnmobilAnhaengerBoot: 39 },
+  // Startaktion: Vermittlungsgebühr entfällt. Endet automatisch nach dem Enddatum (Balken und Texte), auch ohne neuen Build.
+  startaktion: { aktiv: true, ende: '2026-11-30', text: 'Startaktion: Bis 30.11. entfällt die Vermittlungsgebühr' },
 
   // Prüfung der Mieter (Ausweis, Fahrzeugschein, Versicherung). Erst auf true setzen, wenn Sie das wirklich bei jedem Mieter machen.
   mieterPruefung: false,

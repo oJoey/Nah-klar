@@ -2,27 +2,142 @@
   "_hinweis": "STARTWERTE ZUM ANPASSEN. Abgleich 11/2026 mit 22 Immowelt-Angeboten im Kreis Böblingen: Garage bis 5 m 54–100 €, Außenstellplatz PKW 29–60 € (Median 45 €); für Wohnmobil-, Carport- und Hallenplätze gab es keine Vergleichsangebote. Monatsmiete in Euro pro Platz, die der Vermieter erhält. Richtwerte für den Großraum Stuttgart ohne die Stadt Stuttgart (Landkreise Böblingen, Esslingen, Ludwigsburg, Rems-Murr). null = Klasse gibt es bei dieser Art nicht.",
   "region": "Großraum Stuttgart",
   "klassen": [
-    { "wert": "5", "titel": "bis 5 m", "passt": "Auto, Motorrad, kleiner Anhänger" },
-    { "wert": "7", "titel": "bis 7 m", "passt": "Wohnwagen, Camper, kleines Wohnmobil" },
-    { "wert": "9", "titel": "bis 9 m", "passt": "großes Wohnmobil, Bootstrailer" },
-    { "wert": "ueber-9", "titel": "über 9 m", "passt": "sehr große Wohnmobile, Gespanne" }
+    {
+      "wert": "5",
+      "titel": "bis 5 m",
+      "passt": "Auto, Motorrad, kleiner Anhänger"
+    },
+    {
+      "wert": "7",
+      "titel": "bis 7 m",
+      "passt": "Wohnwagen, Camper, kleines Wohnmobil"
+    },
+    {
+      "wert": "9",
+      "titel": "bis 9 m",
+      "passt": "großes Wohnmobil, Bootstrailer"
+    },
+    {
+      "wert": "ueber-9",
+      "titel": "über 9 m",
+      "passt": "sehr große Wohnmobile, Gespanne"
+    }
   ],
   "startklasse": "7",
   "arten": [
-    { "wert": "stellplatz-frei", "titel": "Stellplatz im Freien", "ausstattung": true,
-      "preise": { "5": [30, 50], "7": [45, 70], "9": [55, 85], "ueber-9": [70, 100] } },
-    { "wert": "stellplatz-ueberdacht", "titel": "Stellplatz überdacht", "ausstattung": true,
-      "preise": { "5": [45, 65], "7": [65, 95], "9": [80, 115], "ueber-9": [95, 135] } },
-    { "wert": "garage", "titel": "Garage",
-      "preise": { "5": [55, 100], "7": [90, 130], "9": [110, 160], "ueber-9": null } },
-    { "wert": "halle-scheune", "titel": "Halle / Scheune",
-      "preise": { "5": [50, 80], "7": [80, 120], "9": [100, 145], "ueber-9": [120, 170] } },
-    { "wert": "lagerraum", "titel": "Lagerraum", "proQm": [7, 13], "mindestens": 25 }
+    {
+      "wert": "stellplatz-frei",
+      "titel": "Stellplatz im Freien",
+      "ausstattung": true,
+      "preise": {
+        "5": [
+          30,
+          50
+        ],
+        "7": [
+          45,
+          70
+        ],
+        "9": [
+          55,
+          85
+        ],
+        "ueber-9": [
+          70,
+          100
+        ]
+      }
+    },
+    {
+      "wert": "stellplatz-ueberdacht",
+      "titel": "Stellplatz überdacht",
+      "ausstattung": true,
+      "preise": {
+        "5": [
+          45,
+          65
+        ],
+        "7": [
+          65,
+          95
+        ],
+        "9": [
+          80,
+          115
+        ],
+        "ueber-9": [
+          95,
+          135
+        ]
+      }
+    },
+    {
+      "wert": "garage",
+      "titel": "Garage",
+      "preise": {
+        "5": [
+          55,
+          100
+        ],
+        "7": [
+          90,
+          130
+        ],
+        "9": [
+          110,
+          160
+        ],
+        "ueber-9": null
+      }
+    },
+    {
+      "wert": "halle-scheune",
+      "titel": "Halle / Scheune",
+      "preise": {
+        "5": [
+          50,
+          80
+        ],
+        "7": [
+          80,
+          120
+        ],
+        "9": [
+          100,
+          145
+        ],
+        "ueber-9": [
+          120,
+          170
+        ]
+      }
+    },
+    {
+      "wert": "lagerraum",
+      "titel": "Lagerraum",
+      "proQm": [
+        7,
+        13
+      ],
+      "mindestens": 25
+    }
   ],
-  "lager": { "min": 2, "max": 50, "schritt": 1, "start": 10 },
+  "lager": {
+    "min": 2,
+    "max": 50,
+    "schritt": 1,
+    "start": 10
+  },
   "zuschlaege": [
-    { "wert": "abschliessbar", "titel": "umzäunt / abschließbar", "prozent": 10 },
-    { "wert": "strom", "titel": "Strom", "euro": 10 },
-    { "wert": "befestigt", "titel": "befestigter Untergrund", "prozent": 5 }
+    {
+      "wert": "abschliessbar",
+      "titel": "umzäunt / abschließbar",
+      "prozent": 10
+    },
+    {
+      "wert": "befestigt",
+      "titel": "befestigter Untergrund",
+      "prozent": 5
+    }
   ]
 }

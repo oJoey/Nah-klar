@@ -1,9 +1,9 @@
 // Kurztexte für Seiten, die noch im Aufbau sind (siehe entwurf in src/config/seiten.ts).
 import type { SeitenSchluessel } from '../config/seiten';
-import { site } from '../config/site';
+import { texte, vermittlungHtml } from '../lib/texte';
 
 // punkte: erste Inhalte, die schon vor der fertigen Seite stimmen.
-type Entwurf = { einleitung: string; eltern?: SeitenSchluessel; verwandt?: SeitenSchluessel[]; punkte?: string[] };
+type Entwurf = { einleitung: string; eltern?: SeitenSchluessel; verwandt?: SeitenSchluessel[]; punkte?: string[]; punkteHtml?: string[] };
 
 export const entwurfTexte: Partial<Record<SeitenSchluessel, Entwurf>> = {
   werkzeuge: { einleitung: 'Checklisten, Rechner und Ratgeber rund ums Unterstellen und Vermieten.', verwandt: ['verdienstrechner', 'einwinterung', 'strassenCheck', 'winterplatzVergleich'] },
@@ -27,7 +27,7 @@ export const entwurfTexte: Partial<Record<SeitenSchluessel, Entwurf>> = {
   hilfe: { einleitung: 'Antworten auf häufige Fragen – und ein persönlicher Ansprechpartner, wenn etwas offen bleibt.', verwandt: ['kontakt', 'soFunktionierts'] },
   soFunktionierts: { einleitung: 'Vom Suchauftrag bis zum Vertrag: So läuft die Vermittlung für Mieter und Vermieter.', verwandt: ['mieten', 'vermieten'] },
   sicherheit: { einleitung: 'Jede Fläche von Hand geprüft, Mustervertrag, Kaution und Fotos bei Ein- und Auszug.', verwandt: ['vermieten', 'preise'] },
-  preise: { einleitung: site.zahlungLive ? 'Für Vermieter immer kostenlos. Mieter zahlen einen festen Monatspreis inklusive Servicegebühr.' : 'Für Vermieter immer kostenlos. Den Monatspreis sehen Mieter bei jedem Vorschlag.', verwandt: ['mieten', 'vermieten'] },
+  preise: { einleitung: 'Für Vermieter immer kostenlos. Was Mieter zahlen:', punkteHtml: [texte.mieterKosten, vermittlungHtml()].filter(Boolean), verwandt: ['mieten', 'vermieten'] },
   ueberUns: { einleitung: 'Nachbarn helfen sich: ungenutzter Platz gegen einen fairen Nebenverdienst.', verwandt: ['soFunktionierts', 'kontakt'] },
   kontakt: { einleitung: 'Ihr persönlicher Ansprechpartner – per Telefon oder WhatsApp.', verwandt: ['hilfe'] },
   agb: { einleitung: 'Die Allgemeinen Geschäftsbedingungen werden vor dem Start veröffentlicht.', verwandt: ['impressum', 'datenschutz'] },

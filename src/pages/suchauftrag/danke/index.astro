@@ -3,6 +3,8 @@ import Basis from '../../../layouts/Basis.astro';
 import Empfehlung from '../../../components/Empfehlung.astro';
 import { site, telefonHref, whatsappLink } from '../../../config/site';
 import { link } from '../../../config/seiten';
+import { texte, vermittlungHtml } from '../../../lib/texte';
+const vermittlung = vermittlungHtml();
 
 const erwartung = [
   { art: 'Garage und Auto-Stellplatz', text: 'Garagen sind vielerorts knapp. Es kann länger dauern, bis ein passender Platz frei wird.' },
@@ -21,6 +23,10 @@ const erwartung = [
       <ul class="haken">
         {erwartung.map((e) => <li><strong>{e.art}:</strong> {e.text}</li>)}
       </ul>
+      <h2>Was es kostet</h2>
+      <p>{texte.mieterKosten}</p>
+      {vermittlung && <p set:html={vermittlung} />}
+      <p>Der Suchauftrag selbst ist kostenlos und unverbindlich.</p>
       <p>Fragen? {site.ansprechpartner}: <a href={telefonHref}>{site.telefonAnzeige}</a> oder <a href={whatsappLink} rel="noopener">WhatsApp</a>.</p>
       <Empfehlung />
       <p class="mt"><a href={link('start')}>Zur Startseite</a></p>

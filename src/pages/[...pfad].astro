@@ -28,6 +28,7 @@ const mitKontakt = schluessel === 'kontakt' || schluessel === 'hilfe';
       <h1>{seite.titel}</h1>
       <p class="einleitung">{text.einleitung}</p>
       {text.punkte && <ul class="haken mt">{text.punkte.map((p) => <li>{p}</li>)}</ul>}
+      {text.punkteHtml && <ul class="haken mt">{text.punkteHtml.map((p) => <li set:html={p} />)}</ul>}
       {schluessel !== 'verdienstrechner' && !mitKontakt && (
         <p class="hinweis"><strong>Diese Seite wird gerade erstellt.</strong> Bis dahin helfen wir Ihnen gern persönlich: <a href={telefonHref}>{site.telefonAnzeige}</a> oder <a href={whatsappLink} rel="noopener">WhatsApp</a>.</p>
       )}

@@ -4,6 +4,8 @@ seiten: [start, mieten]
 reihenfolge: 10
 ---
 
-{MIETER_KOSTEN} {ZAHLWEISE_MIETER}
+{MIETER_KOSTEN}
+
+{VERMITTLUNG}
 
 Der Suchauftrag ist kostenlos und unverbindlich.
