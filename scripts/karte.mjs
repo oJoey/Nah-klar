@@ -3,7 +3,7 @@
 // Ohne Datei werden die Daten einmal über die OSM-API geladen. Die Website lädt zur Laufzeit nichts nach.
 import { readFileSync, writeFileSync } from 'node:fs';
 
-const BBOX = { w: 8.9985, s: 48.6695, e: 9.0115, n: 48.6765 }; // Wohngebiet in Böblingen
+const BBOX = { w: 8.9920, s: 48.6660, e: 9.0180, n: 48.6800 }; // Wohngebiete in Böblingen, ca. 1,9 × 1,6 km
 const BREITE = 1000;
 
 const datei = process.argv[2];
@@ -15,7 +15,7 @@ const xml = datei
 const k = Math.cos(((BBOX.s + BBOX.n) / 2) * Math.PI / 180);
 const sx = BREITE / ((BBOX.e - BBOX.w) * k);
 const HOEHE = Math.round((BBOX.n - BBOX.s) * sx);
-const xy = (lat, lon) => [((lon - BBOX.w) * k * sx).toFixed(1), ((BBOX.n - lat) * sx).toFixed(1)];
+const xy = (lat, lon) => [((lon - BBOX.w) * k * sx).toFixed(0), ((BBOX.n - lat) * sx).toFixed(0)];
 
 const knoten = new Map();
 for (const m of xml.matchAll(/<node id="(\d+)"[^>]*?lat="([\d.-]+)" lon="([\d.-]+)"/g)) knoten.set(m[1], xy(+m[2], +m[3]));
@@ -47,9 +47,9 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${BREITE} ${HO
 <path fill="#8fd1b5" fill-opacity=".1" d="${gruppen.gruen.join('')}"/>
 <path fill="#e3f6f5" fill-opacity=".09" d="${gruppen.gebaeude.join('')}"/>
 <g fill="none" stroke="#e3f6f5" stroke-linecap="round" stroke-linejoin="round">
-<path stroke-opacity=".12" stroke-width="1.5" d="${gruppen.klein.join('')}"/>
-<path stroke-opacity=".28" stroke-width="5" d="${gruppen.neben.join('')}"/>
-<path stroke-opacity=".42" stroke-width="10" d="${gruppen.haupt.join('')}"/>
+<path stroke-opacity=".1" stroke-width="1" d="${gruppen.klein.join('')}"/>
+<path stroke-opacity=".3" stroke-width="3" d="${gruppen.neben.join('')}"/>
+<path stroke-opacity=".45" stroke-width="6" d="${gruppen.haupt.join('')}"/>
 </g>
 </svg>
 `;
