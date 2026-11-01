@@ -85,13 +85,13 @@ const mieterSchritte = [
   <Bewertungen />
   <WerkzeugeTeaser />
 
-  <section class="abschnitt">
+  <section class="abschnitt abschnitt-grau">
     <div class="wrap">
       <Faq seite="start"><p>Noch etwas offen? {site.ansprechpartner}: <a href={telefonHref}>{site.telefonAnzeige}</a></p></Faq>
     </div>
   </section>
 
-  <section class="abschnitt abschnitt-grau zentriert">
+  <section class="abschnitt zentriert">
     <div class="wrap">
       <h2>Platz finden oder Platz anbieten?</h2>
       <p class="einleitung">Beides geht schnell und ist unverbindlich.</p>
@@ -108,11 +108,11 @@ const mieterSchritte = [
     .held-raster { grid-template-columns: 1.4fr 1fr; gap: 4rem; }
     .held :global(.held-bild) { display: block; aspect-ratio: 5 / 4; }
   }
-  /* Vermieter-Block: warmer Sandton, Gelb nur am Button */
-  .vermieter-block { background: var(--sand); }
+  /* Vermieter-Block: Tertiärfarbe, Gelb nur am Button */
+  .vermieter-block { background: var(--tertiaer); }
   .vermieter-raster { display: grid; gap: 2.5rem; align-items: start; }
   @media (min-width: 64rem) { .vermieter-raster { grid-template-columns: 1fr 1.4fr; gap: 4rem; } }
   .vermieter-punkte { font-weight: 600; margin-top: 1.5rem; }
   .vermieter-weiter { margin: 2rem 0 0; }
-  .vermieter-block :global(.rechner) { box-shadow: 6px 6px 0 var(--haupt); }
+  .vermieter-block :global(.rechner) { box-shadow: 6px 6px 0 var(--ueberschrift); }
 </style>

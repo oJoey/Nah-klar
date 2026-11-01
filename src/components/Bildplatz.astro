@@ -41,22 +41,22 @@ const hier = { x: 53, y: 56.5 };
   )}
 </div>
 <style>
-  .bildplatz { position: relative; border-radius: var(--r-gross); overflow: hidden; aspect-ratio: 4 / 3; background: var(--marine); box-shadow: 0 20px 50px rgb(19 33 58 / 0.18); }
+  .bildplatz { position: relative; border-radius: var(--r-gross); overflow: hidden; aspect-ratio: 4 / 3; background: var(--ueberschrift); box-shadow: 0 20px 50px rgb(19 33 58 / 0.18); }
   .bildplatz :global(img) { width: 100%; height: 100%; object-fit: cover; display: block; }
-  .karte-bild { position: absolute; inset: 0; background: var(--marine); }
+  .karte-bild { position: absolute; inset: 0; background: var(--ueberschrift); }
   .karte-bild > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
   .marke-pin { position: absolute; transform: translate(-50%, -50%); }
   /* Schweben: nur transform, leicht versetzt je Symbol */
   .pin-schwebe { display: flex; flex-direction: column; align-items: center; gap: 0.35rem; animation: schweben 4s ease-in-out infinite; animation-delay: calc(var(--i) * -1.1s); }
-  .pin-kreis { display: grid; place-items: center; width: 3.25rem; height: 3.25rem; border-radius: 50%; background: #fff; border: 2px solid var(--haupt); box-shadow: 0 8px 20px rgb(0 0 0 / 0.35); }
-  .pin-kreis :global(.symbol) { width: 1.6rem; height: 1.6rem; color: var(--haupt); }
-  .pin-text { font-size: 0.8125rem; font-weight: 600; color: #fff; background: var(--haupt); padding: 0.1rem 0.5rem; border-radius: 4px; }
+  .pin-kreis { display: grid; place-items: center; width: 3.25rem; height: 3.25rem; border-radius: 50%; background: var(--hintergrund); border: 2px solid var(--ueberschrift); box-shadow: 0 8px 20px rgb(0 0 0 / 0.35); }
+  .pin-kreis :global(.symbol) { width: 1.6rem; height: 1.6rem; color: var(--ueberschrift); }
+  .pin-text { font-size: 0.8125rem; font-weight: 600; color: var(--hintergrund); background: var(--ueberschrift); padding: 0.1rem 0.5rem; border-radius: 4px; }
   /* „Sie sind hier“: ruhiger Puls mit zwei sich ausbreitenden Ringen */
-  .hier { position: absolute; width: 1.1rem; height: 1.1rem; transform: translate(-50%, -50%); border-radius: 50%; background: var(--akzent); box-shadow: 0 0 0 3px var(--haupt); }
+  .hier { position: absolute; width: 1.1rem; height: 1.1rem; transform: translate(-50%, -50%); border-radius: 50%; background: var(--akzent); box-shadow: 0 0 0 3px var(--ueberschrift); }
   .hier::before, .hier::after { content: ''; position: absolute; inset: 0; border-radius: 50%; border: 2px solid var(--akzent); animation: ring 3s cubic-bezier(0.23, 1, 0.32, 1) infinite; }
   .hier::after { animation-delay: 1.5s; }
   .osm-hinweis { position: absolute; right: 0.4rem; bottom: 0.3rem; font-size: 0.6875rem; color: rgb(255 255 255 / 0.6); text-decoration: none; }
-  .osm-hinweis:hover { color: #fff; text-decoration: underline; }
+  .osm-hinweis:hover { color: var(--hintergrund); text-decoration: underline; }
   @keyframes schweben { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
   @keyframes ring { from { transform: scale(1); opacity: 0.9; } to { transform: scale(4.5); opacity: 0; } }
   @media (prefers-reduced-motion: reduce) { .pin-schwebe, .hier::before, .hier::after { animation: none; } .hier::before, .hier::after { opacity: 0; } }

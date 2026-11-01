@@ -1,13 +1,13 @@
 ---
-// Verdienstrechner: Art → Ausstattung (nur Stellplätze) → Größe. Ergebnis sofort, Werte aus src/data/richtwerte.json.
-// „Fläche jetzt melden“ übernimmt Art, Ausstattung und Größe ins Formular.
+// Verdienstrechner: Art → Ausstattung (nur Stellplätze) → Größe. Fahrzeugplätze rasten in Größenklassen ein,
+// der Preis springt nur bei einer neuen Klasse. Lagerraum nach m². Werte in src/data/richtwerte.json.
+// „Fläche jetzt melden“ übernimmt Art, Ausstattung, Größe und einen Preisvorschlag ins Formular.
 import richtwerte from '../data/richtwerte.json';
 import { link } from '../config/seiten';
 interface Props { ausfuehrlich?: boolean; }
 const { ausfuehrlich = false } = Astro.props;
-const { arten, groesse, zuschlaege } = richtwerte;
-const start = arten[0];
-const g = groesse[start.einheit as 'm' | 'qm'];
+const { arten, klassen, zuschlaege, startklasse } = richtwerte;
+const startIndex = klassen.findIndex((k) => k.wert === startklasse);
 const id = 'r' + Math.random().toString(36).slice(2, 7);
 const vollerRechner = ausfuehrlich ? null : link('verdienstrechner');
 const formular = link('platzAnbieten') ?? '/platz-anbieten/';
@@ -24,12 +24,14 @@ const formular = link('platzAnbieten') ?? '/platz-anbieten/';
       <fieldset data-ausstattung>
         <legend>Ausstattung <span class="optional">(Mehrfachauswahl)</span></legend>
         <div class="chips">
-          {zuschlaege.map((z) => <label class="chip"><input type="checkbox" value={z.wert} data-zuschlag={z.prozent} /> {z.titel}</label>)}
+          {zuschlaege.map((z) => <label class="chip"><input type="checkbox" value={z.wert} /> {z.titel}</label>)}
         </div>
       </fieldset>
-      <div class="feld">
-        <label for={`${id}-groesse`}><span data-groesse-titel>{g.titel}</span>: <output data-groesse-wert>{g.start} m</output></label>
-        <input id={`${id}-groesse`} type="range" min={g.min} max={g.max} step={g.schritt} value={g.start} data-groesse />
+      <div class="feld groesse">
+        <label for={`${id}-groesse`}><span data-groesse-titel>Länge des Platzes</span>: <output data-groesse-wert>{klassen[startIndex].titel}</output></label>
+        <input id={`${id}-groesse`} type="range" min="0" max={klassen.length - 1} step="1" value={startIndex} data-groesse />
+        <div class="klassen-skala" data-skala aria-hidden="true">{klassen.map((k) => <span>{k.titel}</span>)}</div>
+        <p class="passt" data-passt>Passt für: {klassen[startIndex].passt}</p>
       </div>
       {ausfuehrlich && (
         <div class="feld">
@@ -42,54 +44,73 @@ const formular = link('platzAnbieten') ?? '/platz-anbieten/';
       <p class="rechner-label">Möglicher Ertrag im Jahr</p>
       <p class="rechner-jahr" data-jahr>–</p>
       <p class="rechner-monat" data-monat>–</p>
-      <p class="unter-hinweis">Schätzung, keine Zusage. Sie bestimmen den Preis selbst und erhalten die volle Miete.</p>
+      <p class="unter-hinweis">Richtwerte für den {richtwerte.region}. Schätzung, keine Zusage. Sie bestimmen den Preis selbst und erhalten die volle Miete.</p>
       <a class="btn btn-primaer btn-voll" href={formular} data-melden>Fläche jetzt melden</a>
       {vollerRechner && <p class="rechner-mehr"><a class="weiter" href={vollerRechner}>Ausführlicher Verdienstrechner</a></p>}
     </div>
   </div>
 </div>
 <script>
-  type Art = { wert: string; einheit: 'm' | 'qm'; von: number; bis: number; ausstattung?: boolean };
-  type G = { min: number; max: number; schritt: number; start: number; titel: string };
+  type Klasse = { wert: string; titel: string; passt: string };
+  type Art = { wert: string; ausstattung?: boolean; preise?: Record<string, [number, number] | null>; proQm?: [number, number]; mindestens?: number };
+  type Zuschlag = { wert: string; prozent?: number; euro?: number };
+  type Daten = { klassen: Klasse[]; arten: Art[]; zuschlaege: Zuschlag[]; lager: { min: number; max: number; schritt: number; start: number }; startklasse: string };
   const euro = (n: number) => n.toLocaleString('de-DE');
 
   document.querySelectorAll<HTMLElement>('[data-rechner]').forEach((box) => {
-    const daten = JSON.parse(box.dataset.richtwerte!) as { arten: Art[]; groesse: Record<'m' | 'qm', G> };
+    const d = JSON.parse(box.dataset.richtwerte!) as Daten;
     const q = <T extends Element>(s: string) => box.querySelector<T>(s)!;
     const regler = q<HTMLInputElement>('[data-groesse]');
+    const skala = q<HTMLElement>('[data-skala]');
     const anzahl = box.querySelector<HTMLInputElement>('[data-anzahl]');
     const ausstattung = q<HTMLFieldSetElement>('[data-ausstattung]');
-    let einheit: 'm' | 'qm' | null = null;
+    let modus = '';
+    let klasseWert = d.startklasse;
+    let qm = d.lager.start;
 
-    const rechne = () => {
-      const art = daten.arten.find((a) => a.wert === q<HTMLInputElement>('[data-art]:checked').value)!;
-      if (art.einheit !== einheit) {
-        // Einheit gewechselt: Regler auf die passende Spanne setzen
-        const g = daten.groesse[art.einheit];
-        Object.assign(regler, { min: g.min, max: g.max, step: g.schritt, value: g.start });
-        q('[data-groesse-titel]').textContent = g.titel;
-        einheit = art.einheit;
+    const rechne = (e?: Event) => {
+      const art = d.arten.find((a) => a.wert === q<HTMLInputElement>('[data-art]:checked').value)!;
+      const lager = !!art.proQm;
+      const verfuegbar = lager ? [] : d.klassen.filter((k) => art.preise![k.wert]);
+      // Regler merkt sich die gewählte Klasse bzw. m², auch wenn die Art wechselt
+      if (e?.target === regler) { if (lager) qm = Number(regler.value); else klasseWert = verfuegbar[Number(regler.value)].wert; }
+      const neuerModus = lager ? 'qm' : `m${verfuegbar.length}`;
+      if (neuerModus !== modus) {
+        modus = neuerModus;
+        if (lager) Object.assign(regler, { min: d.lager.min, max: d.lager.max, step: d.lager.schritt });
+        else Object.assign(regler, { min: 0, max: verfuegbar.length - 1, step: 1 });
+        skala.innerHTML = lager ? `<span>${d.lager.min} m²</span><span>${d.lager.max} m²</span>` : verfuegbar.map((k) => `<span>${k.titel}</span>`).join('');
+        q('[data-groesse-titel]').textContent = lager ? 'Fläche' : 'Länge des Platzes';
       }
-      ausstattung.hidden = !art.ausstattung;
-      const gewaehlt = art.ausstattung ? [...ausstattung.querySelectorAll<HTMLInputElement>('input:checked')] : [];
-      const faktor = 1 + gewaehlt.reduce((s, c) => s + Number(c.dataset.zuschlag) / 100, 0);
-      const groesse = Number(regler.value);
-      const stueck = Number(anzahl?.value ?? 1);
-      const von = Math.round(art.von * groesse * faktor * stueck);
-      const bis = Math.round(art.bis * groesse * faktor * stueck);
-      const runde10 = (n: number) => Math.round(n / 10) * 10;
+      let index = verfuegbar.findIndex((k) => k.wert === klasseWert);
+      if (!lager && index < 0) { index = verfuegbar.length - 1; klasseWert = verfuegbar[index].wert; }
+      regler.value = String(lager ? qm : index);
+      const klasse = verfuegbar[index];
 
-      q('[data-groesse-wert]').textContent = art.einheit === 'm' ? `${groesse.toLocaleString('de-DE')} m` : `${groesse} m²`;
+      ausstattung.hidden = !art.ausstattung;
+      const gewaehlt = art.ausstattung ? d.zuschlaege.filter((z) => ausstattung.querySelector<HTMLInputElement>(`input[value="${z.wert}"]`)!.checked) : [];
+      const prozent = gewaehlt.reduce((s, z) => s + (z.prozent ?? 0), 0);
+      const fest = gewaehlt.reduce((s, z) => s + (z.euro ?? 0), 0);
+      const stueck = Number(anzahl?.value ?? 1);
+      const [a, b] = lager ? art.proQm!.map((p) => Math.max(art.mindestens ?? 0, p * qm)) : art.preise![klasse.wert]!;
+      const von = Math.round((a * (1 + prozent / 100) + fest)) * stueck;
+      const bis = Math.round((b * (1 + prozent / 100) + fest)) * stueck;
+
+      q('[data-groesse-wert]').textContent = lager ? `${qm} m²` : klasse.titel;
+      const passt = q<HTMLElement>('[data-passt]');
+      passt.hidden = lager;
+      if (!lager) passt.textContent = `Passt für: ${klasse.passt}`;
       if (anzahl) q('[data-anzahl-wert]').textContent = anzahl.value;
+      const runde10 = (n: number) => Math.round(n / 10) * 10;
       q('[data-jahr]').textContent = `ca. ${euro(runde10(von * 12))}–${euro(runde10(bis * 12))} €`;
-      q('[data-monat]').textContent = `${euro(von)}–${euro(bis)} € im Monat`;
+      q('[data-monat]').textContent = `${euro(von)}–${euro(bis)} € im Monat${stueck > 1 ? ` für ${stueck} Plätze` : ''}`;
 
       const p = new URLSearchParams({ flaechen_art: art.wert });
-      const liste = gewaehlt.map((c) => c.value);
+      const liste = gewaehlt.map((z) => z.wert);
       if (art.wert === 'stellplatz-ueberdacht') liste.push('ueberdacht');
       if (liste.length) p.set('ausstattung', liste.join(','));
-      p.set(art.einheit === 'm' ? 'laenge_m' : 'flaeche_qm', String(groesse));
-      if (anzahl && stueck > 1) p.set('anzahl_plaetze', stueck > 3 ? 'mehr' : String(stueck));
+      if (lager) p.set('flaeche_qm', String(qm)); else p.set('laenge_klasse', klasse.wert);
+      if (stueck > 1) p.set('anzahl_plaetze', stueck > 3 ? 'mehr' : String(stueck));
       p.set('wunschpreis', String(Math.round((von + bis) / 2 / stueck / 5) * 5));
       q<HTMLAnchorElement>('[data-melden]').href = `${box.dataset.formularLink}?${p}`;
     };
@@ -105,11 +126,14 @@ const formular = link('platzAnbieten') ?? '/platz-anbieten/';
   .rechner fieldset { margin-bottom: 1.25rem; }
   .rechner fieldset[hidden] { display: none; }
   .rechner .chip { min-height: 2.75rem; padding: 0.45rem 0.85rem; font-size: 1rem; }
-  input[type='range'] { width: 100%; min-height: 2.75rem; accent-color: var(--haupt); cursor: pointer; }
-  .rechner label output { font-weight: 800; color: var(--haupt); }
-  .rechner-ausgabe { background: var(--blau-hell); border-radius: var(--r); padding: 1.5rem; }
-  .rechner-label { margin: 0; font-weight: 700; color: var(--text-2); }
-  .rechner-jahr { margin: 0.25rem 0 0; font-size: clamp(2rem, 5vw, 2.75rem); font-weight: 800; letter-spacing: -0.03em; line-height: 1.1; color: var(--haupt); font-variant-numeric: tabular-nums; }
+  input[type='range'] { width: 100%; min-height: 2.75rem; accent-color: var(--ueberschrift); cursor: pointer; }
+  .rechner label output { font-weight: 800; color: var(--ueberschrift); }
+  .klassen-skala { display: flex; justify-content: space-between; font-size: 0.8125rem; font-weight: 600; color: var(--text); margin-top: -0.25rem; }
+  .passt { margin: 0.6rem 0 0; padding: 0.5rem 0.75rem; background: var(--tertiaer); border-radius: var(--r-klein); font-size: 0.95rem; font-weight: 600; color: var(--ueberschrift); min-height: 2.6rem; }
+  .passt[hidden] { display: block; visibility: hidden; }
+  .rechner-ausgabe { background: var(--sekundaer); border-radius: var(--r); padding: 1.5rem; }
+  .rechner-label { margin: 0; font-weight: 700; color: var(--text); }
+  .rechner-jahr { margin: 0.25rem 0 0; font-size: clamp(2rem, 5vw, 2.75rem); font-weight: 800; letter-spacing: -0.03em; line-height: 1.1; color: var(--ueberschrift); font-variant-numeric: tabular-nums; }
   .rechner-monat { margin: 0.25rem 0 1rem; font-weight: 600; color: var(--text); font-variant-numeric: tabular-nums; }
   .rechner-ausgabe .btn { margin-top: 1rem; }
   .rechner-mehr { margin: 0.5rem 0 0; }

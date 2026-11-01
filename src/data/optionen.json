@@ -1,55 +1,287 @@
 {
   "_hinweis": "Werte für Formulare, Suchmaske, Rechner und Bestätigungsmail. Die Schlüssel (wert) sind später die Werte in der Datenbank – bitte nicht umbenennen, nur Titel ändern.",
   "mieter_art": [
-    { "wert": "wohnmobil-wohnwagen", "titel": "Wohnmobil / Wohnwagen", "groesse": "fahrzeug", "hoehe": true },
-    { "wert": "auto-motorrad", "titel": "Auto / Motorrad", "groesse": "fahrzeug" },
-    { "wert": "anhaenger-boot", "titel": "Anhänger / Boot", "groesse": "fahrzeug" },
-    { "wert": "lagergut", "titel": "Lagergut", "groesse": "flaeche" }
+    {
+      "wert": "wohnmobil-wohnwagen",
+      "titel": "Wohnmobil / Wohnwagen",
+      "groesse": "fahrzeug",
+      "hoehe": true
+    },
+    {
+      "wert": "auto-motorrad",
+      "titel": "Auto / Motorrad",
+      "groesse": "fahrzeug"
+    },
+    {
+      "wert": "anhaenger-boot",
+      "titel": "Anhänger / Boot",
+      "groesse": "fahrzeug"
+    },
+    {
+      "wert": "lagergut",
+      "titel": "Lagergut",
+      "groesse": "flaeche"
+    }
   ],
   "laenge_max": [
-    { "wert": "5", "titel": "bis 5 m" }, { "wert": "6", "titel": "bis 6 m" }, { "wert": "7", "titel": "bis 7 m" },
-    { "wert": "8", "titel": "bis 8 m" }, { "wert": "ueber-8", "titel": "über 8 m" }
+    {
+      "wert": "5",
+      "titel": "bis 5 m"
+    },
+    {
+      "wert": "6",
+      "titel": "bis 6 m"
+    },
+    {
+      "wert": "7",
+      "titel": "bis 7 m"
+    },
+    {
+      "wert": "8",
+      "titel": "bis 8 m"
+    },
+    {
+      "wert": "ueber-8",
+      "titel": "über 8 m"
+    }
   ],
   "hoehe_max": [
-    { "wert": "2.5", "titel": "bis 2,5 m" }, { "wert": "3", "titel": "bis 3 m" }, { "wert": "ueber-3", "titel": "über 3 m" }
+    {
+      "wert": "2.5",
+      "titel": "bis 2,5 m"
+    },
+    {
+      "wert": "3",
+      "titel": "bis 3 m"
+    },
+    {
+      "wert": "ueber-3",
+      "titel": "über 3 m"
+    }
   ],
   "flaeche_max": [
-    { "wert": "5", "titel": "bis 5 m²" }, { "wert": "10", "titel": "bis 10 m²" }, { "wert": "20", "titel": "bis 20 m²" }, { "wert": "mehr", "titel": "mehr" }
+    {
+      "wert": "5",
+      "titel": "bis 5 m²"
+    },
+    {
+      "wert": "10",
+      "titel": "bis 10 m²"
+    },
+    {
+      "wert": "20",
+      "titel": "bis 20 m²"
+    },
+    {
+      "wert": "mehr",
+      "titel": "mehr"
+    }
   ],
   "umkreis_km": [
-    { "wert": "5", "titel": "5 km" }, { "wert": "10", "titel": "10 km" }, { "wert": "20", "titel": "20 km" }, { "wert": "30", "titel": "30 km" }
+    {
+      "wert": "5",
+      "titel": "5 km"
+    },
+    {
+      "wert": "10",
+      "titel": "10 km"
+    },
+    {
+      "wert": "20",
+      "titel": "20 km"
+    },
+    {
+      "wert": "30",
+      "titel": "30 km"
+    }
   ],
   "wuensche": [
-    { "wert": "ueberdacht", "titel": "überdacht" }, { "wert": "abschliessbar", "titel": "umzäunt / abschließbar" },
-    { "wert": "strom", "titel": "Strom" }, { "wert": "zugang-jederzeit", "titel": "Zugang jederzeit" }
+    {
+      "wert": "ueberdacht",
+      "titel": "überdacht"
+    },
+    {
+      "wert": "abschliessbar",
+      "titel": "umzäunt / abschließbar"
+    },
+    {
+      "wert": "strom",
+      "titel": "Strom"
+    },
+    {
+      "wert": "zugang-jederzeit",
+      "titel": "Zugang jederzeit"
+    }
   ],
   "budget_max": [
-    { "wert": "50", "titel": "bis 50 €" }, { "wert": "80", "titel": "bis 80 €" }, { "wert": "120", "titel": "bis 120 €" },
-    { "wert": "200", "titel": "bis 200 €" }, { "wert": "egal", "titel": "egal" }
+    {
+      "wert": "50",
+      "titel": "bis 50 €"
+    },
+    {
+      "wert": "80",
+      "titel": "bis 80 €"
+    },
+    {
+      "wert": "120",
+      "titel": "bis 120 €"
+    },
+    {
+      "wert": "200",
+      "titel": "bis 200 €"
+    },
+    {
+      "wert": "egal",
+      "titel": "egal"
+    }
   ],
   "ab_wann": [
-    { "wert": "sofort", "titel": "sofort" }, { "wert": "1-3-monate", "titel": "in 1–3 Monaten" }, { "wert": "spaeter", "titel": "später" }
+    {
+      "wert": "sofort",
+      "titel": "sofort"
+    },
+    {
+      "wert": "1-3-monate",
+      "titel": "in 1–3 Monaten"
+    },
+    {
+      "wert": "spaeter",
+      "titel": "später"
+    }
   ],
   "flaechen_art": [
-    { "wert": "stellplatz-frei", "titel": "Stellplatz im Freien", "kurz": "Im Freien" },
-    { "wert": "stellplatz-ueberdacht", "titel": "Stellplatz überdacht / Carport", "kurz": "Überdacht / Carport" },
-    { "wert": "garage", "titel": "Garage", "kurz": "Garage" },
-    { "wert": "halle-scheune", "titel": "Halle / Scheune", "kurz": "Halle / Scheune" },
-    { "wert": "lagerraum", "titel": "Lagerraum", "kurz": "Lagerraum" }
+    {
+      "wert": "stellplatz-frei",
+      "titel": "Stellplatz im Freien",
+      "kurz": "Im Freien"
+    },
+    {
+      "wert": "stellplatz-ueberdacht",
+      "titel": "Stellplatz überdacht / Carport",
+      "kurz": "Überdacht / Carport"
+    },
+    {
+      "wert": "garage",
+      "titel": "Garage",
+      "kurz": "Garage"
+    },
+    {
+      "wert": "halle-scheune",
+      "titel": "Halle / Scheune",
+      "kurz": "Halle / Scheune"
+    },
+    {
+      "wert": "lagerraum",
+      "titel": "Lagerraum",
+      "kurz": "Lagerraum"
+    }
   ],
   "geeignet_fuer": [
-    { "wert": "wohnmobil-wohnwagen", "titel": "Wohnmobil / Wohnwagen" }, { "wert": "auto-motorrad", "titel": "Auto / Motorrad" },
-    { "wert": "anhaenger-boot", "titel": "Anhänger / Boot" }, { "wert": "lagergut", "titel": "Lagergut" }
+    {
+      "wert": "wohnmobil-wohnwagen",
+      "titel": "Wohnmobil / Wohnwagen"
+    },
+    {
+      "wert": "auto-motorrad",
+      "titel": "Auto / Motorrad"
+    },
+    {
+      "wert": "anhaenger-boot",
+      "titel": "Anhänger / Boot"
+    },
+    {
+      "wert": "lagergut",
+      "titel": "Lagergut"
+    }
   ],
   "durchfahrt_hoehe": [
-    { "wert": "2.5", "titel": "bis 2,5 m" }, { "wert": "3", "titel": "bis 3 m" }, { "wert": "4", "titel": "bis 4 m" }, { "wert": "unbegrenzt", "titel": "unbegrenzt" }
+    {
+      "wert": "2.5",
+      "titel": "bis 2,5 m"
+    },
+    {
+      "wert": "3",
+      "titel": "bis 3 m"
+    },
+    {
+      "wert": "4",
+      "titel": "bis 4 m"
+    },
+    {
+      "wert": "unbegrenzt",
+      "titel": "unbegrenzt"
+    }
   ],
   "anzahl_plaetze": [
-    { "wert": "1", "titel": "1" }, { "wert": "2", "titel": "2" }, { "wert": "3", "titel": "3" }, { "wert": "mehr", "titel": "mehr" }
+    {
+      "wert": "1",
+      "titel": "1"
+    },
+    {
+      "wert": "2",
+      "titel": "2"
+    },
+    {
+      "wert": "3",
+      "titel": "3"
+    },
+    {
+      "wert": "mehr",
+      "titel": "mehr"
+    }
   ],
   "ausstattung": [
-    { "wert": "ueberdacht", "titel": "überdacht" }, { "wert": "abschliessbar", "titel": "umzäunt / abschließbar" },
-    { "wert": "strom", "titel": "Strom" }, { "wert": "befestigt", "titel": "befestigter Untergrund" },
-    { "wert": "zugang-jederzeit", "titel": "Zugang jederzeit" }
+    {
+      "wert": "ueberdacht",
+      "titel": "überdacht"
+    },
+    {
+      "wert": "abschliessbar",
+      "titel": "umzäunt / abschließbar"
+    },
+    {
+      "wert": "strom",
+      "titel": "Strom"
+    },
+    {
+      "wert": "befestigt",
+      "titel": "befestigter Untergrund"
+    },
+    {
+      "wert": "zugang-jederzeit",
+      "titel": "Zugang jederzeit"
+    }
+  ],
+  "laenge_klasse": [
+    {
+      "wert": "5",
+      "titel": "bis 5 m"
+    },
+    {
+      "wert": "7",
+      "titel": "bis 7 m"
+    },
+    {
+      "wert": "9",
+      "titel": "bis 9 m"
+    },
+    {
+      "wert": "ueber-9",
+      "titel": "über 9 m"
+    }
+  ],
+  "breite_klasse": [
+    {
+      "wert": "2.5",
+      "titel": "bis 2,5 m"
+    },
+    {
+      "wert": "3",
+      "titel": "bis 3 m"
+    },
+    {
+      "wert": "ueber-3",
+      "titel": "über 3 m"
+    }
   ]
 }

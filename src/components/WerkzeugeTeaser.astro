@@ -11,7 +11,7 @@ const teaser: { seite: SeitenSchluessel; icon: IconName; art: string; text: stri
 const live = teaser.filter((t) => istLive(t.seite));
 ---
 {live.length > 0 && (
-  <section class="abschnitt abschnitt-grau">
+  <section class="abschnitt">
     <div class="wrap">
       <div class="kopfzeile"><h2>Werkzeuge und Ratgeber</h2></div>
       <ul class="raster werkzeuge">
@@ -31,15 +31,15 @@ const live = teaser.filter((t) => istLive(t.seite));
 )}
 <style>
   .werkzeuge { gap: 1.25rem; }
-  .werkzeug { position: relative; display: flex; gap: 1.25rem; align-items: flex-start; background: var(--karte); border-radius: var(--r-gross); padding: 1.25rem; transition: transform 200ms var(--ease-out); }
-  .werkzeug-bild { flex: none; display: grid; place-items: center; width: 4.5rem; height: 4.5rem; border-radius: var(--r); background: var(--marine); color: var(--akzent); }
+  .werkzeug { position: relative; display: flex; gap: 1.25rem; align-items: flex-start; background: var(--sekundaer); border-radius: var(--r-gross); padding: 1.25rem; transition: transform 200ms var(--ease-out); }
+  .werkzeug-bild { flex: none; display: grid; place-items: center; width: 4.5rem; height: 4.5rem; border-radius: var(--r); background: var(--ueberschrift); color: var(--akzent); }
   .werkzeug-bild :global(.symbol) { width: 2.25rem; height: 2.25rem; color: var(--akzent); stroke-width: 1.5; }
-  .werkzeug-art { margin: 0 0 0.25rem; font-size: 0.875rem; font-weight: 700; color: var(--text-2); }
+  .werkzeug-art { margin: 0 0 0.25rem; font-size: 0.875rem; font-weight: 700; color: var(--text); }
   .werkzeug h3 { font-size: 1.15rem; margin-bottom: 0.35rem; }
   .werkzeug h3 a { color: inherit; text-decoration: none; }
   .werkzeug h3 a::after { content: ''; position: absolute; inset: 0; border-radius: var(--r-gross); }
-  .werkzeug p:last-child { margin: 0; font-size: 1rem; color: var(--text-2); }
-  .werkzeug:has(a:focus-visible) { outline: 3px solid var(--fokus); outline-offset: 3px; }
+  .werkzeug p:last-child { margin: 0; font-size: 1rem; color: var(--text); }
+  .werkzeug:has(a:focus-visible) { outline: 3px solid var(--ueberschrift); outline-offset: 3px; }
   .werkzeug h3 a:focus-visible { outline: none; }
   @media (hover: hover) { .werkzeug:hover { transform: translateY(-3px); } .werkzeug:hover h3 { text-decoration: underline; } }
   @media (prefers-reduced-motion: reduce) { .werkzeug:hover { transform: none; } }

@@ -19,18 +19,22 @@ const lager = o.mieter_art.filter((a) => a.groesse === 'flaeche').map((a) => a.w
       <legend class="sr-only">Art</legend>
       <Chips name="mieter_art" optionen={o.mieter_art} pflicht gross />
     </fieldset>
-    <fieldset class="form-gruppe" data-wenn="mieter_art" data-werte={fahrzeuge}>
-      <legend>Länge des Fahrzeugs</legend>
-      <Chips name="laenge_max" optionen={o.laenge_max} pflichtWennSichtbar />
-    </fieldset>
-    <fieldset class="form-gruppe" data-wenn="mieter_art" data-werte={mitHoehe}>
-      <legend>Höhe des Fahrzeugs</legend>
-      <Chips name="hoehe_max" optionen={o.hoehe_max} pflichtWennSichtbar />
-    </fieldset>
-    <fieldset class="form-gruppe" data-wenn="mieter_art" data-werte={lager}>
-      <legend>Benötigte Fläche</legend>
-      <Chips name="flaeche_max" optionen={o.flaeche_max} pflichtWennSichtbar />
-    </fieldset>
+    <div class="tausch">
+      <div data-wenn="mieter_art" data-werte={fahrzeuge}>
+        <fieldset class="form-gruppe">
+          <legend>Länge des Fahrzeugs</legend>
+          <Chips name="laenge_max" optionen={o.laenge_max} pflichtWennSichtbar />
+        </fieldset>
+        <fieldset class="form-gruppe platz-halten" data-wenn="mieter_art" data-werte={mitHoehe}>
+          <legend>Höhe des Fahrzeugs</legend>
+          <Chips name="hoehe_max" optionen={o.hoehe_max} pflichtWennSichtbar />
+        </fieldset>
+      </div>
+      <fieldset class="form-gruppe" data-wenn="mieter_art" data-werte={lager}>
+        <legend>Benötigte Fläche</legend>
+        <Chips name="flaeche_max" optionen={o.flaeche_max} pflichtWennSichtbar />
+      </fieldset>
+    </div>
     <div class="form-knoepfe"><button class="btn btn-primaer btn-gross" type="button" data-weiter hidden>Weiter</button></div>
   </fieldset>
 

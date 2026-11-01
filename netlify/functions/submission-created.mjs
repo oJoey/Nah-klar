@@ -15,7 +15,7 @@ import optionen from '../../src/data/optionen.json' with { type: 'json' };
 const BESCHRIFTUNG = {
   mieter_art: 'Was', laenge_max: 'Länge', hoehe_max: 'Höhe', flaeche_max: 'Fläche', ort: 'Ort', umkreis_km: 'Umkreis',
   wuensche: 'Wünsche', budget_max: 'Budget pro Monat', ab_wann: 'Ab wann',
-  flaechen_art: 'Art der Fläche', geeignet_fuer: 'Geeignet für', laenge_m: 'Länge (m)', breite_m: 'Breite (m)',
+  flaechen_art: 'Art der Fläche', geeignet_fuer: 'Geeignet für', laenge_klasse: 'Länge', breite_klasse: 'Breite',
   durchfahrt_hoehe: 'Durchfahrtshöhe', flaeche_qm: 'Fläche (m²)', anzahl_plaetze: 'Anzahl Plätze', ausstattung: 'Ausstattung',
   wunschpreis: 'Wunschpreis pro Monat (€)', strasse: 'Straße', plz: 'PLZ',
   vorname: 'Vorname', nachname: 'Nachname', email: 'E-Mail', telefon: 'Telefon',

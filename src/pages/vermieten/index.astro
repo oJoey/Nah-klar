@@ -192,7 +192,7 @@ const nachfrageLink = link('nachfrage') ?? link('platzAnbieten');
 <style>
   .held { padding-block: clamp(1.5rem, 6vw, 4.5rem) clamp(3rem, 8vw, 5rem); }
   .held-raster { display: grid; gap: 2rem; }
-  @media (min-width: 56rem) { .held-raster { grid-template-columns: 1.1fr 1fr; align-items: center; gap: 4rem; } }
+  @media (min-width: 56rem) { .held-raster { grid-template-columns: 1.1fr 1fr; align-items: start; gap: 4rem; } }
   .held h1 { margin-bottom: 1.25rem; }
   .held .kostenlos-pille { margin-bottom: 1.5rem; }
   .held .haken li { font-size: 1.2rem; }
@@ -201,8 +201,8 @@ const nachfrageLink = link('nachfrage') ?? link('platzAnbieten');
   .service { display: grid; gap: 1rem; max-width: 50rem; }
   .service h2 { font-size: clamp(1.6rem, 4vw, 2.25rem); }
   .foto-liste { list-style: none; counter-reset: foto; padding: 0; display: grid; gap: 0.75rem; margin: 1.25rem 0; }
-  .foto-liste li { counter-increment: foto; display: flex; align-items: center; gap: 1rem; background: var(--karte); box-shadow: var(--schatten); border-radius: var(--r); padding: 1rem 1.25rem; }
-  .foto-liste li::before { content: counter(foto); display: grid; place-items: center; flex: none; width: 2.25rem; height: 2.25rem; border-radius: 50%; background: var(--blau); color: #fff; font-weight: 700; }
+  .foto-liste li { counter-increment: foto; display: flex; align-items: center; gap: 1rem; background: var(--hintergrund); box-shadow: var(--schatten); border-radius: var(--r); padding: 1rem 1.25rem; }
+  .foto-liste li::before { content: counter(foto); display: grid; place-items: center; flex: none; width: 2.25rem; height: 2.25rem; border-radius: 50%; background: var(--ueberschrift); color: var(--hintergrund); font-weight: 700; }
   .hoefe { display: grid; gap: 2rem; align-items: center; }
   @media (min-width: 56rem) { .hoefe { grid-template-columns: 1fr 1fr; gap: 4rem; } }
   .hoefe h2 { font-size: clamp(1.6rem, 4vw, 2.25rem); }

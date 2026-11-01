@@ -92,7 +92,17 @@
         if (t.hasAttribute('data-weiter')) { if (gueltig(schritte[aktiv])) zeige(aktiv + 1); }
         else zeige(aktiv - 1);
       });
+      // Alle Schritte so hoch wie der längste, damit die Karte beim Umschalten nicht springt
+      const messen = () => {
+        schritte.forEach((s) => (s.style.minHeight = ''));
+        const max = Math.max(...schritte.map((s) => { const war = s.hidden; s.hidden = false; const h = s.offsetHeight; s.hidden = war; return h; }));
+        schritte.forEach((s) => (s.style.minHeight = `${max}px`));
+      };
       zeige(0, false);
+      messen();
+      document.fonts?.ready.then(messen);
+      let t = 0;
+      addEventListener('resize', () => { clearTimeout(t); t = window.setTimeout(messen, 150); });
     }
 
     // Fotos: eine Auswahl, verkleinert verteilt auf foto_1 … foto_5
@@ -121,11 +131,16 @@
 </script>
 <style is:global>
   .fortschritt { display: flex; gap: 0.5rem; list-style: none; margin: 0 0 1.75rem; padding: 0; counter-reset: s; }
-  .fortschritt li { flex: 1; font-size: 0.875rem; font-weight: 700; color: var(--text-2); counter-increment: s; }
+  .fortschritt li { flex: 1; font-size: 0.875rem; font-weight: 700; color: var(--text); counter-increment: s; }
   .fortschritt li::before { content: ''; display: block; height: 5px; border-radius: 3px; background: var(--linie); margin-bottom: 0.45rem; }
-  .fortschritt li[data-aktiv], .fortschritt li[data-fertig] { color: var(--haupt); }
-  .fortschritt li[data-aktiv]::before, .fortschritt li[data-fertig]::before { background: var(--haupt); }
-  .form-schritt { border: 0; padding: 0; margin: 0 0 1.5rem; min-width: 0; }
+  .fortschritt li[data-aktiv], .fortschritt li[data-fertig] { color: var(--ueberschrift); }
+  .fortschritt li[data-aktiv]::before, .fortschritt li[data-fertig]::before { background: var(--ueberschrift); }
+  .form-schritt { border: 0; padding: 0; margin: 0 0 1.5rem; min-width: 0; display: flex; flex-direction: column; }
+  .form-schritt > .form-knoepfe { margin-top: auto; padding-top: 1.5rem; }
+  /* Bedingte Felder im selben Platz austauschen: alle Varianten liegen übereinander, die Höhe richtet sich nach der größten */
+  .tausch { display: grid; }
+  .tausch > * { grid-area: 1 / 1; min-width: 0; }
+  .tausch > [data-wenn][hidden], [data-wenn].platz-halten[hidden] { display: block; visibility: hidden; }
   .form-schritt[hidden], [data-wenn][hidden] { display: none; }
   .form-schritt > h3 { font-size: 1.35rem; margin-bottom: 1.25rem; outline: none; }
   .form-gruppe { margin-bottom: 1.5rem; }
@@ -135,5 +150,5 @@
   .form-knoepfe [data-zurueck] { flex: 0 0 auto; }
   .feld-paar { display: grid; gap: 0 1rem; grid-template-columns: 1fr 1fr; }
   .feld-plz { display: grid; gap: 0 1rem; grid-template-columns: 7rem 1fr; }
-  .foto-liste { margin: 0.5rem 0 0; font-size: 1rem; color: var(--text-2); }
+  .foto-liste { margin: 0.5rem 0 0; font-size: 1rem; color: var(--text); min-height: 1.6em; }
 </style>

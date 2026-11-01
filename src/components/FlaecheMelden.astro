@@ -22,19 +22,28 @@ const mitMassen = o.flaechen_art.filter((a) => a.wert !== 'lagerraum').map((a) =
       <legend>Geeignet für <span class="optional">(Mehrfachauswahl)</span></legend>
       <Chips name="geeignet_fuer" optionen={o.geeignet_fuer} mehrfach />
     </fieldset>
-    <div class="form-gruppe" data-wenn="flaechen_art" data-werte={mitMassen}>
-      <div class="feld-paar">
-        <div class="feld"><label for={`${id}-laenge`}>Länge in m</label><input id={`${id}-laenge`} name="laenge_m" type="number" inputmode="decimal" min="1" max="100" step="0.5" data-pflicht /></div>
-        <div class="feld"><label for={`${id}-breite`}>Breite in m</label><input id={`${id}-breite`} name="breite_m" type="number" inputmode="decimal" min="1" max="100" step="0.5" /></div>
+    <div class="tausch">
+      <div data-wenn="flaechen_art" data-werte={mitMassen}>
+        <fieldset class="form-gruppe">
+          <legend>Länge des Platzes</legend>
+          <Chips name="laenge_klasse" optionen={o.laenge_klasse} vorwahl="7" />
+        </fieldset>
+        <fieldset class="form-gruppe">
+          <legend>Breite</legend>
+          <Chips name="breite_klasse" optionen={o.breite_klasse} vorwahl="3" />
+        </fieldset>
+        <fieldset class="form-gruppe">
+          <legend>Maximale Durchfahrtshöhe</legend>
+          <Chips name="durchfahrt_hoehe" optionen={o.durchfahrt_hoehe} />
+        </fieldset>
       </div>
-      <fieldset class="form-gruppe">
-        <legend>Maximale Durchfahrtshöhe</legend>
-        <Chips name="durchfahrt_hoehe" optionen={o.durchfahrt_hoehe} />
-      </fieldset>
-    </div>
-    <div class="feld" data-wenn="flaechen_art" data-werte="lagerraum">
-      <label for={`${id}-qm`}>Fläche in m²</label>
-      <input id={`${id}-qm`} name="flaeche_qm" type="number" inputmode="decimal" min="1" max="1000" step="1" data-pflicht />
+      <div data-wenn="flaechen_art" data-werte="lagerraum">
+        <div class="feld">
+          <label for={`${id}-qm`}>Fläche in m²</label>
+          <input id={`${id}-qm`} name="flaeche_qm" type="number" inputmode="decimal" min="1" max="1000" step="1" value="10" data-pflicht />
+          <span class="feld-hilfe">Ungefähr reicht, z. B. 3 × 4 m = 12 m².</span>
+        </div>
+      </div>
     </div>
     <fieldset class="form-gruppe">
       <legend>Anzahl Plätze</legend>
