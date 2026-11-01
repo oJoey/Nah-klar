@@ -61,7 +61,7 @@ const v = site.vermittlungsgebuehr;
 /** Letzter Moment der Startaktion (Ende des Tages, deutsche Zeit). */
 export const aktionsEnde = new Date(`${site.startaktion.ende}T23:59:59+01:00`);
 export const startaktionLaeuft = (jetzt = new Date()) => site.startaktion.aktiv && jetzt <= aktionsEnde;
-const tagMonat = aktionsEnde.toLocaleDateString('de-DE', { day: 'numeric', month: 'numeric', timeZone: 'Europe/Berlin' });
+const tagMonat = aktionsEnde.toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', timeZone: 'Europe/Berlin' });
 const beide = `${v.garageAutoLager} € (Garage, Auto, Lager) bzw. ${v.wohnmobilAnhaengerBoot} € (Wohnmobil, Wohnwagen, Anhänger, Boot)`;
 /** Betrag für eine Mieter-Art (mieter_art aus optionen.json). */
 export const vermittlungBetrag = (art?: string) => (art === 'wohnmobil-wohnwagen' || art === 'anhaenger-boot' ? v.wohnmobilAnhaengerBoot : v.garageAutoLager);
