@@ -40,6 +40,10 @@ export const texte = {
     ? 'Sie erhalten jedes Jahr eine Übersicht Ihrer Einnahmen. Als Plattform, über die die Miete läuft, sind wir gesetzlich verpflichtet, Vermieter und Einnahmen jährlich an das Bundeszentralamt für Steuern zu melden. Eine Steuerberatung bieten wir nicht an.'
     : 'Einnahmen aus der Vermietung sind grundsätzlich steuerpflichtig. Eine Steuerberatung bieten wir nicht an.',
   servicegebuehr,
+  // Hinweis zur Umsatzsteuer für Preisangaben und Rechnungen
+  ustHinweis: site.kleinunternehmer
+    ? 'Gemäß § 19 UStG wird keine Umsatzsteuer berechnet.'
+    : 'Alle Gebühren inklusive 19 % Umsatzsteuer.',
   vermieterKosten: servicegebuehr
     ? `Nichts. ${site.name} ist für Vermieter immer kostenlos, Sie erhalten die volle vereinbarte Miete. Die Servicegebühr zahlt der Mieter${live ? ' mit seinem Monatspreis' : ''}.`
     : `Nichts. ${site.name} ist für Vermieter immer kostenlos, Sie erhalten die volle vereinbarte Miete.`,
