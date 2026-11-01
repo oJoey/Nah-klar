@@ -9,10 +9,10 @@ export const site = {
   bundesland: 'Baden-Württemberg',
   ansprechpartner: 'Ihr Ansprechpartner im Landkreis Böblingen',
 
-  // [TELEFON]: Mobilnummer eintragen, z. B. Anzeige '0151 2345 6789', Link '+4915123456789', WhatsApp '4915123456789'
-  telefonAnzeige: '[TELEFON]',
-  telefonLink: '[TELEFON]', // im Format +49…, ohne Leerzeichen
-  whatsappNummer: '[TELEFON]', // für WhatsApp: 49…, ohne + und Leerzeichen
+  // BEISPIELNUMMER: vor dem Livegang an allen drei Stellen durch die echte Mobilnummer ersetzen.
+  telefonAnzeige: '07031 123456',
+  telefonLink: '+497031123456', // im Format +49…, ohne Leerzeichen
+  whatsappNummer: '497031123456', // für WhatsApp: 49…, ohne + und Leerzeichen
 
   // Wie schnell wir uns nach einer Anfrage melden. Bitte nur eintragen, was Sie sicher einhalten.
   antwortzeit: 'innerhalb von zwei Werktagen',
