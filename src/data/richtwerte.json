@@ -11,7 +11,7 @@
   "arten": [
     { "wert": "stellplatz-frei", "titel": "Stellplatz im Freien", "ausstattung": true,
       "preise": { "5": [30, 50], "7": [45, 70], "9": [55, 85], "ueber-9": [70, 100] } },
-    { "wert": "stellplatz-ueberdacht", "titel": "Überdacht / Carport", "ausstattung": true,
+    { "wert": "stellplatz-ueberdacht", "titel": "Stellplatz überdacht", "ausstattung": true,
       "preise": { "5": [45, 65], "7": [65, 95], "9": [80, 115], "ueber-9": [95, 135] } },
     { "wert": "garage", "titel": "Garage",
       "preise": { "5": [55, 100], "7": [90, 130], "9": [110, 160], "ueber-9": null } },
