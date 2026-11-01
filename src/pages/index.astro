@@ -3,10 +3,8 @@
 import Basis from '../layouts/Basis.astro';
 import ButtonPaar from '../components/ButtonPaar.astro';
 import Suchmaske from '../components/Suchmaske.astro';
-import Icon from '../components/Icon.astro';
 import Kacheln from '../components/Kacheln.astro';
 import Verdienstrechner from '../components/Verdienstrechner.astro';
-import Schritte from '../components/Schritte.astro';
 import Bewertungen from '../components/Bewertungen.astro';
 import WerkzeugeTeaser from '../components/WerkzeugeTeaser.astro';
 import Faq from '../components/Faq.astro';
@@ -16,14 +14,13 @@ import { link } from '../config/seiten';
 import { zahlung } from '../config/zahlung';
 import { mietArten } from '../data/arten';
 import { texte } from '../lib/texte';
-import type { IconName } from '../lib/icons';
 
-// Alles aus Sicht der Mieter. „Geprüfte Mieter“ ist ein Vermieter-Argument und steht auf /vermieten/.
-const unterschiede: { icon: IconName; titel: string; text: string }[] = [
-  { icon: 'schild', titel: 'Geprüfte Vermieter und Plätze', text: 'Wir kennen jeden Platz von Fotos und sprechen vorab mit dem Vermieter. Sie besichtigen nur, was zu Ihren Angaben passt.' },
-  { icon: 'vertrag', titel: 'Mustervertrag mit klaren Regeln', text: 'Zufahrt, Kündigung und Zahlung sind schriftlich geregelt. Kein Handschlag-Deal, bei dem später jeder etwas anderes meint.' },
-  { icon: 'euro', titel: 'Kaution geregelt', text: `Eine Monatsmiete, mindestens ${zahlung.kautionMinEuro} €. Zustand mit Fotos bei Ein- und Auszug, Rückzahlung innerhalb von ${zahlung.kautionRueckzahlungWochen} Wochen.` },
-  { icon: 'person', titel: 'Fester Ansprechpartner', text: 'Ein Mensch, den Sie per Telefon oder WhatsApp erreichen – auch nach dem Einzug.' },
+// Vergleich aus Sicht der Mieter. „Geprüfte Mieter“ ist ein Vermieter-Argument und steht auf /vermieten/.
+const vergleich = [
+  { punkt: 'Vermieter und Platz geprüft', anzeige: 'Sie wissen nicht, wer anbietet', wir: 'Wir kennen jeden Platz von Fotos und sprechen vorab mit dem Vermieter' },
+  { punkt: 'Schriftlicher Vertrag', anzeige: 'Meist per Handschlag', wir: 'Mustervertrag mit Regeln zu Zufahrt, Kündigung und Zahlung' },
+  { punkt: 'Kaution geregelt', anzeige: 'Verhandeln Sie selbst', wir: `Eine Monatsmiete, mind. ${zahlung.kautionMinEuro} €, Rückzahlung in ${zahlung.kautionRueckzahlungWochen} Wochen, Zustand mit Fotos` },
+  { punkt: 'Fester Ansprechpartner', anzeige: 'Niemand, wenn es Ärger gibt', wir: 'Per Telefon oder WhatsApp erreichbar – auch nach dem Einzug' },
 ];
 
 const kacheln = mietArten.map((a) => ({
@@ -31,6 +28,7 @@ const kacheln = mietArten.map((a) => ({
   text: a.nutzen,
   icon: a.icon,
   href: link(a.seite),
+  bild: `kachel-${a.wert}`, // Foto unter src/assets/bilder/kachel-<art>.jpg ablegen, sonst Illustration
   linkText: link(a.seite)?.startsWith('/suchauftrag/') ? 'Suchauftrag anlegen' : 'Mehr erfahren',
 }));
 
@@ -62,33 +60,44 @@ const mieterSchritte = [
   <section class="abschnitt abschnitt-grau" aria-labelledby="arten-titel">
     <div class="wrap">
       <div class="kopfzeile"><h2 id="arten-titel">Was möchten Sie unterstellen?</h2></div>
-      <Kacheln kacheln={kacheln} kompakt ohneFoto />
+      <Kacheln kacheln={kacheln} />
       <p class="mt"><a class="weiter" href={link('mieten')}>Alle Infos für Mieter</a></p>
+    </div>
+  </section>
+
+  <section class="abschnitt abschnitt-dunkel ablauf" aria-labelledby="ablauf-titel">
+    <div class="wrap">
+      <div class="kopfzeile"><h2 id="ablauf-titel">So funktioniert's</h2></div>
+      <ol class="ablauf-liste">
+        {mieterSchritte.map((s, i) => (
+          <li><span class="ablauf-nr" aria-hidden="true">{i + 1}</span><h3>{s.titel}</h3><p>{s.text}</p></li>
+        ))}
+      </ol>
     </div>
   </section>
 
   <section class="abschnitt">
     <div class="wrap">
-      <div class="kopfzeile"><h2>So funktioniert's</h2></div>
-      <Schritte mieter={mieterSchritte} />
-    </div>
-  </section>
-
-  <section class="abschnitt abschnitt-grau">
-    <div class="wrap">
       <div class="kopfzeile">
         <h2>Warum nicht einfach Kleinanzeigen?</h2>
         <p class="einleitung">Dort finden Sie schnell einen Kontakt. Bei einem Platz, den Sie über viele Monate nutzen, kommt es auf mehr an.</p>
       </div>
-      <ul class="raster vergleich">
-        {unterschiede.map((u) => (
-          <li><span class="symbol-flaeche"><Icon name={u.icon} /></span><h3>{u.titel}</h3><p>{u.text}</p></li>
-        ))}
-      </ul>
+      <table class="vergleich">
+        <thead><tr><td></td><th scope="col">Kleinanzeigen</th><th scope="col" class="wir">{site.name}</th></tr></thead>
+        <tbody>
+          {vergleich.map((v) => (
+            <tr>
+              <th scope="row">{v.punkt}</th>
+              <td data-spalte="Kleinanzeigen"><span class="kreuz" aria-label="nein">✕</span> {v.anzeige}</td>
+              <td class="wir" data-spalte={site.name}><span class="haken-zeichen" aria-label="ja">✓</span> {v.wir}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   </section>
 
-  <section class="abschnitt abschnitt-kobalt vermieter-block" aria-labelledby="vermieter-titel">
+  <section class="abschnitt vermieter-block" aria-labelledby="vermieter-titel">
     <div class="wrap vermieter-raster">
       <div>
         <p class="kicker">Für Vermieter</p>
@@ -104,13 +113,13 @@ const mieterSchritte = [
   <Bewertungen />
   <WerkzeugeTeaser />
 
-  <section class="abschnitt abschnitt-grau">
+  <section class="abschnitt">
     <div class="wrap">
       <Faq seite="start"><p>Noch etwas offen? {site.ansprechpartner}: <a href={telefonHref}>{site.telefonAnzeige}</a></p></Faq>
     </div>
   </section>
 
-  <section class="abschnitt zentriert">
+  <section class="abschnitt abschnitt-grau zentriert">
     <div class="wrap">
       <h2>Platz finden oder Platz anbieten?</h2>
       <p class="einleitung">Beides geht schnell und ist unverbindlich.</p>
@@ -127,12 +136,46 @@ const mieterSchritte = [
     .held-raster { grid-template-columns: 1.4fr 1fr; gap: 4rem; }
     .held :global(.held-bild) { display: block; aspect-ratio: 5 / 4; }
   }
-  .vergleich { gap: 2rem; }
-  .vergleich li { border-top: 2px solid var(--haupt); padding-top: 1.25rem; }
-  .vergleich p { color: var(--text-2); margin: 0; }
-  @media (min-width: 52rem) { .vergleich { grid-template-columns: repeat(4, 1fr); } }
+  /* Ablauf: waagerecht, nummerierte Kreise auf einer durchgehenden Linie */
+  .ablauf-liste { list-style: none; margin: 0; padding: 0; display: grid; gap: 2rem; position: relative; }
+  .ablauf-liste li { position: relative; padding-left: 4.5rem; }
+  .ablauf-nr { position: absolute; left: 0; top: 0; z-index: 1; display: grid; place-items: center; width: 3.25rem; height: 3.25rem; border-radius: 50%; background: var(--marine); border: 2px solid var(--akzent); color: var(--akzent); font-weight: 800; font-size: 1.35rem; }
+  .ablauf-liste li:not(:last-child)::before { content: ''; position: absolute; left: 1.55rem; top: 3.25rem; bottom: -2rem; width: 2px; background: rgb(255 216 3 / 0.35); }
+  .ablauf p { color: var(--marine-text); margin: 0; }
+  @media (min-width: 56rem) {
+    .ablauf-liste { grid-template-columns: repeat(4, 1fr); }
+    .ablauf-liste li { padding-left: 0; padding-top: 4.75rem; padding-right: 1rem; }
+    .ablauf-liste li:not(:last-child)::before { left: 3.25rem; right: -2rem; top: 1.55rem; bottom: auto; width: auto; height: 2px; }
+  }
+
+  /* Vergleich: Tabelle, Zeile für Zeile */
+  .vergleich { width: 100%; border-collapse: collapse; font-size: 1.05rem; }
+  .vergleich th, .vergleich td { text-align: left; vertical-align: top; padding: 1.1rem 1rem; border-bottom: 1px solid var(--linie); }
+  .vergleich thead th { font-size: 1.1rem; font-weight: 800; color: var(--haupt); border-bottom: 2px solid var(--haupt); }
+  .vergleich tbody th { font-weight: 700; color: var(--haupt); width: 26%; }
+  .vergleich td { color: var(--text-2); }
+  .vergleich .wir { background: var(--blau-hell); color: var(--text); }
+  .vergleich thead .wir { background: var(--haupt); color: #fff; border-radius: var(--r) var(--r) 0 0; }
+  .kreuz, .haken-zeichen { display: inline-grid; place-items: center; width: 1.4rem; height: 1.4rem; margin-right: 0.35rem; border-radius: 50%; font-size: 0.8rem; font-weight: 800; vertical-align: 0.1em; }
+  .kreuz { background: #f3d6d6; color: #8a1c1c; }
+  .haken-zeichen { background: var(--akzent); color: var(--haupt); }
+  /* Schmal: jede Zeile als Block, Spaltenkopf entfällt, Zeichen tragen die Aussage */
+  @media (max-width: 47.99rem) {
+    .vergleich thead { display: none; }
+    .vergleich tr { display: grid; border-bottom: 1px solid var(--linie); padding-block: 0.75rem; }
+    .vergleich th, .vergleich td { border: 0; padding: 0.35rem 0.75rem; width: auto; }
+    .vergleich tbody th { padding-top: 0.5rem; }
+    .vergleich .wir { border-radius: var(--r-klein); }
+    .vergleich td::before { content: attr(data-spalte); display: block; font-size: 0.8125rem; font-weight: 700; color: var(--text-2); margin-bottom: 0.15rem; }
+  }
+
+  /* Vermieter-Block: volle Breite in Gelb */
+  .vermieter-block { background: var(--akzent); color: var(--haupt); }
+  .vermieter-block .einleitung, .vermieter-block .kicker { color: var(--haupt); }
   .vermieter-raster { display: grid; gap: 2.5rem; align-items: center; }
-  .vermieter-raster > div:first-child { max-width: 42rem; }
-  .vermieter-block .kostenlos-pille { margin: 0.5rem 0 0; }
-  .vermieter-block :global(.rechner) { box-shadow: 6px 6px 0 var(--akzent); }
+  @media (min-width: 64rem) { .vermieter-raster { grid-template-columns: 1fr 1.25fr; gap: 4rem; } }
+  .vermieter-block .kostenlos-pille { margin: 0.5rem 0 0; background: var(--haupt); color: var(--akzent); }
+  .vermieter-block .btn-primaer { background: var(--haupt); border-color: var(--haupt); color: #fff; box-shadow: 0 2px 0 #000; }
+  .vermieter-block .btn-primaer:hover { background: var(--blau-dunkel); }
+  .vermieter-block :global(.rechner) { box-shadow: 6px 6px 0 var(--haupt); }
 </style>

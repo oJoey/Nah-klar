@@ -9,7 +9,7 @@ const startMiete = Math.round((start.von + start.bis) / 2);
 const euro = (n: number) => n.toLocaleString('de-DE') + ' €';
 const vollerRechner = link('verdienstrechner');
 ---
-<div class="rechner formular-karte" data-richtwerte={JSON.stringify(arten)}>
+<div class="rechner-huelle"><div class="rechner formular-karte" data-richtwerte={JSON.stringify(arten)}>
   <div>
     <div class="feld">
       <label for="rechner-art">Art der Fläche</label>
@@ -40,7 +40,7 @@ const vollerRechner = link('verdienstrechner');
   {ausfuehrlich && <p class="unter-hinweis kostenlos">Für Vermieter immer kostenlos</p>}
   {vollerRechner && <p class="mt"><a class="weiter" href={vollerRechner}>Zum ausführlichen Verdienstrechner</a></p>}
   </div>
-</div>
+</div></div>
 <script>
   document.querySelectorAll<HTMLElement>('.rechner').forEach((box) => {
     const werte: { wert: string; von: number; bis: number }[] = JSON.parse(box.dataset.richtwerte ?? '[]');
@@ -69,7 +69,8 @@ const vollerRechner = link('verdienstrechner');
 </script>
 <style>
 .rechner { display: grid; gap: 2rem; }
-  @media (min-width: 52rem) { .rechner { grid-template-columns: 1.1fr 1fr; align-items: center; padding: 2.5rem; } }
+  .rechner-huelle { container-type: inline-size; }
+  @container (min-width: 44rem) { .rechner { grid-template-columns: 1.1fr 1fr; align-items: center; padding: 2.5rem; } }
   .rechner-ergebnis { margin: 0; font-size: 1.15rem; font-weight: 600; color: var(--text-2); }
   .rechner-ergebnis output {
     display: block; margin-top: 0.25rem; color: var(--text);

@@ -4,7 +4,7 @@ import Icon from './Icon.astro';
 import { bild } from '../lib/bilder';
 import type { IconName } from '../lib/icons';
 export type Kachel = { titel: string; text: string; icon: IconName; href: string | null; linkText: string; bild?: string };
-// ohneFoto: Icon-Illustration statt Foto. Bildnachweise stehen gesammelt im Impressum, nicht am Bild.
+// ohneFoto: Icon-Illustration statt Foto (auch, solange kein Foto vorliegt). Bildnachweise stehen gesammelt im Impressum, nicht am Bild.
 interface Props { kacheln: Kachel[]; kompakt?: boolean; ohneFoto?: boolean; }
 const { kacheln, kompakt = false, ohneFoto = false } = Astro.props;
 ---
@@ -27,12 +27,12 @@ const { kacheln, kompakt = false, ohneFoto = false } = Astro.props;
   ))}
 </ul>
 <style>
-  .kachel { position: relative; display: flex; flex-direction: column; overflow: hidden; padding-top: 0; transition: transform 200ms ease, box-shadow 200ms ease; }
+  .kachel { position: relative; display: flex; flex-direction: column; overflow: hidden; padding-top: 0; border: 1.5px solid var(--haupt); box-shadow: 4px 4px 0 var(--haupt); transition: transform 200ms var(--ease-out), box-shadow 200ms var(--ease-out); }
   .kachel h3 a { color: inherit; text-decoration: none; }
   /* Ganze Fläche klickbar, der Link bleibt für Screenreader eindeutig */
   .kachel h3 a::after { content: ''; position: absolute; inset: 0; border-radius: var(--r-gross); z-index: 1; }
   .kachel-medien {
-    position: relative; aspect-ratio: 16 / 10; margin: 0 calc(-1 * clamp(1.5rem, 3vw, 2rem)) 1.25rem;
+    position: relative; aspect-ratio: 4 / 3; overflow: hidden; margin: 0 calc(-1 * clamp(1.5rem, 3vw, 2rem)) 1.25rem;
     display: grid; place-items: center; background: var(--blau-hell); color: var(--blau);
   }
   .kachel-medien :global(img) { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
@@ -40,14 +40,15 @@ const { kacheln, kompakt = false, ohneFoto = false } = Astro.props;
   .illu { background: radial-gradient(circle, rgb(39 35 67 / 0.12) 1px, transparent 1.5px) 0 0 / 14px 14px, var(--blau-hell); border-bottom: 1.5px solid var(--haupt); }
   .illu > :global(.symbol) { width: 4.5rem; height: 4.5rem; stroke-width: 1.25; }
   .kachel-medien > :global(.symbol) { width: 3.5rem; height: 3.5rem; }
-  .kachel-symbol { position: absolute; left: 1rem; bottom: -1.25rem; display: grid; place-items: center; width: 3rem; height: 3rem; border-radius: 14px; background: var(--karte); box-shadow: var(--schatten); }
-  .kachel-medien:has(.kachel-symbol) { margin-bottom: 2rem; }
-  .kachel:has(a):hover { transform: translateY(-2px); box-shadow: 0 14px 36px rgb(19 33 58 / 0.12); border-color: transparent; }
+  .kachel-symbol { display: none; }
+  @media (hover: hover) { .kachel:has(a):hover { transform: translate(-3px, -3px); box-shadow: 7px 7px 0 var(--haupt); } }
+  .kachel :global(img) { transition: transform 400ms var(--ease-out); }
+  @media (hover: hover) { .kachel:has(a):hover :global(img) { transform: scale(1.04); } }
   .kachel:has(a):active { transform: scale(0.98); transition-duration: 100ms; }
   .kachel:has(a:focus-visible) { outline: 3px solid var(--fokus); outline-offset: 3px; }
   .kachel h3 a:focus-visible { outline: none; }
   .kachel-link { margin-top: auto; padding-top: 1rem; font-weight: 600; color: var(--blau); }
-  .kachel-link::after { content: ' ›'; }
+  .kachel-link::after { content: ' →'; }
   .kompakt { grid-template-columns: repeat(auto-fit, minmax(min(100%, 13rem), 1fr)); }
   .kompakt .kachel { padding: 0 1.25rem 1.4rem; }
   .kompakt .kachel-medien { margin-inline: -1.25rem; }
