@@ -5,7 +5,7 @@ interface Props { titel?: string; }
 const { titel = 'Was suchen Sie?' } = Astro.props;
 ---
 <form class="suchmaske formular-karte" method="get" action={link('suchauftrag')}>
-  <h2 class="suchmaske-titel">{titel}</h2>
+  {titel && <h2 class="suchmaske-titel">{titel}</h2>}
   <div class="suchmaske-felder">
     <div class="feld">
       <label for="such-ort">PLZ oder Ort</label>

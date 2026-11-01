@@ -1,23 +1,22 @@
 ---
 import { Image } from 'astro:assets';
 import Icon from './Icon.astro';
-import Fotonachweis from './Fotonachweis.astro';
 import { bild } from '../lib/bilder';
 import type { IconName } from '../lib/icons';
 export type Kachel = { titel: string; text: string; icon: IconName; href: string | null; linkText: string; bild?: string };
-interface Props { kacheln: Kachel[]; kompakt?: boolean; }
-const { kacheln, kompakt = false } = Astro.props;
+// ohneFoto: Icon-Illustration statt Foto. Bildnachweise stehen gesammelt im Impressum, nicht am Bild.
+interface Props { kacheln: Kachel[]; kompakt?: boolean; ohneFoto?: boolean; }
+const { kacheln, kompakt = false, ohneFoto = false } = Astro.props;
 ---
 <ul class:list={['raster kacheln', { kompakt }]}>
   {kacheln.map((k) => (
     <li class="karte kachel">
       {(() => {
-        const b = bild(k.bild);
+        const b = ohneFoto ? null : bild(k.bild);
         return (
-          <div class="kachel-medien">
+          <div class:list={['kachel-medien', { illu: !b }]}>
             {b ? <Image src={b.src} alt="" width={640} quality={72} widths={[360, 640]} sizes="(min-width: 60rem) 25vw, 100vw" /> : <Icon name={k.icon} />}
             {b && <span class="kachel-symbol"><Icon name={k.icon} /></span>}
-            <Fotonachweis nachweis={b?.nachweis} />
           </div>
         );
       })()}
@@ -37,7 +36,9 @@ const { kacheln, kompakt = false } = Astro.props;
     display: grid; place-items: center; background: var(--blau-hell); color: var(--blau);
   }
   .kachel-medien :global(img) { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
-  .kachel-medien :global(.fotonachweis) { top: 0.5rem; bottom: auto; }
+  /* Illustration: großes Linien-Icon auf feinem Punktraster */
+  .illu { background: radial-gradient(circle, rgb(39 35 67 / 0.12) 1px, transparent 1.5px) 0 0 / 14px 14px, var(--blau-hell); border-bottom: 1.5px solid var(--haupt); }
+  .illu > :global(.symbol) { width: 4.5rem; height: 4.5rem; stroke-width: 1.25; }
   .kachel-medien > :global(.symbol) { width: 3.5rem; height: 3.5rem; }
   .kachel-symbol { position: absolute; left: 1rem; bottom: -1.25rem; display: grid; place-items: center; width: 3rem; height: 3rem; border-radius: 14px; background: var(--karte); box-shadow: var(--schatten); }
   .kachel-medien:has(.kachel-symbol) { margin-bottom: 2rem; }

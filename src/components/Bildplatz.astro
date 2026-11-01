@@ -1,9 +1,9 @@
 ---
 // Bildplatz: Liegt ein Foto unter src/assets/bilder/<name>.(jpg|png|webp), wird es gezeigt (optimiert).
+// Bildnachweise stehen gesammelt im Impressum, nicht am Bild.
 // Sonst erscheint eine Illustration im Kartenstil mit Markierungen – keine erfundenen Inserate.
 import { Image } from 'astro:assets';
 import Icon from './Icon.astro';
-import Fotonachweis from './Fotonachweis.astro';
 import type { IconName } from '../lib/icons';
 import { bild } from '../lib/bilder';
 
@@ -22,7 +22,6 @@ const marken: { icon: IconName; text: string; x: number; y: number }[] = [
 <div class:list={['bildplatz', klasse]}>
   {foto ? (
     <Image src={foto} alt={alt} width={1200} quality={72} widths={[480, 800, 1200]} sizes="(min-width: 60rem) 45vw, 100vw" loading="eager" />
-    <Fotonachweis nachweis={treffer?.nachweis} />
   ) : (
     <div class="karte-bild" role="img" aria-label="Illustration: Plätze für Auto, Wohnwagen, Lager und Anhänger in der Nachbarschaft">
       {marken.map((m) => (

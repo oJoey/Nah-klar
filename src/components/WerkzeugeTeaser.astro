@@ -3,7 +3,7 @@
 import { seiten, istLive, type SeitenSchluessel } from '../config/seiten';
 const teaser: { seite: SeitenSchluessel; text: string }[] = [
   { seite: 'einwinterung', text: 'Schritt für Schritt: So machen Sie Wohnmobil und Wohnwagen winterfest.' },
-  { seite: 'strassenCheck', text: 'Passt Ihr Wohnwagen durch die Zufahrt? Breite, Höhe und Gewicht prüfen.' },
+  { seite: 'strassenCheck', text: 'Darf Ihr Wohnwagen oder Anhänger an der Straße stehen? Die 2-Wochen-Regel und ihre Ausnahmen.' },
   { seite: 'winterplatzVergleich', text: 'Halle, Scheune oder Carport: Welcher Winterplatz passt zu Ihrem Fahrzeug?' },
 ];
 const live = teaser.filter((t) => istLive(t.seite));

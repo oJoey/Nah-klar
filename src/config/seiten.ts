@@ -28,6 +28,8 @@ export const seiten = {
   einwinterung: { pfad: '/ratgeber/einwinterung-checkliste/', live: true, entwurf: true, titel: 'Einwinterungs-Checkliste' },
   strassenCheck: { pfad: '/werkzeuge/strassen-check-wohnwagen/', live: true, entwurf: true, titel: 'Straßen-Check Wohnwagen' },
   winterplatzVergleich: { pfad: '/ratgeber/winterplatz-vergleich/', live: true, entwurf: true, titel: 'Winterplatz-Vergleich' },
+  // Später: prüft Breite, Höhe und Gewicht gegen die Zufahrt eines Platzes
+  passtWohnmobil: { pfad: '/werkzeuge/passt-mein-wohnmobil/', live: false, titel: 'Passt mein Wohnmobil?' },
   nachfrage: { pfad: '/vermieten/nachfrage/', live: true, entwurf: true, titel: 'Nachfrage in Ihrer Nähe' },
 
   // Kategorieseiten Mieten (Ersatz: Suchauftrag mit vorausgewählter Art)

@@ -1,4 +1,5 @@
 ---
+// Startseite: richtet sich an Suchende. Vermieter bekommen genau einen Block, der auf /vermieten/ führt.
 import Basis from '../layouts/Basis.astro';
 import ButtonPaar from '../components/ButtonPaar.astro';
 import Suchmaske from '../components/Suchmaske.astro';
@@ -10,24 +11,19 @@ import Bewertungen from '../components/Bewertungen.astro';
 import WerkzeugeTeaser from '../components/WerkzeugeTeaser.astro';
 import Faq from '../components/Faq.astro';
 import Bildplatz from '../components/Bildplatz.astro';
-import { telefonHref } from '../config/site';
-import { site } from '../config/site';
+import { site, telefonHref } from '../config/site';
 import { link } from '../config/seiten';
+import { zahlung } from '../config/zahlung';
 import { mietArten } from '../data/arten';
 import { texte } from '../lib/texte';
 import type { IconName } from '../lib/icons';
 
-const vorteile: { icon: IconName; titel: string; text: string }[] = [
-  { icon: 'ort', titel: 'In Ihrer Nähe', text: 'Platz bei Privatleuten in Ihrem Ort oder im Nachbarort.' },
-  { icon: 'schild', titel: 'Geprüft und geregelt', text: 'Geprüfte Mieter, Mustervertrag und Kaution für jede Miete.' },
-  { icon: 'person', titel: 'Persönlich', text: `${site.ansprechpartner}, per Telefon oder WhatsApp.` },
-];
-
+// Alles aus Sicht der Mieter. „Geprüfte Mieter“ ist ein Vermieter-Argument und steht auf /vermieten/.
 const unterschiede: { icon: IconName; titel: string; text: string }[] = [
-  { icon: 'schild', titel: 'Geprüfte Mieter', text: 'Ausweis, bei Fahrzeugen auch Fahrzeugschein und Versicherung, prüfen wir vor dem ersten Treffen.' },
-  { icon: 'vertrag', titel: 'Mustervertrag', text: 'Klare Regeln zu Kaution, Kündigung und Zufahrt – für beide Seiten.' },
-  { icon: 'euro', titel: texte.live ? 'Automatische Zahlung mit Erinnerung' : 'Klare Zahlungsregeln mit Erinnerung', text: `${texte.zahlungLang} Bei offenen Zahlungen ${texte.erinnern}.` },
-  { icon: 'person', titel: 'Persönlicher Ansprechpartner', text: `Ein fester Ansprechpartner im ${site.region}, der sich um Fragen und Probleme kümmert.` },
+  { icon: 'schild', titel: 'Geprüfte Vermieter und Plätze', text: 'Wir kennen jeden Platz von Fotos und sprechen vorab mit dem Vermieter. Sie besichtigen nur, was zu Ihren Angaben passt.' },
+  { icon: 'vertrag', titel: 'Mustervertrag mit klaren Regeln', text: 'Zufahrt, Kündigung und Zahlung sind schriftlich geregelt. Kein Handschlag-Deal, bei dem später jeder etwas anderes meint.' },
+  { icon: 'euro', titel: 'Kaution geregelt', text: `Eine Monatsmiete, mindestens ${zahlung.kautionMinEuro} €. Zustand mit Fotos bei Ein- und Auszug, Rückzahlung innerhalb von ${zahlung.kautionRueckzahlungWochen} Wochen.` },
+  { icon: 'person', titel: 'Fester Ansprechpartner', text: `Jemand aus dem ${site.region}, erreichbar per Telefon oder WhatsApp – auch nach dem Einzug.` },
 ];
 
 const kacheln = mietArten.map((a) => ({
@@ -35,7 +31,6 @@ const kacheln = mietArten.map((a) => ({
   text: a.nutzen,
   icon: a.icon,
   href: link(a.seite),
-  bild: a.bild,
   linkText: link(a.seite)?.startsWith('/suchauftrag/') ? 'Suchauftrag anlegen' : 'Mehr erfahren',
 }));
 
@@ -45,46 +40,37 @@ const mieterSchritte = [
   { titel: 'Besichtigen', text: 'Sie schauen sich den Platz an und lernen den Vermieter kennen.' },
   { titel: texte.mieterSchritt4, text: texte.mieterSchritt4Text },
 ];
-const vermieterSchritte = [
-  { titel: 'Platz melden', text: 'Kurzes Formular oder Anruf. Dauert zwei Minuten.' },
-  { titel: 'Fotos schicken', text: 'Drei Fotos nach Anleitung – Beschreibung und Vertrag erstellen wir.' },
-  { titel: 'Mieter kennenlernen', text: 'Wir schlagen geprüfte Mieter vor. Sie entscheiden, wer einzieht.' },
-  { titel: 'Miete erhalten', text: texte.vermieterSchritt4Text },
-];
 ---
 <Basis
-  titel={`Stellplatz mieten und vermieten im Landkreis Böblingen | ${site.name}`}
-  beschreibung="Stellplatz, Garage oder Lagerraum von Nachbarn mieten – oder ungenutzten Platz vermieten. Geprüfte Mieter, Mustervertrag, persönlicher Ansprechpartner im Landkreis Böblingen."
+  titel={`Stellplatz und Garage mieten im Landkreis Böblingen | ${site.name}`}
+  beschreibung="Stellplatz, Garage, Wohnmobil-Winterplatz oder Lagerraum bei Privatleuten im Landkreis Böblingen mieten. Mustervertrag, geregelte Kaution, persönlicher Ansprechpartner."
 >
   <section class="held">
-    <div class="wrap held-raster">
-      <div>
-        <p class="kicker">Landkreis Böblingen</p>
-        <h1>Platz von Nachbarn – für Ihr Fahrzeug und Ihre Sachen.</h1>
-        <p class="einleitung">Stellplätze, Garagen und Lagerraum bei Privatleuten in Ihrer Nähe. {texte.heroVersprechen}</p>
-        <ButtonPaar />
+    <div class="wrap">
+      <div class="held-raster">
+        <div>
+          <p class="kicker">Stellplatz und Garage mieten im Landkreis Böblingen</p>
+          <h1>Stellplatz gesucht? Wir finden ihn bei Ihren Nachbarn.</h1>
+          <p class="einleitung">Für Wohnmobil, Auto, Anhänger oder Kisten – bei Privatleuten in Ihrem Ort, mit Vertrag und festem Ansprechpartner.</p>
+        </div>
+        <Bildplatz name="" alt="" class="held-bild" />
       </div>
-      <Bildplatz name="start" ersatz="garage" alt="Doppelgarage mit Ziegeldach" />
+      <Suchmaske titel="" />
     </div>
   </section>
 
-  <section class="suche" aria-label="Platz suchen">
+  <section class="abschnitt abschnitt-grau" aria-labelledby="arten-titel">
     <div class="wrap">
-      <Suchmaske />
-      <h2 class="kategorien-titel">Was möchten Sie unterstellen?</h2>
-      <Kacheln kacheln={kacheln} kompakt />
-      <p class="zentriert mt"><a class="weiter" href={link('mieten')}>Alle Infos für Mieter</a></p>
+      <div class="kopfzeile"><h2 id="arten-titel">Was möchten Sie unterstellen?</h2></div>
+      <Kacheln kacheln={kacheln} kompakt ohneFoto />
+      <p class="mt"><a class="weiter" href={link('mieten')}>Alle Infos für Mieter</a></p>
     </div>
   </section>
 
-  <section class="abschnitt" aria-labelledby="vorteile-titel">
+  <section class="abschnitt">
     <div class="wrap">
-      <h2 id="vorteile-titel" class="sr-only">Ihre Vorteile</h2>
-      <ul class="raster vorteile">
-        {vorteile.map((v) => (
-          <li><span class="symbol-flaeche"><Icon name={v.icon} /></span><h3>{v.titel}</h3><p>{v.text}</p></li>
-        ))}
-      </ul>
+      <div class="kopfzeile"><h2>So funktioniert's</h2></div>
+      <Schritte mieter={mieterSchritte} />
     </div>
   </section>
 
@@ -92,32 +78,26 @@ const vermieterSchritte = [
     <div class="wrap">
       <div class="kopfzeile">
         <h2>Warum nicht einfach Kleinanzeigen?</h2>
-        <p class="einleitung">Kleinanzeigen sind gut, um schnell einen Kontakt zu finden. Bei einer Miete über viele Monate kommt es auf mehr an.</p>
+        <p class="einleitung">Dort finden Sie schnell einen Kontakt. Bei einem Platz, den Sie über viele Monate nutzen, kommt es auf mehr an.</p>
       </div>
       <ul class="raster vergleich">
         {unterschiede.map((u) => (
-          <li class="karte"><span class="symbol-flaeche"><Icon name={u.icon} /></span><h3>{u.titel}</h3><p>{u.text}</p></li>
+          <li><span class="symbol-flaeche"><Icon name={u.icon} /></span><h3>{u.titel}</h3><p>{u.text}</p></li>
         ))}
       </ul>
     </div>
   </section>
 
-  <section class="abschnitt abschnitt-kobalt">
-    <div class="wrap">
-      <div class="kopfzeile">
+  <section class="abschnitt abschnitt-kobalt vermieter-block" aria-labelledby="vermieter-titel">
+    <div class="wrap vermieter-raster">
+      <div>
         <p class="kicker">Für Vermieter</p>
-        <h2>Was bringt Ihr freier Platz?</h2>
-        <p class="einleitung">Wählen Sie die Art der Fläche und eine Monatsmiete. Wir zeigen Ihnen, was im Jahr zusammenkommt.</p>
+        <h2 id="vermieter-titel">Sie haben Platz frei?</h2>
+        <p class="einleitung">Eine freie Einfahrt, eine Garage oder eine Scheune bringt im Jahr schnell einige hundert Euro – ohne viel Aufwand.</p>
+        <p class="kostenlos-pille">Für Vermieter immer kostenlos</p>
+        <p class="mt"><a class="btn btn-primaer btn-gross" href={link('vermieten')}>Mehr zum Vermieten</a></p>
       </div>
       <Verdienstrechner />
-      <p class="zentriert mt"><a class="weiter" href={link('vermieten')}>Alle Infos für Vermieter</a></p>
-    </div>
-  </section>
-
-  <section class="abschnitt">
-    <div class="wrap">
-      <div class="kopfzeile"><h2>So funktioniert's</h2></div>
-      <Schritte mieter={mieterSchritte} vermieter={vermieterSchritte} />
     </div>
   </section>
 
@@ -132,23 +112,27 @@ const vermieterSchritte = [
 
   <section class="abschnitt zentriert">
     <div class="wrap">
-      <h2>Platz anbieten oder Platz finden?</h2>
+      <h2>Platz finden oder Platz anbieten?</h2>
       <p class="einleitung">Beides geht schnell und ist unverbindlich.</p>
-      <ButtonPaar />
+      <ButtonPaar mieterZuerst />
     </div>
   </section>
 </Basis>
 <style>
-  .held { padding-block: clamp(1.5rem, 6vw, 4.5rem) clamp(5rem, 12vw, 8rem); background: var(--flaeche); }
-  .held-raster { display: grid; gap: 2.5rem; align-items: center; }
-  @media (min-width: 60rem) { .held-raster { grid-template-columns: 1.1fr 1fr; gap: 4rem; } .held h1 { font-size: clamp(2.6rem, 4.6vw, 3.9rem); } }
-  .held .einleitung { margin-top: 1.25rem; }
-  /* Suche schiebt sich über die Kante des Kopfbereichs */
-  .suche { background: var(--flaeche-2); padding-bottom: var(--abstand); }
-  .suche :global(.suchmaske) { position: relative; transform: translateY(-3.5rem); margin-bottom: -1rem; }
-  .kategorien-titel { text-align: center; font-size: clamp(1.6rem, 4vw, 2.25rem); margin-bottom: 1.75rem; }
-  .vorteile { gap: 2rem; }
-  .vorteile li { border-top: 2px solid var(--haupt); padding-top: 1.25rem; }
-  .vorteile p { color: var(--text-2); margin: 0; }
-  @media (min-width: 52rem) { .vergleich { grid-template-columns: repeat(2, 1fr); } }
+  .held { padding-block: clamp(1.5rem, 6vw, 4rem) clamp(3rem, 8vw, 5rem); }
+  .held-raster { display: grid; gap: 2rem; align-items: center; margin-bottom: clamp(1.5rem, 4vw, 2.5rem); }
+  .held .einleitung { margin-top: 1.25rem; margin-bottom: 0; }
+  .held :global(.held-bild) { display: none; }
+  @media (min-width: 60rem) {
+    .held-raster { grid-template-columns: 1.4fr 1fr; gap: 4rem; }
+    .held :global(.held-bild) { display: block; aspect-ratio: 5 / 4; }
+  }
+  .vergleich { gap: 2rem; }
+  .vergleich li { border-top: 2px solid var(--haupt); padding-top: 1.25rem; }
+  .vergleich p { color: var(--text-2); margin: 0; }
+  @media (min-width: 52rem) { .vergleich { grid-template-columns: repeat(4, 1fr); } }
+  .vermieter-raster { display: grid; gap: 2.5rem; align-items: center; }
+  .vermieter-raster > div:first-child { max-width: 42rem; }
+  .vermieter-block .kostenlos-pille { margin: 0.5rem 0 0; }
+  .vermieter-block :global(.rechner) { box-shadow: 6px 6px 0 var(--akzent); }
 </style>
