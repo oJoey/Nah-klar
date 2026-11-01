@@ -1,12 +1,13 @@
 ---
 import Basis from '../../layouts/Basis.astro';
-import Suchmaske from '../../components/Suchmaske.astro';
+import SuchauftragFormular from '../../components/SuchauftragFormular.astro';
+import FormSkript from '../../components/FormSkript.astro';
+import Icon from '../../components/Icon.astro';
 import Kacheln from '../../components/Kacheln.astro';
 import Schritte from '../../components/Schritte.astro';
 import Kennzahlen from '../../components/Kennzahlen.astro';
 import Faq from '../../components/Faq.astro';
 import SmartLink from '../../components/SmartLink.astro';
-import Bildplatz from '../../components/Bildplatz.astro';
 import { link } from '../../config/seiten';
 import { zahlung } from '../../config/zahlung';
 import { mietArten } from '../../data/arten';
@@ -29,28 +30,25 @@ const schritte = [
 ];
 ---
 <Basis
-  titel="Abstellplatz und Stellplatz mieten in Baden-Württemberg"
+  titel="Stellplatz, Garage oder Lagerraum mieten in Baden-Württemberg"
   beschreibung="Abstellplatz, Garage, Auto-Stellplatz, Platz für Wohnwagen oder Lagerraum privat mieten in Baden-Württemberg. Kostenloser Suchauftrag: Wir suchen aktiv in Ihrer Nähe."
   brotkruemel={[{ name: 'Mieten', pfad: '/mieten/' }]}
 >
-  <section class="held">
+  <section class="held-formular abschnitt-grau">
+    <div class="held-muster" aria-hidden="true"></div>
     <div class="wrap held-raster">
-      <div>
-      <h1>Abstellplatz und Stellplatz mieten in Baden-Württemberg</h1>
-      <p class="einleitung">Sie klicken sich nicht durch Inserate. Sie sagen uns, welchen Platz Sie brauchen. Wir fragen gezielt bei Vermietern in Ihrer Nähe nach und melden uns mit passenden Vorschlägen.</p>
-      <div class="held-knoepfe">
-        <a class="btn btn-rahmen btn-gross" href={link('suchauftrag')}>Platz finden</a>
-        <p class="unter-hinweis">Suchauftrag in 1 Minute, kostenlos</p>
+      <div class="held-text">
+        <p class="kicker">Stellplatz, Garage und Lagerraum mieten</p>
+        <h1>Sie sagen, was Sie suchen. Wir finden den <span class="markiert">Platz</span>.</h1>
+        <p class="einleitung">Kein Durchklicken durch Inserate: Wir fragen gezielt bei Vermietern in Ihrer Nähe nach und melden uns mit passenden Vorschlägen.</p>
+        <ul class="held-punkte">
+          <li><span class="held-icon"><Icon name="check" /></span>Kostenlos und ohne Konto</li>
+          <li><span class="held-icon"><Icon name="schild" /></span>Jede Fläche von Hand geprüft</li>
+          <li><span class="held-icon"><Icon name="kamera" /></span>Vorschläge mit Fotos, Preis und Ortsteil</li>
+        </ul>
+        <p class="vermieter-zeile">Sie haben selbst Platz übrig? <a href={link('platzAnbieten')}>Platz anbieten</a>, für Vermieter kostenlos.</p>
       </div>
-      <p class="vermieter-zeile">Sie haben selbst Platz übrig? <a href={link('platzAnbieten')}>Platz anbieten</a></p>
-      </div>
-      <Bildplatz name="mieten" ersatz="hof" alt="Blick durch eine Hofeinfahrt auf eine Scheune" />
-    </div>
-  </section>
-
-  <section class="abschnitt abschnitt-grau" aria-label="Platz suchen">
-    <div class="wrap">
-      <Suchmaske />
+      <SuchauftragFormular />
     </div>
   </section>
 
@@ -104,13 +102,9 @@ const schritte = [
       <p class="unter-hinweis">Kostenlos, ohne Konto, jederzeit löschbar.</p>
     </div>
   </section>
+  <FormSkript />
 </Basis>
 <style>
-  .held { padding-block: clamp(2rem, 8vw, 5rem) clamp(3rem, 8vw, 5rem); background: radial-gradient(ellipse 90% 70% at 50% 0%, var(--sekundaer), transparent 70%), var(--hintergrund); }
-  .held-raster { display: grid; gap: 2.5rem; align-items: center; }
-  @media (min-width: 60rem) { .held-raster { grid-template-columns: 1.1fr 1fr; gap: 4rem; } .held h1 { font-size: clamp(2.6rem, 4.6vw, 3.9rem); } }
-  .held .einleitung { margin-top: 1.25rem; }
-  .held-knoepfe { margin-top: 2rem; }
   .vermieter-zeile { margin-top: 1.5rem; font-size: 1rem; color: var(--text); }
   .kosten { max-width: 50rem; margin: 0 auto; border-top: 1px solid var(--linie); }
   .kosten > div { display: grid; gap: 0.25rem 2rem; padding-block: 1.1rem; border-bottom: 1px solid var(--linie); }
