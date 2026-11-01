@@ -20,7 +20,7 @@ const BESCHRIFTUNG = {
   flaechen_art: 'Art der Fläche', geeignet_fuer: 'Geeignet für', laenge_klasse: 'Länge', breite_klasse: 'Breite',
   durchfahrt_hoehe: 'Durchfahrtshöhe', flaeche_qm: 'Fläche (m²)', anzahl_plaetze: 'Anzahl Plätze', ausstattung: 'Ausstattung',
   wunschpreis: 'Wunschpreis pro Monat (€)', strasse: 'Straße', plz: 'PLZ',
-  vorname: 'Vorname', nachname: 'Nachname', email: 'E-Mail', telefon: 'Telefon',
+  vorname: 'Vorname', nachname: 'Nachname', email: 'E-Mail', telefon: 'Telefon', whatsapp_ok: 'Per WhatsApp erreichbar',
 };
 // Wert → Titel je Feld, aus src/data/optionen.json
 const titelVon = (feld, wert) => (optionen[feld] || []).find((o) => o.wert === wert)?.titel || wert;

@@ -54,4 +54,15 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${BREITE} ${HO
 </svg>
 `;
 writeFileSync(new URL('../public/bilder/karte-osm.svg', import.meta.url), svg);
+
+// Helle Variante als dezentes Muster (z. B. Hero auf /vermieten/): nur Straßen, transparent, in Navy.
+const hell = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${BREITE} ${HOEHE}" preserveAspectRatio="xMidYMid slice">
+<g fill="none" stroke="#272343" stroke-linecap="round" stroke-linejoin="round">
+<path stroke-opacity=".1" stroke-width="3" d="${gruppen.neben.join('')}"/>
+<path stroke-opacity=".14" stroke-width="6" d="${gruppen.haupt.join('')}"/>
+</g>
+</svg>
+`;
+writeFileSync(new URL('../public/bilder/karte-osm-hell.svg', import.meta.url), hell);
+console.log(`karte-osm-hell.svg: ${(hell.length / 1024).toFixed(0)} KB`);
 console.log(`karte-osm.svg: ${BREITE}×${HOEHE}, ${Object.entries(gruppen).map(([n, g]) => `${n} ${g.length}`).join(', ')}, ${(svg.length / 1024).toFixed(0)} KB`);

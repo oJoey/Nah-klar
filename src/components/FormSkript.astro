@@ -45,6 +45,19 @@
       });
     }
 
+    // Felder, die erst nach einer Eingabe erscheinen (z. B. „per WhatsApp erreichbar“ nach Telefonnummer)
+    form.querySelectorAll<HTMLElement>('[data-wenn-ausgefuellt]').forEach((el) => {
+      const quelle = form.querySelector<HTMLInputElement>(`[name="${el.dataset.wennAusgefuellt}"]`);
+      if (!quelle) return;
+      const pruefe = () => {
+        const an = quelle.value.trim().length > 0;
+        el.hidden = !an;
+        el.querySelectorAll<HTMLInputElement>('input').forEach((f) => { f.disabled = !an; if (!an) f.checked = false; });
+      };
+      quelle.addEventListener('input', pruefe);
+      pruefe();
+    });
+
     // Eigene Hinweise für Pflichtauswahlen (data-meldung am ersten Feld der Gruppe)
     form.querySelectorAll<HTMLInputElement>('[data-meldung]').forEach((f) => {
       f.addEventListener('invalid', () => f.setCustomValidity(f.dataset.meldung!));
@@ -142,5 +155,8 @@
   .form-knoepfe [data-zurueck] { flex: 0 0 auto; }
   .feld-paar { display: grid; gap: 0 1rem; grid-template-columns: 1fr 1fr; }
   .feld-plz { display: grid; gap: 0 1rem; grid-template-columns: 7rem 1fr; }
+  .haken-wahl { display: flex; align-items: center; gap: 0.6rem; min-height: 2.75rem; margin: -0.5rem 0 1.25rem; font-weight: 600; cursor: pointer; }
+  .haken-wahl[hidden] { display: none; }
+  .haken-wahl input { width: 1.3rem; height: 1.3rem; accent-color: var(--ueberschrift); margin: 0; }
   .foto-liste { margin: 0.5rem 0 0; font-size: 1rem; color: var(--text); min-height: 1.6em; }
 </style>

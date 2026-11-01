@@ -16,6 +16,12 @@ import { zahlung } from '../../config/zahlung';
 import { flaechenArten } from '../../data/arten';
 import { sichtbareKennzahlen } from '../../lib/kennzahlen';
 import { texte } from '../../lib/texte';
+import richtwerte from '../../data/richtwerte.json';
+
+// Beispiel im Hero: Werte aus richtwerte.json (Garage bis 5 m), damit Beispiel und Rechner zusammenpassen
+const beispielPreis = richtwerte.arten.find((a) => a.wert === 'garage')!.preise!['5']!;
+const jahr = (n: number) => (Math.round((n * 12) / 10) * 10).toLocaleString('de-DE');
+const beispiel = { titel: 'Garage in Sindelfingen', groesse: 'bis 5 m', von: jahr(beispielPreis[0]), bis: jahr(beispielPreis[1]) };
 
 const kacheln = flaechenArten.map((a) => ({
   titel: a.titel,
@@ -65,16 +71,25 @@ const nachfrageLink = link('nachfrage') ?? link('platzAnbieten');
   brotkruemel={[{ name: 'Vermieten', pfad: '/vermieten/' }]}
 >
   <section class="held abschnitt-grau">
+    <div class="held-muster" aria-hidden="true"></div>
     <div class="wrap held-raster">
-      <div>
-        <p class="kicker">Baden-Württemberg</p>
-        <h1>Stellplatz, Garage oder Lagerraum vermieten</h1>
-        <p class="einleitung">Fairer Nebenverdienst, für Sie kostenlos</p>
-        <ul class="haken">
-          <li>Jede Fläche von Hand geprüft</li>
-          <li>Mustervertrag und Kaution</li>
-          <li>Persönlicher Ansprechpartner per WhatsApp und E-Mail</li>
+      <div class="held-text">
+        <p class="kicker">Stellplatz, Garage oder Lagerraum vermieten</p>
+        <h1>Leerer Platz? Machen Sie <span class="markiert">Miete</span> daraus.</h1>
+        <p class="einleitung">Für Vermieter immer kostenlos. Sie bestimmen den Preis und erhalten die volle Miete.</p>
+        <ul class="held-punkte">
+          <li><span class="held-icon"><Icon name="schild" /></span>Jede Fläche von Hand geprüft</li>
+          <li><span class="held-icon"><Icon name="vertrag" /></span>Mustervertrag und Kaution</li>
+          <li><span class="held-icon"><Icon name="chat" /></span>Persönlicher Ansprechpartner per WhatsApp und E-Mail</li>
         </ul>
+        <a class="beispiel" href="#rechner">
+          <span class="beispiel-icon" aria-hidden="true"><Icon name="garage" /></span>
+          <span class="beispiel-text">
+            <span class="beispiel-label">Beispiel: {beispiel.titel}, {beispiel.groesse}</span>
+            <strong>ca. {beispiel.von} bis {beispiel.bis} € im Jahr</strong>
+            <span class="beispiel-link">Ertrag für Ihren Platz berechnen →</span>
+          </span>
+        </a>
       </div>
       <FlaecheMelden id="flaeche-melden" />
     </div>
@@ -104,7 +119,7 @@ const nachfrageLink = link('nachfrage') ?? link('platzAnbieten');
 
   <section class="abschnitt abschnitt-grau">
     <div class="wrap">
-      <div class="kopfzeile"><h2>Was bringt Ihr Platz im Jahr?</h2></div>
+      <div class="kopfzeile" id="rechner"><h2>Was bringt Ihr Platz im Jahr?</h2></div>
       <Verdienstrechner ausfuehrlich />
     </div>
   </section>
@@ -187,13 +202,28 @@ const nachfrageLink = link('nachfrage') ?? link('platzAnbieten');
   <FormSkript />
 </Basis>
 <style>
-  .held { padding-block: clamp(1.5rem, 6vw, 4.5rem) clamp(3rem, 8vw, 5rem); }
-  .held-raster { display: grid; gap: 2rem; }
-  @media (min-width: 56rem) { .held-raster { grid-template-columns: 55fr 45fr; align-items: start; gap: 3.5rem; } }
-  /* Kleiner als auf der Startseite: die Textspalte ist schmaler, sonst steht ein Wort pro Zeile */
-  .held h1 { font-size: clamp(2rem, 4vw, 3.25rem); text-wrap: balance; margin-bottom: 1rem; }
+  .held { position: relative; overflow: hidden; padding-block: clamp(1.5rem, 6vw, 4.5rem) clamp(3rem, 8vw, 5rem); }
+  /* Dezentes Straßenmuster aus OpenStreetMap-Daten, zur Mitte hin ausgeblendet */
+  .held-muster { position: absolute; inset: 0; background: url('/bilder/karte-osm-hell.svg') left bottom / 1100px auto no-repeat;
+    -webkit-mask-image: radial-gradient(ellipse 70% 80% at 0% 100%, #000 30%, transparent 75%); mask-image: radial-gradient(ellipse 70% 80% at 0% 100%, #000 30%, transparent 75%); pointer-events: none; }
+  .held-raster { position: relative; display: grid; gap: 2.5rem; }
+  @media (min-width: 56rem) { .held-raster { grid-template-columns: 55fr 45fr; align-items: center; gap: 3.5rem; } }
+  .held h1 { margin-bottom: 1.25rem; }
   .held .einleitung { margin-bottom: 1.75rem; }
-  .held .haken li { font-size: 1.2rem; }
+  .held-punkte { list-style: none; padding: 0; margin: 0 0 2rem; display: grid; gap: 0.85rem; }
+  .held-punkte li { display: flex; align-items: center; gap: 0.85rem; font-size: 1.15rem; font-weight: 600; color: var(--ueberschrift); }
+  .held-icon { flex: none; display: grid; place-items: center; width: 2.5rem; height: 2.5rem; border-radius: var(--r); background: var(--ueberschrift); }
+  .held-icon :global(.symbol) { width: 1.35rem; height: 1.35rem; color: var(--akzent); }
+  /* Beispiel-Karte: füllt die Spalte unten und führt zum Rechner */
+  .beispiel { display: flex; gap: 1rem; align-items: center; max-width: 30rem; padding: 1.1rem 1.25rem; background: var(--hintergrund); border: 1.5px solid var(--ueberschrift); border-radius: var(--r-gross); box-shadow: 4px 4px 0 var(--ueberschrift); text-decoration: none; color: var(--text); transition: transform 200ms var(--ease-out), box-shadow 200ms var(--ease-out); }
+  @media (hover: hover) { .beispiel:hover { transform: translate(-2px, -2px); box-shadow: 6px 6px 0 var(--ueberschrift); color: var(--text); } }
+  .beispiel-icon { flex: none; display: grid; place-items: center; width: 3.25rem; height: 3.25rem; border-radius: var(--r); background: var(--tertiaer); }
+  .beispiel-icon :global(.symbol) { width: 1.75rem; height: 1.75rem; }
+  .beispiel-text { display: grid; gap: 0.1rem; }
+  .beispiel-label { font-size: 0.95rem; }
+  .beispiel strong { font-size: 1.3rem; font-weight: 800; color: var(--ueberschrift); letter-spacing: -0.02em; }
+  .beispiel-link { font-size: 0.95rem; font-weight: 700; color: var(--ueberschrift); text-decoration: underline; text-underline-offset: 0.2em; }
+  @media (prefers-reduced-motion: reduce) { .beispiel:hover { transform: none; } }
   .formular-titel { font-size: 1.5rem; letter-spacing: -0.02em; }
   .sorgen { max-width: 50rem; margin-inline: auto; }
   .service { display: grid; gap: 1rem; max-width: 50rem; }

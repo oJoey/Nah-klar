@@ -21,14 +21,14 @@ Die Spalten heißen wie die heutigen Formularfelder – Netlify-Einsendungen las
 Werte siehe `src/data/optionen.json`.
 
 **suchauftraege**
-`id uuid`, `erstellt_am`, `status` (offen · vorschlag · vermittelt · geloescht), `mieter_art`, `laenge_max`, `hoehe_max`, `flaeche_max`, `ort`, `plz` (aus `ort` abgeleitet), `umkreis_km`, `wuensche text[]`, `budget_max`, `ab_wann`, `vorname`, `email`, `telefon`, `quelle`, `letzte_rueckmeldung_am`, `loeschen_ab` (= letzte Rückmeldung + 12 Monate)
+`id uuid`, `erstellt_am`, `status` (offen · vorschlag · vermittelt · geloescht), `mieter_art`, `laenge_max`, `hoehe_max`, `flaeche_max`, `ort`, `plz` (aus `ort` abgeleitet), `umkreis_km`, `wuensche text[]`, `budget_max`, `ab_wann`, `vorname`, `email`, `telefon` (optional), `whatsapp_ok` (bool), `quelle`, `letzte_rueckmeldung_am`, `loeschen_ab` (= letzte Rückmeldung + 12 Monate)
 
 **flaechen**
 `id`, `erstellt_am`, `vermieter_id → vermieter`, `status` (gemeldet · geprueft · veroeffentlicht · vermietet · pausiert), `flaechen_art`, `geeignet_fuer text[]`, `laenge_klasse` (5 · 7 · 9 · ueber-9), `breite_klasse`, `durchfahrt_hoehe`, `flaeche_qm`, `anzahl_plaetze`, `ausstattung text[]`, `wunschpreis`, `strasse`, `plz`, `ort`, `ortsteil` (öffentlich), `lat`/`lng` (für Umkreissuche, nicht öffentlich), `geprueft_am`, `geprueft_von`
 
 **fotos** – `id`, `flaeche_id`, `pfad` (Supabase Storage, privat bis zur Freigabe), `reihenfolge`
 
-**vermieter** – `id` (= Supabase-Auth-Nutzer), `vorname`, `nachname`, `email`, `telefon`, `erstellt_am`
+**vermieter** – `id` (= Supabase-Auth-Nutzer), `vorname`, `nachname`, `email`, `telefon` (optional), `whatsapp_ok` (bool), `erstellt_am`
 
 **vorschlaege** – `id`, `suchauftrag_id`, `flaeche_id`, `punkte` (Abgleich), `status` (neu · freigegeben · verworfen · gesendet · angenommen), `erstellt_am`
 

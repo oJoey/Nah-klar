@@ -109,8 +109,9 @@ const mitMassen = o.flaechen_art.filter((a) => a.wert !== 'lagerraum').map((a) =
       <input id={`${id}-email`} name="email" type="email" autocomplete="email" required maxlength="100" />
     </div>
     <div class="feld">
-      <label for={`${id}-telefon`}>Telefon</label>
-      <input id={`${id}-telefon`} name="telefon" type="tel" autocomplete="tel" required maxlength="30" />
+      <label for={`${id}-telefon`}>Telefon <span class="optional">(optional)</span></label>
+      <input id={`${id}-telefon`} name="telefon" type="tel" autocomplete="tel" maxlength="30" />
+      <label class="haken-wahl" data-wenn-ausgefuellt="telefon"><input type="checkbox" name="whatsapp_ok" value="ja" /> Ich bin per WhatsApp erreichbar</label>
     </div>
     <div class="form-knoepfe">
       <button class="btn btn-rahmen btn-gross" type="button" data-zurueck hidden>Zurück</button>
