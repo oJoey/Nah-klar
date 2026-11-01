@@ -10,7 +10,7 @@ const mitMassen = o.flaechen_art.filter((a) => a.wert !== 'lagerraum').map((a) =
 ---
 <form id={id} class="formular-karte" name="flaeche-melden" method="POST" action="/platz-anbieten/danke/" enctype="multipart/form-data" data-netlify="true" netlify-honeypot="bot-feld" data-formular data-mehrstufig>
   <FormVersteckt name="flaeche-melden" />
-  <ol class="fortschritt" hidden><li>Fläche</li><li>Ausstattung</li><li>Adresse und Kontakt</li></ol>
+  <ol class="fortschritt" hidden><li>Fläche</li><li>Größe</li><li>Fotos</li><li>Kontakt</li></ol>
 
   <fieldset class="form-schritt">
     <h3 tabindex="-1">Welche Fläche haben Sie frei?</h3>
@@ -22,29 +22,6 @@ const mitMassen = o.flaechen_art.filter((a) => a.wert !== 'lagerraum').map((a) =
       <legend>Geeignet für <span class="optional">(Mehrfachauswahl)</span></legend>
       <Chips name="geeignet_fuer" optionen={o.geeignet_fuer} mehrfach />
     </fieldset>
-    <div class="tausch">
-      <div data-wenn="flaechen_art" data-werte={mitMassen}>
-        <fieldset class="form-gruppe">
-          <legend>Länge des Platzes</legend>
-          <Chips name="laenge_klasse" optionen={o.laenge_klasse} vorwahl="7" />
-        </fieldset>
-        <fieldset class="form-gruppe">
-          <legend>Breite</legend>
-          <Chips name="breite_klasse" optionen={o.breite_klasse} vorwahl="3" />
-        </fieldset>
-        <fieldset class="form-gruppe">
-          <legend>Maximale Durchfahrtshöhe</legend>
-          <Chips name="durchfahrt_hoehe" optionen={o.durchfahrt_hoehe} />
-        </fieldset>
-      </div>
-      <div data-wenn="flaechen_art" data-werte="lagerraum">
-        <div class="feld">
-          <label for={`${id}-qm`}>Fläche in m²</label>
-          <input id={`${id}-qm`} name="flaeche_qm" type="number" inputmode="decimal" min="1" max="1000" step="1" value="10" data-pflicht />
-          <span class="feld-hilfe">Ungefähr reicht, z. B. 3 × 4 m = 12 m².</span>
-        </div>
-      </div>
-    </div>
     <fieldset class="form-gruppe">
       <legend>Anzahl Plätze</legend>
       <Chips name="anzahl_plaetze" optionen={o.anzahl_plaetze} vorwahl="1" />
@@ -53,11 +30,40 @@ const mitMassen = o.flaechen_art.filter((a) => a.wert !== 'lagerraum').map((a) =
   </fieldset>
 
   <fieldset class="form-schritt">
-    <h3 tabindex="-1">Ausstattung und Fotos</h3>
+    <h3 tabindex="-1">Wie groß ist die Fläche?</h3>
+    <div data-wenn="flaechen_art" data-werte={mitMassen}>
+      <fieldset class="form-gruppe">
+        <legend>Länge des Platzes</legend>
+        <Chips name="laenge_klasse" optionen={o.laenge_klasse} vorwahl="7" />
+      </fieldset>
+      <fieldset class="form-gruppe">
+        <legend>Breite</legend>
+        <Chips name="breite_klasse" optionen={o.breite_klasse} vorwahl="3" />
+      </fieldset>
+      <fieldset class="form-gruppe">
+        <legend>Maximale Durchfahrtshöhe</legend>
+        <Chips name="durchfahrt_hoehe" optionen={o.durchfahrt_hoehe} />
+      </fieldset>
+    </div>
+    <div data-wenn="flaechen_art" data-werte="lagerraum">
+      <div class="feld">
+        <label for={`${id}-qm`}>Fläche in m²</label>
+        <input id={`${id}-qm`} name="flaeche_qm" type="number" inputmode="decimal" min="1" max="1000" step="1" value="10" data-pflicht />
+        <span class="feld-hilfe">Ungefähr reicht, z. B. 3 × 4 m = 12 m².</span>
+      </div>
+    </div>
     <fieldset class="form-gruppe">
       <legend>Ausstattung <span class="optional">(Mehrfachauswahl)</span></legend>
       <Chips name="ausstattung" optionen={o.ausstattung} mehrfach />
     </fieldset>
+    <div class="form-knoepfe">
+      <button class="btn btn-rahmen btn-gross" type="button" data-zurueck hidden>Zurück</button>
+      <button class="btn btn-primaer btn-gross" type="button" data-weiter hidden>Weiter</button>
+    </div>
+  </fieldset>
+
+  <fieldset class="form-schritt">
+    <h3 tabindex="-1">Fotos und Wunschpreis</h3>
     <div class="form-gruppe" data-fotos>
       <p class="gruppen-titel">Fotos <span class="optional">(optional, bis zu 5)</span></p>
       <p class="feld-hilfe">Zufahrt, Fläche, ein Foto mit Zollstock genügt.</p>

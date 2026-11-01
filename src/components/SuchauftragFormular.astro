@@ -11,7 +11,7 @@ const lager = o.mieter_art.filter((a) => a.groesse === 'flaeche').map((a) => a.w
 ---
 <form class="formular-karte" name="suchauftrag" method="POST" action="/suchauftrag/danke/" data-netlify="true" netlify-honeypot="bot-feld" data-formular data-mehrstufig>
   <FormVersteckt name="suchauftrag" />
-  <ol class="fortschritt" hidden><li>Was</li><li>Wo und Wünsche</li><li>Kontakt</li></ol>
+  <ol class="fortschritt" hidden><li>Was</li><li>Größe und Ort</li><li>Wünsche</li><li>Kontakt</li></ol>
 
   <fieldset class="form-schritt">
     <h3 tabindex="-1">Was möchten Sie unterstellen?</h3>
@@ -19,27 +19,25 @@ const lager = o.mieter_art.filter((a) => a.groesse === 'flaeche').map((a) => a.w
       <legend class="sr-only">Art</legend>
       <Chips name="mieter_art" optionen={o.mieter_art} pflicht gross />
     </fieldset>
-    <div class="tausch">
-      <div data-wenn="mieter_art" data-werte={fahrzeuge}>
-        <fieldset class="form-gruppe">
-          <legend>Länge des Fahrzeugs</legend>
-          <Chips name="laenge_max" optionen={o.laenge_max} pflichtWennSichtbar />
-        </fieldset>
-        <fieldset class="form-gruppe platz-halten" data-wenn="mieter_art" data-werte={mitHoehe}>
-          <legend>Höhe des Fahrzeugs</legend>
-          <Chips name="hoehe_max" optionen={o.hoehe_max} pflichtWennSichtbar />
-        </fieldset>
-      </div>
-      <fieldset class="form-gruppe" data-wenn="mieter_art" data-werte={lager}>
-        <legend>Benötigte Fläche</legend>
-        <Chips name="flaeche_max" optionen={o.flaeche_max} pflichtWennSichtbar />
-      </fieldset>
-    </div>
     <div class="form-knoepfe"><button class="btn btn-primaer btn-gross" type="button" data-weiter hidden>Weiter</button></div>
   </fieldset>
 
   <fieldset class="form-schritt">
-    <h3 tabindex="-1">Wo, und was ist Ihnen wichtig?</h3>
+    <h3 tabindex="-1">Wie groß, und wo?</h3>
+    <div data-wenn="mieter_art" data-werte={fahrzeuge}>
+      <fieldset class="form-gruppe">
+        <legend>Länge des Fahrzeugs</legend>
+        <Chips name="laenge_max" optionen={o.laenge_max} pflichtWennSichtbar />
+      </fieldset>
+      <fieldset class="form-gruppe" data-wenn="mieter_art" data-werte={mitHoehe}>
+        <legend>Höhe des Fahrzeugs</legend>
+        <Chips name="hoehe_max" optionen={o.hoehe_max} pflichtWennSichtbar />
+      </fieldset>
+    </div>
+    <fieldset class="form-gruppe" data-wenn="mieter_art" data-werte={lager}>
+      <legend>Benötigte Fläche</legend>
+      <Chips name="flaeche_max" optionen={o.flaeche_max} pflichtWennSichtbar />
+    </fieldset>
     <div class="feld">
       <label for="sa-ort">PLZ oder Ort</label>
       <input id="sa-ort" name="ort" type="text" autocomplete="postal-code" required maxlength="60" placeholder="z. B. 71032 oder Böblingen" />
@@ -48,6 +46,14 @@ const lager = o.mieter_art.filter((a) => a.groesse === 'flaeche').map((a) => a.w
       <legend>Umkreis</legend>
       <Chips name="umkreis_km" optionen={o.umkreis_km} vorwahl="10" />
     </fieldset>
+    <div class="form-knoepfe">
+      <button class="btn btn-rahmen btn-gross" type="button" data-zurueck hidden>Zurück</button>
+      <button class="btn btn-primaer btn-gross" type="button" data-weiter hidden>Weiter</button>
+    </div>
+  </fieldset>
+
+  <fieldset class="form-schritt">
+    <h3 tabindex="-1">Was ist Ihnen wichtig?</h3>
     <fieldset class="form-gruppe">
       <legend>Wünsche <span class="optional">(optional, Mehrfachauswahl)</span></legend>
       <Chips name="wuensche" optionen={o.wuensche} mehrfach />
