@@ -2,17 +2,17 @@
 import Basis from '../../layouts/Basis.astro';
 import FlaecheMelden from '../../components/FlaecheMelden.astro';
 import FormSkript from '../../components/FormSkript.astro';
-import { site, telefonHref } from '../../config/site';
+import { site, whatsappLink, emailHref } from '../../config/site';
 ---
 <Basis
-  titel="Fläche melden – Garage, Stellplatz, Scheune oder Lagerraum vermieten"
-  beschreibung="Melden Sie Ihre freie Fläche in Baden-Württemberg. Für Vermieter immer kostenlos – Sie bestimmen den Preis, wir melden uns mit passenden Mietern."
-  brotkruemel={[{ name: 'Vermieten', pfad: '/vermieten/' }, { name: 'Fläche melden', pfad: '/platz-anbieten/' }]}
+  titel="Platz anbieten: Garage, Stellplatz, Scheune oder Lagerraum vermieten"
+  beschreibung="Bieten Sie Ihren freien Platz in Baden-Württemberg an. Für Vermieter immer kostenlos: Sie bestimmen den Preis, wir melden uns mit passenden Mietern."
+  brotkruemel={[{ name: 'Vermieten', pfad: '/vermieten/' }, { name: 'Platz anbieten', pfad: '/platz-anbieten/' }]}
 >
   <section class="abschnitt abschnitt-grau formular-seite">
     <div class="wrap schmal">
-      <h1>Fläche melden</h1>
-      <p class="einleitung">Drei kurze Schritte. Wir prüfen Fotos und Angaben und melden uns persönlich, {site.antwortzeit}. Lieber telefonieren? <a href={telefonHref}>{site.telefonAnzeige}</a></p>
+      <h1>Platz anbieten</h1>
+      <p class="einleitung">Wenige kurze Schritte. Wir prüfen Fotos und Angaben und melden uns persönlich, {site.antwortzeit}. Fragen? Schreiben Sie uns per <a href={whatsappLink} rel="noopener">WhatsApp</a> oder <a href={emailHref}>E-Mail</a>.</p>
       <FlaecheMelden />
     </div>
   </section>

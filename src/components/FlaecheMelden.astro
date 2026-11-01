@@ -1,5 +1,5 @@
 ---
-// „Fläche melden“ für Vermieter: 3 Schritte. Feldnamen = spätere Datenbankspalten (siehe docs/plan-inserate.md).
+// „Platz anbieten“ für Vermieter (Netlify-Formularname bleibt flaeche-melden): 3 Schritte. Feldnamen = spätere Datenbankspalten (siehe docs/plan-inserate.md).
 import Chips from './Chips.astro';
 import FormVersteckt from './FormVersteckt.astro';
 import Datenschutzhinweis from './Datenschutzhinweis.astro';
@@ -54,7 +54,7 @@ const mitMassen = o.flaechen_art.filter((a) => a.wert !== 'lagerraum').map((a) =
     </div>
     <fieldset class="form-gruppe">
       <legend>Ausstattung <span class="optional">(Mehrfachauswahl)</span></legend>
-      <Chips name="ausstattung" optionen={o.ausstattung} mehrfach />
+      <Chips name="ausstattung" optionen={o.ausstattung} mehrfach bedingt={{ strom: { wenn: 'geeignet_fuer[]', werte: 'wohnmobil-wohnwagen' } }} />
     </fieldset>
     <div class="form-knoepfe">
       <button class="btn btn-rahmen btn-gross" type="button" data-zurueck hidden>Zurück</button>
@@ -114,7 +114,7 @@ const mitMassen = o.flaechen_art.filter((a) => a.wert !== 'lagerraum').map((a) =
     </div>
     <div class="form-knoepfe">
       <button class="btn btn-rahmen btn-gross" type="button" data-zurueck hidden>Zurück</button>
-      <button class="btn btn-primaer btn-gross" type="submit">Fläche melden</button>
+      <button class="btn btn-primaer btn-gross" type="submit">Platz anbieten</button>
     </div>
     <p class="unter-hinweis">Für Vermieter immer kostenlos.</p>
     <Datenschutzhinweis />

@@ -1,26 +1,61 @@
 {
-  "_hinweis": "Werte für Formulare, Suchmaske, Rechner und Bestätigungsmail. Die Schlüssel (wert) sind später die Werte in der Datenbank – bitte nicht umbenennen, nur Titel ändern.",
+  "_hinweis": "Werte für Formulare, Suchmaske, Rechner und Bestätigungsmail. Die Schlüssel (wert) sind später die Werte in der Datenbank. Bitte nicht umbenennen, nur Titel ändern. mieter_art: flaechen_art und geeignet_fuer zeigen, welche angebotenen Plätze zu einem Suchauftrag passen.",
   "mieter_art": [
     {
-      "wert": "wohnmobil-wohnwagen",
-      "titel": "Wohnmobil / Wohnwagen",
+      "wert": "auto-motorrad",
+      "titel": "Stellplatz für Auto oder Motorrad",
       "groesse": "fahrzeug",
-      "hoehe": true
+      "flaechen_art": [
+        "stellplatz-frei",
+        "stellplatz-ueberdacht"
+      ],
+      "geeignet_fuer": "auto-motorrad"
     },
     {
-      "wert": "auto-motorrad",
-      "titel": "Auto / Motorrad",
-      "groesse": "fahrzeug"
+      "wert": "garage",
+      "titel": "Garage",
+      "groesse": "fahrzeug",
+      "hoehe": true,
+      "flaechen_art": [
+        "garage"
+      ],
+      "geeignet_fuer": "auto-motorrad"
+    },
+    {
+      "wert": "wohnmobil-wohnwagen",
+      "titel": "Stellplatz für Wohnmobil oder Wohnwagen",
+      "groesse": "fahrzeug",
+      "hoehe": true,
+      "strom": true,
+      "flaechen_art": [
+        "stellplatz-frei",
+        "stellplatz-ueberdacht",
+        "halle-scheune"
+      ],
+      "geeignet_fuer": "wohnmobil-wohnwagen"
     },
     {
       "wert": "anhaenger-boot",
-      "titel": "Anhänger / Boot",
-      "groesse": "fahrzeug"
+      "titel": "Stellplatz für Anhänger oder Boot",
+      "groesse": "fahrzeug",
+      "flaechen_art": [
+        "stellplatz-frei",
+        "stellplatz-ueberdacht",
+        "garage",
+        "halle-scheune"
+      ],
+      "geeignet_fuer": "anhaenger-boot"
     },
     {
-      "wert": "lagergut",
-      "titel": "Lagergut",
-      "groesse": "flaeche"
+      "wert": "lagerraum",
+      "titel": "Lagerraum",
+      "groesse": "flaeche",
+      "flaechen_art": [
+        "lagerraum",
+        "garage",
+        "halle-scheune"
+      ],
+      "geeignet_fuer": "lagergut"
     }
   ],
   "laenge_max": [
@@ -142,7 +177,7 @@
     },
     {
       "wert": "1-3-monate",
-      "titel": "in 1–3 Monaten"
+      "titel": "in 1 bis 3 Monaten"
     },
     {
       "wert": "spaeter",

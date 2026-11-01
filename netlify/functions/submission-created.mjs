@@ -10,10 +10,10 @@
 //                      Ohne diese Prüfung könnte jeder die Funktion direkt aufrufen und Mails an fremde Adressen auslösen.
 
 import optionen from '../../src/data/optionen.json' with { type: 'json' };
-// Gebührentexte zentral aus texte.ts – wird von esbuild mitgebündelt, das Datum der Startaktion wird beim Versand geprüft.
+// Gebührentexte zentral aus texte.ts. Wird von esbuild mitgebündelt, das Datum der Startaktion wird beim Versand geprüft.
 import { texte, vermittlungText } from '../../src/lib/texte.ts';
 
-// Beschriftungen für die Mail – Feldnamen wie in den Formularen (= spätere Datenbankspalten).
+// Beschriftungen für die Mail. Feldnamen wie in den Formularen (= spätere Datenbankspalten).
 const BESCHRIFTUNG = {
   mieter_art: 'Was', laenge_max: 'Länge', hoehe_max: 'Höhe', flaeche_max: 'Fläche', ort: 'Ort', umkreis_km: 'Umkreis',
   wuensche: 'Wünsche', budget_max: 'Budget pro Monat', ab_wann: 'Ab wann',
@@ -29,21 +29,21 @@ const anzeige = (feld, wert) => (Array.isArray(wert) ? wert : [wert]).map((w) =>
 const FORMULARE = {
   suchauftrag: {
     betreff: 'Ihr Suchauftrag ist angekommen',
-    einleitung: 'vielen Dank für Ihren Suchauftrag. Wir gleichen ihn jetzt mit den gemeldeten Flächen ab.',
+    einleitung: 'vielen Dank für Ihren Suchauftrag. Wir gleichen ihn jetzt mit den angebotenen Plätzen ab.',
     schritte: [
-      'Wir melden uns mit passenden Plätzen – mit Fotos, Preis und Ortsteil.',
+      'Wir melden uns mit passenden Plätzen, mit Fotos, Preis und Ortsteil.',
       'Sie besichtigen den Platz und unterschreiben den Mustervertrag.',
       'Die Kaution zahlen Sie direkt an den Vermieter.',
     ],
     schluss: 'Wie schnell es geht, hängt von Ort und Art ab. Wir sagen Ihnen ehrlich, wie es in Ihrer Gegend aussieht.',
   },
   'flaeche-melden': {
-    betreff: 'Ihre Fläche ist bei uns gemeldet',
-    einleitung: 'vielen Dank, dass Sie Ihre Fläche anbieten. Für Vermieter ist unser Service immer kostenlos.',
+    betreff: 'Ihr Platzangebot ist angekommen',
+    einleitung: 'vielen Dank, dass Sie Ihren Platz anbieten. Für Vermieter ist unser Service immer kostenlos.',
     schritte: [
       'Wir prüfen Fotos und Angaben und melden uns bei Rückfragen.',
       'Wir schlagen Ihnen passende Mieter vor. Sie entscheiden, wer einzieht.',
-      'Besichtigung, Mustervertrag, Kaution – dann läuft die Miete.',
+      'Besichtigung, Mustervertrag, Kaution. Danach läuft die Miete.',
     ],
     schluss: 'Ihre Adresse wird nicht veröffentlicht. Interessenten erfahren nur den Ortsteil.',
   },
@@ -63,7 +63,7 @@ export const handler = async (event) => {
   const { RESEND_API_KEY, MAIL_ABSENDER, MAIL_ANTWORT, NETLIFY_API_TOKEN } = process.env;
   const marke = process.env.MARKENNAME || 'Platz Kompass';
   if (!RESEND_API_KEY || !MAIL_ABSENDER || !NETLIFY_API_TOKEN) {
-    console.log('Mailversand nicht eingerichtet – Umgebungsvariablen fehlen.');
+    console.log('Mailversand nicht eingerichtet, Umgebungsvariablen fehlen.');
     return { statusCode: 200, body: 'nicht eingerichtet' };
   }
 
@@ -71,7 +71,7 @@ export const handler = async (event) => {
   try { id = JSON.parse(event.body || '{}').payload?.id; } catch { /* ungültig */ }
   if (!id) return { statusCode: 400, body: 'ungültig' };
 
-  // Einsendung direkt bei Netlify abrufen – nur diesen Daten vertrauen wir.
+  // Einsendung direkt bei Netlify abrufen. Nur diesen Daten vertrauen wir.
   const r = await fetch(`https://api.netlify.com/api/v1/submissions/${encodeURIComponent(id)}`, {
     headers: { Authorization: `Bearer ${NETLIFY_API_TOKEN}` },
   });
@@ -122,7 +122,7 @@ ${loeschLink ? `<p style="font-size:14px;color:#485063"><a href="${esc(loeschLin
       from: MAIL_ABSENDER,
       to: [empfaenger],
       ...(MAIL_ANTWORT ? { reply_to: MAIL_ANTWORT } : {}),
-      subject: `${vorlage.betreff} – ${marke}`,
+      subject: `${vorlage.betreff} | ${marke}`,
       text,
       html,
     }),

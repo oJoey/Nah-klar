@@ -2,13 +2,14 @@
 // Auswahl als Chips (Radio = eine Auswahl, Checkbox = Mehrfachauswahl).
 // pflicht bei Radio: erstes Feld bekommt required (Browser prüft die ganze Gruppe).
 // pflichtWennSichtbar: required wird per Skript gesetzt, sobald die Gruppe sichtbar ist.
+// meldung: eigener Hinweis, wenn nichts gewählt ist. bedingt: einzelne Optionen nur bei bestimmter Auswahl zeigen.
 type Option = { wert: string; titel: string };
-interface Props { name: string; optionen: Option[]; mehrfach?: boolean; pflicht?: boolean; pflichtWennSichtbar?: boolean; gross?: boolean; vorwahl?: string }
-const { name, optionen, mehrfach = false, pflicht = false, pflichtWennSichtbar = false, gross = false, vorwahl } = Astro.props;
+interface Props { name: string; optionen: Option[]; mehrfach?: boolean; pflicht?: boolean; pflichtWennSichtbar?: boolean; gross?: boolean; vorwahl?: string; meldung?: string; bedingt?: Record<string, { wenn: string; werte: string }> }
+const { name, optionen, mehrfach = false, pflicht = false, pflichtWennSichtbar = false, gross = false, vorwahl, meldung, bedingt = {} } = Astro.props;
 ---
 <div class:list={['chips', { 'chips-gross': gross }]}>
   {optionen.map((o, i) => (
-    <label class="chip">
+    <label class="chip" data-wenn={bedingt[o.wert]?.wenn} data-werte={bedingt[o.wert]?.werte}>
       <input
         type={mehrfach ? 'checkbox' : 'radio'}
         name={mehrfach ? `${name}[]` : name}
@@ -16,6 +17,7 @@ const { name, optionen, mehrfach = false, pflicht = false, pflichtWennSichtbar =
         required={!mehrfach && pflicht && i === 0}
         data-pflicht={!mehrfach && pflichtWennSichtbar && i === 0 ? '' : undefined}
         checked={vorwahl === o.wert}
+        data-meldung={i === 0 ? meldung : undefined}
       />
       {o.titel}
     </label>

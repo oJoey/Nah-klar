@@ -3,7 +3,7 @@ import { site } from '../config/site';
 import { jsonLd } from '../lib/texte';
 export type Kruemel = { name: string; pfad: string };
 interface Props { pfadListe: Kruemel[]; }
-const liste: Kruemel[] = [{ name: 'Startseite', pfad: '/' }, ...Astro.props.pfadListe];
+const liste: Kruemel[] = [{ name: 'Start', pfad: '/' }, ...Astro.props.pfadListe];
 const schema = {
   '@context': 'https://schema.org',
   '@type': 'BreadcrumbList',

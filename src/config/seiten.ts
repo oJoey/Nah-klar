@@ -1,5 +1,5 @@
 // Alle geplanten Seiten. Links gehen nur auf Seiten mit live: true.
-// Ist eine Seite noch nicht live, wird auf „ersatz“ verlinkt – oder der Link wird ausgeblendet.
+// Ist eine Seite noch nicht live, wird auf „ersatz“ verlinkt, oder der Link wird ausgeblendet.
 // entwurf: Seite existiert als Platzhalter (noindex, nicht in der Sitemap), Inhalt folgt.
 type Seite = { pfad: string; live: boolean; titel: string; ersatz?: string; entwurf?: boolean };
 
@@ -34,8 +34,9 @@ export const seiten = {
 
   // Kategorieseiten Mieten (Ersatz: Suchauftrag mit vorausgewählter Art)
   mietenWohnmobil: { pfad: '/mieten/wohnmobil-wohnwagen-stellplatz/', live: false, titel: 'Wohnmobil und Wohnwagen', ersatz: '/suchauftrag/?mieter_art=wohnmobil-wohnwagen' },
-  mietenGarage: { pfad: '/mieten/garage-auto-stellplatz/', live: false, titel: 'Garage und Auto', ersatz: '/suchauftrag/?mieter_art=auto-motorrad' },
-  mietenLager: { pfad: '/mieten/lagerraum/', live: false, titel: 'Lagerraum', ersatz: '/suchauftrag/?mieter_art=lagergut' },
+  mietenAuto: { pfad: '/mieten/auto-stellplatz/', live: false, titel: 'Stellplatz für Auto oder Motorrad', ersatz: '/suchauftrag/?mieter_art=auto-motorrad' },
+  mietenGarage: { pfad: '/mieten/garage/', live: false, titel: 'Garage', ersatz: '/suchauftrag/?mieter_art=garage' },
+  mietenLager: { pfad: '/mieten/lagerraum/', live: false, titel: 'Lagerraum', ersatz: '/suchauftrag/?mieter_art=lagerraum' },
   mietenAnhaenger: { pfad: '/mieten/anhaenger-boot/', live: false, titel: 'Anhänger und Boot', ersatz: '/suchauftrag/?mieter_art=anhaenger-boot' },
 
   // Unterseiten Vermieten (Ersatz: Formular mit vorausgewählter Fläche)

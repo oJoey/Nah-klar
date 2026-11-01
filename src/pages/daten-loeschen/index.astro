@@ -6,11 +6,11 @@ import FormVersteckt from '../../components/FormVersteckt.astro';
 import FormSkript from '../../components/FormSkript.astro';
 import { site, emailHref } from '../../config/site';
 ---
-<Basis titel="Daten löschen" beschreibung="Suchauftrag oder gemeldete Fläche löschen lassen." noindex>
+<Basis titel="Daten löschen" beschreibung="Suchauftrag oder angebotenen Platz löschen lassen." noindex>
   <section class="abschnitt abschnitt-grau">
     <div class="wrap schmal">
       <h1>Daten löschen lassen</h1>
-      <p class="einleitung">Wir löschen Ihren Suchauftrag bzw. Ihre gemeldete Fläche und alle zugehörigen Angaben, in der Regel innerhalb weniger Tage. Sie bekommen keine weiteren Vorschläge.</p>
+      <p class="einleitung">Wir löschen Ihren Suchauftrag bzw. Ihren angebotenen Platz und alle zugehörigen Angaben, in der Regel innerhalb weniger Tage. Sie bekommen keine weiteren Vorschläge.</p>
       <form class="formular-karte" name="loeschanfrage" method="POST" action="/daten-loeschen/danke/" data-netlify="true" netlify-honeypot="bot-feld" data-formular>
         <FormVersteckt name="loeschanfrage" />
         <div class="feld">

@@ -1,5 +1,5 @@
 ---
-import { site, telefonHref, whatsappLink, emailHref } from '../config/site';
+import { site, whatsappLink, emailHref } from '../config/site';
 import Logo from './Logo.astro';
 import { seiten, istLive, type SeitenSchluessel } from '../config/seiten';
 const fussLinks: SeitenSchluessel[] = ['werkzeuge', 'soFunktionierts', 'sicherheit', 'preise', 'ueberUns', 'kontakt', 'impressum', 'datenschutz', 'agb'];
@@ -15,8 +15,7 @@ const fussLinks: SeitenSchluessel[] = ['werkzeuge', 'soFunktionierts', 'sicherhe
         <h2 class="fuss-titel">Kontakt</h2>
         <p>{site.ansprechpartner}</p>
         <ul class="fuss-liste">
-          <li><a href={telefonHref}>Telefon: {site.telefonAnzeige}</a></li>
-          <li><a href={whatsappLink} rel="noopener">WhatsApp: {site.telefonAnzeige}</a></li>
+          <li><a href={whatsappLink} rel="noopener">WhatsApp: {site.whatsappAnzeige}</a></li>
           <li><a href={emailHref}>E-Mail: {site.email}</a></li>
         </ul>
       </div>

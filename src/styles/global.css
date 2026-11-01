@@ -3,8 +3,8 @@
   /* Palette (verbindlich). Nur diese sechs Farben verwenden, alles Weitere wird daraus abgeleitet. */
   --hintergrund: #fffffe;   /* Haupt-Hintergrund, Karten auf hellblauem Grund, Formularfelder; Überschriften auf Dunkel */
   --ueberschrift: #272343;  /* Überschriften, Logo, Icons, Linien, Links auf Hell, dunkle Abschnitte, Text auf Gelb */
-  --text: #2d334a;          /* Fließtext, Unterzeilen, Kartentext auf hellem Grund – nie auf Dunkel */
-  --akzent: #ffd803;        /* Haupt-Buttons, Highlights, Zahlen im Ablauf, Links nur auf dunklem Grund – nie als Schrift auf Hell */
+  --text: #2d334a;          /* Fließtext, Unterzeilen, Kartentext auf hellem Grund, nie auf Dunkel */
+  --akzent: #ffd803;        /* Haupt-Buttons, Highlights, Zahlen im Ablauf, Links nur auf dunklem Grund, nie als Schrift auf Hell */
   --sekundaer: #e3f6f5;     /* abgesetzte Abschnitte; Fließtext auf Dunkel */
   --tertiaer: #bae8e8;      /* Tags, Badges, Hinweisboxen, Vermieter-Block */
 

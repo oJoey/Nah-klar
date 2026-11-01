@@ -26,5 +26,8 @@ Stand: Website mit Netlify-Hosting, Netlify Forms und (vorbereitet) Resend. Bitt
 
 ## Vor dem Livegang
 
-- Auftragsverarbeitungsverträge (DPA) mit Netlify und Resend abschließen (beide online im Konto).
-- Bei Resend die Absender-Domain bestätigen, `RESEND_API_KEY`, `MAIL_ABSENDER`, `NETLIFY_API_TOKEN` in Netlify setzen, dann in `src/config/site.ts` `bestaetigungsmail: true`.
+- **Domain festlegen** (Voraussetzung für Stripe und für die Absender-Domain bei Resend)
+- **Impressum und Datenschutz füllen** mit den Diensten oben
+- Auftragsverarbeitungsverträge (DPA) mit Netlify und Resend abschließen (beide online im Konto)
+- Bei Resend die Absender-Domain bestätigen, `RESEND_API_KEY`, `MAIL_ABSENDER`, `NETLIFY_API_TOKEN` in Netlify setzen, dann in `src/config/site.ts` `bestaetigungsmail: true`
+- Weitere Aufgaben vor dem Geldfluss (AGB und Mustervertrag, BZSt, Reverse Charge): siehe `docs/stripe-connect.md`

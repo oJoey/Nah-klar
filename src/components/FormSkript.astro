@@ -45,12 +45,19 @@
       });
     }
 
+    // Eigene Hinweise für Pflichtauswahlen (data-meldung am ersten Feld der Gruppe)
+    form.querySelectorAll<HTMLInputElement>('[data-meldung]').forEach((f) => {
+      f.addEventListener('invalid', () => f.setCustomValidity(f.dataset.meldung!));
+      form.querySelectorAll<HTMLInputElement>(`[name="${f.name}"]`).forEach((g) => g.addEventListener('change', () => f.setCustomValidity('')));
+    });
+
     // Bedingte Feldgruppen
     const gruppen = [...form.querySelectorAll<HTMLElement>('[data-wenn]')];
     const aktualisiere = () => {
       for (const g of gruppen) {
-        const gewaehlt = form.querySelector<HTMLInputElement>(`[name="${g.dataset.wenn}"]:checked`)?.value;
-        const an = !!gewaehlt && g.dataset.werte!.split(',').includes(gewaehlt);
+        // Auswahl kann eine Radio-Gruppe oder eine Mehrfachauswahl sein (name mit [])
+        const werte = g.dataset.werte!.split(',');
+        const an = [...form.querySelectorAll<HTMLInputElement>(`[name="${g.dataset.wenn}"]:checked`)].some((f) => werte.includes(f.value));
         g.hidden = !an;
         g.querySelectorAll<HTMLInputElement>('input, select').forEach((f) => {
           f.disabled = !an;

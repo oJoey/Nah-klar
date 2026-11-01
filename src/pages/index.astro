@@ -10,7 +10,7 @@ import Bewertungen from '../components/Bewertungen.astro';
 import WerkzeugeTeaser from '../components/WerkzeugeTeaser.astro';
 import Faq from '../components/Faq.astro';
 import Bildplatz from '../components/Bildplatz.astro';
-import { site, telefonHref } from '../config/site';
+import { site, whatsappLink, emailHref } from '../config/site';
 import { link } from '../config/seiten';
 import { mietArten } from '../data/arten';
 import { texte } from '../lib/texte';
@@ -44,7 +44,7 @@ const mieterSchritte = [
         <div>
           <p class="kicker">Stellplatz, Garage und Lagerraum mieten in Baden-Württemberg</p>
           <h1>Platz gesucht? Ihre Nachbarn haben welchen.</h1>
-          <p class="einleitung">Für Wohnmobil, Auto, Anhänger oder Lagergut – bei Privatleuten in Ihrer Nähe, mit Mustervertrag und persönlichem Ansprechpartner.</p>
+          <p class="einleitung">Für Wohnmobil, Auto, Anhänger oder Lagergut. Bei Privatleuten in Ihrer Nähe, mit Mustervertrag und persönlichem Ansprechpartner.</p>
         </div>
         <Bildplatz name="" alt="" class="held-bild" />
       </div>
@@ -87,7 +87,7 @@ const mieterSchritte = [
 
   <section class="abschnitt abschnitt-grau">
     <div class="wrap">
-      <Faq seite="start"><p>Noch etwas offen? {site.ansprechpartner}: <a href={telefonHref}>{site.telefonAnzeige}</a></p></Faq>
+      <Faq seite="start"><p>Noch etwas offen? {site.ansprechpartner} per <a href={whatsappLink} rel="noopener">WhatsApp</a> oder <a href={emailHref}>E-Mail</a>.</p></Faq>
     </div>
   </section>
 

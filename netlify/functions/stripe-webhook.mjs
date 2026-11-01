@@ -1,4 +1,4 @@
-// VORBEREITUNG – noch nicht aktiv. Plan siehe docs/stripe-connect.md.
+// VORBEREITUNG, noch nicht aktiv. Plan siehe docs/stripe-connect.md.
 // Hier kommen später die Stripe-Webhooks an (Signatur prüfen mit STRIPE_WEBHOOK_SECRET).
 //
 // Geplante Ereignisse:

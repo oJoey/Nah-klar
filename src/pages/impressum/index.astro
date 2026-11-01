@@ -8,11 +8,11 @@ import { alleNachweise } from '../../lib/bilder';
   <section class="abschnitt">
     <div class="wrap">
       <h1>Impressum</h1>
-      <p class="hinweis">Platzhalter – wird vor dem Livegang ausgefüllt.</p>
+      <p class="hinweis">Platzhalter: wird vor dem Livegang ausgefüllt.</p>
       <h2>Angaben gemäß § 5 DDG</h2>
       <p>[NAME / FIRMA]<br />[STRASSE HAUSNUMMER]<br />[PLZ ORT]</p>
       <h2>Kontakt</h2>
-      <p>Telefon: {site.telefonAnzeige}<br />E-Mail: [E-MAIL]</p>
+      <p>E-Mail: {site.email}</p>
       <h2>Vertreten durch</h2>
       <p>[VERTRETUNGSBERECHTIGTE PERSON]</p>
       <h2>Umsatzsteuer-ID</h2>
@@ -21,7 +21,7 @@ import { alleNachweise } from '../../lib/bilder';
       <p>Die Fotos stammen von Wikimedia Commons. Sie wurden für diese Website verkleinert und zugeschnitten.</p>
       <ul>
         {alleNachweise.map(([, n]) => (
-          <li><a href={n.quelle} rel="noopener">{n.titel}</a> – Foto: {n.fotograf}, Lizenz: <a href={n.lizenzUrl} rel="license noopener">{n.lizenz}</a></li>
+          <li><a href={n.quelle} rel="noopener">{n.titel}</a>, Foto: {n.fotograf}, Lizenz: <a href={n.lizenzUrl} rel="license noopener">{n.lizenz}</a></li>
         ))}
       </ul>
     </div>

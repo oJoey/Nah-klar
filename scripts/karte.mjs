@@ -11,7 +11,7 @@ const xml = datei
   ? readFileSync(datei, 'utf8')
   : await (await fetch(`https://api.openstreetmap.org/api/0.6/map?bbox=${BBOX.w},${BBOX.s},${BBOX.e},${BBOX.n}`)).text();
 
-// Projektion: flach, Längengrade mit cos(Breite) gestaucht – reicht für einen Ausschnitt von 1 km.
+// Projektion: flach, Längengrade mit cos(Breite) gestaucht. Reicht für einen Ausschnitt von wenigen Kilometern.
 const k = Math.cos(((BBOX.s + BBOX.n) / 2) * Math.PI / 180);
 const sx = BREITE / ((BBOX.e - BBOX.w) * k);
 const HOEHE = Math.round((BBOX.n - BBOX.s) * sx);

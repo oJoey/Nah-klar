@@ -3,6 +3,6 @@
   "stand": "2026-10-30",
   "suchende": { "wert": 0, "text": "aktive Suchaufträge in Baden-Württemberg" },
   "suchendeWohnmobil": { "wert": 0, "text": "Suchende für Wohnmobil und Wohnwagen" },
-  "plaetze": { "wert": 0, "text": "gemeldete Plätze" },
+  "plaetze": { "wert": 0, "text": "angebotene Plätze" },
   "preisGarage": { "wert": 0, "text": "€ durchschnittliche Monatsmiete Garage", "einheit": "€" }
 }

@@ -10,7 +10,7 @@ import Icon from '../../components/Icon.astro';
 import SmartLink from '../../components/SmartLink.astro';
 import Bildplatz from '../../components/Bildplatz.astro';
 import FormSkript from '../../components/FormSkript.astro';
-import { site, telefonHref, whatsappLink } from '../../config/site';
+import { site, whatsappLink, emailHref } from '../../config/site';
 import { link, seiten, istLive } from '../../config/seiten';
 import { zahlung } from '../../config/zahlung';
 import { flaechenArten } from '../../data/arten';
@@ -43,13 +43,13 @@ const vergleich = [
   { punkt: 'Schriftlicher Mustervertrag', anzeige: 'Meist per Handschlag', wir: 'Regeln zu Zufahrt, Kündigung und Zahlung' },
   { punkt: 'Kaution verpflichtend', anzeige: 'Verhandeln Sie selbst', wir: `Eine Monatsmiete, mindestens ${zahlung.kautionMinEuro} €` },
   ...(site.zahlungLive ? [{ punkt: 'Miete per Lastschrift', anzeige: 'Sie laufen dem Geld hinterher', wir: 'Automatisch jeden Monat' }] : []),
-  { punkt: 'Persönlicher Ansprechpartner', anzeige: 'Niemand, wenn es Ärger gibt', wir: 'Per Telefon und WhatsApp' },
+  { punkt: 'Persönlicher Ansprechpartner', anzeige: 'Niemand, wenn es Ärger gibt', wir: 'Per WhatsApp und E-Mail' },
   { punkt: 'Keine Telefonketten mit Fremden', anzeige: 'Ihre Nummer steht öffentlich', wir: 'Anfragen gebündelt über uns' },
   ...(site.mieterPruefung ? [{ punkt: 'Geprüfte Mieter', anzeige: 'Sie wissen nicht, wer anruft', wir: 'Ausweis, Fahrzeugschein, Versicherung' }] : []),
 ];
 
 const schritte = [
-  { titel: 'Fläche melden', text: 'Drei kurze Schritte im Formular oder ein Anruf.' },
+  { titel: 'Platz anbieten', text: 'In wenigen kurzen Schritten über unser Formular.' },
   { titel: 'Prüfung von Hand', text: 'Wir prüfen Fotos und Angaben und melden uns bei Rückfragen.' },
   { titel: 'Passende Mieter', text: 'Wir schlagen Ihnen Interessenten vor. Sie entscheiden, wer einzieht.' },
   { titel: 'Besichtigung und Vertrag', text: 'Sie lernen den Mieter kennen und unterschreiben den Mustervertrag.' },
@@ -61,19 +61,19 @@ const nachfrageLink = link('nachfrage') ?? link('platzAnbieten');
 ---
 <Basis
   titel="Stellplatz, Garage oder Lagerraum vermieten in Baden-Württemberg"
-  beschreibung="Stellplatz, Garage, Einfahrt, Lagerraum oder Scheune vermieten – mit fairem Nebenverdienst. Für Vermieter immer kostenlos: jede Fläche von Hand geprüft, Mustervertrag, persönlicher Ansprechpartner."
+  beschreibung="Stellplatz, Garage, Einfahrt, Lagerraum oder Scheune vermieten, mit fairem Nebenverdienst. Für Vermieter immer kostenlos: jede Fläche von Hand geprüft, Mustervertrag, persönlicher Ansprechpartner."
   brotkruemel={[{ name: 'Vermieten', pfad: '/vermieten/' }]}
 >
   <section class="held abschnitt-grau">
     <div class="wrap held-raster">
       <div>
         <p class="kicker">Baden-Württemberg</p>
-        <h1>Stellplatz, Garage oder Lagerraum vermieten – mit fairem Nebenverdienst</h1>
-        <p class="kostenlos-pille">Für Vermieter immer kostenlos</p>
+        <h1>Stellplatz, Garage oder Lagerraum vermieten</h1>
+        <p class="einleitung">Fairer Nebenverdienst, für Sie kostenlos</p>
         <ul class="haken">
           <li>Jede Fläche von Hand geprüft</li>
           <li>Mustervertrag und Kaution</li>
-          <li>Persönlicher Ansprechpartner per Telefon und WhatsApp</li>
+          <li>Persönlicher Ansprechpartner per WhatsApp und E-Mail</li>
         </ul>
       </div>
       <FlaecheMelden id="flaeche-melden" />
@@ -112,7 +112,7 @@ const nachfrageLink = link('nachfrage') ?? link('platzAnbieten');
     <div class="wrap">
       <div class="kopfzeile">
         <h2>Ihre Bedenken, unsere Antworten</h2>
-        <p class="einleitung">Was Vermieter am häufigsten fragen – und wie wir es lösen.</p>
+        <p class="einleitung">Was Vermieter am häufigsten fragen, und wie wir es lösen.</p>
       </div>
       <div class="sorgen klapp-liste">
         {sorgen.map((s) => (
@@ -175,13 +175,12 @@ const nachfrageLink = link('nachfrage') ?? link('platzAnbieten');
 
   <section class="abschnitt zentriert">
     <div class="wrap">
-      <h2>Bereit? Melden Sie Ihren Platz.</h2>
-      <p class="einleitung">Online in zwei Minuten – oder rufen Sie uns an. {site.ansprechpartner}.</p>
-      <p><a class="btn btn-primaer btn-gross" href="#flaeche-melden">Fläche melden</a></p>
-      <p class="unter-hinweis kostenlos">Für Vermieter immer kostenlos</p>
+      <h2>Bereit? Bieten Sie Ihren Platz an.</h2>
+      <p class="einleitung">In zwei Minuten eingetragen. Fragen? Schreiben Sie uns per WhatsApp oder E-Mail.</p>
       <p class="kontakt-zeile">
-        <a class="btn btn-rahmen" href={telefonHref}><Icon name="telefon" class="symbol-klein" /> {site.telefonAnzeige}</a>
-        <a class="btn btn-rahmen" href={whatsappLink} rel="noopener"><Icon name="chat" class="symbol-klein" /> WhatsApp</a>
+        <a class="btn btn-primaer btn-gross" href="#flaeche-melden">Platz anbieten</a>
+        <a class="btn btn-rahmen btn-gross" href={whatsappLink} rel="noopener"><Icon name="chat" class="symbol-klein" /> WhatsApp</a>
+        <a class="btn btn-rahmen btn-gross" href={emailHref}><Icon name="mail" class="symbol-klein" /> E-Mail</a>
       </p>
     </div>
   </section>
@@ -190,9 +189,10 @@ const nachfrageLink = link('nachfrage') ?? link('platzAnbieten');
 <style>
   .held { padding-block: clamp(1.5rem, 6vw, 4.5rem) clamp(3rem, 8vw, 5rem); }
   .held-raster { display: grid; gap: 2rem; }
-  @media (min-width: 56rem) { .held-raster { grid-template-columns: 1.1fr 1fr; align-items: start; gap: 4rem; } }
-  .held h1 { margin-bottom: 1.25rem; }
-  .held .kostenlos-pille { margin-bottom: 1.5rem; }
+  @media (min-width: 56rem) { .held-raster { grid-template-columns: 55fr 45fr; align-items: start; gap: 3.5rem; } }
+  /* Kleiner als auf der Startseite: die Textspalte ist schmaler, sonst steht ein Wort pro Zeile */
+  .held h1 { font-size: clamp(2rem, 4vw, 3.25rem); text-wrap: balance; margin-bottom: 1rem; }
+  .held .einleitung { margin-bottom: 1.75rem; }
   .held .haken li { font-size: 1.2rem; }
   .formular-titel { font-size: 1.5rem; letter-spacing: -0.02em; }
   .sorgen { max-width: 50rem; margin-inline: auto; }

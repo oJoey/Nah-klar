@@ -1,7 +1,7 @@
 ---
 // Verdienstrechner: Art → Ausstattung (nur Stellplätze) → Größe. Fahrzeugplätze rasten in Größenklassen ein,
 // der Preis springt nur bei einer neuen Klasse. Lagerraum nach m². Werte in src/data/richtwerte.json.
-// „Fläche jetzt melden“ übernimmt Art, Ausstattung, Größe und einen Preisvorschlag ins Formular.
+// „Platz jetzt anbieten“ übernimmt Art, Ausstattung, Größe und einen Preisvorschlag ins Formular.
 import richtwerte from '../data/richtwerte.json';
 import { link } from '../config/seiten';
 interface Props { ausfuehrlich?: boolean; }
@@ -42,10 +42,10 @@ const formular = link('platzAnbieten') ?? '/platz-anbieten/';
     </div>
     <div class="rechner-ausgabe" aria-live="polite">
       <p class="rechner-label">Möglicher Ertrag im Jahr</p>
-      <p class="rechner-jahr" data-jahr>–</p>
-      <p class="rechner-monat" data-monat>–</p>
+      <p class="rechner-jahr" data-jahr>&nbsp;</p>
+      <p class="rechner-monat" data-monat>&nbsp;</p>
       <p class="unter-hinweis">Richtwerte für den {richtwerte.region}. Schätzung, keine Zusage. Sie bestimmen den Preis selbst und erhalten die volle Miete.</p>
-      <a class="btn btn-primaer btn-voll" href={formular} data-melden>Fläche jetzt melden</a>
+      <a class="btn btn-primaer btn-voll" href={formular} data-melden>Platz jetzt anbieten</a>
       {vollerRechner && <p class="rechner-mehr"><a class="weiter" href={vollerRechner}>Ausführlicher Verdienstrechner</a></p>}
     </div>
   </div>
@@ -102,8 +102,8 @@ const formular = link('platzAnbieten') ?? '/platz-anbieten/';
       if (!lager) passt.textContent = `Passt für: ${klasse.passt}`;
       if (anzahl) q('[data-anzahl-wert]').textContent = anzahl.value;
       const runde10 = (n: number) => Math.round(n / 10) * 10;
-      q('[data-jahr]').textContent = `ca. ${euro(runde10(von * 12))}–${euro(runde10(bis * 12))} €`;
-      q('[data-monat]').textContent = `${euro(von)}–${euro(bis)} € im Monat${stueck > 1 ? ` für ${stueck} Plätze` : ''}`;
+      q('[data-jahr]').textContent = `ca. ${euro(runde10(von * 12))} bis ${euro(runde10(bis * 12))} €`;
+      q('[data-monat]').textContent = `${euro(von)} bis ${euro(bis)} € im Monat${stueck > 1 ? ` für ${stueck} Plätze` : ''}`;
 
       const p = new URLSearchParams({ flaechen_art: art.wert });
       const liste = gewaehlt.map((z) => z.wert);

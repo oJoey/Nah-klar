@@ -21,7 +21,7 @@ export const texte = {
   zahlungKurz: live ? 'Automatische Zahlung' : 'Klare Zahlungsregeln',
   zahlungLang: live
     ? `Die Miete wird am ${zahlung.abbuchungTag}. des Monats per Lastschrift eingezogen und am ${zahlung.auszahlungTag}. an den Vermieter überwiesen.`
-    : 'Höhe, Termin und Weg der Zahlung stehen im Mietvertrag – für beide Seiten nachlesbar.',
+    : 'Höhe, Termin und Weg der Zahlung stehen im Mietvertrag, für beide Seiten nachlesbar.',
   zahlweiseMieter: live
     ? `Sie zahlen bequem per SEPA-Lastschrift, eingezogen am ${zahlung.abbuchungTag}. des Monats.`
     : 'Wie und wann Sie zahlen, steht in Ihrem Mietvertrag.',
@@ -35,7 +35,7 @@ export const texte = {
   // Alles, was eine Zahlungsabwicklung über uns voraussetzt, hängt an zahlungLive:
   zahlungPuenktlich: live
     ? 'Die Miete wird jeden Monat automatisch per Lastschrift eingezogen und an Sie ausgezahlt.'
-    : 'Höhe, Termin und Weg der Zahlung stehen im Mietvertrag – für beide Seiten nachlesbar.',
+    : 'Höhe, Termin und Weg der Zahlung stehen im Mietvertrag, für beide Seiten nachlesbar.',
   steuer: live
     ? 'Sie erhalten jedes Jahr eine Übersicht Ihrer Einnahmen. Als Plattform, über die die Miete läuft, sind wir gesetzlich verpflichtet, Vermieter und Einnahmen jährlich an das Bundeszentralamt für Steuern zu melden. Eine Steuerberatung bieten wir nicht an.'
     : 'Einnahmen aus der Vermietung sind grundsätzlich steuerpflichtig. Eine Steuerberatung bieten wir nicht an.',
@@ -66,11 +66,11 @@ const beide = `${v.garageAutoLager} € (Garage, Auto, Lager) bzw. ${v.wohnmobil
 /** Betrag für eine Mieter-Art (mieter_art aus optionen.json). */
 export const vermittlungBetrag = (art?: string) => (art === 'wohnmobil-wohnwagen' || art === 'anhaenger-boot' ? v.wohnmobilAnhaengerBoot : v.garageAutoLager);
 
-/** Satz zur Vermittlungsgebühr zum Zeitpunkt „jetzt“ – leer, wenn sie nicht erwähnt werden soll. Mit art nur der passende Betrag. */
+/** Satz zur Vermittlungsgebühr zum Zeitpunkt „jetzt“. Leer, wenn sie nicht erwähnt werden soll. Mit art nur der passende Betrag. */
 export function vermittlungText(jetzt = new Date(), art?: string): string {
   const betrag = art ? `${vermittlungBetrag(art)} €` : beide;
   if (startaktionLaeuft(jetzt)) return `Vermittlungsgebühr: ${betrag}, fällig erst bei Vertragsabschluss. Bis ${tagMonat} entfällt sie.`;
-  if (v.aktiv) return `Vermittlungsgebühr: ${betrag}, nur bei Erfolg fällig – erst wenn Sie einen Mietvertrag abschließen.`;
+  if (v.aktiv) return `Vermittlungsgebühr: ${betrag}, nur bei Erfolg fällig, also erst wenn Sie einen Mietvertrag abschließen.`;
   return '';
 }
 
@@ -87,7 +87,7 @@ export function vermittlungHtml(art?: string): string {
 export function ersetze(text: string): string {
   return text
     .replaceAll('{NAME}', site.name)
-    .replaceAll('{TELEFON}', site.telefonAnzeige)
+    .replaceAll('{WHATSAPP}', site.whatsappAnzeige)
     .replaceAll('{REGION}', site.region)
     .replaceAll('{IN_REGION}', site.regionIn)
     .replaceAll('{EMAIL}', site.email)
@@ -105,7 +105,7 @@ export function ersetze(text: string): string {
 }
 
 
-/** Einfache Absätze mit Links [Text](/pfad/) – mehr Markdown brauchen die FAQ nicht. */
+/** Einfache Absätze mit Links [Text](/pfad/). Mehr Markdown brauchen die FAQ nicht. */
 export function absaetze(text: string): string {
   return ersetze(text)
     .trim()

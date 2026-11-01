@@ -34,7 +34,9 @@ Werte siehe `src/data/optionen.json`.
 
 ## Abgleich (Regeln)
 
-Passend, wenn: `geeignet_fuer` enthält `mieter_art` · Länge/Höhe/Fläche reicht · Entfernung ≤ `umkreis_km` (PostGIS oder Haversine) · Preis ≤ `budget_max` (oder egal) · Wünsche erfüllt (weiche Bewertung, erhöht `punkte`).
+Zuordnung aus `optionen.json`: jede `mieter_art` nennt die passenden `flaechen_art` und ein `geeignet_fuer` (z. B. Garage → `flaechen_art` garage, `geeignet_fuer` auto-motorrad; Lagerraum → lagerraum/garage/halle-scheune, lagergut).
+
+Passend, wenn: `flaechen_art` der Fläche in der Liste der `mieter_art` und `geeignet_fuer` enthält den Wert der `mieter_art` · Länge/Höhe/Fläche reicht · Entfernung ≤ `umkreis_km` (PostGIS oder Haversine) · Preis ≤ `budget_max` (oder egal) · Wünsche erfüllt (weiche Bewertung, erhöht `punkte`).
 
 ## Seiten
 

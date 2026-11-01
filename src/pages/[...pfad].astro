@@ -4,7 +4,7 @@ import Basis from '../layouts/Basis.astro';
 import ButtonPaar from '../components/ButtonPaar.astro';
 import Verdienstrechner from '../components/Verdienstrechner.astro';
 import Faq from '../components/Faq.astro';
-import { site, telefonHref, whatsappLink } from '../config/site';
+import { site, whatsappLink, emailHref } from '../config/site';
 import { seiten, entwuerfe, link, type SeitenSchluessel } from '../config/seiten';
 import { entwurfTexte } from '../data/entwuerfe';
 
@@ -22,7 +22,7 @@ const kruemel = [
 const verwandt = (text.verwandt ?? []).map((k) => ({ titel: seiten[k].titel, href: link(k) })).filter((v) => v.href);
 const mitKontakt = schluessel === 'kontakt' || schluessel === 'hilfe';
 ---
-<Basis titel={seite.titel} beschreibung={text.einleitung || `${seite.titel} – ${site.name}`} brotkruemel={kruemel} noindex>
+<Basis titel={seite.titel} beschreibung={text.einleitung || `${seite.titel} bei ${site.name}`} brotkruemel={kruemel} noindex>
   <section class="abschnitt abschnitt-grau">
     <div class="wrap schmal">
       <h1>{seite.titel}</h1>
@@ -30,7 +30,7 @@ const mitKontakt = schluessel === 'kontakt' || schluessel === 'hilfe';
       {text.punkte && <ul class="haken mt">{text.punkte.map((p) => <li>{p}</li>)}</ul>}
       {text.punkteHtml && <ul class="haken mt">{text.punkteHtml.map((p) => <li set:html={p} />)}</ul>}
       {schluessel !== 'verdienstrechner' && !mitKontakt && (
-        <p class="hinweis"><strong>Diese Seite wird gerade erstellt.</strong> Bis dahin helfen wir Ihnen gern persönlich: <a href={telefonHref}>{site.telefonAnzeige}</a> oder <a href={whatsappLink} rel="noopener">WhatsApp</a>.</p>
+        <p class="hinweis"><strong>Diese Seite wird gerade erstellt.</strong> Bis dahin helfen wir Ihnen gern persönlich per <a href={whatsappLink} rel="noopener">WhatsApp</a> oder <a href={emailHref}>E-Mail</a>.</p>
       )}
     </div>
   </section>
@@ -42,8 +42,8 @@ const mitKontakt = schluessel === 'kontakt' || schluessel === 'hilfe';
   {mitKontakt && (
     <section class="abschnitt">
       <div class="wrap kontakt-raster">
-        <a class="karte kontakt-karte" href={telefonHref}><strong>Telefon</strong><span>{site.telefonAnzeige}</span></a>
-        <a class="karte kontakt-karte" href={whatsappLink} rel="noopener"><strong>WhatsApp</strong><span>{site.telefonAnzeige}</span></a>
+        <a class="karte kontakt-karte" href={whatsappLink} rel="noopener"><strong>WhatsApp</strong><span>{site.whatsappAnzeige}</span></a>
+        <a class="karte kontakt-karte" href={emailHref}><strong>E-Mail</strong><span>{site.email}</span></a>
       </div>
     </section>
   )}

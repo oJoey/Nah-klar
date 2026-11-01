@@ -4,6 +4,6 @@ seiten: [start]
 reihenfolge: 90
 ---
 
-Melden Sie Ihren Platz in zwei Minuten an, per Formular oder Anruf. Für Vermieter ist das immer kostenlos.
+Bieten Sie Ihren Platz in zwei Minuten über unser Formular an. Für Vermieter ist das immer kostenlos.
 
 Alles Weitere, vom Ablauf bis zum möglichen Ertrag, finden Sie unter [Platz vermieten](/vermieten/).

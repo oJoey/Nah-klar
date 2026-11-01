@@ -1,7 +1,7 @@
 ---
 import '@fontsource-variable/manrope';
 import '../styles/global.css';
-import { site, telefonHref } from '../config/site';
+import { site } from '../config/site';
 import { jsonLd } from '../lib/texte';
 import Aktionsbalken from '../components/Aktionsbalken.astro';
 import Kopf from '../components/Kopf.astro';
@@ -24,10 +24,9 @@ const organisation = {
   '@id': `${site.url}/#organisation`,
   name: site.name,
   url: site.url,
-  telephone: site.telefonLink,
   description: site.beschreibung,
   areaServed: { '@type': 'AdministrativeArea', name: site.region },
-  contactPoint: { '@type': 'ContactPoint', telephone: site.telefonLink, contactType: 'customer service', areaServed: 'DE', availableLanguage: 'de' },
+  contactPoint: { '@type': 'ContactPoint', email: site.email, contactType: 'customer service', areaServed: 'DE', availableLanguage: 'de' },
 };
 const website = {
   '@context': 'https://schema.org',
@@ -67,7 +66,7 @@ const website = {
         });
         if (Object.keys(o).length) { o.einstieg = location.pathname; sessionStorage.setItem('herkunft', JSON.stringify(o)); }
       } catch (e) {}
-      // Startaktion zeitgesteuert: nach dem Enddatum Aktionstexte entfernen, Folgetexte zeigen – auch ohne neuen Build.
+      // Startaktion zeitgesteuert: nach dem Enddatum Aktionstexte entfernen, Folgetexte zeigen, auch ohne neuen Build.
       document.addEventListener('DOMContentLoaded', function () {
         var jetzt = new Date();
         document.querySelectorAll('[data-aktion-bis]').forEach(function (el) { if (jetzt > new Date(el.getAttribute('data-aktion-bis'))) el.remove(); });

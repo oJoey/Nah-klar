@@ -1,5 +1,5 @@
 {
-  "_hinweis": "STARTWERTE ZUM ANPASSEN. Abgleich 11/2026 mit 22 Immowelt-Angeboten im Kreis Böblingen: Garage bis 5 m 54–100 €, Außenstellplatz PKW 29–60 € (Median 45 €); für Wohnmobil-, Carport- und Hallenplätze gab es keine Vergleichsangebote. Monatsmiete in Euro pro Platz, die der Vermieter erhält. Richtwerte für den Großraum Stuttgart ohne die Stadt Stuttgart (Landkreise Böblingen, Esslingen, Ludwigsburg, Rems-Murr). null = Klasse gibt es bei dieser Art nicht.",
+  "_hinweis": "STARTWERTE ZUM ANPASSEN. Abgleich 11/2026 mit 22 Immowelt-Angeboten im Kreis Böblingen: Garage bis 5 m 54 bis 100 €, Außenstellplatz PKW 29 bis 60 € (Median 45 €); für Wohnmobil-, Carport- und Hallenplätze gab es keine Vergleichsangebote. Monatsmiete in Euro pro Platz, die der Vermieter erhält. Richtwerte für den Großraum Stuttgart ohne die Stadt Stuttgart (Landkreise Böblingen, Esslingen, Ludwigsburg, Rems-Murr). null = Klasse gibt es bei dieser Art nicht.",
   "region": "Großraum Stuttgart",
   "klassen": [
     {

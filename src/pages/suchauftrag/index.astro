@@ -5,7 +5,7 @@ import FormSkript from '../../components/FormSkript.astro';
 import { link } from '../../config/seiten';
 ---
 <Basis
-  titel="Suchauftrag anlegen – Stellplatz, Garage oder Lagerraum"
+  titel="Suchauftrag anlegen: Stellplatz, Garage oder Lagerraum"
   beschreibung="Kostenloser Suchauftrag für Stellplatz, Garage, Winterplatz oder Lagerraum in Baden-Württemberg. Ohne Konto, keine Werbemails, jederzeit löschbar."
   brotkruemel={[{ name: 'Mieten', pfad: '/mieten/' }, { name: 'Suchauftrag', pfad: '/suchauftrag/' }]}
 >
@@ -14,7 +14,7 @@ import { link } from '../../config/seiten';
       <h1>Suchauftrag anlegen</h1>
       <p class="einleitung">In einer Minute, ohne Konto. Wir melden uns mit passenden Plätzen, mit Fotos, Preis und Ortsteil.</p>
       <SuchauftragFormular />
-      <p class="mt">Sie möchten selbst Platz vermieten? <a href={link('vermieten')}>Fläche melden</a>, für Vermieter kostenlos.</p>
+      <p class="mt">Sie möchten selbst Platz vermieten? <a href={link('platzAnbieten')}>Platz anbieten</a>, für Vermieter kostenlos.</p>
     </div>
   </section>
   <FormSkript />
