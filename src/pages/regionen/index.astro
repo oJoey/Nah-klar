@@ -31,6 +31,7 @@ const ortLink = (ort: string) => (such ? `${such}?ort=${encodeURIComponent(ort)}
         <h2>Wo suchen Sie?</h2>
         <p class="einleitung">Wählen Sie Ihre Stadt, der Ort wird im Suchauftrag schon eingetragen. Ihr Ort ist nicht dabei? Kein Problem, wir suchen überall im Land.</p>
       </div>
+      {link('regionBoeblingen') && <p class="region-link"><a class="weiter" href={link('regionBoeblingen')}>Alles zum Landkreis Böblingen</a></p>}
       <div class="bezirke">
         {bezirke.map((b) => (
           <div>

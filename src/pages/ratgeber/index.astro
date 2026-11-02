@@ -1,0 +1,60 @@
+---
+import Ratgeber from '../../layouts/Ratgeber.astro';
+import Icon from '../../components/Icon.astro';
+import FaqBlock from '../../components/FaqBlock.astro';
+import { seiten, istLive, link } from '../../config/seiten';
+import { ratgeberArtikel } from '../../data/ratgeber';
+
+const artikel = ratgeberArtikel.filter((a) => istLive(a.seite));
+const werkzeuge = (['passtWohnmobil', 'verdienstrechner'] as const).filter((k) => istLive(k));
+const faq = [
+  { frage: 'Für wen sind die Ratgeber gedacht?', antwort: 'Für alle, die einen Platz für Wohnmobil, Wohnwagen, Anhänger, Auto oder Lagergut suchen, und für Privatleute, die Platz vermieten möchten.' },
+  { frage: 'Kosten die Ratgeber und Werkzeuge etwas?', antwort: 'Nein. Alle Ratgeber, Checklisten und Werkzeuge sind kostenlos und ohne Anmeldung nutzbar.' },
+  { frage: 'Ersetzen die Ratgeber eine Beratung?', antwort: 'Nein. Die Ratgeber enthalten praktische Tipps. Eine Rechts-, Steuer- oder Versicherungsberatung bieten wir nicht an.' },
+];
+---
+<Ratgeber
+  seite="ratgeber"
+  eltern={null}
+  typ="CollectionPage"
+  titel="Ratgeber: Wohnmobil und Wohnwagen abstellen"
+  beschreibung="Ratgeber rund ums Abstellen: Diebstahlschutz, Einwinterung und Winterplatz-Vergleich für Wohnmobil, Wohnwagen und Anhänger. Praktische Tipps, kostenlos."
+  kicker="Ratgeber"
+  einleitung="Praktische Tipps rund ums Abstellen von Wohnmobil, Wohnwagen, Anhänger und Lagergut."
+  verwandt={['werkzeuge', 'mietenWohnmobil', 'mietenAnhaenger']}
+>
+  <Fragment slot="h1">Ratgeber rund ums <span class="markiert">Abstellen</span></Fragment>
+  <section class="abschnitt">
+    <div class="wrap">
+      <h2 class="gruppen-titel">Artikel und Checklisten</h2>
+      <ul class="raster artikel-liste">
+        {artikel.map((a) => (
+          <li class="artikel-karte">
+            <span class="artikel-symbol" aria-hidden="true"><Icon name={a.icon} /></span>
+            <p class="artikel-art">{a.art}</p>
+            <h3><a href={seiten[a.seite].pfad}>{seiten[a.seite].titel}</a></h3>
+            <p>{a.text}</p>
+          </li>
+        ))}
+      </ul>
+      {werkzeuge.length > 0 && (
+        <p class="mt">Werkzeuge: {werkzeuge.map((k, i) => <>{i > 0 && ' · '}<a href={link(k)}>{seiten[k].titel}</a></>)}</p>
+      )}
+    </div>
+  </section>
+  <section class="abschnitt abschnitt-grau">
+    <div class="wrap"><FaqBlock eintraege={faq} /></div>
+  </section>
+</Ratgeber>
+<style>
+  .gruppen-titel { font-size: clamp(1.5rem, 3vw, 2rem); }
+  .artikel-liste { gap: 1.25rem; }
+  .artikel-karte { position: relative; padding: 1.5rem; border: 1.5px solid var(--ueberschrift); border-radius: var(--r-gross); background: var(--hintergrund); box-shadow: 4px 4px 0 var(--ueberschrift); }
+  .artikel-symbol { display: grid; place-items: center; width: 3.5rem; height: 3.5rem; border-radius: var(--r); background: var(--ueberschrift); margin-bottom: 1rem; }
+  .artikel-symbol :global(.symbol) { color: var(--akzent); }
+  .artikel-art { margin: 0 0 0.25rem; font-size: 0.875rem; font-weight: 700; }
+  .artikel-karte h3 a { color: inherit; text-decoration: none; }
+  .artikel-karte h3 a::after { content: ''; position: absolute; inset: 0; border-radius: var(--r-gross); }
+  .artikel-karte:has(a:focus-visible) { outline: 3px solid var(--ueberschrift); outline-offset: 3px; }
+  .artikel-karte p:last-child { margin: 0; }
+</style>

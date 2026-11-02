@@ -1,0 +1,92 @@
+---
+import Ratgeber from '../../layouts/Ratgeber.astro';
+import RegionKennzahlen from '../../components/RegionKennzahlen.astro';
+import Richtwerte from '../../components/Richtwerte.astro';
+import FaqBlock from '../../components/FaqBlock.astro';
+import ButtonPaar from '../../components/ButtonPaar.astro';
+import { seiten, link } from '../../config/seiten';
+import { kategorien } from '../../data/kategorien';
+import { vermietKategorien } from '../../data/vermietKategorien';
+
+// Die 26 Städte und Gemeinden im Landkreis Böblingen. Links führen in den Suchauftrag mit vorausgefülltem Ort (Ortsseiten folgen später).
+const orte = ['Aidlingen', 'Altdorf', 'Böblingen', 'Bondorf', 'Deckenpfronn', 'Ehningen', 'Gärtringen', 'Gäufelden', 'Grafenau', 'Herrenberg', 'Hildrizhausen', 'Holzgerlingen', 'Jettingen', 'Leonberg', 'Magstadt', 'Mötzingen', 'Nufringen', 'Renningen', 'Rutesheim', 'Schönaich', 'Sindelfingen', 'Steinenbronn', 'Waldenbuch', 'Weil der Stadt', 'Weil im Schönbuch', 'Weissach'];
+const such = link('suchauftrag');
+const ortLink = (o: string) => (such ? `${such}?ort=${encodeURIComponent(o)}` : null);
+const mieten = kategorien.filter((k) => link(k.seite));
+const vermieten = vermietKategorien.filter((k) => link(k.seite));
+const faq = [
+  { frage: 'In welchen Orten im Landkreis Böblingen suchen Sie?', antwort: 'In allen 26 Städten und Gemeinden, von Leonberg und Weil der Stadt bis Herrenberg und Waldenbuch. Wie schnell wir einen Platz finden, hängt davon ab, wie viele Angebote es in Ihrer Gegend gibt.' },
+  { frage: 'Suchen Sie auch in den Nachbarkreisen?', antwort: 'Ja. Geben Sie im Suchauftrag den Umkreis an, den Sie fahren möchten. Dann schlagen wir auch Plätze in den angrenzenden Landkreisen vor.' },
+  { frage: 'Was kostet ein Stellplatz im Landkreis Böblingen?', antwort: 'Das hängt von Art, Größe und Lage ab. Die Richtwerte auf dieser Seite geben eine Orientierung. Den genauen Preis sehen Sie bei jedem Vorschlag.' },
+  { frage: 'Ich habe im Landkreis Platz frei. Wie biete ich ihn an?', antwort: 'Über unser Formular, in wenigen Schritten und mit ein paar Fotos. Für Vermieter ist das immer kostenlos.' },
+];
+---
+<Ratgeber
+  seite="regionBoeblingen"
+  eltern="regionen"
+  typ="CollectionPage"
+  titel="Stellplatz und Garage im Landkreis Böblingen"
+  beschreibung="Stellplatz, Garage, Winterplatz oder Lagerraum im Landkreis Böblingen mieten oder vermieten: in Böblingen, Sindelfingen, Leonberg, Herrenberg und mehr."
+  kicker="Region · Landkreis Böblingen"
+  einleitung="Von Leonberg bis Herrenberg, von Sindelfingen bis Waldenbuch: Wir bringen Mieter und Vermieter im ganzen Landkreis zusammen."
+  verwandt={['regionen', 'mieten', 'vermieten']}
+>
+  <Fragment slot="h1">Stellplatz und Garage im <span class="markiert">Landkreis Böblingen</span></Fragment>
+
+  <section class="abschnitt" id="orte">
+    <div class="wrap">
+      <RegionKennzahlen region="landkreis-boeblingen" />
+      <div class="kopfzeile">
+        <h2>Städte und Gemeinden im Landkreis</h2>
+        <p class="einleitung">Wählen Sie Ihren Ort, er wird im Suchauftrag schon eingetragen.</p>
+      </div>
+      <ul class="chips orte">
+        {orte.map((o) => { const h = ortLink(o); return <li>{h ? <a class="chip" href={h} rel="nofollow">{o}</a> : <span class="chip">{o}</span>}</li>; })}
+      </ul>
+      {link('regionen') && <p class="mt"><a class="weiter" href={link('regionen')}>Alle Regionen in Baden-Württemberg</a></p>}
+    </div>
+  </section>
+
+  <section class="abschnitt abschnitt-grau" id="kategorien">
+    <div class="wrap kat-raster">
+      <div>
+        <h2>Platz mieten</h2>
+        <ul class="haken">{mieten.map((k) => <li><a href={link(k.seite)}>{seiten[k.seite].titel}</a></li>)}</ul>
+      </div>
+      <div>
+        <h2>Platz vermieten</h2>
+        <ul class="haken">{vermieten.map((k) => <li><a href={link(k.seite)}>{seiten[k.seite].titel}</a></li>)}</ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="abschnitt" id="stadt-land">
+    <div class="wrap inhalt">
+      <h2>Stadt oder Land: Welche Plätze es im Kreis gibt</h2>
+      <p>In den größeren Städten wie Böblingen, Sindelfingen und Leonberg sind es vor allem Garagen, Carports und Plätze in Einfahrten. In den ländlicheren Gemeinden gibt es eher Scheunen, Hallen und Hofflächen, dort finden sich auch Plätze für Wohnmobile, Wohnwagen und Boote.</p>
+      <p>Für einen Winterplatz lohnt sich deshalb oft ein etwas größerer Umkreis. Geben Sie im Suchauftrag an, wie weit Sie fahren möchten.</p>
+    </div>
+  </section>
+
+  <section class="abschnitt abschnitt-grau" id="richtwerte">
+    <div class="wrap">
+      <div class="kopfzeile">
+        <h2>Richtpreise in der Region</h2>
+        <p class="einleitung">Übliche Monatspreise nach Art und Fahrzeuglänge. Den genauen Preis sehen Sie bei jedem Vorschlag.</p>
+      </div>
+      <Richtwerte fuer="mieter" />
+    </div>
+  </section>
+
+  <section class="abschnitt">
+    <div class="wrap">
+      <FaqBlock eintraege={faq} />
+      <ButtonPaar mieterZuerst />
+    </div>
+  </section>
+</Ratgeber>
+<style>
+  .orte { list-style: none; padding: 0; margin: 0; }
+  .orte .chip { text-decoration: none; color: var(--ueberschrift); }
+  .kat-raster { display: grid; gap: 2rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr)); }
+</style>

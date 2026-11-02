@@ -30,21 +30,25 @@ export const seiten = {
   strassenCheck: { pfad: '/werkzeuge/strassen-check-wohnwagen/', live: false, titel: 'Straßen-Check Wohnwagen' },
   winterplatzVergleich: { pfad: '/ratgeber/winterplatz-vergleich/', live: true, titel: 'Winterplatz-Vergleich' },
   // Später: prüft Breite, Höhe und Gewicht gegen die Zufahrt eines Platzes
-  passtWohnmobil: { pfad: '/werkzeuge/passt-mein-wohnmobil/', live: false, titel: 'Passt mein Wohnmobil?' },
+  passtWohnmobil: { pfad: '/werkzeuge/passt-mein-wohnmobil/', live: true, titel: 'Passt mein Wohnmobil?' },
+  ratgeber: { pfad: '/ratgeber/', live: true, titel: 'Ratgeber' },
+  diebstahlschutz: { pfad: '/ratgeber/diebstahlschutz-abstellen/', live: true, titel: 'Diebstahlschutz beim Abstellen' },
+  // Regionen (Ortsseiten und Stuttgart folgen später)
+  regionBoeblingen: { pfad: '/region/landkreis-boeblingen/', live: true, titel: 'Landkreis Böblingen' },
   nachfrage: { pfad: '/vermieten/nachfrage/', live: true, titel: 'Nachfrage in Ihrer Nähe' },
 
   // Kategorieseiten Mieten (Inhalt: src/data/kategorien.ts, Seite: src/pages/mieten/[kategorie].astro)
   mietenWohnmobil: { pfad: '/mieten/wohnmobil-wohnwagen-stellplatz/', live: true, titel: 'Wohnmobil und Wohnwagen' },
   mietenAuto: { pfad: '/mieten/auto-stellplatz/', live: true, titel: 'Auto und Motorrad' },
-  mietenGarage: { pfad: '/mieten/garage/', live: false, titel: 'Garage', ersatz: '/suchauftrag/?mieter_art=garage' },
+  mietenGarage: { pfad: '/mieten/garage/', live: true, titel: 'Garage' },
   mietenLager: { pfad: '/mieten/lagerraum/', live: true, titel: 'Lagerraum' },
   mietenAnhaenger: { pfad: '/mieten/anhaenger-boot/', live: true, titel: 'Anhänger und Boot' },
 
   // Unterseiten Vermieten (Ersatz: Formular mit vorausgewählter Fläche)
-  vermietenGarage: { pfad: '/vermieten/garage/', live: false, titel: 'Garage vermieten', ersatz: '/platz-anbieten/?flaechen_art=garage' },
-  vermietenEinfahrt: { pfad: '/vermieten/einfahrt/', live: false, titel: 'Einfahrt vermieten', ersatz: '/platz-anbieten/?flaechen_art=stellplatz-frei' },
-  vermietenKeller: { pfad: '/vermieten/keller-raum/', live: false, titel: 'Keller und Raum vermieten', ersatz: '/platz-anbieten/?flaechen_art=lagerraum' },
-  vermietenScheune: { pfad: '/vermieten/scheune-hofflaeche/', live: false, titel: 'Scheune und Hof vermieten', ersatz: '/platz-anbieten/?flaechen_art=halle-scheune' },
+  vermietenGarage: { pfad: '/vermieten/garage/', live: true, titel: 'Garage vermieten' },
+  vermietenEinfahrt: { pfad: '/vermieten/einfahrt/', live: true, titel: 'Einfahrt vermieten' },
+  vermietenKeller: { pfad: '/vermieten/keller-raum/', live: true, titel: 'Keller und Raum vermieten' },
+  vermietenScheune: { pfad: '/vermieten/scheune-hofflaeche/', live: true, titel: 'Scheune und Hof vermieten' },
 } satisfies Record<string, Seite>;
 
 export type SeitenSchluessel = keyof typeof seiten;

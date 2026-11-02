@@ -5,4 +5,4 @@ export const nachfrageSatz = 'Jedes Jahr suchen in Baden-Württemberg schätzung
 // Nur im Wohnmobil-Kontext (Kategorieseite Wohnmobil/Wohnwagen, Suchauftrag bei Art Wohnmobil).
 // Nicht auf Startseite, /mieten/ oder /vermieten/. Quelle: KBA, Bestand am 01.01.2025: 148.275 Wohnmobile in BW.
 export const wohnmobilSatz = 'In Baden-Württemberg sind über 148.000 Wohnmobile zugelassen (Quelle: Kraftfahrt-Bundesamt, Stand 01.01.2025).';
-export const wohnmobilHinweis = 'Über 148.000 Wohnmobile in Baden-Württemberg – Abstellplätze sind gefragt.';
+export const wohnmobilHinweis = 'Über 148.000 Wohnmobile in Baden-Württemberg: Abstellplätze sind gefragt.';

@@ -17,8 +17,13 @@ interface Props {
   fuer?: 'mieter' | 'vermieter';
   eltern?: SeitenSchluessel | null; // Brotkrümel-Ebene darüber, null = direkt unter der Startseite
   typ?: 'Article' | 'WebPage' | 'AboutPage' | 'ContactPage' | 'CollectionPage';
+  // Nur für Ratgeber-Artikel:
+  autor?: string;                        // z. B. 'Redaktion'
+  lesezeit?: number;                     // Minuten
+  inhalt?: { id: string; titel: string }[]; // Inhaltsverzeichnis
+  kurz?: string[];                       // „Das Wichtigste in Kürze“
 }
-const { seite, titel, beschreibung, kicker, einleitung, stand, verwandt = [], fuer = 'mieter', eltern = 'werkzeuge', typ = 'Article' } = Astro.props;
+const { seite, titel, beschreibung, kicker, einleitung, stand, verwandt = [], fuer = 'mieter', eltern = 'werkzeuge', typ = 'Article', autor, lesezeit, inhalt = [], kurz = [] } = Astro.props;
 const s = seiten[seite];
 const kruemel = [...(eltern && eltern !== seite ? [{ name: seiten[eltern].titel, pfad: seiten[eltern].pfad }] : []), { name: s.titel, pfad: s.pfad }];
 const standText = stand ? new Date(stand).toLocaleDateString('de-DE', { month: 'long', year: 'numeric' }) : '';
@@ -32,6 +37,7 @@ const artikel = typ === 'Article'
     description: beschreibung,
     dateModified: stand,
     inLanguage: 'de-DE',
+    ...(autor ? { author: { '@type': 'Organization', name: `${autor} ${site.name}`, url: site.url } } : {}),
     publisher: { '@id': `${site.url}/#organisation` },
     mainEntityOfPage: url,
   }
@@ -58,9 +64,30 @@ const cta = fuer === 'vermieter'
       <p class="kicker">{kicker}</p>
       <h1><slot name="h1" /></h1>
       <p class="einleitung">{einleitung}</p>
-      {standText && <p class="stand">Stand: {standText}</p>}
+      {(standText || autor || lesezeit) && (
+        <p class="stand">{[standText && `Stand: ${standText}`, lesezeit && `Lesezeit: ${lesezeit} Minuten`, autor && `Von: ${autor}`].filter(Boolean).join(' · ')}</p>
+      )}
     </div>
   </section>
+
+  {(kurz.length > 0 || inhalt.length > 0) && (
+    <section class="abschnitt artikel-start">
+      <div class="wrap artikel-start-raster">
+        {kurz.length > 0 && (
+          <div class="kurz">
+            <h2>Das Wichtigste in Kürze</h2>
+            <ul class="haken">{kurz.map((k) => <li>{k}</li>)}</ul>
+          </div>
+        )}
+        {inhalt.length > 0 && (
+          <nav class="inhalt-nav" aria-label="Inhaltsverzeichnis">
+            <h2>Inhalt</h2>
+            <ol>{inhalt.map((i) => <li><a href={`#${i.id}`}>{i.titel}</a></li>)}</ol>
+          </nav>
+        )}
+      </div>
+    </section>
+  )}
 
   <slot />
 
@@ -96,4 +123,13 @@ const cta = fuer === 'vermieter'
   .ratgeber-cta { display: grid; gap: 1.5rem; align-items: center; }
   .ratgeber-cta .einleitung { margin: 0; }
   @media (min-width: 52rem) { .ratgeber-cta { grid-template-columns: 1fr auto; gap: 3rem; } }
+  .artikel-start { padding-bottom: 0; }
+  .artikel-start-raster { display: grid; gap: 1.5rem; align-items: start; }
+  @media (min-width: 56rem) { .artikel-start-raster { grid-template-columns: 1.4fr 1fr; gap: 3rem; } }
+  .kurz { background: var(--tertiaer); border-radius: var(--r-gross); padding: clamp(1.25rem, 3vw, 2rem); }
+  .kurz h2, .inhalt-nav h2 { font-size: 1.3rem; }
+  .kurz .haken { margin: 0; }
+  .inhalt-nav ol { margin: 0; padding-left: 1.25rem; }
+  .inhalt-nav li { margin-bottom: 0.4rem; }
+  :global([id]) { scroll-margin-top: 5rem; }
 </style>

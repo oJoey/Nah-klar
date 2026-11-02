@@ -1,0 +1,107 @@
+---
+// Kategorieseiten für Vermieter. Inhalte in src/data/vermietKategorien.ts.
+import Ratgeber from '../../layouts/Ratgeber.astro';
+import Icon from '../../components/Icon.astro';
+import Richtwerte from '../../components/Richtwerte.astro';
+import Ertragsrechner from '../../components/Ertragsrechner.astro';
+import FlaecheMelden from '../../components/FlaecheMelden.astro';
+import FormSkript from '../../components/FormSkript.astro';
+import FaqBlock from '../../components/FaqBlock.astro';
+import NachfrageHinweis from '../../components/NachfrageHinweis.astro';
+import Vorteile from '../../components/Vorteile.astro';
+import { seiten, link } from '../../config/seiten';
+import { vermietKategorien, type VermietKategorie } from '../../data/vermietKategorien';
+
+export function getStaticPaths() {
+  return vermietKategorien
+    .filter((k) => seiten[k.seite].live)
+    .map((k) => ({ params: { kategorie: seiten[k.seite].pfad.split('/').filter(Boolean).pop() }, props: { k } }));
+}
+const { k } = Astro.props as { k: VermietKategorie };
+const andere = vermietKategorien.filter((x) => x.seite !== k.seite && link(x.seite));
+---
+<Ratgeber
+  seite={k.seite}
+  eltern="vermieten"
+  typ="WebPage"
+  titel={k.titel}
+  beschreibung={k.beschreibung}
+  kicker={`Vermieten · ${seiten[k.seite].titel.replace(' vermieten', '')}`}
+  einleitung={k.einleitung}
+  verwandt={k.verwandt}
+  fuer="vermieter"
+>
+  <Fragment slot="h1">{k.h1[0]}<span class="markiert">{k.h1[1]}</span>{k.h1[2]}</Fragment>
+
+  <section class="abschnitt">
+    <div class="wrap kat-start">
+      <div>
+        <h2>Wer so einen Platz sucht</h2>
+        <ul class="haken">{k.gesucht.map((g) => <li>{g}</li>)}</ul>
+        <NachfrageHinweis />
+      </div>
+      <div class="karte kat-hinweis">
+        <span class="kat-icon" aria-hidden="true"><Icon name={k.icon} /></span>
+        <h2>Ihre Vorteile</h2>
+        <Vorteile nur="vermieter" />
+        <a class="btn btn-primaer btn-gross" href="#anbieten">Platz anbieten</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="abschnitt abschnitt-grau" id="richtwerte">
+    <div class="wrap">
+      <div class="kopfzeile">
+        <h2>Größen und Richtpreise</h2>
+        <p class="einleitung">Was Mieter für vergleichbare Plätze üblicherweise zahlen. Es sind Richtwerte, den Preis legen Sie selbst fest.</p>
+      </div>
+      <Richtwerte fuer="vermieter" {...k.richtwerte} />
+    </div>
+  </section>
+
+  <section class="abschnitt" id="rechner">
+    <div class="wrap">
+      <div class="kopfzeile"><h2>Was bringt Ihr Platz im Jahr?</h2></div>
+      <Ertragsrechner />
+    </div>
+  </section>
+
+  <section class="abschnitt abschnitt-grau" id="checkliste">
+    <div class="wrap">
+      <div class="kopfzeile">
+        <h2>Checkliste vor dem Anbieten</h2>
+        <p class="einleitung">Mit diesen Punkten ist Ihr Angebot schnell geprüft und Interessenten wissen, woran sie sind.</p>
+      </div>
+      <ul class="haken checkliste">{k.checkliste.map((c) => <li>{c}</li>)}</ul>
+    </div>
+  </section>
+
+  <section class="abschnitt" id="anbieten">
+    <div class="wrap kat-formular">
+      <div>
+        <h2>{seiten[k.seite].titel}: jetzt anbieten</h2>
+        <p class="einleitung">In wenigen Schritten eingetragen. Wir prüfen Ihre Angaben und melden uns persönlich.</p>
+      </div>
+      <FlaecheMelden id="flaeche-melden" art={k.art} />
+    </div>
+  </section>
+
+  <section class="abschnitt abschnitt-grau">
+    <div class="wrap">
+      <FaqBlock eintraege={k.faq} />
+      <p class="mt andere">Auch vermieten: {andere.map((x, i) => <>{i > 0 && ' · '}<a href={link(x.seite)}>{seiten[x.seite].titel}</a></>)}</p>
+    </div>
+  </section>
+  <FormSkript />
+</Ratgeber>
+<style>
+  .kat-start, .kat-formular { display: grid; gap: 2.5rem; align-items: start; }
+  @media (min-width: 56rem) { .kat-start { grid-template-columns: 1.2fr 1fr; gap: 4rem; } .kat-formular { grid-template-columns: 1fr 1.4fr; gap: 4rem; } }
+  .kat-start :global(.nachfrage-hinweis) { margin-top: 1.5rem; }
+  .kat-hinweis { border: 1.5px solid var(--ueberschrift); box-shadow: 6px 6px 0 var(--ueberschrift); }
+  .kat-hinweis h2 { font-size: 1.4rem; }
+  .kat-icon { display: grid; place-items: center; width: 3.5rem; height: 3.5rem; border-radius: var(--r); background: var(--ueberschrift); margin-bottom: 1rem; }
+  .kat-icon :global(.symbol) { color: var(--akzent); }
+  .checkliste { max-width: 46rem; }
+  .andere { color: var(--text); }
+</style>

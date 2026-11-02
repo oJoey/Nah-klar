@@ -1,0 +1,19 @@
+---
+// Kennzahlen einer Region aus src/data/kennzahlen.json. Nur Werte ab 3 erscheinen, sonst bleibt der Block leer.
+import daten from '../data/kennzahlen.json';
+interface Props { region: keyof typeof daten.regionen }
+const { region } = Astro.props;
+const liste = (daten.regionen[region] ?? []).filter((k) => k.wert >= 3);
+---
+{liste.length > 0 && (
+  <div class="region-zahlen">
+    <ul class="raster">
+      {liste.map((k) => <li class="karte"><strong>{k.wert.toLocaleString('de-DE')}</strong> {k.text}</li>)}
+    </ul>
+    <p class="unter-hinweis">Stand: {new Date(daten.stand).toLocaleDateString('de-DE')}</p>
+  </div>
+)}
+<style>
+  .region-zahlen { margin-bottom: 2rem; }
+  .region-zahlen strong { display: block; font-size: clamp(2.25rem, 6vw, 3rem); letter-spacing: -0.03em; color: var(--ueberschrift); font-variant-numeric: tabular-nums; }
+</style>

@@ -1,0 +1,24 @@
+---
+// FAQ aus einer Liste (für SEO-Seiten), mit FAQPage-Schema. Für die FAQ aus src/content/faq gibt es Faq.astro.
+import { jsonLd } from '../lib/texte';
+export type FaqEintrag = { frage: string; antwort: string };
+interface Props { eintraege: FaqEintrag[]; titel?: string; id?: string }
+const { eintraege, titel = 'Häufige Fragen', id = 'faq' } = Astro.props;
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: eintraege.map((e) => ({ '@type': 'Question', name: e.frage, acceptedAnswer: { '@type': 'Answer', text: e.antwort } })),
+};
+---
+<div class="faq-block" id={id}>
+  <h2>{titel}</h2>
+  <div class="klapp-liste">
+    {eintraege.map((e) => (
+      <details class="klapp"><summary>{e.frage}</summary><div class="klapp-inhalt"><p>{e.antwort}</p></div></details>
+    ))}
+  </div>
+</div>
+<script type="application/ld+json" set:html={jsonLd(schema)} />
+<style>
+  .faq-block { max-width: 50rem; scroll-margin-top: 5rem; }
+</style>

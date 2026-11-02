@@ -4,8 +4,8 @@ import Chips from './Chips.astro';
 import FormVersteckt from './FormVersteckt.astro';
 import Datenschutzhinweis from './Datenschutzhinweis.astro';
 import o from '../data/optionen.json';
-interface Props { id?: string }
-const { id = 'fm' } = Astro.props;
+interface Props { id?: string; art?: string }
+const { id = 'fm', art } = Astro.props;
 const mitMassen = o.flaechen_art.filter((a) => a.wert !== 'lagerraum').map((a) => a.wert).join(',');
 ---
 <form id={id} class="formular-karte" name="flaeche-melden" method="POST" action="/platz-anbieten/danke/" enctype="multipart/form-data" data-netlify="true" netlify-honeypot="bot-feld" data-formular data-mehrstufig>
@@ -16,7 +16,7 @@ const mitMassen = o.flaechen_art.filter((a) => a.wert !== 'lagerraum').map((a) =
     <h3 tabindex="-1">Welche Fläche haben Sie frei?</h3>
     <fieldset class="form-gruppe">
       <legend class="sr-only">Art der Fläche</legend>
-      <Chips name="flaechen_art" optionen={o.flaechen_art} pflicht gross />
+      <Chips name="flaechen_art" optionen={o.flaechen_art} pflicht gross vorwahl={art} />
     </fieldset>
     <fieldset class="form-gruppe">
       <legend>Geeignet für <span class="optional">(Mehrfachauswahl)</span></legend>

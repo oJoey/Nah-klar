@@ -48,13 +48,14 @@ const gruppen = [
 const gesamt = gruppen.reduce((s, g) => s + g.punkte.length, 0);
 ---
 <Ratgeber
+  eltern="ratgeber"
   seite="einwinterung"
   titel="Wohnmobil und Wohnwagen einwintern: Checkliste zum Abhaken"
   beschreibung="Wohnmobil oder Wohnwagen winterfest machen: Wasser, Gas, Batterie, Reifen, Innenraum und Papiere. Checkliste zum Abhaken und Ausdrucken."
   kicker="Ratgeber · Checkliste"
   einleitung={`${gesamt} Punkte, damit Ihr Wohnmobil oder Wohnwagen gut durch den Winter kommt. Zum Abhaken am Handy oder zum Ausdrucken.`}
   stand="2026-11-01"
-  verwandt={['winterplatzVergleich', 'preise', 'mieten']}
+  verwandt={['winterplatzVergleich', 'diebstahlschutz', 'mietenWohnmobil']}
 >
   <Fragment slot="h1">Wohnmobil und Wohnwagen <span class="markiert">einwintern</span></Fragment>
 

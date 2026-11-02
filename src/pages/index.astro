@@ -19,8 +19,9 @@ import { mieterSchritte, vermieterSchritte } from '../data/ablauf';
 import { vertrauen } from '../data/vorteile';
 import { startorte } from '../data/startorte';
 
-const arten = kategorien.map((k) => ({ wert: k.art, titel: k.kurz }));
-const kacheln = kategorien.map((k) => ({
+const startKategorien = kategorien.filter((k) => k.startseite !== false);
+const arten = startKategorien.map((k) => ({ wert: k.art, titel: k.kurz }));
+const kacheln = startKategorien.map((k) => ({
   titel: k.kurz,
   text: k.kachelText,
   icon: k.icon,
@@ -86,7 +87,10 @@ const orte = startorte.map((o) => ({ ort: o.ort, href: o.pfad ?? (such ? `${such
       <ul class="chips orte">
         {orte.map((o) => <li>{o.href ? <a class="chip" href={o.href} rel={o.href.includes('?') ? 'nofollow' : undefined}>{o.ort}</a> : <span class="chip">{o.ort}</span>}</li>)}
       </ul>
-      {link('regionen') && <p class="mt"><a class="weiter" href={link('regionen')}>Alle Regionen</a></p>}
+      <p class="mt">
+        {link('regionBoeblingen') && <a class="weiter" href={link('regionBoeblingen')}>Landkreis Böblingen</a>}
+        {link('regionen') && <a class="weiter alle-regionen" href={link('regionen')}>Alle Regionen</a>}
+      </p>
     </div>
   </section>
 
@@ -123,6 +127,7 @@ const orte = startorte.map((o) => ({ ort: o.ort, href: o.pfad ?? (such ? `${such
   .nachfrage-abschnitt :global(.nachfrage-hinweis) { margin: 0 auto; }
   .orte { list-style: none; padding: 0; margin: 0; }
   .orte .chip { text-decoration: none; color: var(--ueberschrift); }
+  .alle-regionen { margin-left: 1.5rem; }
   .abschluss :global(.button-paar) { margin-inline: auto; }
   .abschluss :global(.btn-rahmen) { border-color: var(--hintergrund); }
   .abschluss :global(.unter-hinweis) { color: var(--sekundaer); }

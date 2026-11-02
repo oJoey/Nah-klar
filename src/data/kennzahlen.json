@@ -1,0 +1,10 @@
+{
+  "_hinweis": "Von Hand pflegen, je Region. Eine Zahl erscheint erst ab 3, darunter wird sie ausgeblendet. Nur auf Regionsseiten verwenden, nicht auf Startseite, /mieten/ oder /vermieten/.",
+  "stand": "2026-11-02",
+  "regionen": {
+    "landkreis-boeblingen": [
+      { "wert": 0, "text": "Suchaufträge aus dem Landkreis in den letzten 12 Monaten" },
+      { "wert": 0, "text": "angebotene Plätze im Landkreis" }
+    ]
+  }
+}

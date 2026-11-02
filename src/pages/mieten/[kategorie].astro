@@ -2,10 +2,12 @@
 // Kategorieseiten für Mieter. Inhalte in src/data/kategorien.ts.
 import Ratgeber from '../../layouts/Ratgeber.astro';
 import Icon from '../../components/Icon.astro';
-import Schritte from '../../components/Schritte.astro';
+import Richtwerte from '../../components/Richtwerte.astro';
+import SuchauftragFormular from '../../components/SuchauftragFormular.astro';
+import FormSkript from '../../components/FormSkript.astro';
+import FaqBlock from '../../components/FaqBlock.astro';
 import { seiten, link } from '../../config/seiten';
 import { kategorien, type Kategorie } from '../../data/kategorien';
-import { mieterSchritte } from '../../data/ablauf';
 
 export function getStaticPaths() {
   return kategorien
@@ -13,12 +15,14 @@ export function getStaticPaths() {
     .map((k) => ({ params: { kategorie: seiten[k.seite].pfad.split('/').filter(Boolean).pop() }, props: { k } }));
 }
 const { k } = Astro.props as { k: Kategorie };
-const suche = `${link('suchauftrag')}?mieter_art=${k.art}`;
+const titel = seiten[k.seite].titel;
 const tipps = [
   { titel: 'Zufahrt', icon: 'einfahrt', punkte: k.zufahrt },
   { titel: 'Maße', icon: 'liste', punkte: k.masse },
   { titel: 'Zugang', icon: 'ort', punkte: k.zugang },
 ] as const;
+// Andere Kategorien für die interne Verlinkung
+const andere = kategorien.filter((x) => x.seite !== k.seite && link(x.seite));
 ---
 <Ratgeber
   seite={k.seite}
@@ -26,7 +30,7 @@ const tipps = [
   typ="WebPage"
   titel={k.titel}
   beschreibung={k.beschreibung}
-  kicker={`Mieten · ${seiten[k.seite].titel}`}
+  kicker={`Mieten · ${titel}`}
   einleitung={k.einleitung}
   verwandt={k.verwandt}
 >
@@ -36,53 +40,75 @@ const tipps = [
     <div class="wrap kat-start">
       <div>
         {k.zahl && <p class="kat-zahl">{k.zahl}</p>}
-        <h2>Diese Plätze gibt es</h2>
+        <h2>Welche Plätze es gibt</h2>
         <ul class="haken">{k.plaetze.map((p) => <li>{p}</li>)}</ul>
+        <p><a class="weiter" href="#suchauftrag">Passenden Platz suchen lassen</a></p>
       </div>
-      <div class="karte kat-suche">
+      <div class="karte kat-hinweis">
         <span class="kat-icon" aria-hidden="true"><Icon name={k.icon} /></span>
         <h2>Noch kein passender Platz frei?</h2>
-        <p>Legen Sie einen Suchauftrag an. Wir melden uns, sobald ein passender Platz in Ihrer Nähe frei ist.</p>
-        <a class="btn btn-primaer btn-gross btn-voll" href={suche}>Suchauftrag anlegen</a>
-        <p class="unter-hinweis">Der Suchauftrag ist kostenlos und unverbindlich.</p>
+        <p>Legen Sie einen Suchauftrag an. Wir melden uns, sobald ein passender Platz in Ihrer Nähe frei ist. Der Suchauftrag ist kostenlos und unverbindlich.</p>
       </div>
     </div>
   </section>
 
-  <section class="abschnitt abschnitt-grau">
+  <section class="abschnitt abschnitt-grau" id="richtwerte">
     <div class="wrap">
       <div class="kopfzeile">
-        <h2>Darauf sollten Sie achten</h2>
-        <p class="einleitung">Bei jedem Vorschlag nennen wir Ihnen, was wir zu Zufahrt, Maßen und Zugang wissen. Diese Fragen sollten Sie vor der Zusage klären.</p>
+        <h2>Größen und Richtpreise</h2>
+        <p class="einleitung">Übliche Monatspreise nach Fahrzeuglänge bzw. Fläche. Es sind Richtwerte, den genauen Preis sehen Sie bei jedem Vorschlag.</p>
+      </div>
+      <Richtwerte fuer="mieter" {...k.richtwerte} />
+      {link('passtWohnmobil') && k.seite !== 'mietenLager' && <p class="mt"><a class="weiter" href={link('passtWohnmobil')}>Prüfen, ob Ihr Fahrzeug durch Tor und Zufahrt passt</a></p>}
+    </div>
+  </section>
+
+  <section class="abschnitt" id="checkliste">
+    <div class="wrap">
+      <div class="kopfzeile">
+        <h2>Checkliste für die Besichtigung</h2>
+        <p class="einleitung">Zufahrt, Maße und Zugang entscheiden, ob ein Platz wirklich passt. Diese Punkte sollten Sie vor der Zusage klären.</p>
       </div>
       <ul class="raster tipps">
         {tipps.map((t) => (
           <li class="karte">
             <span class="symbol-flaeche" aria-hidden="true"><Icon name={t.icon} /></span>
             <h3>{t.titel}</h3>
-            <ul class="tipp-liste">{t.punkte.map((p) => <li>{p}</li>)}</ul>
+            <ul class="haken tipp-liste">{t.punkte.map((p) => <li>{p}</li>)}</ul>
           </li>
         ))}
       </ul>
     </div>
   </section>
 
-  <section class="abschnitt">
-    <div class="wrap">
-      <div class="kopfzeile"><h2>So kommen Sie zu Ihrem Platz</h2></div>
-      <Schritte mieter={mieterSchritte} />
+  <section class="abschnitt abschnitt-grau" id="suchauftrag">
+    <div class="wrap kat-formular">
+      <div>
+        <h2>Suchauftrag für {titel}</h2>
+        <p class="einleitung">Sagen Sie uns, was Sie suchen. Wir melden uns mit passenden Plätzen, mit Fotos, Ortsteil und festem Monatspreis.</p>
+      </div>
+      <SuchauftragFormular art={k.art} />
     </div>
   </section>
+
+  <section class="abschnitt">
+    <div class="wrap">
+      <FaqBlock eintraege={k.faq} />
+      <p class="mt andere">Weitere Kategorien: {andere.map((x, i) => <>{i > 0 && ' · '}<a href={link(x.seite)}>{seiten[x.seite].titel}</a></>)}</p>
+    </div>
+  </section>
+  <FormSkript />
 </Ratgeber>
 <style>
-  .kat-start { display: grid; gap: 2.5rem; align-items: start; }
-  @media (min-width: 56rem) { .kat-start { grid-template-columns: 1.2fr 1fr; gap: 4rem; } }
+  .kat-start, .kat-formular { display: grid; gap: 2.5rem; align-items: start; }
+  @media (min-width: 56rem) { .kat-start { grid-template-columns: 1.2fr 1fr; gap: 4rem; } .kat-formular { grid-template-columns: 1fr 1.4fr; gap: 4rem; } }
   .kat-zahl { margin: 0 0 2rem; padding: 1rem 1.25rem; background: var(--tertiaer); border-radius: var(--r); font-weight: 600; color: var(--ueberschrift); }
-  .kat-suche { border: 1.5px solid var(--ueberschrift); box-shadow: 6px 6px 0 var(--ueberschrift); }
-  .kat-suche h2 { font-size: 1.4rem; }
+  .kat-hinweis { border: 1.5px solid var(--ueberschrift); box-shadow: 6px 6px 0 var(--ueberschrift); }
+  .kat-hinweis h2 { font-size: 1.4rem; }
+  .kat-hinweis p { margin: 0; color: var(--text); }
   .kat-icon { display: grid; place-items: center; width: 3.5rem; height: 3.5rem; border-radius: var(--r); background: var(--ueberschrift); margin-bottom: 1rem; }
   .kat-icon :global(.symbol) { color: var(--akzent); }
   .tipps { gap: 1.25rem; }
-  .tipp-liste { margin: 0; padding-left: 1.1rem; color: var(--text); }
-  .tipp-liste li { margin-bottom: 0.5rem; }
+  .tipp-liste { margin: 0; }
+  .andere { color: var(--text); }
 </style>

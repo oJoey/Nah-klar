@@ -1,0 +1,96 @@
+---
+import Ratgeber from '../../layouts/Ratgeber.astro';
+import FaqBlock from '../../components/FaqBlock.astro';
+import { link } from '../../config/seiten';
+
+// Nur praktische Tipps. Keine Aussagen zu Versicherungsbedingungen oder Recht.
+const inhalt = [
+  { id: 'platz', titel: 'Den richtigen Platz wählen' },
+  { id: 'mechanisch', titel: 'Mechanische Sicherungen' },
+  { id: 'elektronisch', titel: 'Tracker und Alarm' },
+  { id: 'ausraeumen', titel: 'Ausräumen und dokumentieren' },
+  { id: 'kontrolle', titel: 'Während der Standzeit' },
+  { id: 'faq', titel: 'Häufige Fragen' },
+];
+const kurz = [
+  'Ein abschließbarer, gut einsehbarer Platz ist der beste Schutz.',
+  'Mehrere Sicherungen kombinieren: Deichsel- oder Lenkradschloss plus Radkralle.',
+  'Wertsachen, Papiere und Elektronik vor dem Abstellen mitnehmen.',
+  'Fahrzeug, Ausstattung und Seriennummern mit Fotos festhalten.',
+  'Regelmäßig vorbeischauen und mit dem Vermieter in Kontakt bleiben.',
+];
+const faq = [
+  { frage: 'Welche Sicherung hilft am meisten?', antwort: 'Keine einzelne. Am wirksamsten ist die Kombination: ein geschützter Platz, eine sichtbare mechanische Sicherung und ein ausgeräumtes Fahrzeug. Je mehr Aufwand ein Diebstahl macht, desto unattraktiver wird er.' },
+  { frage: 'Lohnt sich ein GPS-Tracker?', antwort: 'Ein Tracker verhindert keinen Diebstahl, kann aber helfen, ein Fahrzeug wiederzufinden. Achten Sie auf ein gutes Versteck und eine Stromversorgung, die auch bei langer Standzeit hält.' },
+  { frage: 'Kann der Fahrzeugschein im Fahrzeug bleiben?', antwort: 'Besser nicht. Nehmen Sie Fahrzeugpapiere, Ersatzschlüssel und Wertsachen mit nach Hause, damit sie nicht zusammen mit dem Fahrzeug verschwinden.' },
+  { frage: 'Was tue ich, wenn doch etwas passiert?', antwort: 'Verständigen Sie die Polizei und informieren Sie den Vermieter. Ihre Fotos, die Fahrgestellnummer und die Seriennummern helfen bei der Anzeige.' },
+];
+---
+<Ratgeber
+  seite="diebstahlschutz"
+  eltern="ratgeber"
+  titel="Wohnwagen Diebstahlschutz: sicher abstellen"
+  beschreibung="Wohnwagen Diebstahlschutz: Platzwahl, Deichselschloss, Radkralle, GPS-Tracker und was Sie vor dem Abstellen ausräumen sollten. Praktische Tipps."
+  kicker="Ratgeber · Sicherheit"
+  einleitung="Ob Winterplatz oder Dauerstellplatz: Mit ein paar Handgriffen machen Sie es Dieben deutlich schwerer."
+  stand="2026-11-02"
+  autor="Redaktion"
+  lesezeit={5}
+  inhalt={inhalt}
+  kurz={kurz}
+  verwandt={['einwinterung', 'winterplatzVergleich', 'mietenWohnmobil', 'mietenAnhaenger']}
+>
+  <Fragment slot="h1">Wohnwagen <span class="markiert">Diebstahlschutz</span>: sicher abstellen</Fragment>
+
+  <section class="abschnitt">
+    <div class="wrap inhalt">
+      <h2 id="platz">Den richtigen Platz wählen</h2>
+      <p>Der Abstellplatz entscheidet mehr als jedes Schloss. Ein Fahrzeug, das man von der Straße aus nicht sieht und das hinter einem Tor steht, ist für Gelegenheitsdiebe kaum interessant.</p>
+      <ul>
+        <li>Abschließbare Halle, Scheune oder Garage sind am sichersten.</li>
+        <li>Ein umzäunter Hof, auf dem der Vermieter selbst wohnt, ist ebenfalls gut.</li>
+        <li>Steht das Fahrzeug im Freien, helfen Licht und Nachbarn, die den Platz im Blick haben.</li>
+        <li>Parken Sie so, dass sich das Fahrzeug nicht einfach herausziehen lässt, etwa mit der Deichsel zur Wand.</li>
+      </ul>
+      {link('mietenWohnmobil') && <p>Einen geschützten Platz in Ihrer Nähe finden: <a href={link('mietenWohnmobil')}>Stellplatz für Wohnmobil und Wohnwagen</a>.</p>}
+
+      <h2 id="mechanisch">Mechanische Sicherungen</h2>
+      <p>Sichtbare Sicherungen schrecken ab und kosten Zeit. Kombinieren Sie mehrere:</p>
+      <ul>
+        <li><strong>Deichsel- oder Kupplungsschloss</strong> für Wohnwagen und Anhänger: verhindert das Ankuppeln.</li>
+        <li><strong>Radkralle</strong>: blockiert ein Rad, wirkt für Wohnwagen, Anhänger und Wohnmobil.</li>
+        <li><strong>Lenkrad- oder Pedalsperre</strong> für Wohnmobile.</li>
+        <li><strong>Stützen herunterkurbeln</strong>: Ein aufgebockter Wohnwagen lässt sich nicht einfach wegziehen.</li>
+      </ul>
+
+      <h2 id="elektronisch">Tracker und Alarm</h2>
+      <p>Elektronik verhindert keinen Diebstahl, hilft aber beim Wiederfinden oder macht auf einen Einbruch aufmerksam.</p>
+      <ul>
+        <li>Ein GPS-Tracker sollte gut versteckt sein und eine eigene, ausreichend lange Stromversorgung haben.</li>
+        <li>Wenn Sie die Batterie über den Winter abklemmen, prüfen Sie, ob Tracker oder Alarmanlage dann noch Strom haben.</li>
+        <li>Eine Alarmanlage nützt vor allem dort, wo jemand den Alarm hört.</li>
+      </ul>
+
+      <h2 id="ausraeumen">Ausräumen und dokumentieren</h2>
+      <ul>
+        <li>Wertsachen, Elektronik und Fahrräder vom Heckträger mitnehmen.</li>
+        <li>Fahrzeugpapiere und Ersatzschlüssel nicht im Fahrzeug lassen.</li>
+        <li>Fotos von außen und innen machen, auch von Ausstattung und Zubehör.</li>
+        <li>Fahrgestellnummer und Seriennummern von Geräten notieren.</li>
+        <li>Wertvolles Zubehör unauffällig kennzeichnen, etwa mit einer Gravur.</li>
+      </ul>
+      {link('einwinterung') && <p>Was Sie beim Abstellen über den Winter sonst noch erledigen sollten, steht in unserer <a href={link('einwinterung')}>Einwinterungs-Checkliste</a>.</p>}
+
+      <h2 id="kontrolle">Während der Standzeit</h2>
+      <ul>
+        <li>Alle paar Wochen vorbeischauen, gleichzeitig Feuchtigkeit und Batterie prüfen.</li>
+        <li>Mit dem Vermieter absprechen, dass er Auffälliges meldet.</li>
+        <li>Sicherungen nach jedem Besuch wieder anbringen.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="abschnitt abschnitt-grau">
+    <div class="wrap"><FaqBlock eintraege={faq} /></div>
+  </section>
+</Ratgeber>

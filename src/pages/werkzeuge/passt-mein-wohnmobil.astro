@@ -1,0 +1,107 @@
+---
+import Ratgeber from '../../layouts/Ratgeber.astro';
+import FaqBlock from '../../components/FaqBlock.astro';
+import { link } from '../../config/seiten';
+
+// Reine Rechenhilfe: Maße von Fahrzeug und Platz vergleichen. Der Sicherheitsabstand ist frei wählbar, wir geben keinen vor.
+const felder = [
+  { id: 'laenge', titel: 'Länge', fahrzeug: 'Länge des Fahrzeugs', fhilfe: 'mit Deichsel, Fahrradträger und Heckaufbauten', platz: 'Länge des Stellplatzes', philfe: 'vom Tor bis zur Rückwand bzw. Länge der Fläche', f: 6.5, p: 7.5 },
+  { id: 'breite', titel: 'Breite', fahrzeug: 'Breite des Fahrzeugs', fhilfe: 'mit Spiegeln', platz: 'Breite von Tor bzw. Durchfahrt', philfe: 'an der engsten Stelle', f: 2.3, p: 2.8 },
+  { id: 'hoehe', titel: 'Höhe', fahrzeug: 'Höhe des Fahrzeugs', fhilfe: 'mit Klimaanlage, SAT-Antenne und Dachbox', platz: 'Höhe von Tor bzw. Durchfahrt', philfe: 'an der niedrigsten Stelle, auch Balken und Lampen', f: 2.9, p: 3.2 },
+];
+const faq = [
+  { frage: 'Wie messe ich die Höhe richtig?', antwort: 'Stellen Sie das Fahrzeug auf ebenen Boden und messen Sie bis zum höchsten Punkt, also bis zur Oberkante von Klimaanlage, SAT-Antenne oder Dachbox. Die Angabe im Fahrzeugschein enthält nachträglich montierte Aufbauten oft nicht.' },
+  { frage: 'Was gehört zur Länge?', antwort: 'Alles, was vorne und hinten übersteht: Deichsel, Fahrradträger, Heckgarage oder Ersatzrad. Beim Gespann kommt es darauf an, ob Zugfahrzeug und Wohnwagen gemeinsam auf den Platz müssen.' },
+  { frage: 'Warum ein Sicherheitsabstand?', antwort: 'Gemessene Werte sind nie ganz genau, und beim Einfahren steht ein Fahrzeug selten exakt gerade. Wie viel Luft Sie sich lassen möchten, stellen Sie selbst ein.' },
+  { frage: 'Reicht es, wenn das Tor breit genug ist?', antwort: 'Nicht immer. Wenn Sie schräg einfahren oder rangieren müssen, brauchen Sie mehr Platz als die reine Fahrzeugbreite. Prüfen Sie das bei der Besichtigung am besten mit dem Fahrzeug selbst.' },
+];
+---
+<Ratgeber
+  seite="passtWohnmobil"
+  typ="WebPage"
+  titel="Passt mein Wohnmobil? Maße prüfen"
+  beschreibung="Passt mein Wohnmobil durch Tor und Zufahrt? Länge, Breite und Höhe von Wohnmobil, Wohnwagen oder Anhänger mit dem Stellplatz vergleichen. Kostenlos."
+  kicker="Werkzeug"
+  einleitung="Tragen Sie die Maße Ihres Fahrzeugs und des Platzes ein. Sie sehen sofort, wo es passt, wo es knapp wird und wo nicht."
+  verwandt={['mietenWohnmobil', 'mietenAnhaenger', 'mietenGarage', 'diebstahlschutz']}
+>
+  <Fragment slot="h1">Passt mein <span class="markiert">Wohnmobil</span>?</Fragment>
+
+  <section class="abschnitt">
+    <div class="wrap">
+      <form class="formular-karte passt" data-passt onsubmit="return false">
+        <div class="passt-kopf"><span></span><strong>Fahrzeug (m)</strong><strong>Platz (m)</strong></div>
+        {felder.map((f) => (
+          <fieldset class="passt-zeile">
+            <legend>{f.titel}</legend>
+            <div class="feld">
+              <label for={`pf-${f.id}`}>{f.fahrzeug}</label>
+              <input id={`pf-${f.id}`} type="number" inputmode="decimal" min="0" max="30" step="0.01" value={f.f} data-fahrzeug={f.id} />
+              <span class="feld-hilfe">{f.fhilfe}</span>
+            </div>
+            <div class="feld">
+              <label for={`pp-${f.id}`}>{f.platz}</label>
+              <input id={`pp-${f.id}`} type="number" inputmode="decimal" min="0" max="30" step="0.01" value={f.p} data-platz={f.id} />
+              <span class="feld-hilfe">{f.philfe}</span>
+            </div>
+            <p class="passt-ergebnis" data-ergebnis={f.id} aria-live="polite"></p>
+          </fieldset>
+        ))}
+        <div class="feld abstand">
+          <label for="pa">Gewünschter Sicherheitsabstand (cm)</label>
+          <input id="pa" type="number" inputmode="numeric" min="0" max="100" step="1" value="10" data-abstand />
+          <span class="feld-hilfe">So viel Luft möchten Sie mindestens haben. Den Wert legen Sie selbst fest.</span>
+        </div>
+        <p class="unter-hinweis">Eine Rechenhilfe, keine Garantie. Prüfen Sie Zufahrt und Tor bei der Besichtigung am besten mit dem Fahrzeug selbst.</p>
+      </form>
+    </div>
+  </section>
+
+  <section class="abschnitt abschnitt-grau">
+    <div class="wrap inhalt">
+      <h2>Wo Sie den passenden Platz finden</h2>
+      <p>Geben Sie die Maße im Suchauftrag an. Dann schlagen wir nur Plätze vor, bei denen Zufahrt, Tor und Fläche passen.</p>
+      <p>
+        {link('mietenWohnmobil') && <a class="weiter" href={link('mietenWohnmobil')}>Stellplatz für Wohnmobil und Wohnwagen</a>}
+      </p>
+    </div>
+  </section>
+
+  <section class="abschnitt">
+    <div class="wrap"><FaqBlock eintraege={faq} /></div>
+  </section>
+</Ratgeber>
+<script>
+  document.querySelectorAll<HTMLFormElement>('[data-passt]').forEach((form) => {
+    const abstand = form.querySelector<HTMLInputElement>('[data-abstand]')!;
+    const ids = ['laenge', 'breite', 'hoehe'];
+    const fmt = (m: number) => `${Math.round(Math.abs(m) * 100)} cm`;
+    const rechne = () => {
+      const luft = Math.max(0, Number(abstand.value) || 0) / 100;
+      for (const id of ids) {
+        const f = Number(form.querySelector<HTMLInputElement>(`[data-fahrzeug="${id}"]`)!.value);
+        const p = Number(form.querySelector<HTMLInputElement>(`[data-platz="${id}"]`)!.value);
+        const ziel = form.querySelector<HTMLElement>(`[data-ergebnis="${id}"]`)!;
+        if (!f || !p) { ziel.textContent = 'Bitte beide Werte eintragen.'; ziel.dataset.stand = ''; continue; }
+        const rest = p - f;
+        if (rest < 0) { ziel.textContent = `Passt nicht: ${fmt(rest)} zu wenig.`; ziel.dataset.stand = 'nein'; }
+        else if (rest < luft) { ziel.textContent = `Knapp: nur ${fmt(rest)} Luft.`; ziel.dataset.stand = 'knapp'; }
+        else { ziel.textContent = `Passt: ${fmt(rest)} Luft.`; ziel.dataset.stand = 'ja'; }
+      }
+    };
+    form.addEventListener('input', rechne);
+    rechne();
+  });
+</script>
+<style>
+  .passt { max-width: 46rem; }
+  .passt-kopf { display: none; }
+  .passt-zeile { border: 0; padding: 0; margin: 0 0 1.5rem; display: grid; gap: 0 1rem; }
+  .passt-zeile legend { font-weight: 800; font-size: 1.15rem; color: var(--ueberschrift); margin-bottom: 0.5rem; }
+  @media (min-width: 40rem) { .passt-zeile { grid-template-columns: 1fr 1fr; } }
+  .passt-ergebnis { grid-column: 1 / -1; margin: 0; padding: 0.7rem 1rem; border-radius: var(--r); font-weight: 700; background: var(--sekundaer); }
+  .passt-ergebnis[data-stand='ja'] { background: #dff3e4; color: #14532d; }
+  .passt-ergebnis[data-stand='knapp'] { background: #fff4c2; color: #6b4e00; }
+  .passt-ergebnis[data-stand='nein'] { background: #fde2e1; color: #7f1d1d; }
+  .abstand { max-width: 22rem; }
+</style>

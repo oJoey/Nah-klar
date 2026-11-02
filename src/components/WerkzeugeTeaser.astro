@@ -1,12 +1,12 @@
 ---
 // Erscheint automatisch, sobald mindestens ein Werkzeug oder Ratgeber live ist.
 import Icon from './Icon.astro';
-import { seiten, istLive, type SeitenSchluessel } from '../config/seiten';
+import { seiten, istLive, link, type SeitenSchluessel } from '../config/seiten';
 import type { IconName } from '../lib/icons';
 const teaser: { seite: SeitenSchluessel; icon: IconName; art: string; text: string }[] = [
+  { seite: 'diebstahlschutz', icon: 'schild', art: 'Ratgeber', text: 'Wohnwagen, Wohnmobil oder Anhänger sicher abstellen: Platzwahl, Schlösser und Tracker.' },
   { seite: 'einwinterung', icon: 'liste', art: 'Checkliste', text: 'Schritt für Schritt: So machen Sie Wohnmobil und Wohnwagen winterfest.' },
   { seite: 'winterplatzVergleich', icon: 'hof', art: 'Ratgeber', text: 'Halle, Scheune oder Carport: Welcher Winterplatz passt zu Ihrem Fahrzeug?' },
-  { seite: 'verdienstrechner', icon: 'euro', art: 'Für Vermieter', text: 'Was bringt Ihr freier Platz im Jahr? Art, Größe und Ausstattung wählen, Ergebnis sofort.' },
 ];
 const live = teaser.filter((t) => istLive(t.seite));
 ---
@@ -26,6 +26,7 @@ const live = teaser.filter((t) => istLive(t.seite));
           </li>
         ))}
       </ul>
+      {link('ratgeber') && <p class="mt"><a class="weiter" href={link('ratgeber')}>Alle Ratgeber</a></p>}
     </div>
   </section>
 )}

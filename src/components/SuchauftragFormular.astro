@@ -7,8 +7,8 @@ import FormVersteckt from './FormVersteckt.astro';
 import Datenschutzhinweis from './Datenschutzhinweis.astro';
 import o from '../data/optionen.json';
 import { zahlung } from '../config/zahlung';
-interface Props { mitWohnmobilZahl?: boolean }
-const { mitWohnmobilZahl = true } = Astro.props;
+interface Props { mitWohnmobilZahl?: boolean; art?: string }
+const { mitWohnmobilZahl = true, art } = Astro.props;
 const fahrzeuge = o.mieter_art.filter((a) => a.groesse === 'fahrzeug').map((a) => a.wert).join(',');
 const mitHoehe = o.mieter_art.filter((a) => a.hoehe).map((a) => a.wert).join(',');
 const lager = o.mieter_art.filter((a) => a.groesse === 'flaeche').map((a) => a.wert).join(',');
@@ -22,7 +22,7 @@ const mitStrom = o.mieter_art.filter((a) => a.strom).map((a) => a.wert).join(','
     <h3 tabindex="-1">Was suchen Sie?</h3>
     <fieldset class="form-gruppe">
       <legend class="sr-only">Art</legend>
-      <Chips name="mieter_art" optionen={o.mieter_art} pflicht gross />
+      <Chips name="mieter_art" optionen={o.mieter_art} pflicht gross vorwahl={art} />
     </fieldset>
     {mitWohnmobilZahl && <p class="wohnmobil-hinweis" data-wenn="mieter_art" data-werte="wohnmobil-wohnwagen" hidden>{wohnmobilHinweis}</p>}
     <div class="form-knoepfe"><button class="btn btn-primaer btn-gross" type="button" data-weiter hidden>Weiter</button></div>
