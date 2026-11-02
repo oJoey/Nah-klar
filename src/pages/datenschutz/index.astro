@@ -1,24 +1,119 @@
 ---
 import Basis from '../../layouts/Basis.astro';
-import { site } from '../../config/site';
-// PLATZHALTER: Vor dem Livegang vollständig ausfüllen und noindex entfernen.
-// Welche Dienste zu nennen sind: docs/datenschutz-dienste.md
+import { site, betreiber, betreiberAnschrift, emailHref } from '../../config/site';
+// ENTWURF zur anwaltlichen Prüfung. Offene Punkte: docs/rechtstexte-pruefung.md, Dienste: docs/datenschutz-dienste.md
+// Abschnitte zu Umami, Resend und Stripe erscheinen nur, wenn der jeweilige Schalter in site.ts an ist.
+const fertig = !betreiber.name.includes('[');
+const umami = !!site.umami.websiteId;
+const resend = site.bestaetigungsmail;
+const stripe = site.zahlungLive;
+const stand = 'November 2026';
 ---
-<Basis titel="Datenschutz" beschreibung={`Datenschutzerklärung von ${site.name}.`} brotkruemel={[{ name: 'Datenschutz', pfad: '/datenschutz/' }]} noindex>
+<Basis titel="Datenschutzerklärung" beschreibung={`Wie ${site.name} mit Ihren Daten umgeht: Formulare, Hosting, Kontakt und Ihre Rechte.`} brotkruemel={[{ name: 'Datenschutz', pfad: '/datenschutz/' }]} noindex={!fertig}>
   <section class="abschnitt">
-    <div class="wrap">
+    <div class="wrap rechtstext">
       <h1>Datenschutzerklärung</h1>
-      <p class="hinweis">Platzhalter: wird vor dem Livegang ausgefüllt.</p>
-      <h2>Verantwortlich</h2>
-      <p>[NAME / FIRMA, ANSCHRIFT, E-MAIL]</p>
-      <h2>Formulare</h2>
-      <p>[Zweck, Rechtsgrundlage, Speicherdauer, Empfänger: Netlify Forms, Resend]</p>
-      <h2>Hosting</h2>
-      <p>[Netlify]</p>
-      <h2>Reichweitenmessung</h2>
-      <p>[Umami Cloud, ohne Cookies]</p>
-      <h2>Ihre Rechte</h2>
-      <p>[Auskunft, Berichtigung, Löschung, Widerspruch, Beschwerde bei der Aufsichtsbehörde]</p>
+      <p class="einleitung">Kurz gesagt: Wir nutzen Ihre Angaben nur, um Plätze zu vermitteln. Keine Werbung, kein Newsletter, keine Cookies{umami ? ', Besucherstatistik ohne Cookies' : ''}.</p>
+
+      <ol class="inhaltsverzeichnis">
+        <li><a href="#verantwortlich">Verantwortlicher</a></li>
+        <li><a href="#hosting">Hosting und Server-Protokolle</a></li>
+        <li><a href="#formulare">Suchauftrag und Platz anbieten</a></li>
+        <li><a href="#weitergabe">Weitergabe an Mieter und Vermieter</a></li>
+        <li><a href="#kontakt">Kontakt per E-Mail und WhatsApp</a></li>
+        {resend && <li><a href="#mails">Bestätigungsmails</a></li>}
+        {umami && <li><a href="#statistik">Besucherstatistik</a></li>}
+        {stripe && <li><a href="#zahlung">Zahlungsabwicklung und Steuermeldung</a></li>}
+        <li><a href="#browser">Speicherung im Browser</a></li>
+        <li><a href="#extern">Keine externen Inhalte</a></li>
+        <li><a href="#dauer">Speicherdauer</a></li>
+        <li><a href="#rechte">Ihre Rechte</a></li>
+      </ol>
+
+      <h2 id="verantwortlich">Verantwortlicher</h2>
+      <p>Verantwortlich für die Datenverarbeitung auf dieser Website im Sinne der Datenschutz-Grundverordnung (DSGVO):</p>
+      <p>{betreiber.name}<br />{betreiber.zusatz}<br />{betreiber.strasse}<br />{betreiber.plzOrt}<br />E-Mail: <a href={emailHref}>{site.email}</a></p>
+      <p>Einen Datenschutzbeauftragten haben wir nicht benannt, weil wir dazu nicht verpflichtet sind.</p>
+
+      <h2 id="hosting">Hosting und Server-Protokolle</h2>
+      <p>Diese Website wird bei Netlify, Inc., San Francisco, USA, gehostet. Bei jedem Aufruf verarbeitet Netlify technisch notwendige Daten: IP-Adresse, Datum und Uhrzeit, aufgerufene Adresse, zuvor besuchte Seite (Referrer), Browser und Betriebssystem. Das ist nötig, um die Seite auszuliefern und vor Angriffen zu schützen.</p>
+      <p>Rechtsgrundlage ist unser berechtigtes Interesse an einer sicheren und funktionierenden Website (Art. 6 Abs. 1 lit. f DSGVO). Mit Netlify haben wir einen Vertrag zur Auftragsverarbeitung geschlossen. Netlify ist nach dem EU-US Data Privacy Framework zertifiziert; die Übermittlung in die USA stützt sich auf den Angemessenheitsbeschluss der EU-Kommission (Art. 45 DSGVO).</p>
+
+      <h2 id="formulare">Suchauftrag, Platz anbieten und Löschanfrage</h2>
+      <p>Wenn Sie eines unserer Formulare absenden, verarbeiten wir die Angaben, die Sie dort machen:</p>
+      <ul>
+        <li><strong>Suchauftrag:</strong> Name, E-Mail-Adresse, auf Wunsch Telefonnummer, Ort oder Postleitzahl, Umkreis, gesuchte Art des Platzes, Maße des Fahrzeugs oder der Fläche, Budget, Zeitraum und Ihre Wünsche.</li>
+        <li><strong>Platz anbieten:</strong> Name, E-Mail-Adresse, auf Wunsch Telefonnummer, Anschrift der Fläche, Art, Größe und Ausstattung, Wunschpreis und Fotos der Fläche.</li>
+        <li><strong>Löschanfrage:</strong> Ihre E-Mail-Adresse.</li>
+        <li><strong>Herkunft:</strong> Über welchen Weg Sie auf die Seite gekommen sind (z. B. ein Flyer oder eine Kampagne), sofern die Adresse einen solchen Hinweis enthielt, und die Seite, auf der Sie eingestiegen sind.</li>
+      </ul>
+      <p>Wir nutzen diese Angaben, um passende Plätze und Mieter zu finden, Sie zu kontaktieren und einen Mietvertrag anzubahnen. Rechtsgrundlage ist Art. 6 Abs. 1 lit. b DSGVO (vorvertragliche Maßnahmen auf Ihre Anfrage). Die Herkunftsangabe verarbeiten wir auf Grundlage unseres berechtigten Interesses, zu erfahren, welche Werbewege funktionieren (Art. 6 Abs. 1 lit. f DSGVO).</p>
+      <p>Wenn Sie ankreuzen, dass wir Sie per WhatsApp kontaktieren dürfen, ist Ihre Einwilligung die Rechtsgrundlage (Art. 6 Abs. 1 lit. a DSGVO). Sie können sie jederzeit mit Wirkung für die Zukunft widerrufen.</p>
+      <p>Die Angaben werden bei Netlify (Netlify Forms) gespeichert, Fotos ebenfalls bei Netlify bzw. dessen Speicherdienstleister. Bitte laden Sie nur Fotos ohne Personen und Kfz-Kennzeichen hoch.</p>
+      <p>Ohne die Pflichtangaben können wir nicht vermitteln. Eine Pflicht, uns Daten zu geben, besteht sonst nicht. Wir treffen keine automatisierten Entscheidungen und erstellen keine Profile im Sinne von Art. 22 DSGVO.</p>
+
+      <h2 id="weitergabe">Weitergabe an Mieter und Vermieter</h2>
+      <p>Vermittlung heißt, dass die andere Seite einen Teil Ihrer Angaben erfährt. Das geschieht schrittweise und nur so weit wie nötig:</p>
+      <ul>
+        <li>Mit einem Vorschlag erhalten Interessenten Fotos, Größe, Ausstattung, Preis und den Ortsteil der Fläche, aber nicht die Anschrift und nicht den Namen des Vermieters.</li>
+        <li>Vermieter erhalten mit einem Vorschlag den Vornamen des Interessenten, die Art des Fahrzeugs oder Lagerguts und den gewünschten Zeitraum.</li>
+        <li>Erst wenn beide einer Besichtigung zustimmen, geben wir Namen, Anschrift der Fläche und die Kontaktdaten weiter, die für die Terminabsprache nötig sind.</li>
+      </ul>
+      <p>Rechtsgrundlage ist Art. 6 Abs. 1 lit. b DSGVO. Die Anschrift einer Fläche veröffentlichen wir nie.</p>
+
+      <h2 id="kontakt">Kontakt per E-Mail und WhatsApp</h2>
+      <p>Wenn Sie uns schreiben, verarbeiten wir Ihre Nachricht und Ihre Kontaktdaten, um Ihre Anfrage zu beantworten (Art. 6 Abs. 1 lit. b DSGVO bei Fragen zu einer Vermittlung, sonst Art. 6 Abs. 1 lit. f DSGVO).</p>
+      <p>Für WhatsApp gilt zusätzlich: Anbieter ist die WhatsApp Ireland Limited, Merrion Road, Dublin 4, Irland. WhatsApp erhält dabei Ihre Telefonnummer und Metadaten der Kommunikation, auch Übermittlungen an die Meta Platforms, Inc. in den USA sind möglich. Die Inhalte sind Ende-zu-Ende-verschlüsselt. Wenn Sie das nicht möchten, schreiben Sie uns bitte per E-Mail. Der WhatsApp-Link auf dieser Website lädt nichts von WhatsApp, solange Sie ihn nicht anklicken.</p>
+
+      {resend && (
+        <>
+          <h2 id="mails">Bestätigungsmails</h2>
+          <p>Nach dem Absenden eines Formulars erhalten Sie eine Bestätigung per E-Mail. Für den Versand nutzen wir Resend (Resend, Inc., San Francisco, USA) mit Datenverarbeitung in der EU. Resend erhält Ihre E-Mail-Adresse, Ihren Vornamen und den Inhalt der Bestätigung. Rechtsgrundlage ist Art. 6 Abs. 1 lit. b DSGVO. Mit Resend besteht ein Vertrag zur Auftragsverarbeitung; für mögliche Übermittlungen in die USA gelten die Standardvertragsklauseln der EU-Kommission bzw. das EU-US Data Privacy Framework.</p>
+        </>
+      )}
+
+      {umami && (
+        <>
+          <h2 id="statistik">Besucherstatistik mit Umami</h2>
+          <p>Um zu verstehen, welche Seiten genutzt werden, verwenden wir Umami Cloud (Umami Software, Inc., USA) mit Datenspeicherung in der Region {site.umami.region}. Umami setzt keine Cookies und speichert nichts auf Ihrem Gerät. Die IP-Adresse wird nicht gespeichert, sondern nur kurzzeitig genutzt, um zusammen mit Browserdaten eine täglich wechselnde, nicht rückverfolgbare Kennung zu bilden und das ungefähre Land zu bestimmen.</p>
+          <p>Erfasst werden aufgerufene Seiten, Herkunftsseite, Kampagnen-Parameter in der Adresse, Browser, Betriebssystem, Gerätetyp, Land sowie Klicks auf Kontakt-Links und das Absenden von Formularen (ohne Inhalte). {site.umami.respektiereDnt && 'Wenn Ihr Browser „Do Not Track“ sendet, werden Sie nicht erfasst.'}</p>
+          <p>Rechtsgrundlage ist unser berechtigtes Interesse an einer bedarfsgerechten Gestaltung der Website (Art. 6 Abs. 1 lit. f DSGVO). Sie können jederzeit widersprechen, etwa indem Sie „Do Not Track“ aktivieren oder uns schreiben. Mit Umami besteht ein Vertrag zur Auftragsverarbeitung.</p>
+        </>
+      )}
+
+      {stripe && (
+        <>
+          <h2 id="zahlung">Zahlungsabwicklung und Steuermeldung</h2>
+          <p>Die Miete wird über Stripe (Stripe Payments Europe, Ltd., Dublin, Irland) per SEPA-Lastschrift eingezogen und an Vermieter ausgezahlt. Stripe erhält dafür Name, E-Mail-Adresse, IBAN und die Zahlungsbeträge, bei Vermietern zusätzlich die zur Identitätsprüfung nötigen Angaben. Rechtsgrundlage ist Art. 6 Abs. 1 lit. b und c DSGVO. Stripe ist für Teile der Verarbeitung selbst verantwortlich.</p>
+          <p>Als Plattformbetreiber sind wir nach dem Plattformen-Steuertransparenzgesetz verpflichtet, Angaben zu Vermietern und deren Einnahmen jährlich an das Bundeszentralamt für Steuern zu melden (Art. 6 Abs. 1 lit. c DSGVO). Vermieter werden vorab informiert.</p>
+        </>
+      )}
+
+      <h2 id="browser">Speicherung im Browser</h2>
+      <p>Wir setzen keine Cookies. Zwei Funktionen speichern Daten nur in Ihrem Browser, sie werden nicht an uns übertragen:</p>
+      <ul>
+        <li><strong>Herkunft:</strong> Enthält die Adresse, über die Sie kommen, einen Kampagnen- oder Flyer-Hinweis, merkt sich der Browser diesen bis zum Schließen des Tabs (Session Storage), damit er beim Absenden eines Formulars mitgeschickt werden kann.</li>
+        <li><strong>Checkliste:</strong> Auf der Einwinterungs-Checkliste speichert der Browser, welche Punkte Sie abgehakt haben (Local Storage), bis Sie die Liste zurücksetzen oder die Browserdaten löschen.</li>
+      </ul>
+      <p>Die Speicherung der Checkliste ist für die von Ihnen gewünschte Funktion unbedingt erforderlich (§ 25 Abs. 2 Nr. 2 TDDDG).</p>
+
+      <h2 id="extern">Keine externen Inhalte</h2>
+      <p>Schriften, Bilder und Karten liegen auf unserem eigenen Server. Beim Aufruf der Website werden keine Inhalte von Google, sozialen Netzwerken oder anderen Drittanbietern geladen{umami ? ', mit Ausnahme des Statistik-Skripts von Umami' : ''}.</p>
+
+      <h2 id="dauer">Speicherdauer</h2>
+      <ul>
+        <li>Suchaufträge und angebotene Plätze löschen wir, sobald Sie das wünschen, spätestens aber 12 Monate nach Ihrer letzten Rückmeldung.</li>
+        <li>Kommt ein Mietvertrag zustande, speichern wir die für die Abrechnung nötigen Angaben, solange das Mietverhältnis läuft, und danach so lange, wie gesetzliche Aufbewahrungspflichten es verlangen (insbesondere § 147 AO, für Buchungsbelege bis zu acht Jahre).</li>
+        <li>E-Mails und WhatsApp-Nachrichten löschen wir, wenn die Anfrage erledigt ist und keine Aufbewahrungspflicht besteht.</li>
+      </ul>
+
+      <h2 id="rechte">Ihre Rechte</h2>
+      <p>Sie haben das Recht auf Auskunft (Art. 15 DSGVO), Berichtigung (Art. 16), Löschung (Art. 17), Einschränkung der Verarbeitung (Art. 18), Datenübertragbarkeit (Art. 20) und Widerruf einer Einwilligung mit Wirkung für die Zukunft (Art. 7 Abs. 3). Eine Löschung können Sie bequem über <a href="/daten-loeschen/">dieses Formular</a> beantragen.</p>
+      <p><strong>Widerspruchsrecht:</strong> Soweit wir Daten auf Grundlage unseres berechtigten Interesses verarbeiten (Art. 6 Abs. 1 lit. f DSGVO), können Sie aus Gründen, die sich aus Ihrer besonderen Situation ergeben, jederzeit widersprechen (Art. 21 DSGVO).</p>
+      <p>Sie können sich außerdem bei einer Datenschutz-Aufsichtsbehörde beschweren. Für uns zuständig ist der Landesbeauftragte für den Datenschutz und die Informationsfreiheit Baden-Württemberg, Lautenschlagerstraße 20, 70173 Stuttgart.</p>
+      <p>Schreiben Sie uns für alle Anliegen einfach an <a href={emailHref}>{site.email}</a> oder per Post an {betreiberAnschrift}.</p>
+
+      <p class="stand">Stand: {stand}</p>
     </div>
   </section>
 </Basis>

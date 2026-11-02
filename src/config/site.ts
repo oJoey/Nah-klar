@@ -41,9 +41,30 @@ export const site = {
   // vorher verspricht die Danke-Seite keine Mail.
   bestaetigungsmail: false,
 
-  // Umami Cloud (ohne Cookies). Leer lassen = keine Statistik.
-  umamiWebsiteId: '',
+  // Umami Cloud (ohne Cookies). websiteId leer lassen = keine Statistik, auch kein Abschnitt in der Datenschutzerklärung.
+  // websiteId und skript aus Umami: Settings → Websites → Edit → Tracking code. Bei der Anmeldung Datenregion EU wählen.
+  umami: {
+    websiteId: '',
+    skript: 'https://cloud.umami.is/script.js',
+    region: 'EU', // nur für den Text in der Datenschutzerklärung, muss zur Auswahl im Umami-Konto passen
+    respektiereDnt: true, // Besucher mit „Do Not Track“ werden nicht gezählt
+  },
 };
+
+// Betreiber für Impressum, Datenschutzerklärung und AGB. [ECKIGE KLAMMERN] vor dem Livegang ersetzen.
+export const betreiber = {
+  name: '[VORNAME NACHNAME]', // bei Einzelunternehmen der volle Name, Marke allein reicht nicht
+  zusatz: `${site.name}`, // erscheint als „Vorname Nachname, Platz Kompass“
+  strasse: '[STRASSE HAUSNUMMER]', // ladungsfähige Anschrift, kein Postfach
+  plzOrt: '[PLZ ORT]',
+  // Wirtschafts-Identifikationsnummer (§ 139c AO), sobald vom BZSt zugeteilt. Leer = Zeile entfällt.
+  // Eine USt-IdNr. gibt es als Kleinunternehmer meist nicht.
+  wirtschaftsId: '',
+  ustId: '',
+  // Nur ausfüllen, falls eine Erlaubnis nach § 34c GewO nötig ist (siehe docs/rechtstexte-pruefung.md).
+  erlaubnis: { noetig: false, behoerde: '[ZUSTÄNDIGE BEHÖRDE, ANSCHRIFT]' },
+};
+export const betreiberAnschrift = `${betreiber.name}, ${betreiber.strasse}, ${betreiber.plzOrt}`;
 
 export const whatsappLink = `https://wa.me/${site.whatsappNummer}`;
 export const emailHref = `mailto:${site.email}`;

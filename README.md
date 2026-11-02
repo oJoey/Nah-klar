@@ -15,7 +15,8 @@ npm run dev
 
 | Was | Datei |
 |---|---|
-| Name, Telefon, Domain, Antwortzeit, Schalter `zahlungLive`, Umami | `src/config/site.ts` |
+| Name, Telefon, Domain, Antwortzeit, Schalter `zahlungLive`, Umami, Betreiber für Impressum/Datenschutz/AGB | `src/config/site.ts` |
+| Rechtstexte: offene Fragen für die Prüfung | `docs/rechtstexte-pruefung.md` |
 | Welche Seiten live sind (Links passen sich automatisch an) | `src/config/seiten.ts` |
 | Aktionsbalken (Text, Enddatum) | `src/config/aktion.json` |
 | Servicegebühr, Kaution, Zahltage | `src/config/zahlung.ts` |
@@ -36,6 +37,16 @@ Seiten mit `entwurf: true` sind Platzhalter (Text in `src/data/entwuerfe.ts`): v
 2. Umgebungsvariablen: `RESEND_API_KEY`, `MAIL_ABSENDER`, `MAIL_ANTWORT` (optional), `MARKENNAME`, `NETLIFY_API_TOKEN`.
 3. Bei Resend die Absender-Domain bestätigen.
 4. Benachrichtigung über neue Einsendungen an Sie selbst: Forms → Form notifications.
+
+## Umami (Besucherstatistik ohne Cookies)
+
+1. Konto bei Umami Cloud anlegen (cloud.umami.is), bei der Anmeldung **Datenregion EU** wählen.
+2. Website hinzufügen (Domain eintragen), dann unter Settings → Websites → Edit → Tracking code die **Website-ID** und die **Skript-Adresse** kopieren.
+3. Beides in `src/config/site.ts` unter `umami` eintragen. Die Datenschutzerklärung bekommt den Abschnitt dazu automatisch.
+4. In Umami den Vertrag zur Auftragsverarbeitung (DPA) abschließen.
+5. Eigene Besuche ausschließen: in der Browser-Konsole auf der eigenen Seite `localStorage.setItem('umami.disabled', 1)` ausführen.
+
+Gezählt werden Seitenaufrufe und diese Ereignisse: `kontakt-whatsapp`, `kontakt-email`, `weg-suchauftrag`, `weg-platz-anbieten` (Klicks) sowie `formular-suchauftrag`, `formular-flaeche-melden`, `formular-suche` usw. (Absenden). Erfolgreiche Anfragen erkennt man an den Aufrufen von `/suchauftrag/danke/` und `/platz-anbieten/danke/`. Gezählt wird nur auf der echten Domain aus `site.url`.
 
 ## Fotos
 

@@ -21,7 +21,7 @@ export const seiten = {
   preise: { pfad: '/preise/', live: true, titel: 'Preise' },
   ueberUns: { pfad: '/ueber-uns/', live: true, titel: 'Über uns' },
   kontakt: { pfad: '/kontakt/', live: true, titel: 'Kontakt' },
-  agb: { pfad: '/agb/', live: true, entwurf: true, titel: 'AGB' },
+  agb: { pfad: '/agb/', live: true, titel: 'AGB' },
 
   // Werkzeuge und Ratgeber
   verdienstrechner: { pfad: '/werkzeuge/verdienstrechner/', live: true, titel: 'Verdienstrechner' },

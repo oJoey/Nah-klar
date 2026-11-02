@@ -248,3 +248,12 @@ fieldset > legend { font-size: 1.05rem; margin-bottom: 0.6rem; }
   .abschnitt, .ratgeber-kopf { padding-block: 0.5rem !important; background: none !important; }
   .held-muster { display: none; }
 }
+
+/* Rechtstexte (Impressum, Datenschutz, AGB) */
+.rechtstext { max-width: 48rem; }
+.rechtstext h2 { margin-top: 2.5rem; font-size: clamp(1.35rem, 3vw, 1.7rem); }
+.rechtstext h3 { margin-top: 1.5rem; font-size: 1.15rem; }
+.rechtstext li { margin-bottom: 0.4rem; }
+.rechtstext .stand { margin-top: 3rem; font-size: 0.95rem; color: var(--text); }
+.rechtstext .inhaltsverzeichnis { columns: 2 16rem; padding-left: 1.25rem; }
+.rechtstext [id] { scroll-margin-top: 5rem; }

@@ -8,7 +8,7 @@ Stand: Website mit Netlify-Hosting, Netlify Forms und (vorbereitet) Resend. Bitt
 | **Netlify Forms** inkl. **Datei-Uploads** | Suchauftrag, Fläche melden, Löschanfrage; Fotos der Flächen | Netlify, Inc., USA (Speicherung der Dateien bei Netlify/AWS) | alle Formularangaben, Fotos, Adresse der Fläche | aktiv |
 | **Netlify Functions** | Bestätigungsmail auslösen (`submission-created`) | Netlify, Inc., USA | Formularangaben (nur zur Weitergabe an Resend) | aktiv, versendet erst mit Schlüssel |
 | **Resend** | Bestätigungsmails | Resend, Inc., USA – beim Einrichten **Region EU** wählen | E-Mail-Adresse, Vorname, Formularangaben | vorbereitet |
-| **Umami Cloud** | Besucherstatistik ohne Cookies | Umami Software, Inc., USA (EU-Hosting wählbar) | anonymisierte Nutzungsdaten | nur wenn `umamiWebsiteId` gesetzt |
+| **Umami Cloud** | Besucherstatistik ohne Cookies | Umami Software, Inc., USA (bei Anmeldung Datenregion EU wählen) | Seitenaufrufe, Klicks auf Kontakt-Links, Formular-Absendungen (ohne Inhalte) | nur wenn `umami.websiteId` gesetzt |
 | **WhatsApp** (nur Link) | Kontakt per WhatsApp | WhatsApp Ireland Ltd. / Meta | erst beim Klick auf den Link | aktiv |
 | **Stripe** | später: Lastschrift, Auszahlung | Stripe Payments Europe Ltd., Irland | Zahlungsdaten | später |
 | Google Sheets | – | – | – | **nicht genutzt** |
@@ -27,7 +27,8 @@ Stand: Website mit Netlify-Hosting, Netlify Forms und (vorbereitet) Resend. Bitt
 ## Vor dem Livegang
 
 - **Domain festlegen** (Voraussetzung für Stripe und für die Absender-Domain bei Resend)
-- **Impressum und Datenschutz füllen** mit den Diensten oben
+- **Betreiberangaben** in `src/config/site.ts` (`betreiber`) eintragen: Impressum, Datenschutz und AGB übernehmen sie automatisch
+- Rechtstexte prüfen lassen: `docs/rechtstexte-pruefung.md`
 - Auftragsverarbeitungsverträge (DPA) mit Netlify und Resend abschließen (beide online im Konto)
 - Bei Resend die Absender-Domain bestätigen, `RESEND_API_KEY`, `MAIL_ABSENDER`, `NETLIFY_API_TOKEN` in Netlify setzen, dann in `src/config/site.ts` `bestaetigungsmail: true`
 - Weitere Aufgaben vor dem Geldfluss (AGB und Mustervertrag, BZSt, Reverse Charge): siehe `docs/stripe-connect.md`

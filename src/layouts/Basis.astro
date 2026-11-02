@@ -15,6 +15,8 @@ interface Props {
   noindex?: boolean;
 }
 const { titel, beschreibung, brotkruemel, noindex = false } = Astro.props;
+// Nur auf der echten Domain zählen, nicht in Vorschau-Deploys. Solange die Domain ein Platzhalter ist, ohne Einschränkung.
+const umamiDomain = site.url.includes('domain-eintragen') ? undefined : new URL(site.url).hostname;
 const canonical = new URL(Astro.url.pathname, site.url).href;
 const volltitel = Astro.url.pathname === '/' ? titel : `${titel} | ${site.name}`;
 
@@ -73,7 +75,27 @@ const website = {
         document.querySelectorAll('[data-aktion-ab]').forEach(function (el) { if (jetzt > new Date(el.getAttribute('data-aktion-ab'))) el.hidden = false; });
       });
     </script>
-    {site.umamiWebsiteId && <script is:inline defer src="https://cloud.umami.is/script.js" data-website-id={site.umamiWebsiteId}></script>}
+    {site.umami.websiteId && (
+      <script is:inline defer src={site.umami.skript} data-website-id={site.umami.websiteId} data-domains={umamiDomain} data-do-not-track={site.umami.respektiereDnt ? 'true' : undefined}></script>
+    )}
+    {site.umami.websiteId && (
+      <script is:inline>
+        // Klicks auf WhatsApp, E-Mail und die beiden Hauptwege sowie abgeschickte Formulare als Ereignis zählen (ohne personenbezogene Daten).
+        document.addEventListener('click', function (e) {
+          var a = e.target.closest && e.target.closest('a[href]'); if (!a || !window.umami) return;
+          var h = a.getAttribute('href'), name = '';
+          if (h.indexOf('https://wa.me/') === 0) name = 'kontakt-whatsapp';
+          else if (h.indexOf('mailto:') === 0) name = 'kontakt-email';
+          else if (h.indexOf('/suchauftrag/') === 0) name = 'weg-suchauftrag';
+          else if (h.indexOf('/platz-anbieten/') === 0) name = 'weg-platz-anbieten';
+          if (name) window.umami.track(name, { seite: location.pathname });
+        });
+        document.addEventListener('submit', function (e) {
+          var f = e.target; if (!window.umami || !f.getAttribute) return;
+          window.umami.track('formular-' + (f.getAttribute('name') || 'suche'), { seite: location.pathname });
+        });
+      </script>
+    )}
   </head>
   <body>
     <a class="sr-only sprung" href="#inhalt">Zum Inhalt springen</a>

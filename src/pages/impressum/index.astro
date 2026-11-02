@@ -1,22 +1,48 @@
 ---
 import Basis from '../../layouts/Basis.astro';
-import { site } from '../../config/site';
+import { site, betreiber, whatsappLink, emailHref } from '../../config/site';
 import { alleNachweise } from '../../lib/bilder';
-// PLATZHALTER: Vor dem Livegang vollständig ausfüllen und noindex entfernen.
+// ENTWURF zur anwaltlichen Prüfung. Angaben in src/config/site.ts (betreiber). Offene Punkte: docs/rechtstexte-pruefung.md
+// noindex bleibt, bis die Platzhalter ersetzt sind (wird automatisch entfernt, sobald kein „[“ mehr im Namen steht).
+const fertig = !betreiber.name.includes('[');
 ---
-<Basis titel="Impressum" beschreibung={`Impressum von ${site.name}.`} brotkruemel={[{ name: 'Impressum', pfad: '/impressum/' }]} noindex>
+<Basis titel="Impressum" beschreibung={`Impressum von ${site.name}: Anbieter, Anschrift und Kontakt.`} brotkruemel={[{ name: 'Impressum', pfad: '/impressum/' }]} noindex={!fertig}>
   <section class="abschnitt">
-    <div class="wrap">
+    <div class="wrap rechtstext">
       <h1>Impressum</h1>
-      <p class="hinweis">Platzhalter: wird vor dem Livegang ausgefüllt.</p>
+
       <h2>Angaben gemäß § 5 DDG</h2>
-      <p>[NAME / FIRMA]<br />[STRASSE HAUSNUMMER]<br />[PLZ ORT]</p>
+      <p>{betreiber.name}<br />{betreiber.zusatz}<br />{betreiber.strasse}<br />{betreiber.plzOrt}<br />Deutschland</p>
+
       <h2>Kontakt</h2>
-      <p>E-Mail: {site.email}</p>
-      <h2>Vertreten durch</h2>
-      <p>[VERTRETUNGSBERECHTIGTE PERSON]</p>
-      <h2>Umsatzsteuer-ID</h2>
-      <p>[USt-IdNr., falls vorhanden]</p>
+      <p>E-Mail: <a href={emailHref}>{site.email}</a><br />WhatsApp: <a href={whatsappLink} rel="noopener">{site.whatsappAnzeige}</a></p>
+
+      {(betreiber.ustId || betreiber.wirtschaftsId) && (
+        <>
+          <h2>Steuerliche Angaben</h2>
+          <p>
+            {betreiber.ustId && <>Umsatzsteuer-Identifikationsnummer gemäß § 27a UStG: {betreiber.ustId}<br /></>}
+            {betreiber.wirtschaftsId && <>Wirtschafts-Identifikationsnummer gemäß § 139c AO: {betreiber.wirtschaftsId}</>}
+          </p>
+        </>
+      )}
+
+      {betreiber.erlaubnis.noetig && (
+        <>
+          <h2>Erlaubnis und Aufsichtsbehörde</h2>
+          <p>Erlaubnis nach § 34c Gewerbeordnung, erteilt durch: {betreiber.erlaubnis.behoerde}</p>
+        </>
+      )}
+
+      <h2>Verantwortlich für den Inhalt nach § 18 Abs. 2 MStV</h2>
+      <p>{betreiber.name}, Anschrift wie oben</p>
+
+      <h2>Verbraucherstreitbeilegung</h2>
+      <p>Wir sind nicht bereit und nicht verpflichtet, an Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle teilzunehmen.</p>
+
+      <h2>Hinweis zur Vermittlung</h2>
+      <p>{site.name} vermittelt Mietverträge über Stellplätze, Garagen und Lagerflächen zwischen Privatpersonen. Vertragspartner des Mietvertrags sind ausschließlich Mieter und Vermieter. Näheres regeln unsere <a href="/agb/">AGB</a>.</p>
+
       <h2 id="bildnachweise">Bildnachweise</h2>
       <p>Die Fotos stammen von Wikimedia Commons. Sie wurden für diese Website verkleinert und zugeschnitten.</p>
       <ul>
@@ -24,6 +50,7 @@ import { alleNachweise } from '../../lib/bilder';
           <li><a href={n.quelle} rel="noopener">{n.titel}</a>, Foto: {n.fotograf}, Lizenz: <a href={n.lizenzUrl} rel="license noopener">{n.lizenz}</a></li>
         ))}
       </ul>
+      <p>Kartendaten im Hintergrund: © OpenStreetMap-Mitwirkende, <a href="https://www.openstreetmap.org/copyright" rel="noopener">ODbL</a>.</p>
     </div>
   </section>
 </Basis>
