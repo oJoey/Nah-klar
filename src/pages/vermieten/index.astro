@@ -1,4 +1,5 @@
 ---
+import { vermieterSchritte } from '../../data/ablauf';
 import Basis from '../../layouts/Basis.astro';
 import Kacheln from '../../components/Kacheln.astro';
 import Verdienstrechner from '../../components/Verdienstrechner.astro';
@@ -54,13 +55,7 @@ const vergleich = [
   ...(site.mieterPruefung ? [{ punkt: 'Geprüfte Mieter', anzeige: 'Sie wissen nicht, wer anruft', wir: 'Ausweis, Fahrzeugschein, Versicherung' }] : []),
 ];
 
-const schritte = [
-  { titel: 'Platz anbieten', text: 'In wenigen kurzen Schritten über unser Formular.' },
-  { titel: 'Prüfung von Hand', text: 'Wir prüfen Fotos und Angaben und melden uns bei Rückfragen.' },
-  { titel: 'Passende Mieter', text: 'Wir schlagen Ihnen Interessenten vor. Sie entscheiden, wer einzieht.' },
-  { titel: 'Besichtigung und Vertrag', text: 'Sie lernen den Mieter kennen und unterschreiben den Mustervertrag.' },
-  { titel: 'Miete erhalten', text: texte.vermieterSchritt4Text },
-];
+const schritte = vermieterSchritte;
 
 const nachfrage = sichtbareKennzahlen(['suchende', 'suchendeWohnmobil']);
 const nachfrageLink = link('nachfrage') ?? link('platzAnbieten');

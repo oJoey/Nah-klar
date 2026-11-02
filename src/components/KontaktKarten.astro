@@ -1,0 +1,19 @@
+---
+// WhatsApp und E-Mail als zwei große Karten. Kein Telefon (siehe site.ts).
+import Icon from './Icon.astro';
+import { site, whatsappLink, emailHref } from '../config/site';
+---
+<div class="kontakt-raster">
+  <a class="karte kontakt-karte" href={whatsappLink} rel="noopener"><span class="kontakt-icon" aria-hidden="true"><Icon name="chat" /></span><strong>WhatsApp</strong><span>{site.whatsappAnzeige}</span></a>
+  <a class="karte kontakt-karte" href={emailHref}><span class="kontakt-icon" aria-hidden="true"><Icon name="mail" /></span><strong>E-Mail</strong><span>{site.email}</span></a>
+</div>
+<p class="unter-hinweis">Wir antworten {site.antwortzeit}.</p>
+<style>
+  .kontakt-raster { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr)); max-width: 44rem; }
+  .kontakt-karte { display: grid; gap: 0.25rem; text-decoration: none; color: var(--text); border: 1.5px solid var(--ueberschrift); box-shadow: 4px 4px 0 var(--ueberschrift); transition: transform 200ms var(--ease-out), box-shadow 200ms var(--ease-out); overflow-wrap: anywhere; }
+  @media (hover: hover) { .kontakt-karte:hover { transform: translate(-2px, -2px); box-shadow: 6px 6px 0 var(--ueberschrift); } }
+  .kontakt-karte strong { color: var(--ueberschrift); font-size: 1.2rem; }
+  .kontakt-icon { display: grid; place-items: center; width: 3rem; height: 3rem; border-radius: var(--r); background: var(--ueberschrift); margin-bottom: 0.5rem; }
+  .kontakt-icon :global(.symbol) { color: var(--akzent); }
+  @media (prefers-reduced-motion: reduce) { .kontakt-karte:hover { transform: none; } }
+</style>

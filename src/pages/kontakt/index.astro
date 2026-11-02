@@ -1,0 +1,46 @@
+---
+import Ratgeber from '../../layouts/Ratgeber.astro';
+import KontaktKarten from '../../components/KontaktKarten.astro';
+import { site } from '../../config/site';
+import { link } from '../../config/seiten';
+
+const anliegen = [
+  { titel: 'Sie suchen einen Platz?', text: 'Mit einem Suchauftrag geht es am schnellsten. Wir melden uns mit passenden Vorschlägen.', href: link('suchauftrag'), knopf: 'Suchauftrag anlegen' },
+  { titel: 'Sie haben Platz frei?', text: 'Bieten Sie ihn über unser Formular an. Für Vermieter immer kostenlos.', href: link('platzAnbieten'), knopf: 'Platz anbieten' },
+  { titel: 'Sie haben eine Frage?', text: 'Viele Antworten finden Sie schon in unserer Hilfe.', href: link('hilfe'), knopf: 'Zur Hilfe' },
+  { titel: 'Daten löschen?', text: 'Sie können Ihre Angaben jederzeit löschen lassen.', href: '/daten-loeschen/', knopf: 'Daten löschen' },
+].filter((a) => a.href);
+---
+<Ratgeber
+  seite="kontakt"
+  eltern={null}
+  typ="ContactPage"
+  titel="Kontakt"
+  beschreibung={`So erreichen Sie ${site.name}: per WhatsApp oder E-Mail, persönlich und ${site.antwortzeit}.`}
+  kicker="Kontakt"
+  einleitung={`Ihr persönlicher Ansprechpartner, per WhatsApp oder E-Mail. Wir antworten ${site.antwortzeit}.`}
+>
+  <Fragment slot="h1">Schreiben Sie uns, wir <span class="markiert">antworten</span> persönlich</Fragment>
+
+  <section class="abschnitt">
+    <div class="wrap"><KontaktKarten /></div>
+  </section>
+
+  <section class="abschnitt abschnitt-grau">
+    <div class="wrap">
+      <div class="kopfzeile"><h2>Worum geht es?</h2></div>
+      <ul class="raster anliegen">
+        {anliegen.map((a) => (
+          <li class="karte">
+            <h3>{a.titel}</h3>
+            <p>{a.text}</p>
+            <a class="weiter" href={a.href}>{a.knopf}</a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+</Ratgeber>
+<style>
+  .anliegen p { color: var(--text); }
+</style>

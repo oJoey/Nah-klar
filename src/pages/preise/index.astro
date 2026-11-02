@@ -1,0 +1,69 @@
+---
+import Ratgeber from '../../layouts/Ratgeber.astro';
+import Richtwerte from '../../components/Richtwerte.astro';
+import { site } from '../../config/site';
+import { zahlung, mieterpreis } from '../../config/zahlung';
+import { link } from '../../config/seiten';
+import { texte, vermittlungHtml } from '../../lib/texte';
+
+const beispielMiete = 80;
+const gebuehr = Math.round(beispielMiete * zahlung.servicegebuehr);
+---
+<Ratgeber
+  seite="preise"
+  eltern={null}
+  typ="WebPage"
+  titel="Preise: Was kostet ein Stellplatz, eine Garage oder ein Lagerraum?"
+  beschreibung={`Für Vermieter kostenlos. Was Mieter bei ${site.name} zahlen, wie die Kaution geregelt ist und was Stellplatz, Garage und Lagerraum ${site.regionIn} üblicherweise kosten.`}
+  kicker="Preise"
+  einleitung="Für Vermieter immer kostenlos. Für Mieter ohne versteckte Kosten: Was Sie zahlen, steht vor der Zusage fest."
+  verwandt={['soFunktionierts', 'verdienstrechner', 'winterplatzVergleich']}
+>
+  <Fragment slot="h1">Klare <span class="markiert">Preise</span>, keine Überraschungen</Fragment>
+
+  <section class="abschnitt">
+    <div class="wrap preis-raster">
+      <div class="karte preis-karte">
+        <p class="preis-wer">Für Mieter</p>
+        <h2>Miete{texte.servicegebuehr ? ' plus Servicegebühr' : ''}</h2>
+        <ul class="haken">
+          <li>{texte.mieterKosten}</li>
+          {vermittlungHtml() && <li set:html={vermittlungHtml()} />}
+          <li>Kaution: eine Monatsmiete, mindestens {zahlung.kautionMinEuro} €, direkt an den Vermieter. Zurück innerhalb von {zahlung.kautionRueckzahlungWochen} Wochen nach dem Auszug, abzüglich belegter Schäden.</li>
+          <li>Suchauftrag kostenlos und unverbindlich.</li>
+        </ul>
+      </div>
+      <div class="karte preis-karte">
+        <p class="preis-wer">Für Vermieter</p>
+        <h2><span class="kostenlos">Kostenlos</span></h2>
+        <ul class="haken">
+          <li>{texte.vermieterKosten}</li>
+          <li>Sie legen den Preis selbst fest. Auf Wunsch sagen wir Ihnen, was in Ihrer Gegend üblich ist.</li>
+          <li>Kein Konto, keine Grundgebühr, keine Laufzeit bei uns.</li>
+        </ul>
+      </div>
+    </div>
+    {texte.servicegebuehr && (
+      <div class="wrap">
+        <p class="hinweis-box">Beispiel: Bei einer Miete von {beispielMiete} € {texte.live ? `zahlen Sie ${mieterpreis(beispielMiete)} € im Monat, davon gehen ${beispielMiete} € an den Vermieter` : `zahlen Sie ${beispielMiete} € an den Vermieter und etwa ${gebuehr} € Servicegebühr an uns`}. {texte.ustHinweis}</p>
+      </div>
+    )}
+  </section>
+
+  <section class="abschnitt abschnitt-grau">
+    <div class="wrap">
+      <div class="kopfzeile">
+        <h2>Was kostet ein Platz im Monat?</h2>
+        <p class="einleitung">Übliche Monatsmieten nach Art und Fahrzeuglänge. Den genauen Preis legt der Vermieter fest.</p>
+      </div>
+      <Richtwerte />
+      <p class="mt"><a class="weiter" href={link('suchauftrag')}>Passenden Platz suchen lassen</a></p>
+    </div>
+  </section>
+</Ratgeber>
+<style>
+  .preis-raster { display: grid; gap: 1.25rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr)); }
+  .preis-karte { border: 1.5px solid var(--ueberschrift); box-shadow: 4px 4px 0 var(--ueberschrift); }
+  .preis-karte .haken { margin: 0; }
+  .preis-wer { margin: 0 0 0.25rem; font-weight: 700; font-size: 0.95rem; }
+</style>

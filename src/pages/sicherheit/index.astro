@@ -1,0 +1,75 @@
+---
+import Ratgeber from '../../layouts/Ratgeber.astro';
+import Icon from '../../components/Icon.astro';
+import { site } from '../../config/site';
+import { zahlung } from '../../config/zahlung';
+import { link } from '../../config/seiten';
+import { texte } from '../../lib/texte';
+import type { IconName } from '../../lib/icons';
+
+// Nur aufführen, was wirklich gemacht wird. Mieterprüfung hängt am Schalter in site.ts.
+const punkte: { icon: IconName; titel: string; text: string }[] = [
+  { icon: 'schild', titel: 'Jede Fläche von Hand geprüft', text: 'Wir prüfen Fotos und Angaben jeder Fläche, bevor wir sie vorschlagen, und fragen nach, wenn etwas unklar ist.' },
+  { icon: 'vertrag', titel: 'Schriftlicher Mustervertrag', text: 'Miete, Kaution, Kündigung, Zufahrt und Hausregeln sind schriftlich geregelt, für beide Seiten nachlesbar.' },
+  { icon: 'euro', titel: 'Kaution verpflichtend', text: `Eine Monatsmiete, mindestens ${zahlung.kautionMinEuro} €, direkt an den Vermieter. Zurück innerhalb von ${zahlung.kautionRueckzahlungWochen} Wochen nach dem Auszug, abzüglich belegter Schäden.` },
+  { icon: 'kamera', titel: 'Fotos bei Ein- und Auszug', text: 'Der Zustand wird bei Übergabe und Rückgabe mit Fotos festgehalten. So gibt es später keinen Streit über Schäden.' },
+  { icon: 'ort', titel: 'Adresse geschützt', text: 'Interessenten erfahren zuerst nur den Ortsteil. Die genaue Adresse gibt es erst, wenn eine Besichtigung vereinbart ist.' },
+  { icon: 'person', titel: site.mieterPruefung ? 'Geprüfte Mieter' : 'Sie entscheiden, wer einzieht', text: site.mieterPruefung
+      ? 'Vor der Besichtigung prüfen wir jeden Mieter: Ausweis, bei Fahrzeugen auch Fahrzeugschein und Nachweis der Kfz-Versicherung.'
+      : 'Vermieter lernen jeden Interessenten bei der Besichtigung kennen und entscheiden selbst, ob sie vermieten.' },
+  { icon: 'chat', titel: 'Persönlicher Ansprechpartner', text: texte.serviceGarantie },
+  { icon: 'liste', titel: 'Sparsam mit Daten', text: 'Wir nutzen Ihre Angaben nur für die Vermittlung und löschen sie auf Wunsch jederzeit.' },
+];
+---
+<Ratgeber
+  seite="sicherheit"
+  eltern={null}
+  typ="WebPage"
+  titel="Sicherheit beim privaten Mieten und Vermieten von Stellplätzen"
+  beschreibung="Geprüfte Flächen, Mustervertrag, Kaution, Fotos bei Ein- und Auszug und geschützte Adresse: So sorgen wir für Sicherheit beim privaten Mieten und Vermieten von Stellplatz, Garage und Lagerraum."
+  kicker="Sicherheit"
+  einleitung="Wer seinen Hof oder seine Garage an Fremde vermietet, will sich darauf verlassen können. Wer sein Wohnmobil abstellt, auch. Das tun wir dafür."
+  verwandt={['soFunktionierts', 'preise', 'hilfe']}
+  fuer="vermieter"
+>
+  <Fragment slot="h1">Sicher mieten, <span class="markiert">sicher</span> vermieten</Fragment>
+
+  <section class="abschnitt">
+    <div class="wrap">
+      <ul class="raster sicher-liste">
+        {punkte.map((p) => (
+          <li class="karte">
+            <span class="symbol-flaeche" aria-hidden="true"><Icon name={p.icon} /></span>
+            <h2 class="sicher-titel">{p.titel}</h2>
+            <p>{p.text}</p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <section class="abschnitt abschnitt-grau">
+    <div class="wrap inhalt">
+      <h2>Was Sie selbst tun sollten</h2>
+      <h3>Als Mieter</h3>
+      <ul>
+        <li>Schauen Sie sich den Platz vor der Unterschrift an, am besten mit dem Fahrzeug oder einem Maßband.</li>
+        <li>Fragen Sie bei Ihrer Kfz- oder Hausratversicherung nach, ob das Fahrzeug oder Lagergut am neuen Ort versichert ist.</li>
+        <li>Zahlen Sie nie Geld, bevor Sie den Platz gesehen und den Vertrag erhalten haben.</li>
+      </ul>
+      <h3>Als Vermieter</h3>
+      <ul>
+        <li>Klären Sie, ob Ihre Haftpflicht- oder Gebäudeversicherung die Vermietung abdeckt.</li>
+        <li>Legen Sie Zufahrtszeiten und Hausregeln im Vertrag fest, etwa keine Reparaturen auf dem Hof.</li>
+        <li>Prüfen Sie im Zweifel bei Ihrer Gemeinde, ob für die Nutzung eine Genehmigung nötig ist.</li>
+      </ul>
+      <p class="hinweis-box">Eine Rechts- oder Steuerberatung bieten wir nicht an. Bei Fragen zu Ihrer Versicherung wenden Sie sich bitte an Ihren Versicherer.</p>
+      <p>Mehr zum Umgang mit Ihren Daten: <a href={link('datenschutz')}>Datenschutz</a> · <a href="/daten-loeschen/">Daten löschen</a></p>
+    </div>
+  </section>
+</Ratgeber>
+<style>
+  .sicher-liste { gap: 1.25rem; }
+  .sicher-titel { font-size: 1.25rem; }
+  .sicher-liste p { margin: 0; color: var(--text); }
+</style>

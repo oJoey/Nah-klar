@@ -1,4 +1,5 @@
 ---
+import { mieterSchritte } from '../../data/ablauf';
 import Basis from '../../layouts/Basis.astro';
 import SuchauftragFormular from '../../components/SuchauftragFormular.astro';
 import FormSkript from '../../components/FormSkript.astro';
@@ -22,12 +23,7 @@ const kacheln = mietArten.map((a) => ({
   linkText: link(a.seite)?.startsWith('/suchauftrag/') ? 'Suchauftrag anlegen' : 'Mehr erfahren',
 }));
 
-const schritte = [
-  { titel: 'Suchauftrag anlegen', text: 'Sie sagen uns Ort, Art und Zeitraum. Dauert eine Minute, kostenlos und ohne Konto.' },
-  { titel: 'Vorschlag erhalten', text: 'Wir schicken Ihnen passende Plätze mit Fotos, Preis und Ortsteil. Die Adresse folgt zur Besichtigung.' },
-  { titel: 'Besichtigen', text: 'Sie schauen sich den Platz in Ruhe an und lernen den Vermieter kennen.' },
-  { titel: texte.mieterSchritt4, text: texte.mieterSchritt4Text },
-];
+const schritte = mieterSchritte;
 ---
 <Basis
   titel="Stellplatz, Garage oder Lagerraum mieten in Baden-Württemberg"

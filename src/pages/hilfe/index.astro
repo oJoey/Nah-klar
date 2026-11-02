@@ -1,0 +1,75 @@
+---
+import { getCollection } from 'astro:content';
+import Ratgeber from '../../layouts/Ratgeber.astro';
+import KontaktKarten from '../../components/KontaktKarten.astro';
+import { absaetze, klartext, jsonLd } from '../../lib/texte';
+
+// Alle FAQ, gruppiert. Jede Frage erscheint nur einmal: zuerst Allgemein, dann Mieter, dann Vermieter.
+const alle = (await getCollection('faq')).sort((a, b) => a.data.reihenfolge - b.data.reihenfolge);
+const gruppen = [
+  { id: 'allgemein', titel: 'Allgemein', eintraege: alle.filter((e) => e.data.seiten.includes('start')) },
+  { id: 'mieter', titel: 'Für Mieter', eintraege: alle.filter((e) => !e.data.seiten.includes('start') && e.data.seiten.includes('mieten')) },
+  { id: 'vermieter', titel: 'Für Vermieter', eintraege: alle.filter((e) => !e.data.seiten.includes('start') && !e.data.seiten.includes('mieten')) },
+].filter((g) => g.eintraege.length);
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: gruppen.flatMap((g) => g.eintraege).map((e) => ({
+    '@type': 'Question',
+    name: e.data.frage,
+    acceptedAnswer: { '@type': 'Answer', text: klartext(e.body ?? '') },
+  })),
+};
+---
+<Ratgeber
+  seite="hilfe"
+  eltern={null}
+  typ="WebPage"
+  titel="Hilfe und häufige Fragen zu Stellplatz, Garage und Lagerraum"
+  beschreibung="Antworten auf häufige Fragen zu Kosten, Kaution, Kündigung, Mietvertrag und Steuer beim privaten Mieten und Vermieten von Stellplatz, Garage und Lagerraum."
+  kicker="Hilfe & Kontakt"
+  einleitung="Antworten auf die häufigsten Fragen. Wenn etwas offen bleibt, schreiben Sie uns einfach."
+  verwandt={['soFunktionierts', 'preise', 'sicherheit']}
+>
+  <Fragment slot="h1">Wie können wir <span class="markiert">helfen</span>?</Fragment>
+  <script type="application/ld+json" set:html={jsonLd(schema)} />
+
+  <section class="abschnitt">
+    <div class="wrap">
+      <nav class="sprungmarken" aria-label="Fragen nach Thema">
+        {gruppen.map((g) => <a class="chip" href={`#${g.id}`}>{g.titel}</a>)}
+        <a class="chip" href="#kontakt">Kontakt</a>
+      </nav>
+      {gruppen.map((g) => (
+        <div class="faq-gruppe" id={g.id}>
+          <h2>{g.titel}</h2>
+          <div class="klapp-liste">
+            {g.eintraege.map((e) => (
+              <details class="klapp">
+                <summary>{e.data.frage}</summary>
+                <div class="klapp-inhalt" set:html={absaetze(e.body ?? '')} />
+              </details>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <section class="abschnitt abschnitt-grau" id="kontakt">
+    <div class="wrap">
+      <div class="kopfzeile">
+        <h2>Ihre Frage war nicht dabei?</h2>
+        <p class="einleitung">Ihr persönlicher Ansprechpartner hilft gern weiter.</p>
+      </div>
+      <KontaktKarten />
+    </div>
+  </section>
+</Ratgeber>
+<style>
+  .sprungmarken { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 2.5rem; }
+  .sprungmarken .chip { text-decoration: none; color: var(--ueberschrift); }
+  .faq-gruppe { max-width: 50rem; scroll-margin-top: 6rem; }
+  .faq-gruppe + .faq-gruppe { margin-top: 3rem; }
+  #kontakt { scroll-margin-top: 4rem; }
+</style>

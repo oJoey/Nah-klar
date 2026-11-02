@@ -1,0 +1,52 @@
+---
+import Ratgeber from '../../../layouts/Ratgeber.astro';
+import Kennzahlen from '../../../components/Kennzahlen.astro';
+import Richtwerte from '../../../components/Richtwerte.astro';
+import { site } from '../../../config/site';
+import { link } from '../../../config/seiten';
+
+const gefragt = [
+  { titel: 'Winterplätze für Wohnmobil und Wohnwagen', text: 'Ab dem Spätsommer suchen viele einen trockenen Platz für die Monate von Oktober bis März. Überdachte Plätze, Scheunen und Hallen sind besonders gefragt.' },
+  { titel: 'Garagen in der Stadt', text: 'In dicht bebauten Wohngebieten fehlen Garagen fast überall. Gesucht werden sie für Auto, Motorrad, Oldtimer oder als Lager.' },
+  { titel: 'Stellplätze für Anhänger und Boote', text: 'Anhänger ohne Zugfahrzeug dürfen höchstens zwei Wochen am Stück an der Straße parken. Ein befestigter Platz in der Einfahrt oder auf dem Hof reicht oft schon.' },
+  { titel: 'Lagerräume', text: 'Für Möbel bei einem Umzug, Reifen, Gartengeräte oder Kisten: Ein trockener Keller oder Raum lässt sich gut vermieten.' },
+];
+---
+<Ratgeber
+  seite="nachfrage"
+  eltern="vermieten"
+  typ="WebPage"
+  titel={`Nachfrage nach Stellplätzen, Garagen und Lagerräumen ${site.regionIn}`}
+  beschreibung={`Welche Plätze ${site.regionIn} gesucht werden und was sie einbringen: Winterplätze für Wohnmobile, Garagen, Stellplätze für Anhänger und Lagerräume. Mit Richtpreisen für Vermieter.`}
+  kicker="Für Vermieter · Nachfrage"
+  einleitung={`Wo und wofür ${site.regionIn} gerade Platz gesucht wird, und was Ihr freier Platz einbringen kann.`}
+  verwandt={['verdienstrechner', 'vermieten', 'sicherheit']}
+  fuer="vermieter"
+>
+  <Fragment slot="h1">Ihr freier Platz wird <span class="markiert">gesucht</span></Fragment>
+
+  <Kennzahlen schluessel={['suchende', 'suchendeWohnmobil', 'plaetze']} titel="Aktuelle Zahlen" />
+
+  <section class="abschnitt">
+    <div class="wrap">
+      <div class="kopfzeile"><h2>Was besonders gefragt ist</h2></div>
+      <ul class="raster">
+        {gefragt.map((g) => <li class="karte"><h3>{g.titel}</h3><p class="gefragt-text">{g.text}</p></li>)}
+      </ul>
+    </div>
+  </section>
+
+  <section class="abschnitt abschnitt-grau">
+    <div class="wrap">
+      <div class="kopfzeile">
+        <h2>Was Ihr Platz einbringen kann</h2>
+        <p class="einleitung">Übliche Monatsmieten nach Art und Größe. Den Preis legen Sie selbst fest, die Miete erhalten Sie in voller Höhe.</p>
+      </div>
+      <Richtwerte />
+      <p class="mt"><a class="weiter" href={link('verdienstrechner')}>Ertrag für Ihren Platz ausrechnen</a></p>
+    </div>
+  </section>
+</Ratgeber>
+<style>
+  .gefragt-text { margin: 0; color: var(--text); }
+</style>

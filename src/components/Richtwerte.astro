@@ -1,0 +1,35 @@
+---
+// Richtpreise je Art und Größe aus src/data/richtwerte.json (Monatsmiete, die der Vermieter erhält).
+import richtwerte from '../data/richtwerte.json';
+type Preise = Record<string, number[] | null>;
+const fahrzeug = richtwerte.arten.filter((a) => a.preise).map((a) => ({ titel: a.titel, preise: a.preise as Preise }));
+const lager = richtwerte.arten.find((a) => a.proQm);
+const zelle = (p: number[] | null | undefined) => (p ? `${p[0]} bis ${p[1]} €` : 'selten');
+---
+<div class="tabelle-huelle">
+  <table class="richtwert-tabelle">
+    <caption class="sr-only">Richtpreise pro Platz und Monat, {richtwerte.region}</caption>
+    <thead><tr><th scope="col">Art</th>{richtwerte.klassen.map((k) => <th scope="col">{k.titel}<span>{k.passt}</span></th>)}</tr></thead>
+    <tbody>
+      {fahrzeug.map((a) => (
+        <tr><th scope="row">{a.titel}</th>{richtwerte.klassen.map((k) => <td>{zelle(a.preise[k.wert])}</td>)}</tr>
+      ))}
+    </tbody>
+  </table>
+</div>
+<p class="unter-hinweis">
+  {lager && <>{lager.titel}: {lager.proQm![0]} bis {lager.proQm![1]} € pro m² und Monat, mindestens {lager.mindestens} €. </>}
+  Richtwerte für den {richtwerte.region}. Der tatsächliche Preis hängt von Lage, Zufahrt und Ausstattung ab.
+</p>
+<style>
+  .tabelle-huelle { overflow-x: auto; }
+  .richtwert-tabelle { width: 100%; min-width: 40rem; border-collapse: collapse; font-size: 1rem; }
+  .richtwert-tabelle th, .richtwert-tabelle td { text-align: left; vertical-align: top; padding: 0.85rem; border-bottom: 1px solid var(--linie); }
+  .richtwert-tabelle thead th { background: var(--ueberschrift); color: var(--hintergrund); font-weight: 800; }
+  .richtwert-tabelle thead th span { display: block; font-size: 0.85rem; font-weight: 500; opacity: 0.85; }
+  .richtwert-tabelle thead th:first-child { border-radius: var(--r) 0 0 0; }
+  .richtwert-tabelle thead th:last-child { border-radius: 0 var(--r) 0 0; }
+  .richtwert-tabelle tbody th { color: var(--ueberschrift); }
+  .richtwert-tabelle td { font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .richtwert-tabelle tbody tr:nth-child(even) > * { background: var(--sekundaer); }
+</style>

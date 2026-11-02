@@ -1,5 +1,5 @@
 ---
-// Layout für Ratgeber und Werkzeuge: Kopfbereich wie auf den Hauptseiten, Artikel-Daten für Google,
+// Layout für Ratgeber, Werkzeuge und Infoseiten: Kopfbereich wie auf den Hauptseiten, strukturierte Daten für Google,
 // verwandte Seiten und ein Abschluss mit passendem Button (Mieter oder Vermieter).
 import Basis from './Basis.astro';
 import { site } from '../config/site';
@@ -12,25 +12,40 @@ interface Props {
   beschreibung: string;   // Meta-Beschreibung
   kicker: string;
   einleitung: string;
-  stand: string;          // z. B. '2026-11-01'
+  stand?: string;         // z. B. '2026-11-01', nur bei Ratgebern angezeigt
   verwandt?: SeitenSchluessel[];
   fuer?: 'mieter' | 'vermieter';
+  eltern?: SeitenSchluessel | null; // Brotkrümel-Ebene darüber, null = direkt unter der Startseite
+  typ?: 'Article' | 'WebPage' | 'AboutPage' | 'ContactPage' | 'CollectionPage';
 }
-const { seite, titel, beschreibung, kicker, einleitung, stand, verwandt = [], fuer = 'mieter' } = Astro.props;
+const { seite, titel, beschreibung, kicker, einleitung, stand, verwandt = [], fuer = 'mieter', eltern = 'werkzeuge', typ = 'Article' } = Astro.props;
 const s = seiten[seite];
-const kruemel = seite === 'werkzeuge' ? [{ name: s.titel, pfad: s.pfad }] : [{ name: seiten.werkzeuge.titel, pfad: seiten.werkzeuge.pfad }, { name: s.titel, pfad: s.pfad }];
-const standText = new Date(stand).toLocaleDateString('de-DE', { month: 'long', year: 'numeric' });
+const kruemel = [...(eltern && eltern !== seite ? [{ name: seiten[eltern].titel, pfad: seiten[eltern].pfad }] : []), { name: s.titel, pfad: s.pfad }];
+const standText = stand ? new Date(stand).toLocaleDateString('de-DE', { month: 'long', year: 'numeric' }) : '';
 const weitere = verwandt.map((k) => ({ titel: seiten[k].titel, href: link(k) })).filter((v) => v.href);
-const artikel = {
-  '@context': 'https://schema.org',
-  '@type': 'Article',
-  headline: titel,
-  description: beschreibung,
-  dateModified: stand,
-  inLanguage: 'de-DE',
-  publisher: { '@id': `${site.url}/#organisation` },
-  mainEntityOfPage: new URL(s.pfad, site.url).href,
-};
+const url = new URL(s.pfad, site.url).href;
+const artikel = typ === 'Article'
+  ? {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: titel,
+    description: beschreibung,
+    dateModified: stand,
+    inLanguage: 'de-DE',
+    publisher: { '@id': `${site.url}/#organisation` },
+    mainEntityOfPage: url,
+  }
+  : {
+    '@context': 'https://schema.org',
+    '@type': typ,
+    name: titel,
+    description: beschreibung,
+    url,
+    inLanguage: 'de-DE',
+    ...(stand ? { dateModified: stand } : {}),
+    isPartOf: { '@type': 'WebSite', name: site.name, url: site.url },
+    ...(typ === 'AboutPage' || typ === 'ContactPage' ? { mainEntity: { '@id': `${site.url}/#organisation` } } : {}),
+  };
 const cta = fuer === 'vermieter'
   ? { titel: 'Sie haben Platz frei?', text: 'Bieten Sie ihn in zwei Minuten an. Für Vermieter immer kostenlos.', knopf: 'Platz anbieten', href: link('platzAnbieten') }
   : { titel: 'Sie suchen einen Platz?', text: 'Legen Sie einen Suchauftrag an. Wir melden uns mit passenden Plätzen in Ihrer Nähe.', knopf: 'Platz finden', href: link('suchauftrag') };
@@ -43,7 +58,7 @@ const cta = fuer === 'vermieter'
       <p class="kicker">{kicker}</p>
       <h1><slot name="h1" /></h1>
       <p class="einleitung">{einleitung}</p>
-      <p class="stand">Stand: {standText}</p>
+      {standText && <p class="stand">Stand: {standText}</p>}
     </div>
   </section>
 

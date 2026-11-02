@@ -1,9 +1,7 @@
 ---
-// Platzhalterseiten für alles, was in src/config/seiten.ts als entwurf markiert ist.
+// Platzhalterseiten für alles, was in src/config/seiten.ts als entwurf markiert ist (noindex, nicht in der Sitemap).
 import Basis from '../layouts/Basis.astro';
 import ButtonPaar from '../components/ButtonPaar.astro';
-import Verdienstrechner from '../components/Verdienstrechner.astro';
-import Faq from '../components/Faq.astro';
 import { site, whatsappLink, emailHref } from '../config/site';
 import { seiten, entwuerfe, link, type SeitenSchluessel } from '../config/seiten';
 import { entwurfTexte } from '../data/entwuerfe';
@@ -20,7 +18,6 @@ const kruemel = [
   { name: seite.titel, pfad: seite.pfad },
 ];
 const verwandt = (text.verwandt ?? []).map((k) => ({ titel: seiten[k].titel, href: link(k) })).filter((v) => v.href);
-const mitKontakt = schluessel === 'kontakt' || schluessel === 'hilfe';
 ---
 <Basis titel={seite.titel} beschreibung={text.einleitung || `${seite.titel} bei ${site.name}`} brotkruemel={kruemel} noindex>
   <section class="abschnitt abschnitt-grau">
@@ -29,27 +26,9 @@ const mitKontakt = schluessel === 'kontakt' || schluessel === 'hilfe';
       <p class="einleitung">{text.einleitung}</p>
       {text.punkte && <ul class="haken mt">{text.punkte.map((p) => <li>{p}</li>)}</ul>}
       {text.punkteHtml && <ul class="haken mt">{text.punkteHtml.map((p) => <li set:html={p} />)}</ul>}
-      {schluessel !== 'verdienstrechner' && !mitKontakt && (
-        <p class="hinweis"><strong>Diese Seite wird gerade erstellt.</strong> Bis dahin helfen wir Ihnen gern persönlich per <a href={whatsappLink} rel="noopener">WhatsApp</a> oder <a href={emailHref}>E-Mail</a>.</p>
-      )}
+      <p class="hinweis"><strong>Diese Seite wird gerade erstellt.</strong> Bis dahin helfen wir Ihnen gern persönlich per <a href={whatsappLink} rel="noopener">WhatsApp</a> oder <a href={emailHref}>E-Mail</a>.</p>
     </div>
   </section>
-
-  {schluessel === 'verdienstrechner' && (
-    <section class="abschnitt"><div class="wrap"><Verdienstrechner ausfuehrlich /></div></section>
-  )}
-
-  {mitKontakt && (
-    <section class="abschnitt">
-      <div class="wrap kontakt-raster">
-        <a class="karte kontakt-karte" href={whatsappLink} rel="noopener"><strong>WhatsApp</strong><span>{site.whatsappAnzeige}</span></a>
-        <a class="karte kontakt-karte" href={emailHref}><strong>E-Mail</strong><span>{site.email}</span></a>
-      </div>
-    </section>
-  )}
-  {schluessel === 'hilfe' && (
-    <section class="abschnitt abschnitt-grau"><div class="wrap"><Faq seite="start" /></div></section>
-  )}
 
   <section class="abschnitt zentriert">
     <div class="wrap">
@@ -62,8 +41,5 @@ const mitKontakt = schluessel === 'kontakt' || schluessel === 'hilfe';
   </section>
 </Basis>
 <style>
-  .kontakt-raster { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr)); max-width: 44rem; }
-  .kontakt-karte { display: grid; gap: 0.25rem; text-decoration: none; color: var(--text); }
-  .kontakt-karte strong { color: var(--ueberschrift); font-size: 1.2rem; }
   .verwandt { color: var(--text); }
 </style>

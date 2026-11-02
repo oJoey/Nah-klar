@@ -1,0 +1,64 @@
+---
+import Ratgeber from '../../layouts/Ratgeber.astro';
+import { site } from '../../config/site';
+import { link } from '../../config/seiten';
+
+// Größere Städte je Regierungsbezirk. Links öffnen den Suchauftrag mit vorausgefülltem Ort.
+const bezirke = [
+  { titel: 'Region Stuttgart, Heilbronn und Ostwürttemberg', staedte: ['Stuttgart', 'Böblingen', 'Sindelfingen', 'Esslingen am Neckar', 'Ludwigsburg', 'Waiblingen', 'Göppingen', 'Heilbronn', 'Schwäbisch Hall', 'Schwäbisch Gmünd', 'Aalen', 'Heidenheim an der Brenz'] },
+  { titel: 'Region Karlsruhe, Rhein-Neckar und Nordschwarzwald', staedte: ['Karlsruhe', 'Mannheim', 'Heidelberg', 'Pforzheim', 'Baden-Baden', 'Rastatt', 'Bruchsal', 'Calw', 'Sinsheim', 'Mosbach'] },
+  { titel: 'Region Freiburg, Ortenau und Bodensee West', staedte: ['Freiburg im Breisgau', 'Offenburg', 'Lörrach', 'Emmendingen', 'Konstanz', 'Singen', 'Villingen-Schwenningen', 'Rottweil', 'Tuttlingen', 'Waldshut-Tiengen'] },
+  { titel: 'Region Tübingen, Ulm und Oberschwaben', staedte: ['Tübingen', 'Reutlingen', 'Ulm', 'Ravensburg', 'Friedrichshafen', 'Biberach an der Riß', 'Sigmaringen', 'Balingen', 'Albstadt', 'Ehingen'] },
+];
+const such = link('suchauftrag');
+const ortLink = (ort: string) => (such ? `${such}?ort=${encodeURIComponent(ort)}` : null);
+---
+<Ratgeber
+  seite="regionen"
+  eltern={null}
+  typ="CollectionPage"
+  titel={`Stellplatz, Garage und Lagerraum in ganz ${site.region}`}
+  beschreibung={`Stellplatz, Garage, Wohnmobil-Winterplatz oder Lagerraum mieten und vermieten in ${site.region}: in Stuttgart, Karlsruhe, Mannheim, Freiburg, Ulm, Heilbronn und auf dem Land.`}
+  kicker="Regionen"
+  einleitung={`Wir vermitteln Plätze in ganz ${site.region}: in Städten wie Stuttgart, Karlsruhe, Freiburg oder Ulm und auf dem Land.`}
+  verwandt={['mieten', 'vermieten', 'preise']}
+>
+  <Fragment slot="h1">Platz finden in ganz <span class="markiert">{site.region}</span></Fragment>
+
+  <section class="abschnitt">
+    <div class="wrap">
+      <div class="kopfzeile">
+        <h2>Wo suchen Sie?</h2>
+        <p class="einleitung">Wählen Sie Ihre Stadt, der Ort wird im Suchauftrag schon eingetragen. Ihr Ort ist nicht dabei? Kein Problem, wir suchen überall im Land.</p>
+      </div>
+      <div class="bezirke">
+        {bezirke.map((b) => (
+          <div>
+            <h3>{b.titel}</h3>
+            <ul class="orte">
+              {b.staedte.map((s) => { const href = ortLink(s); return <li>{href ? <a href={href} rel="nofollow">{s}</a> : s}</li>; })}
+            </ul>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="abschnitt abschnitt-grau">
+    <div class="wrap inhalt">
+      <h2>Stadt oder Land: Was Sie erwarten können</h2>
+      <h3>In den Städten</h3>
+      <p>In Stuttgart, Mannheim, Karlsruhe oder Freiburg sind Garagen und Stellplätze knapp und teurer. Für Wohnmobile gibt es in der Stadt selbst kaum Platz, oft findet sich aber etwas in den Orten am Stadtrand.</p>
+      <h3>Im Umland und auf dem Land</h3>
+      <p>Scheunen, Hallen und große Höfe gibt es vor allem außerhalb der Städte. Hier finden sich die meisten Winterplätze für Wohnmobil, Wohnwagen und Boot, meist günstiger als in der Stadt.</p>
+      <p>Wie schnell wir einen Platz finden, hängt davon ab, wie viele Angebote es in Ihrer Gegend gibt. Nach Ihrem Suchauftrag sagen wir Ihnen ehrlich, wie die Chancen stehen.</p>
+      <p>Sie haben selbst Platz frei? <a href={link('platzAnbieten')}>Platz anbieten</a>, für Vermieter kostenlos.</p>
+    </div>
+  </section>
+</Ratgeber>
+<style>
+  .bezirke { display: grid; gap: 2rem 3rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr)); }
+  .bezirke h3 { font-size: 1.15rem; }
+  .orte { list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: 0.25rem 1.25rem; }
+  .orte a { display: inline-block; min-height: 2.75rem; padding-block: 0.5rem; font-weight: 600; }
+</style>

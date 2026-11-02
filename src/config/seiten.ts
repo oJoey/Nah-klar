@@ -14,13 +14,13 @@ export const seiten = {
 
   // Menü und Fußbereich
   werkzeuge: { pfad: '/werkzeuge/', live: true, titel: 'Werkzeuge & Ratgeber' },
-  regionen: { pfad: '/regionen/', live: true, entwurf: true, titel: 'Regionen' },
-  hilfe: { pfad: '/hilfe/', live: true, entwurf: true, titel: 'Hilfe & Kontakt' },
-  soFunktionierts: { pfad: '/so-funktionierts/', live: true, entwurf: true, titel: "So funktioniert's" },
-  sicherheit: { pfad: '/sicherheit/', live: true, entwurf: true, titel: 'Sicherheit' },
-  preise: { pfad: '/preise/', live: true, entwurf: true, titel: 'Preise' },
-  ueberUns: { pfad: '/ueber-uns/', live: true, entwurf: true, titel: 'Über uns' },
-  kontakt: { pfad: '/kontakt/', live: true, entwurf: true, titel: 'Kontakt' },
+  regionen: { pfad: '/regionen/', live: true, titel: 'Regionen' },
+  hilfe: { pfad: '/hilfe/', live: true, titel: 'Hilfe & Kontakt' },
+  soFunktionierts: { pfad: '/so-funktionierts/', live: true, titel: "So funktioniert's" },
+  sicherheit: { pfad: '/sicherheit/', live: true, titel: 'Sicherheit' },
+  preise: { pfad: '/preise/', live: true, titel: 'Preise' },
+  ueberUns: { pfad: '/ueber-uns/', live: true, titel: 'Über uns' },
+  kontakt: { pfad: '/kontakt/', live: true, titel: 'Kontakt' },
   agb: { pfad: '/agb/', live: true, entwurf: true, titel: 'AGB' },
 
   // Werkzeuge und Ratgeber
@@ -30,7 +30,7 @@ export const seiten = {
   winterplatzVergleich: { pfad: '/ratgeber/winterplatz-vergleich/', live: true, titel: 'Winterplatz-Vergleich' },
   // Später: prüft Breite, Höhe und Gewicht gegen die Zufahrt eines Platzes
   passtWohnmobil: { pfad: '/werkzeuge/passt-mein-wohnmobil/', live: false, titel: 'Passt mein Wohnmobil?' },
-  nachfrage: { pfad: '/vermieten/nachfrage/', live: true, entwurf: true, titel: 'Nachfrage in Ihrer Nähe' },
+  nachfrage: { pfad: '/vermieten/nachfrage/', live: true, titel: 'Nachfrage in Ihrer Nähe' },
 
   // Kategorieseiten Mieten (Ersatz: Suchauftrag mit vorausgewählter Art)
   mietenWohnmobil: { pfad: '/mieten/wohnmobil-wohnwagen-stellplatz/', live: false, titel: 'Wohnmobil und Wohnwagen', ersatz: '/suchauftrag/?mieter_art=wohnmobil-wohnwagen' },
