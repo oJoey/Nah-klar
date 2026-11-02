@@ -1,5 +1,6 @@
 ---
 import Ratgeber from '../../layouts/Ratgeber.astro';
+import FaqBlock from '../../components/FaqBlock.astro';
 
 // Checkliste zum Abhaken. Jeder Punkt hat eine feste ID, damit der Browser den Fortschritt speichern kann.
 const gruppen = [
@@ -46,6 +47,20 @@ const gruppen = [
   ]},
 ] as const;
 const gesamt = gruppen.reduce((s, g) => s + g.punkte.length, 0);
+const inhalt = [...gruppen.map((g) => ({ id: g.id, titel: g.titel })), { id: 'faq', titel: 'Häufige Fragen' }];
+const kurz = [
+  'Wasser vollständig ablassen, sonst drohen Frostschäden an Leitungen und Boiler.',
+  'Gasflaschen zudrehen und klären, ob sie im Fahrzeug bleiben dürfen.',
+  'Batterie laden und über den Winter mit Erhaltungsladung versorgen oder abklemmen.',
+  'Innenraum ausräumen, lüften und gegen Feuchtigkeit schützen.',
+  'Im Winter alle paar Wochen nach dem Fahrzeug sehen.',
+];
+const faq = [
+  { frage: 'Wann sollte ich mein Wohnmobil einwintern?', antwort: 'Am besten vor dem ersten Frost. Spätestens wenn die Nächte unter null Grad fallen, sollte kein Wasser mehr in Leitungen, Tanks und Boiler sein.' },
+  { frage: 'Muss das Wasser wirklich komplett raus?', antwort: 'Ja. Schon wenig Restwasser kann beim Gefrieren Leitungen, Pumpe oder Boiler beschädigen. Öffnen Sie alle Hähne und Ablassventile und folgen Sie den Angaben des Herstellers.' },
+  { frage: 'Batterie ausbauen oder im Fahrzeug lassen?', antwort: 'Beides ist möglich. Wichtig ist, dass sie nicht tiefentladen wird: entweder mit Erhaltungsladung am Stromanschluss oder abgeklemmt und regelmäßig nachgeladen. Bei Lithium-Batterien gelten die Angaben des Herstellers.' },
+  { frage: 'Wie oft sollte ich im Winter nach dem Fahrzeug sehen?', antwort: 'Alle paar Wochen. Prüfen Sie Feuchtigkeit, Batterie und Spuren von Mäusen und lüften Sie an trockenen Tagen kurz.' },
+];
 ---
 <Ratgeber
   eltern="ratgeber"
@@ -54,7 +69,11 @@ const gesamt = gruppen.reduce((s, g) => s + g.punkte.length, 0);
   beschreibung="Wohnmobil oder Wohnwagen winterfest machen: Wasser, Gas, Batterie, Reifen, Innenraum und Papiere. Checkliste zum Abhaken und Ausdrucken."
   kicker="Ratgeber · Checkliste"
   einleitung={`${gesamt} Punkte, damit Ihr Wohnmobil oder Wohnwagen gut durch den Winter kommt. Zum Abhaken am Handy oder zum Ausdrucken.`}
-  stand="2026-11-01"
+  stand="2026-11-02"
+  autor="Redaktion"
+  lesezeit={6}
+  inhalt={inhalt}
+  kurz={kurz}
   verwandt={['winterplatzVergleich', 'diebstahlschutz', 'mietenWohnmobil']}
 >
   <Fragment slot="h1">Wohnmobil und Wohnwagen <span class="markiert">einwintern</span></Fragment>
@@ -71,7 +90,7 @@ const gesamt = gruppen.reduce((s, g) => s + g.punkte.length, 0);
           </div>
         </div>
         {gruppen.map((g) => (
-          <fieldset class="check-gruppe">
+          <fieldset class="check-gruppe" id={g.id}>
             <legend><h2>{g.titel}</h2></legend>
             {g.punkte.map(([id, text]) => (
               <label class="check-punkt"><input type="checkbox" data-id={id} /><span>{text}</span></label>
@@ -90,6 +109,10 @@ const gesamt = gruppen.reduce((s, g) => s + g.punkte.length, 0);
         </div>
       </aside>
     </div>
+  </section>
+
+  <section class="abschnitt abschnitt-grau nicht-drucken">
+    <div class="wrap"><FaqBlock eintraege={faq} /></div>
   </section>
 </Ratgeber>
 <script>

@@ -1,6 +1,7 @@
 ---
 import Ratgeber from '../../layouts/Ratgeber.astro';
 import richtwerte from '../../data/richtwerte.json';
+import FaqBlock from '../../components/FaqBlock.astro';
 import { mieterpreis } from '../../config/zahlung';
 import { texte } from '../../lib/texte';
 
@@ -17,6 +18,25 @@ const plaetze = [
   { art: 'stellplatz-ueberdacht', titel: 'Stellplatz überdacht', schutz: 'Gut, bei Schlagregen von der Seite eingeschränkt', sonne: 'Gut', feucht: 'Gut belüftet', zugang: 'Meist jederzeit', hoehe: 'Dachhöhe prüfen' },
   { art: 'stellplatz-frei', titel: 'Stellplatz im Freien', schutz: 'Keiner, Schnee vom Dach räumen', sonne: 'Keiner, UV-Licht setzt Dichtungen und Fenstern zu', feucht: 'Gut belüftet, nur atmungsaktive Plane', zugang: 'Meist jederzeit', hoehe: 'Keine Begrenzung' },
 ].map((p) => ({ ...p, preis7: preis(p.art, '7'), preis9: preis(p.art, '9') }));
+const inhalt = [
+  { id: 'vergleich', titel: 'Die Plätze im Vergleich' },
+  { id: 'was-passt', titel: 'Was passt zu wem?' },
+  { id: 'worauf-achten', titel: 'Darauf sollten Sie bei jedem Platz achten' },
+  { id: 'faq', titel: 'Häufige Fragen' },
+];
+const kurz = [
+  'Halle oder Scheune schützen am besten vor Nässe, Schnee und Sonne.',
+  'Eine Garage ist trocken und abschließbar, aber oft zu niedrig für Wohnmobile.',
+  'Ein überdachter Stellplatz ist ein guter Mittelweg zwischen Schutz und Preis.',
+  'Im Freien nur mit atmungsaktiver Plane und auf befestigtem Untergrund.',
+  'Zufahrt, Zugang, Strom und Gasflaschen vor der Zusage klären.',
+];
+const faq = [
+  { frage: 'Welcher Winterplatz ist der beste?', antwort: 'Für den Schutz eine trockene, gut belüftete Halle oder Scheune. Welcher Platz für Sie passt, hängt aber auch von Fahrzeug, Budget und davon ab, wie oft Sie an Ihr Fahrzeug müssen.' },
+  { frage: 'Reicht ein Carport für den Winter?', antwort: 'Ein Carport schützt vor Schnee auf dem Dach und vor der Sonne. Bei Schlagregen von der Seite wird das Fahrzeug trotzdem nass. Für viele Fahrzeuge ist das ein guter Kompromiss.' },
+  { frage: 'Sollte ich eine Plane verwenden?', antwort: 'Im Freien kann eine Plane helfen, aber nur eine atmungsaktive. Dichte Planen halten Feuchtigkeit am Fahrzeug fest. In der Halle ist meist keine Plane nötig.' },
+  { frage: 'Wann sollte ich einen Winterplatz suchen?', antwort: 'Möglichst früh, viele suchen ab dem Spätsommer. Mit einem Suchauftrag melden wir uns, sobald ein passender Platz frei ist.' },
+];
 const zeilen: [string, keyof (typeof plaetze)[number]][] = [
   ['Schutz vor Regen und Schnee', 'schutz'], ['Schutz vor Sonne', 'sonne'], ['Feuchtigkeit', 'feucht'], ['Zugang', 'zugang'], ['Für hohe Fahrzeuge', 'hoehe'],
   ['Preis bis 7 m (Wohnwagen)', 'preis7'], ['Preis bis 9 m (großes Wohnmobil)', 'preis9'],
@@ -29,13 +49,18 @@ const zeilen: [string, keyof (typeof plaetze)[number]][] = [
   beschreibung="Halle, Scheune, Garage, überdachter Stellplatz oder Freifläche: Welcher Winterplatz passt zu Ihrem Wohnmobil oder Wohnwagen? Vergleich mit Vor- und Nachteilen und Richtpreisen."
   kicker="Ratgeber · Vergleich"
   einleitung="Halle, Garage, überdacht oder im Freien: Was schützt Ihr Fahrzeug wirklich, was kostet es, und worauf sollten Sie achten?"
-  stand="2026-11-01"
+  stand="2026-11-02"
+  autor="Redaktion"
+  lesezeit={4}
+  inhalt={inhalt}
+  kurz={kurz}
   verwandt={['einwinterung', 'diebstahlschutz', 'passtWohnmobil', 'mietenWohnmobil']}
 >
   <Fragment slot="h1">Welcher <span class="markiert">Winterplatz</span> passt zu Ihrem Fahrzeug?</Fragment>
 
-  <section class="abschnitt">
+  <section class="abschnitt" id="vergleich">
     <div class="wrap">
+      <h2 class="sr-only">Die Plätze im Vergleich</h2>
       <div class="tabelle-huelle">
         <table class="vergleich-tabelle">
           <thead><tr><td></td>{plaetze.map((p) => <th scope="col">{p.titel}</th>)}</tr></thead>
@@ -50,7 +75,7 @@ const zeilen: [string, keyof (typeof plaetze)[number]][] = [
 
   <section class="abschnitt abschnitt-grau">
     <div class="wrap inhalt">
-      <h2>Was passt zu wem?</h2>
+      <h2 id="was-passt">Was passt zu wem?</h2>
       <h3>Neues oder hochwertiges Wohnmobil: Halle oder Scheune</h3>
       <p>Der beste Schutz vor Nässe, Schnee und UV-Licht. Achten Sie auf Lüftung und klären Sie, wie oft Sie an Ihr Fahrzeug kommen. In Hallen mit mehreren Fahrzeugen steht man oft hintereinander.</p>
       <h3>Kleiner Wohnwagen oder Oldtimer: Garage</h3>
@@ -59,7 +84,7 @@ const zeilen: [string, keyof (typeof plaetze)[number]][] = [
       <p>Schützt vor Schnee auf dem Dach und vor der Sonne, ist gut belüftet und günstiger als eine Halle. Bei Schlagregen von der Seite wird das Fahrzeug trotzdem nass.</p>
       <h3>Günstig und flexibel: Stellplatz im Freien</h3>
       <p>Für robuste Fahrzeuge und kurze Zeiträume. Ein befestigter Untergrund ist besser als Wiese, weil das Fahrzeug nicht einsinkt und weniger Feuchtigkeit von unten kommt. Nur atmungsaktive Abdeckplanen verwenden.</p>
-      <h2>Darauf sollten Sie bei jedem Platz achten</h2>
+      <h2 id="worauf-achten">Darauf sollten Sie bei jedem Platz achten</h2>
       <ul>
         <li>Zufahrt: Kommen Sie mit Ihrem Gespann gut hinein und wieder heraus?</li>
         <li>Zugang: Jederzeit oder nur nach Absprache?</li>
@@ -69,6 +94,10 @@ const zeilen: [string, keyof (typeof plaetze)[number]][] = [
         <li>Vertrag: Kaution, Kündigungsfrist und Zugangszeiten schriftlich festhalten.</li>
       </ul>
     </div>
+  </section>
+
+  <section class="abschnitt">
+    <div class="wrap"><FaqBlock eintraege={faq} /></div>
   </section>
 </Ratgeber>
 <style>

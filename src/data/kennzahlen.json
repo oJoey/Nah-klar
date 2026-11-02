@@ -1,5 +1,5 @@
 {
-  "_hinweis": "Von Hand pflegen, je Region. Eine Zahl erscheint erst ab 3, darunter wird sie ausgeblendet. Nur auf Regionsseiten verwenden, nicht auf Startseite, /mieten/ oder /vermieten/.",
+  "_hinweis": "Von Hand pflegen, je Region. Nur echte Zahlen eintragen. Eine Zahl erscheint erst ab 10 (MINDESTWERT in RegionKennzahlen.astro), darunter wird sie ausgeblendet. Nur auf Regionsseiten verwenden, nicht auf Startseite, /mieten/ oder /vermieten/.",
   "stand": "2026-11-02",
   "regionen": {
     "landkreis-boeblingen": [

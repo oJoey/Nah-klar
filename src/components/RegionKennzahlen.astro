@@ -1,9 +1,10 @@
 ---
-// Kennzahlen einer Region aus src/data/kennzahlen.json. Nur Werte ab 3 erscheinen, sonst bleibt der Block leer.
+// Kennzahlen einer Region aus src/data/kennzahlen.json. Nur echte Zahlen eintragen. Erst ab MINDESTWERT sichtbar, sonst bleibt der Block leer.
 import daten from '../data/kennzahlen.json';
 interface Props { region: keyof typeof daten.regionen }
 const { region } = Astro.props;
-const liste = (daten.regionen[region] ?? []).filter((k) => k.wert >= 3);
+const MINDESTWERT = 10; // kleinere Zahlen wirken eher schwach
+const liste = (daten.regionen[region] ?? []).filter((k) => k.wert >= MINDESTWERT);
 ---
 {liste.length > 0 && (
   <div class="region-zahlen">

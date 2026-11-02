@@ -139,5 +139,9 @@
       "titel": "befestigter Untergrund",
       "prozent": 5
     }
-  ]
+  ],
+  "_quellen": {
+    "geprueft": "garage bis 5 m und stellplatz-frei bis 5 m: Abgleich 11/2026 mit 22 Immowelt-Angeboten im Kreis Böblingen",
+    "geschaetzt": "alle übrigen Werte (Wohnmobil-, Carport-, Hallen- und Lagerpreise, Klassen ab 7 m). Vor dem Livegang abgleichen, Anleitung: docs/richtwerte-abgleich.md"
+  }
 }
