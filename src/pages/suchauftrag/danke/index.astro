@@ -22,8 +22,7 @@ const erwartung = [
       <ul class="haken">
         {erwartung.map((e) => <li><strong>{e.art}:</strong> {e.text}</li>)}
       </ul>
-      <h2>Was es kostet</h2>
-      <p>Der Suchauftrag ist kostenlos und unverbindlich. {texte.mieterPreisKurz} {link('preise') && <>Alle Einzelheiten stehen auf der Seite <a href={link('preise')}>Preise</a>.</>}</p>
+      <p>Der Suchauftrag ist kostenlos und unverbindlich.</p>
       <p>Fragen? {site.ansprechpartner} per <a href={whatsappLink} rel="noopener">WhatsApp</a> oder <a href={emailHref}>E-Mail</a>.</p>
       <Empfehlung />
       <p class="mt"><a href={link('start')}>Zur Startseite</a></p>

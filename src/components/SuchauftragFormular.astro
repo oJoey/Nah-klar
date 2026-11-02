@@ -1,10 +1,14 @@
 ---
 // Suchauftrag für Mieter: 3 Schritte, fast nur Auswahl. Feldnamen = spätere Datenbankspalten (siehe docs/plan-inserate.md).
+// mitWohnmobilZahl: Hinweis mit der KBA-Zahl bei Art Wohnmobil. Auf /mieten/ aus (Zahl nur im Wohnmobil-Kontext).
+import { wohnmobilHinweis } from '../data/nachfrage';
 import Chips from './Chips.astro';
 import FormVersteckt from './FormVersteckt.astro';
 import Datenschutzhinweis from './Datenschutzhinweis.astro';
 import o from '../data/optionen.json';
 import { zahlung } from '../config/zahlung';
+interface Props { mitWohnmobilZahl?: boolean }
+const { mitWohnmobilZahl = true } = Astro.props;
 const fahrzeuge = o.mieter_art.filter((a) => a.groesse === 'fahrzeug').map((a) => a.wert).join(',');
 const mitHoehe = o.mieter_art.filter((a) => a.hoehe).map((a) => a.wert).join(',');
 const lager = o.mieter_art.filter((a) => a.groesse === 'flaeche').map((a) => a.wert).join(',');
@@ -20,6 +24,7 @@ const mitStrom = o.mieter_art.filter((a) => a.strom).map((a) => a.wert).join(','
       <legend class="sr-only">Art</legend>
       <Chips name="mieter_art" optionen={o.mieter_art} pflicht gross />
     </fieldset>
+    {mitWohnmobilZahl && <p class="wohnmobil-hinweis" data-wenn="mieter_art" data-werte="wohnmobil-wohnwagen" hidden>{wohnmobilHinweis}</p>}
     <div class="form-knoepfe"><button class="btn btn-primaer btn-gross" type="button" data-weiter hidden>Weiter</button></div>
   </fieldset>
 
@@ -96,3 +101,7 @@ const mitStrom = o.mieter_art.filter((a) => a.strom).map((a) => a.wert).join(','
     <Datenschutzhinweis />
   </fieldset>
 </form>
+
+<style>
+  .wohnmobil-hinweis { margin: 0.75rem 0 0; padding: 0.75rem 1rem; background: var(--tertiaer); border-radius: var(--r); font-weight: 600; color: var(--ueberschrift); }
+</style>

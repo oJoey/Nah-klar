@@ -6,7 +6,6 @@ import FormSkript from '../../components/FormSkript.astro';
 import Icon from '../../components/Icon.astro';
 import Kacheln from '../../components/Kacheln.astro';
 import Schritte from '../../components/Schritte.astro';
-import Kennzahlen from '../../components/Kennzahlen.astro';
 import Faq from '../../components/Faq.astro';
 import SmartLink from '../../components/SmartLink.astro';
 import { link } from '../../config/seiten';
@@ -44,7 +43,7 @@ const schritte = mieterSchritte;
         </ul>
         <p class="vermieter-zeile">Sie haben selbst Platz übrig? <a href={link('platzAnbieten')}>Platz anbieten</a>, für Vermieter kostenlos.</p>
       </div>
-      <SuchauftragFormular />
+      <SuchauftragFormular mitWohnmobilZahl={false} />
     </div>
   </section>
 
@@ -62,27 +61,7 @@ const schritte = mieterSchritte;
     </div>
   </section>
 
-  <section class="abschnitt">
-    <div class="wrap">
-      <div class="kopfzeile">
-        <h2>Was es kostet</h2>
-        <p class="einleitung">Offen und ohne Kleingedrucktes.</p>
-      </div>
-      <dl class="kosten">
-        <div><dt>Suchauftrag</dt><dd>Der Suchauftrag ist kostenlos und unverbindlich.</dd></div>
-        <div><dt>Monatspreis</dt><dd>{texte.mieterPreisKurz}</dd></div>
-        <div><dt>Kaution</dt><dd>Eine Monatsmiete, mindestens {zahlung.kautionMinEuro} €, direkt an den Vermieter.</dd></div>
-        <div><dt>Rückzahlung</dt><dd>Innerhalb von {zahlung.kautionRueckzahlungWochen} Wochen nach dem Auszug, abzüglich belegter Schäden.</dd></div>
-        <div><dt>Laufzeit</dt><dd>Monatlich kündbar mit einem Monat Frist.</dd></div>
-      </dl>
-      <p class="zentriert mt links">
-        <SmartLink seite="preise" class="weiter">Alle Preise im Detail</SmartLink>
-        <SmartLink seite="sicherheit" class="weiter">So sorgen wir für Sicherheit</SmartLink>
-      </p>
-    </div>
-  </section>
 
-  <Kennzahlen schluessel={['suchende', 'plaetze', 'preisGarage']} titel="Aktuell in Baden-Württemberg" />
 
   <section class="abschnitt abschnitt-grau">
     <div class="wrap">

@@ -1,0 +1,11 @@
+---
+// Nachfrage-Satz als hervorgehobene Zeile (Startseite, /vermieten/).
+import Icon from './Icon.astro';
+import { nachfrageSatz } from '../data/nachfrage';
+---
+<p class="nachfrage-hinweis"><span class="nachfrage-icon" aria-hidden="true"><Icon name="person" /></span><span>{nachfrageSatz}</span></p>
+<style>
+  .nachfrage-hinweis { display: flex; gap: 1rem; align-items: center; max-width: 46rem; margin: 0 0 2rem; padding: 1rem 1.25rem; background: var(--tertiaer); border-radius: var(--r); font-weight: 600; color: var(--ueberschrift); }
+  .nachfrage-icon { flex: none; display: grid; place-items: center; width: 2.75rem; height: 2.75rem; border-radius: var(--r); background: var(--ueberschrift); }
+  .nachfrage-icon :global(.symbol) { color: var(--akzent); }
+</style>

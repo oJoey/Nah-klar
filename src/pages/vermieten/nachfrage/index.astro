@@ -1,6 +1,6 @@
 ---
 import Ratgeber from '../../../layouts/Ratgeber.astro';
-import Kennzahlen from '../../../components/Kennzahlen.astro';
+import NachfrageHinweis from '../../../components/NachfrageHinweis.astro';
 import Richtwerte from '../../../components/Richtwerte.astro';
 import { site } from '../../../config/site';
 import { link } from '../../../config/seiten';
@@ -25,11 +25,10 @@ const gefragt = [
 >
   <Fragment slot="h1">Ihr freier Platz wird <span class="markiert">gesucht</span></Fragment>
 
-  <Kennzahlen schluessel={['suchende', 'suchendeWohnmobil', 'plaetze']} titel="Aktuelle Zahlen" />
-
   <section class="abschnitt">
     <div class="wrap">
       <div class="kopfzeile"><h2>Was besonders gefragt ist</h2></div>
+      <NachfrageHinweis />
       <ul class="raster">
         {gefragt.map((g) => <li class="karte"><h3>{g.titel}</h3><p class="gefragt-text">{g.text}</p></li>)}
       </ul>

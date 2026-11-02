@@ -20,7 +20,7 @@ npm run dev
 | Welche Seiten live sind (Links passen sich automatisch an) | `src/config/seiten.ts` |
 | Aktionsbalken (Text, Enddatum) | `src/config/aktion.json` |
 | Servicegebühr, Kaution, Zahltage | `src/config/zahlung.ts` |
-| Kennzahlen (erscheinen erst ab 3) | `src/data/kennzahlen.json` |
+| Nachfrage-Sätze (15.000 Suchende, 148.000 Wohnmobile) | `src/data/nachfrage.ts` |
 | Richtwerte Verdienstrechner | `src/data/richtwerte.json` |
 | Bewertungen (leer = ausgeblendet) | `src/data/bewertungen.json` |
 | FAQ-Texte | `src/content/faq/*.md` |
