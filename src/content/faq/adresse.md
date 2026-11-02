@@ -1,6 +1,6 @@
 ---
 frage: "Bekomme ich die Adresse vorab?"
-seiten: [start, mieten]
+seiten: [mieten]
 reihenfolge: 35
 ---
 

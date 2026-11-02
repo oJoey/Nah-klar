@@ -1,0 +1,38 @@
+---
+// Einfacher Ertragsrechner für Vermieter: Anzahl Plätze × Miete pro Monat × 12. Ohne Gebührenabzug (Vermieter erhalten die volle Miete).
+import { link } from '../config/seiten';
+const anbieten = link('platzAnbieten') ?? '/platz-anbieten/';
+---
+<div class="ertrag formular-karte" data-ertrag>
+  <div class="ertrag-felder">
+    <div class="feld">
+      <label for="er-anzahl">Anzahl Plätze</label>
+      <input id="er-anzahl" type="number" inputmode="numeric" min="1" max="50" step="1" value="1" data-anzahl />
+    </div>
+    <div class="feld">
+      <label for="er-miete">Miete pro Platz und Monat (€)</label>
+      <input id="er-miete" type="number" inputmode="numeric" min="0" max="2000" step="5" value="60" data-miete />
+    </div>
+  </div>
+  <p class="ertrag-ergebnis" aria-live="polite"><span>Im Jahr</span> <strong data-ergebnis>720 €</strong></p>
+  <p class="unter-hinweis">Sie legen die Miete selbst fest und erhalten sie in voller Höhe. Wenn Sie wissen möchten, was in Ihrer Gegend üblich ist, fragen Sie uns.</p>
+  <a class="btn btn-primaer btn-gross" href={anbieten}>Platz anbieten</a>
+</div>
+<script>
+  document.querySelectorAll<HTMLElement>('[data-ertrag]').forEach((box) => {
+    const anzahl = box.querySelector<HTMLInputElement>('[data-anzahl]')!;
+    const miete = box.querySelector<HTMLInputElement>('[data-miete]')!;
+    const ziel = box.querySelector<HTMLElement>('[data-ergebnis]')!;
+    const zahl = (f: HTMLInputElement, max: number) => Math.min(max, Math.max(0, Number(f.value) || 0));
+    const rechne = () => { ziel.textContent = `${(zahl(anzahl, 50) * zahl(miete, 2000) * 12).toLocaleString('de-DE')} €`; };
+    anzahl.addEventListener('input', rechne); miete.addEventListener('input', rechne); rechne();
+  });
+</script>
+<style>
+  .ertrag { max-width: 40rem; }
+  .ertrag-felder { display: grid; gap: 0 1rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr)); }
+  .ertrag-ergebnis { display: flex; align-items: baseline; gap: 0.75rem; margin: 0.5rem 0 0.25rem; padding: 1rem 1.25rem; background: var(--tertiaer); border-radius: var(--r); }
+  .ertrag-ergebnis span { font-weight: 600; }
+  .ertrag-ergebnis strong { font-size: clamp(2rem, 6vw, 2.75rem); letter-spacing: -0.03em; color: var(--ueberschrift); font-variant-numeric: tabular-nums; }
+  .ertrag .btn { margin-top: 1.25rem; }
+</style>

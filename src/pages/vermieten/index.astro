@@ -2,7 +2,8 @@
 import { vermieterSchritte } from '../../data/ablauf';
 import Basis from '../../layouts/Basis.astro';
 import Kacheln from '../../components/Kacheln.astro';
-import Verdienstrechner from '../../components/Verdienstrechner.astro';
+import Ertragsrechner from '../../components/Ertragsrechner.astro';
+import Vorteile from '../../components/Vorteile.astro';
 import Ablauf from '../../components/Ablauf.astro';
 import Vergleich from '../../components/Vergleich.astro';
 import FlaecheMelden from '../../components/FlaecheMelden.astro';
@@ -44,15 +45,12 @@ const sorgen = [
   { titel: 'Nachbarn: Gibt es Ärger?', text: 'Zufahrtszeiten und Regeln, etwa keine Reparaturen auf dem Hof, legen Sie im Vertrag fest. So wissen alle, woran sie sind.' },
 ];
 
-// Vergleich aus Sicht der Vermieter. Zeilen mit Schalter erscheinen nur, wenn die Leistung wirklich angeboten wird.
+// Vergleich aus Sicht der Vermieter: Vertrag, Zahlung, Kaution, Anfragen. Nur, was wirklich angeboten wird (Schalter in site.ts).
 const vergleich = [
-  { punkt: 'Jede Fläche von Hand geprüft', anzeige: 'Sie schreiben und prüfen alles selbst', wir: 'Wir prüfen Fotos und Angaben jeder Fläche, bevor wir sie vorschlagen' },
-  { punkt: 'Schriftlicher Mustervertrag', anzeige: 'Meist per Handschlag', wir: 'Regeln zu Zufahrt, Kündigung und Zahlung' },
-  { punkt: 'Kaution verpflichtend', anzeige: 'Verhandeln Sie selbst', wir: `Eine Monatsmiete, mindestens ${zahlung.kautionMinEuro} €` },
-  ...(site.zahlungLive ? [{ punkt: 'Miete per Lastschrift', anzeige: 'Sie laufen dem Geld hinterher', wir: 'Automatisch jeden Monat' }] : []),
-  { punkt: 'Persönlicher Ansprechpartner', anzeige: 'Niemand, wenn es Ärger gibt', wir: 'Per WhatsApp und E-Mail' },
-  { punkt: 'Keine Telefonketten mit Fremden', anzeige: 'Ihre Nummer steht öffentlich', wir: 'Anfragen gebündelt über uns' },
-  ...(site.mieterPruefung ? [{ punkt: 'Geprüfte Mieter', anzeige: 'Sie wissen nicht, wer anruft', wir: 'Ausweis, Fahrzeugschein, Versicherung' }] : []),
+  { punkt: 'Vertrag', anzeige: 'Meist per Handschlag', wir: site.vertragDigital ? 'Mustervertrag, digital per Klick unterschrieben' : 'Schriftlicher Mustervertrag mit Regeln zu Zufahrt, Kündigung und Zahlung' },
+  { punkt: 'Zahlung', anzeige: 'Sie laufen dem Geld hinterher', wir: site.zahlungLive ? 'Automatischer Einzug jeden Monat, Auszahlung an Sie' : 'Termin und Weg im Vertrag geregelt, wir helfen bei Problemen' },
+  { punkt: 'Kaution', anzeige: 'Verhandeln Sie selbst, oft gar nicht', wir: `Verpflichtend: eine Monatsmiete, mindestens ${zahlung.kautionMinEuro} €, direkt an Sie` },
+  { punkt: 'Anfragen', anzeige: 'Viele Anrufe, Ihre Nummer steht öffentlich', wir: site.mieterPruefung ? 'Vorab geprüfte Interessenten, gebündelt über uns' : 'Nur passende Interessenten, gebündelt über uns' },
 ];
 
 const schritte = vermieterSchritte;
@@ -100,6 +98,15 @@ const schritte = vermieterSchritte;
     </div>
   </section>
 
+  <section class="abschnitt abschnitt-grau">
+    <div class="wrap vorteile-raster">
+      <div>
+        <h2>Ihre Vorteile</h2>
+        <Vorteile nur="vermieter" />
+      </div>
+    </div>
+  </section>
+
   <Ablauf titel="So vermieten Sie Ihre Fläche" schritte={schritte} />
 
   <section class="abschnitt">
@@ -114,8 +121,11 @@ const schritte = vermieterSchritte;
 
   <section class="abschnitt abschnitt-grau">
     <div class="wrap">
-      <div class="kopfzeile" id="rechner"><h2>Was bringt Ihr Platz im Jahr?</h2></div>
-      <Verdienstrechner ausfuehrlich />
+      <div class="kopfzeile" id="rechner">
+        <h2>Was bringt Ihr Platz im Jahr?</h2>
+        <p class="einleitung">Anzahl der Plätze und Miete eintragen, das Ergebnis steht sofort da.{link('verdienstrechner') && <> Was für Ihren Platz üblich ist, zeigt der <a href={link('verdienstrechner')}>Verdienstrechner</a>.</>}</p>
+      </div>
+      <Ertragsrechner />
     </div>
   </section>
   <section class="abschnitt">

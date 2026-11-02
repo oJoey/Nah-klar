@@ -34,6 +34,9 @@ export const site = {
   // Nur zusammen mit vermittlungsgebuehr.aktiv: true einschalten. Sonst wird mit dem Erlass einer Gebühr geworben, die es nicht gibt.
   startaktion: { aktiv: true, ende: '2027-01-31', text: 'Startaktion: Bis 31.01. entfällt die Abschlussgebühr' },
 
+  // Vertrag digital per Klick unterschreiben. Erst auf true setzen, wenn es das wirklich gibt. Vorher: Mustervertrag zum Unterschreiben.
+  vertragDigital: false,
+
   // Prüfung der Mieter (Ausweis, Fahrzeugschein, Versicherung). Erst auf true setzen, wenn Sie das wirklich bei jedem Mieter machen.
   mieterPruefung: false,
 

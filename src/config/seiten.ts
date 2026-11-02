@@ -33,12 +33,12 @@ export const seiten = {
   passtWohnmobil: { pfad: '/werkzeuge/passt-mein-wohnmobil/', live: false, titel: 'Passt mein Wohnmobil?' },
   nachfrage: { pfad: '/vermieten/nachfrage/', live: true, titel: 'Nachfrage in Ihrer Nähe' },
 
-  // Kategorieseiten Mieten (Ersatz: Suchauftrag mit vorausgewählter Art)
-  mietenWohnmobil: { pfad: '/mieten/wohnmobil-wohnwagen-stellplatz/', live: false, titel: 'Wohnmobil und Wohnwagen', ersatz: '/suchauftrag/?mieter_art=wohnmobil-wohnwagen' },
-  mietenAuto: { pfad: '/mieten/auto-stellplatz/', live: false, titel: 'Stellplatz für Auto oder Motorrad', ersatz: '/suchauftrag/?mieter_art=auto-motorrad' },
+  // Kategorieseiten Mieten (Inhalt: src/data/kategorien.ts, Seite: src/pages/mieten/[kategorie].astro)
+  mietenWohnmobil: { pfad: '/mieten/wohnmobil-wohnwagen-stellplatz/', live: true, titel: 'Wohnmobil und Wohnwagen' },
+  mietenAuto: { pfad: '/mieten/auto-stellplatz/', live: true, titel: 'Auto und Motorrad' },
   mietenGarage: { pfad: '/mieten/garage/', live: false, titel: 'Garage', ersatz: '/suchauftrag/?mieter_art=garage' },
-  mietenLager: { pfad: '/mieten/lagerraum/', live: false, titel: 'Lagerraum', ersatz: '/suchauftrag/?mieter_art=lagerraum' },
-  mietenAnhaenger: { pfad: '/mieten/anhaenger-boot/', live: false, titel: 'Anhänger und Boot', ersatz: '/suchauftrag/?mieter_art=anhaenger-boot' },
+  mietenLager: { pfad: '/mieten/lagerraum/', live: true, titel: 'Lagerraum' },
+  mietenAnhaenger: { pfad: '/mieten/anhaenger-boot/', live: true, titel: 'Anhänger und Boot' },
 
   // Unterseiten Vermieten (Ersatz: Formular mit vorausgewählter Fläche)
   vermietenGarage: { pfad: '/vermieten/garage/', live: false, titel: 'Garage vermieten', ersatz: '/platz-anbieten/?flaechen_art=garage' },

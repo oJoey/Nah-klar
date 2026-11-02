@@ -1,90 +1,95 @@
 ---
-// Startseite: richtet sich an Suchende. Vermieter bekommen genau einen Block, der auf /vermieten/ führt.
+// Startseite: Suche, Kategorien, Ablauf, Vorteile, Nachfrage, Regionen, Ratgeber, FAQ, Abschluss.
+// Keine Kundenstimmen, Logos oder Zähler, bis es echte gibt. Gebühren nur in der FAQ.
 import Basis from '../layouts/Basis.astro';
 import ButtonPaar from '../components/ButtonPaar.astro';
 import Suchmaske from '../components/Suchmaske.astro';
 import Kacheln from '../components/Kacheln.astro';
-import Verdienstrechner from '../components/Verdienstrechner.astro';
-import Ablauf from '../components/Ablauf.astro';
-import Bewertungen from '../components/Bewertungen.astro';
+import Schritte from '../components/Schritte.astro';
+import Vorteile from '../components/Vorteile.astro';
 import NachfrageHinweis from '../components/NachfrageHinweis.astro';
 import WerkzeugeTeaser from '../components/WerkzeugeTeaser.astro';
 import Faq from '../components/Faq.astro';
+import Icon from '../components/Icon.astro';
 import Bildplatz from '../components/Bildplatz.astro';
 import { site, whatsappLink, emailHref } from '../config/site';
 import { link } from '../config/seiten';
-import { mietArten } from '../data/arten';
-import { texte } from '../lib/texte';
+import { kategorien } from '../data/kategorien';
+import { mieterSchritte, vermieterSchritte } from '../data/ablauf';
+import { vertrauen } from '../data/vorteile';
+import { startorte } from '../data/startorte';
 
-
-const kacheln = mietArten.map((a) => ({
-  titel: a.titel,
-  text: a.nutzen,
-  icon: a.icon,
-  href: link(a.seite),
-  bild: `kachel-${a.wert}`, // Foto unter src/assets/bilder/kachel-<art>.jpg ablegen, sonst Illustration
-  linkText: link(a.seite)?.startsWith('/suchauftrag/') ? 'Suchauftrag anlegen' : 'Mehr erfahren',
+const arten = kategorien.map((k) => ({ wert: k.art, titel: k.kurz }));
+const kacheln = kategorien.map((k) => ({
+  titel: k.kurz,
+  text: k.kachelText,
+  icon: k.icon,
+  href: link(k.seite),
+  bild: `kachel-${k.art}`, // Foto unter src/assets/bilder/kachel-<art>.jpg ablegen, sonst Illustration
+  linkText: 'Mehr erfahren',
 }));
-
-const mieterSchritte = [
-  { titel: 'Suchauftrag anlegen', text: 'In einer Minute, ohne Konto.' },
-  { titel: 'Passende Vorschläge erhalten', text: 'Mit Fotos, Ortsteil und festem Monatspreis.' },
-  { titel: 'Besichtigen und unterschreiben', text: 'Sie schauen sich den Platz an und unterschreiben den Mustervertrag.' },
-  { titel: 'Kaution zahlen, einziehen', text: texte.live
-      ? 'Die Kaution geht direkt an den Vermieter. Die Miete läuft danach automatisch per Lastschrift.'
-      : 'Die Kaution geht direkt an den Vermieter. Wie die Miete gezahlt wird, steht im Vertrag.' },
-];
+const such = link('suchauftrag');
+const orte = startorte.map((o) => ({ ort: o.ort, href: o.pfad ?? (such ? `${such}?ort=${encodeURIComponent(o.ort)}` : null) }));
 ---
 <Basis
   titel={`Stellplatz, Garage und Lagerraum mieten in Baden-Württemberg | ${site.name}`}
-  beschreibung="Stellplatz, Garage, Wohnmobil-Winterplatz oder Lagerraum bei Privatleuten in Baden-Württemberg mieten. Mustervertrag, geregelte Kaution, persönlicher Ansprechpartner."
+  beschreibung="Stellplatz für Wohnmobil, Anhänger oder Auto, Garage oder Lagerraum bei Privatleuten in Baden-Württemberg mieten oder vermieten. Mustervertrag, geprüfte Plätze, persönlicher Ansprechpartner."
 >
   <section class="held">
     <div class="wrap">
       <div class="held-raster">
         <div>
-          <p class="kicker">Stellplatz, Garage und Lagerraum mieten in Baden-Württemberg</p>
+          <p class="kicker">Stellplatz, Garage und Lagerraum in Baden-Württemberg</p>
           <h1>Platz gesucht? Ihre <span class="markiert">Nachbarn</span> haben welchen.</h1>
-          <p class="einleitung">Für Wohnmobil, Auto, Anhänger oder Lagergut. Bei Privatleuten in Ihrer Nähe, mit Mustervertrag und persönlichem Ansprechpartner.</p>
+          <p class="einleitung">Für Wohnmobil, Anhänger, Auto oder Lagergut. Bei Privatleuten in Ihrer Nähe, mit Mustervertrag und persönlichem Ansprechpartner.</p>
         </div>
         <Bildplatz name="" alt="" class="held-bild" />
       </div>
-      <Suchmaske titel="" />
+      <Suchmaske titel="" arten={arten} mitZeitraum={false} />
+      <ul class="vertrauen">
+        {vertrauen.map((v) => <li><span class="vertrauen-icon" aria-hidden="true"><Icon name={v.icon} /></span>{v.text}</li>)}
+      </ul>
     </div>
   </section>
 
   <section class="abschnitt abschnitt-grau" aria-labelledby="arten-titel">
     <div class="wrap">
       <div class="kopfzeile"><h2 id="arten-titel">Was möchten Sie unterstellen?</h2></div>
-      <NachfrageHinweis />
       <Kacheln kacheln={kacheln} />
-      <p class="mt"><a class="weiter" href={link('mieten')}>Alle Infos für Mieter</a></p>
     </div>
   </section>
 
-  <Ablauf titel="So funktioniert's" schritte={mieterSchritte} />
-
-  <section class="abschnitt vermieter-block" aria-labelledby="vermieter-titel">
+  <section class="abschnitt" aria-labelledby="ablauf-titel">
     <div class="wrap">
-      <div class="vermieter-raster">
-        <div>
-          <p class="kicker">Für Vermieter</p>
-          <h2 id="vermieter-titel">Sie haben Platz frei?</h2>
-          <p class="einleitung">Eine freie Einfahrt, eine Garage oder eine Scheune bringt im Jahr schnell einige hundert Euro.</p>
-          <ul class="haken vermieter-punkte">
-            <li>Jede Fläche von Hand geprüft</li>
-            <li>Mustervertrag und Kaution</li>
-            <li>Persönlicher Ansprechpartner</li>
-            <li>Für Sie kostenlos</li>
-          </ul>
-        </div>
-        <Verdienstrechner />
-      </div>
-      <p class="vermieter-weiter"><a class="btn btn-primaer btn-gross" href={link('vermieten')}>Mehr zum Vermieten</a></p>
+      <div class="kopfzeile"><h2 id="ablauf-titel">So funktioniert's</h2></div>
+      <Schritte mieter={mieterSchritte} vermieter={vermieterSchritte} />
     </div>
   </section>
 
-  <Bewertungen />
+  <section class="abschnitt abschnitt-grau" aria-labelledby="vorteile-titel">
+    <div class="wrap">
+      <div class="kopfzeile"><h2 id="vorteile-titel">Ihre Vorteile</h2></div>
+      <Vorteile />
+    </div>
+  </section>
+
+  <section class="abschnitt nachfrage-abschnitt">
+    <div class="wrap"><NachfrageHinweis /></div>
+  </section>
+
+  <section class="abschnitt abschnitt-grau" aria-labelledby="regionen-titel">
+    <div class="wrap">
+      <div class="kopfzeile">
+        <h2 id="regionen-titel">Wo wir starten</h2>
+        <p class="einleitung">Wir beginnen im Großraum Stuttgart und suchen auf Wunsch in ganz Baden-Württemberg.</p>
+      </div>
+      <ul class="chips orte">
+        {orte.map((o) => <li>{o.href ? <a class="chip" href={o.href} rel={o.href.includes('?') ? 'nofollow' : undefined}>{o.ort}</a> : <span class="chip">{o.ort}</span>}</li>)}
+      </ul>
+      {link('regionen') && <p class="mt"><a class="weiter" href={link('regionen')}>Alle Regionen</a></p>}
+    </div>
+  </section>
+
   <WerkzeugeTeaser />
 
   <section class="abschnitt abschnitt-grau">
@@ -93,7 +98,7 @@ const mieterSchritte = [
     </div>
   </section>
 
-  <section class="abschnitt zentriert">
+  <section class="abschnitt abschnitt-dunkel zentriert abschluss">
     <div class="wrap">
       <h2>Platz finden oder Platz anbieten?</h2>
       <p class="einleitung">Beides geht schnell und ist unverbindlich.</p>
@@ -110,11 +115,15 @@ const mieterSchritte = [
     .held-raster { grid-template-columns: 1.4fr 1fr; gap: 4rem; }
     .held :global(.held-bild) { display: block; aspect-ratio: 5 / 4; }
   }
-  /* Vermieter-Block: Tertiärfarbe, Gelb nur am Button */
-  .vermieter-block { background: var(--tertiaer); }
-  .vermieter-raster { display: grid; gap: 2.5rem; align-items: start; }
-  @media (min-width: 64rem) { .vermieter-raster { grid-template-columns: 1fr 1.4fr; gap: 4rem; } }
-  .vermieter-punkte { font-weight: 600; margin-top: 1.5rem; }
-  .vermieter-weiter { margin: 2rem 0 0; }
-  .vermieter-block :global(.rechner) { box-shadow: 6px 6px 0 var(--ueberschrift); }
+  .vertrauen { list-style: none; padding: 0; margin: 1.75rem 0 0; display: flex; flex-wrap: wrap; gap: 0.75rem 2rem; font-weight: 600; color: var(--ueberschrift); }
+  .vertrauen li { display: flex; align-items: center; gap: 0.6rem; }
+  .vertrauen-icon { display: grid; place-items: center; width: 2.5rem; height: 2.5rem; border-radius: var(--r); background: var(--ueberschrift); }
+  .vertrauen-icon :global(.symbol) { color: var(--akzent); width: 1.4rem; height: 1.4rem; }
+  .nachfrage-abschnitt { padding-block: clamp(2rem, 5vw, 3rem); }
+  .nachfrage-abschnitt :global(.nachfrage-hinweis) { margin: 0 auto; }
+  .orte { list-style: none; padding: 0; margin: 0; }
+  .orte .chip { text-decoration: none; color: var(--ueberschrift); }
+  .abschluss :global(.button-paar) { margin-inline: auto; }
+  .abschluss :global(.btn-rahmen) { border-color: var(--hintergrund); }
+  .abschluss :global(.unter-hinweis) { color: var(--sekundaer); }
 </style>

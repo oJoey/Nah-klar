@@ -7,11 +7,10 @@ import Icon from '../../components/Icon.astro';
 import Kacheln from '../../components/Kacheln.astro';
 import Schritte from '../../components/Schritte.astro';
 import Faq from '../../components/Faq.astro';
-import SmartLink from '../../components/SmartLink.astro';
 import { link } from '../../config/seiten';
-import { zahlung } from '../../config/zahlung';
 import { mietArten } from '../../data/arten';
-import { texte } from '../../lib/texte';
+import { kategorien } from '../../data/kategorien';
+import { seiten } from '../../config/seiten';
 
 const kacheln = mietArten.map((a) => ({
   titel: a.titel,
@@ -54,6 +53,40 @@ const schritte = mieterSchritte;
     </div>
   </section>
 
+  <section class="abschnitt abschnitt-tertiaer">
+    <div class="wrap suchauftrag-hinweis">
+      <span class="symbol-flaeche" aria-hidden="true"><Icon name="mail" /></span>
+      <div>
+        <h2>Gerade kein passender Platz frei?</h2>
+        <p>Mit einem Suchauftrag müssen Sie nicht immer wieder nachsehen. Wir melden uns, sobald ein passender Platz in Ihrer Nähe frei wird. Der Suchauftrag ist kostenlos und unverbindlich, Sie können ihn jederzeit löschen.</p>
+        <a class="btn btn-primaer btn-gross" href={link('suchauftrag')}>Suchauftrag anlegen</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="abschnitt">
+    <div class="wrap">
+      <div class="kopfzeile">
+        <h2>Worauf Sie achten sollten</h2>
+        <p class="einleitung">Zufahrt, Maße und Zugang entscheiden, ob ein Platz wirklich passt. Das Wichtigste je Kategorie:</p>
+      </div>
+      <ul class="raster kat-infos">
+        {kategorien.filter((k) => link(k.seite)).map((k) => (
+          <li class="karte">
+            <span class="symbol-flaeche" aria-hidden="true"><Icon name={k.icon} /></span>
+            <h3>{seiten[k.seite].titel}</h3>
+            <dl class="kat-dl">
+              <div><dt>Zufahrt</dt><dd>{k.zufahrt[0]}</dd></div>
+              <div><dt>Maße</dt><dd>{k.masse[0]}</dd></div>
+              <div><dt>Zugang</dt><dd>{k.zugang[0]}</dd></div>
+            </dl>
+            <a class="weiter" href={link(k.seite)}>Mehr zu {seiten[k.seite].titel}</a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
   <section class="abschnitt abschnitt-grau">
     <div class="wrap">
       <div class="kopfzeile"><h2>So kommen Sie zu Ihrem Platz</h2></div>
@@ -81,10 +114,12 @@ const schritte = mieterSchritte;
 </Basis>
 <style>
   .vermieter-zeile { margin-top: 1.5rem; font-size: 1rem; color: var(--text); }
-  .kosten { max-width: 50rem; margin: 0 auto; border-top: 1px solid var(--linie); }
-  .kosten > div { display: grid; gap: 0.25rem 2rem; padding-block: 1.1rem; border-bottom: 1px solid var(--linie); }
   @media (min-width: 40rem) { .kosten > div { grid-template-columns: 11rem 1fr; } }
-  .kosten dt { font-weight: 600; }
-  .kosten dd { margin: 0; color: var(--text); }
-  .links :global(a + a) { margin-left: 1.5rem; }
+  .suchauftrag-hinweis { display: grid; gap: 1rem; max-width: 50rem; }
+  .suchauftrag-hinweis p { color: var(--text); }
+  .kat-infos { gap: 1.25rem; }
+  .kat-dl { margin: 0 0 1rem; }
+  .kat-dl > div { padding: 0.5rem 0; border-bottom: 1px solid var(--linie); }
+  .kat-dl dt { font-weight: 700; color: var(--ueberschrift); }
+  .kat-dl dd { margin: 0; color: var(--text); }
 </style>

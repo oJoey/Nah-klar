@@ -1,0 +1,27 @@
+---
+// Vorteile für Mieter und Vermieter (Texte in src/data/vorteile.ts, abhängig von den Schaltern in site.ts).
+import { mieterVorteile, vermieterVorteile } from '../data/vorteile';
+import { link } from '../config/seiten';
+interface Props { nur?: 'mieter' | 'vermieter' }
+const { nur } = Astro.props;
+const spalten = [
+  { id: 'mieter', titel: 'Für Mieter', punkte: mieterVorteile, link: link('suchauftrag'), knopf: 'Suchauftrag anlegen' },
+  { id: 'vermieter', titel: 'Für Vermieter', punkte: vermieterVorteile, link: link('platzAnbieten'), knopf: 'Platz anbieten' },
+].filter((s) => !nur || s.id === nur);
+---
+<div class:list={['vorteile', { einzeln: spalten.length === 1 }]}>
+  {spalten.map((s) => (
+    <div class="karte vorteil-karte">
+      {spalten.length > 1 && <h3>{s.titel}</h3>}
+      <ul class="haken">{s.punkte.map((p) => <li>{p}</li>)}</ul>
+      {spalten.length > 1 && s.link && <a class="weiter" href={s.link}>{s.knopf}</a>}
+    </div>
+  ))}
+</div>
+<style>
+  .vorteile { display: grid; gap: 1.25rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr)); }
+  .vorteile.einzeln { max-width: 40rem; }
+  .vorteil-karte { border: 1.5px solid var(--ueberschrift); box-shadow: 4px 4px 0 var(--ueberschrift); }
+  .vorteil-karte .haken { font-weight: 600; margin-bottom: 0.5rem; }
+  .vorteile.einzeln .vorteil-karte { box-shadow: none; border: 0; padding: 0; background: transparent; }
+</style>

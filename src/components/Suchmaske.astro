@@ -1,12 +1,13 @@
 ---
 import o from '../data/optionen.json';
 import { link } from '../config/seiten';
-interface Props { titel?: string; }
-const { titel = 'Was suchen Sie?' } = Astro.props;
+// arten: Auswahl einschränken (Startseite: 4 Arten). mitZeitraum: Feld „Ab wann“ zeigen.
+interface Props { titel?: string; arten?: { wert: string; titel: string }[]; mitZeitraum?: boolean }
+const { titel = 'Was suchen Sie?', arten = o.mieter_art, mitZeitraum = true } = Astro.props;
 ---
 <form class="suchmaske formular-karte" method="get" action={link('suchauftrag')}>
   {titel && <h2 class="suchmaske-titel">{titel}</h2>}
-  <div class="suchmaske-felder">
+  <div class:list={['suchmaske-felder', { ohne: !mitZeitraum }]}>
     <div class="feld">
       <label for="such-ort">PLZ oder Ort</label>
       <input id="such-ort" name="ort" type="text" autocomplete="postal-code" placeholder="z. B. 71032 oder Böblingen" />
@@ -14,15 +15,17 @@ const { titel = 'Was suchen Sie?' } = Astro.props;
     <div class="feld">
       <label for="such-art">Art</label>
       <select id="such-art" name="mieter_art">
-        {o.mieter_art.map((a) => <option value={a.wert}>{a.titel}</option>)}
+        {arten.map((a) => <option value={a.wert}>{a.titel}</option>)}
       </select>
     </div>
-    <div class="feld">
-      <label for="such-zeitraum">Ab wann</label>
-      <select id="such-zeitraum" name="ab_wann">
-        {o.ab_wann.map((z) => <option value={z.wert}>{z.titel}</option>)}
-      </select>
-    </div>
+    {mitZeitraum && (
+      <div class="feld">
+        <label for="such-zeitraum">Ab wann</label>
+        <select id="such-zeitraum" name="ab_wann">
+          {o.ab_wann.map((z) => <option value={z.wert}>{z.titel}</option>)}
+        </select>
+      </div>
+    )}
     <div class="feld suchmaske-knopf">
       <button class="btn btn-primaer btn-voll" type="submit">Platz finden</button>
     </div>
@@ -36,6 +39,7 @@ const { titel = 'Was suchen Sie?' } = Astro.props;
   .suchmaske .unter-hinweis { margin-top: 0; }
   @media (min-width: 56rem) {
     .suchmaske-felder { grid-template-columns: 1.3fr 1fr 1fr auto; align-items: end; }
+    .suchmaske-felder.ohne { grid-template-columns: 1.3fr 1.2fr auto; }
     .suchmaske-knopf .btn { min-height: 3.25rem; }
   }
 </style>

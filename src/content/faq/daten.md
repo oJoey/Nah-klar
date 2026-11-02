@@ -1,6 +1,6 @@
 ---
 frage: "Was passiert mit meinen Daten?"
-seiten: [start, mieten]
+seiten: [mieten]
 reihenfolge: 70
 ---
 

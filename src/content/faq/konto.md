@@ -1,6 +1,6 @@
 ---
 frage: "Muss ich ein Konto anlegen?"
-seiten: [start, mieten]
+seiten: [mieten]
 reihenfolge: 50
 ---
 
