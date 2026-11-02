@@ -6,6 +6,6 @@ reihenfolge: 10
 
 {MIETER_KOSTEN}
 
-{VERMITTLUNG}
+{ABSCHLUSS}
 
 Der Suchauftrag ist kostenlos und unverbindlich.

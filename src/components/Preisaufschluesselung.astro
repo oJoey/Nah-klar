@@ -1,0 +1,31 @@
+---
+// Aufschlüsselung des Mieterpreises vor dem Abschluss. Während der Startaktion beide Fassungen ausgeben,
+// das Skript in Basis.astro schaltet am Enddatum um (ohne neuen Build).
+import { aufschluesselung, startaktionLaeuft, aktionsEnde, texte } from '../lib/texte';
+interface Props { miete: number; art?: string; titel?: string }
+const { miete, art, titel } = Astro.props;
+const aktion = startaktionLaeuft();
+const fassungen = aktion
+  ? [{ zeilen: aufschluesselung(miete, art), attr: { 'data-aktion-bis': aktionsEnde.toISOString() } },
+     { zeilen: aufschluesselung(miete, art, new Date(aktionsEnde.getTime() + 1000)), attr: { 'data-aktion-ab': aktionsEnde.toISOString(), hidden: true } }]
+  : [{ zeilen: aufschluesselung(miete, art), attr: {} }];
+---
+<div class="aufschluesselung karte">
+  {titel && <h3>{titel}</h3>}
+  {fassungen.map((f) => (
+    <dl {...f.attr}>
+      {f.zeilen.map((z) => <div class:list={[{ summe: z.summe, nebenbei: z.nebenbei }]}><dt>{z.titel}</dt><dd>{z.betrag}</dd></div>)}
+    </dl>
+  ))}
+  <p class="unter-hinweis">{texte.zahlungsweg} {texte.ustHinweis}</p>
+</div>
+<style>
+  .aufschluesselung { max-width: 34rem; border: 1.5px solid var(--ueberschrift); }
+  .aufschluesselung dl { margin: 0; }
+  .aufschluesselung dl > div { display: flex; justify-content: space-between; gap: 1rem; padding: 0.55rem 0; border-bottom: 1px solid var(--linie); }
+  .aufschluesselung dd { margin: 0; text-align: right; font-variant-numeric: tabular-nums; font-weight: 600; }
+  .aufschluesselung .summe { border-bottom: 2px solid var(--ueberschrift); font-weight: 800; color: var(--ueberschrift); }
+  .aufschluesselung .summe dd { font-weight: 800; }
+  .aufschluesselung .nebenbei { color: var(--text); }
+  .aufschluesselung .nebenbei dd { font-weight: 400; max-width: 60%; }
+</style>

@@ -1,22 +1,24 @@
 ---
 import Ratgeber from '../../layouts/Ratgeber.astro';
 import Richtwerte from '../../components/Richtwerte.astro';
+import Preisaufschluesselung from '../../components/Preisaufschluesselung.astro';
 import { site } from '../../config/site';
-import { zahlung, mieterpreis } from '../../config/zahlung';
+import { zahlung } from '../../config/zahlung';
 import { link } from '../../config/seiten';
-import { texte, vermittlungHtml } from '../../lib/texte';
+import { texte, abschlussHtml, gesamtpreisText } from '../../lib/texte';
 
-const beispielMiete = 80;
-const gebuehr = Math.round(beispielMiete * zahlung.servicegebuehr);
+// Beispiel: Wohnwagen-Stellplatz, 70 € Miete → 77 € im Monat
+const beispielMiete = 70;
+const beispielArt = 'wohnmobil-wohnwagen';
 ---
 <Ratgeber
   seite="preise"
   eltern={null}
   typ="WebPage"
   titel="Preise: Was kostet ein Stellplatz, eine Garage oder ein Lagerraum?"
-  beschreibung={`Für Vermieter kostenlos. Was Mieter bei ${site.name} zahlen, wie die Kaution geregelt ist und was Stellplatz, Garage und Lagerraum ${site.regionIn} üblicherweise kosten.`}
+  beschreibung={`Für Vermieter kostenlos. Für Mieter ein fester Monatspreis, die Servicegebühr ist enthalten. Was Stellplatz, Garage und Lagerraum ${site.regionIn} üblicherweise kosten.`}
   kicker="Preise"
-  einleitung="Für Vermieter immer kostenlos. Für Mieter ohne versteckte Kosten: Was Sie zahlen, steht vor der Zusage fest."
+  einleitung="Für Vermieter immer kostenlos. Für Mieter ein fester Monatspreis: Was Sie zahlen, steht vor dem Abschluss fest."
   verwandt={['soFunktionierts', 'verdienstrechner', 'winterplatzVergleich']}
 >
   <Fragment slot="h1">Klare <span class="markiert">Preise</span>, keine Überraschungen</Fragment>
@@ -25,12 +27,13 @@ const gebuehr = Math.round(beispielMiete * zahlung.servicegebuehr);
     <div class="wrap preis-raster">
       <div class="karte preis-karte">
         <p class="preis-wer">Für Mieter</p>
-        <h2>Miete{texte.servicegebuehr ? ' plus Servicegebühr' : ''}</h2>
+        <h2>Ein fester Monatspreis</h2>
         <ul class="haken">
           <li>{texte.mieterKosten}</li>
-          {vermittlungHtml() && <li set:html={vermittlungHtml()} />}
+          {texte.servicegebuehr && <li>Die Servicegebühr von {texte.prozent} der Miete ist {texte.servicegebuehrZweck}.</li>}
+          {abschlussHtml() && <li set:html={abschlussHtml()} />}
           <li>Kaution: eine Monatsmiete, mindestens {zahlung.kautionMinEuro} €, direkt an den Vermieter. Zurück innerhalb von {zahlung.kautionRueckzahlungWochen} Wochen nach dem Auszug, abzüglich belegter Schäden.</li>
-          <li>Suchauftrag kostenlos und unverbindlich.</li>
+          <li>Der Suchauftrag ist kostenlos und unverbindlich.</li>
         </ul>
       </div>
       <div class="karte preis-karte">
@@ -43,20 +46,28 @@ const gebuehr = Math.round(beispielMiete * zahlung.servicegebuehr);
         </ul>
       </div>
     </div>
-    {texte.servicegebuehr && (
-      <div class="wrap">
-        <p class="hinweis-box">Beispiel: Bei einer Miete von {beispielMiete} € {texte.live ? `zahlen Sie ${mieterpreis(beispielMiete)} € im Monat, davon gehen ${beispielMiete} € an den Vermieter` : `zahlen Sie ${beispielMiete} € an den Vermieter und etwa ${gebuehr} € Servicegebühr an uns`}. {texte.ustHinweis}</p>
-      </div>
-    )}
   </section>
 
-  <section class="abschnitt abschnitt-grau">
+  {texte.servicegebuehr && (
+    <section class="abschnitt abschnitt-grau">
+      <div class="wrap beispiel-raster">
+        <div>
+          <h2>Ein Beispiel</h2>
+          <p class="einleitung">Ein Stellplatz für den Wohnwagen kostet im Vorschlag <strong>{gesamtpreisText(beispielMiete)}</strong>. Mehr steht dort nicht, denn das ist der Preis, den Sie zahlen.</p>
+          <p>Bevor Sie sich verbindlich entscheiden, zeigen wir Ihnen, wie sich der Preis zusammensetzt:</p>
+        </div>
+        <Preisaufschluesselung miete={beispielMiete} art={beispielArt} titel="Aufschlüsselung vor dem Abschluss" />
+      </div>
+    </section>
+  )}
+
+  <section class="abschnitt">
     <div class="wrap">
       <div class="kopfzeile">
         <h2>Was kostet ein Platz im Monat?</h2>
-        <p class="einleitung">Übliche Monatsmieten nach Art und Fahrzeuglänge. Den genauen Preis legt der Vermieter fest.</p>
+        <p class="einleitung">Übliche Monatspreise nach Art und Fahrzeuglänge. Den genauen Preis sehen Sie bei jedem Vorschlag.</p>
       </div>
-      <Richtwerte />
+      <Richtwerte fuer="mieter" />
       <p class="mt"><a class="weiter" href={link('suchauftrag')}>Passenden Platz suchen lassen</a></p>
     </div>
   </section>
@@ -66,4 +77,6 @@ const gebuehr = Math.round(beispielMiete * zahlung.servicegebuehr);
   .preis-karte { border: 1.5px solid var(--ueberschrift); box-shadow: 4px 4px 0 var(--ueberschrift); }
   .preis-karte .haken { margin: 0; }
   .preis-wer { margin: 0 0 0.25rem; font-weight: 700; font-size: 0.95rem; }
+  .beispiel-raster { display: grid; gap: 2rem; align-items: start; }
+  @media (min-width: 56rem) { .beispiel-raster { grid-template-columns: 1fr 1fr; gap: 4rem; } }
 </style>

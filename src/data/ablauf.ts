@@ -2,8 +2,8 @@
 import { texte } from '../lib/texte';
 
 export const mieterSchritte = [
-  { titel: 'Suchauftrag anlegen', text: 'Sie sagen uns Ort, Art und Zeitraum. Dauert eine Minute, kostenlos und ohne Konto.' },
-  { titel: 'Vorschlag erhalten', text: 'Wir schicken Ihnen passende Plätze mit Fotos, Preis und Ortsteil. Die Adresse folgt zur Besichtigung.' },
+  { titel: 'Suchauftrag anlegen', text: 'Sie sagen uns Ort, Art und Zeitraum. Dauert eine Minute. Der Suchauftrag ist kostenlos und unverbindlich.' },
+  { titel: 'Vorschlag erhalten', text: 'Mit Fotos, Ortsteil und festem Monatspreis. Die Adresse folgt zur Besichtigung.' },
   { titel: 'Besichtigen', text: 'Sie schauen sich den Platz in Ruhe an und lernen den Vermieter kennen.' },
   { titel: texte.mieterSchritt4, text: texte.mieterSchritt4Text },
 ];

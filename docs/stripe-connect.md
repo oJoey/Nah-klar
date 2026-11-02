@@ -8,9 +8,9 @@ Bis dahin: `zahlungLive: false`, Servicegebühr manuell (`servicegebuehrManuell:
 | Was | Wer zahlt | Wie | Wohin |
 |---|---|---|---|
 | Kaution (1 Monatsmiete, mind. 50 €) | Mieter | direkt, außerhalb von Stripe | Vermieter |
-| Monatspreis = Miete + ca. 10 % Servicegebühr | Mieter | SEPA-Lastschrift, Stripe-Abo, Einzug am 1. | Plattformkonto |
+| Monatspreis = Miete + 10 % Servicegebühr | Mieter | SEPA-Lastschrift, Stripe-Abo, Einzug am 1. | Plattformkonto |
 | Miete (100 %) | Plattform | Stripe Transfer am 15. | Express-Konto des Vermieters → dessen Bankkonto |
-| Vermittlungsgebühr 19 €/39 € (**vorerst nicht erhoben**, `vermittlungsgebuehr.aktiv: false`) | Mieter | einmalig mit der ersten Abbuchung | Plattformkonto |
+| Abschlussgebühr 19 €/39 € (**vorerst nicht erhoben**, `vermittlungsgebuehr.aktiv: false`) | Mieter | einmalig mit der ersten Abbuchung | Plattformkonto |
 
 ## 1. Vermieter-Onboarding (Stripe Express)
 
@@ -34,7 +34,7 @@ Bis dahin: `zahlungLive: false`, Servicegebühr manuell (`servicegebuehrManuell:
 - Geplante Netlify Function (Scheduled Function, monatlich am 15.): für jede **bezahlte** Rechnung des Monats `transfers.create({ amount: Miete, destination: acct_…, source_transaction: ch_…, transfer_group: mietverhaeltnis_id })`.
 - `source_transaction` bindet den Transfer an die Zahlung: nicht eingegangenes Geld wird nicht ausgezahlt.
 
-## 4. Vermittlungsgebühr (vorerst nicht erhoben – nur bauen, wenn `vermittlungsgebuehr.aktiv` kommt)
+## 4. Abschlussgebühr (vorerst nicht erhoben – nur bauen, wenn `vermittlungsgebuehr.aktiv` kommt)
 
 - Als einmaliger Posten auf der ersten Rechnung (`add_invoice_items` im Checkout/Abo), Betrag nach `mieter_art` (19 € bzw. 39 €).
 - Während der Startaktion weglassen (Datum aus `site.startaktion` prüfen – dieselbe Logik wie `startaktionLaeuft()` in `texte.ts`).
@@ -76,7 +76,7 @@ Tabelle `mietverhaeltnisse`: `id`, `flaeche_id`, `suchauftrag_id`, `miete`, `mon
 
 ## Umsatzsteuer (entschieden)
 
-- **Kleinunternehmer nach § 19 UStG:** keine Umsatzsteuer auf Service- und Vermittlungsgebühr.
+- **Kleinunternehmer nach § 19 UStG:** keine Umsatzsteuer auf Service- und Abschlussgebühr.
 - Auf allen Rechnungen und Belegen der Hinweis: „Gemäß § 19 UStG wird keine Umsatzsteuer berechnet.“ (Text zentral: `texte.ustHinweis`)
 - Schalter `kleinunternehmer` in `src/config/site.ts`. Bei Überschreiten der Grenze (**25.000 € im Vorjahr bzw. 100.000 € im laufenden Jahr**) auf `false` → 19 % USt; Stripe Invoices dann mit Steuersatz 19 % (`tax_rates`) und Gesamtpreis inkl. USt.
 - **Offener Punkt (selbst klären): Reverse Charge.** Stripe-Gebühren kommen von Stripe Payments Europe (Irland). Für solche Leistungen gilt das Reverse-Charge-Verfahren (§ 13b UStG), und nach unserem Verständnis greift die Kleinunternehmerregelung dafür nicht. Auf die Stripe-Gebühren könnte also trotzdem Umsatzsteuer anfallen, die gemeldet werden muss.
@@ -91,11 +91,15 @@ AGB und Mustervertrag werden selbst erstellt. Diese Punkte müssen die Texte abd
 4. **Rücklastschriften:** Risiko beim Vermieter; Verrechnung mit der nächsten Auszahlung; Rückforderung, wenn keine Auszahlung mehr folgt; Sperre des Mieters; Kosten der Rücklastschrift trägt der Mieter.
 5. **Zahlungsverzug des Mieters:** Erinnerung, Fristen, ab wann der Vermieter kündigen darf.
 6. **Kündigung:** Fristen (`zahlung.kuendigungsfristMonate`), Ende des Abos, anteilige Erstattung ja/nein, Räumung.
-7. **Gebühren:** Servicegebühr (ca. 10 %, im Gesamtpreis), ggf. Vermittlungsgebühr (nur bei Vertragsabschluss), Kleinunternehmer-Hinweis; Vermieter zahlt nichts.
+7. **Gebühren:** Servicegebühr (10 %, im Gesamtpreis), ggf. Abschlussgebühr (nur bei Vertragsabschluss), Kleinunternehmer-Hinweis; Vermieter zahlt nichts.
 8. **Erster Teilmonat:** anteilige Berechnung nach Tagen.
 9. **Kaution:** direkt an den Vermieter, nicht über die Plattform; Rückzahlung und Abzüge.
 10. **Rolle der Plattform:** Vermittler, nicht Vertragspartei des Mietvertrags; Haftung, Streitbeilegung.
 11. **Datenweitergabe:** an Stripe (Zahlungsabwicklung) und an das BZSt (DAC7-Meldung).
+
+## Preisdarstellung im Checkout
+
+Mieter sehen überall nur den Gesamtpreis pro Monat. Im Checkout steht **vor der SEPA-Bestätigung** die Aufschlüsselung aus `aufschluesselung()` in `src/lib/texte.ts` (Baustein `Preisaufschluesselung.astro`): Miete, Servicegebühr (10 %), Gesamt pro Monat, einmalige Abschlussgebühr (bzw. „entfällt bis 31.01.“), Kaution an den Vermieter (separat).
 
 ## Vor dem Livegang (Aufgaben)
 
@@ -110,7 +114,7 @@ AGB und Mustervertrag werden selbst erstellt. Diese Punkte müssen die Texte abd
 1. Stripe-Konto (Testmodus), Connect-Plattformprofil (Express, Deutschland), Branding
 2. Webhook-Funktion mit Signaturprüfung + Tests mit Stripe CLI
 3. Onboarding-Link für Vermieter
-4. Checkout für Mieter (SEPA-Test-IBANs), anteiliger erster Monat; Vermittlungsgebühr erst, wenn sie eingeführt wird
+4. Checkout für Mieter (SEPA-Test-IBANs), anteiliger erster Monat; Abschlussgebühr erst, wenn sie eingeführt wird
 5. Seite für die Steuer-ID vor der ersten Auszahlung
 6. Scheduled Function für Transfers am 15. inkl. Verrechnung von Rücklastschriften
 7. Ein vollständiger Testmonat im Testmodus inkl. fehlgeschlagener Lastschrift und Rücklastschrift

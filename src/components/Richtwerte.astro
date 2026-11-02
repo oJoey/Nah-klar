@@ -1,10 +1,17 @@
 ---
-// Richtpreise je Art und Größe aus src/data/richtwerte.json (Monatsmiete, die der Vermieter erhält).
+// Richtpreise je Art und Größe aus src/data/richtwerte.json.
+// fuer="vermieter": Miete, die der Vermieter erhält. fuer="mieter": Gesamtpreis inklusive Servicegebühr.
 import richtwerte from '../data/richtwerte.json';
+import { mieterpreis } from '../config/zahlung';
+import { texte } from '../lib/texte';
+interface Props { fuer: 'mieter' | 'vermieter' }
+const { fuer } = Astro.props;
+const mitGebuehr = fuer === 'mieter' && texte.servicegebuehr;
+const p = (n: number) => (mitGebuehr ? mieterpreis(n) : n);
 type Preise = Record<string, number[] | null>;
 const fahrzeug = richtwerte.arten.filter((a) => a.preise).map((a) => ({ titel: a.titel, preise: a.preise as Preise }));
 const lager = richtwerte.arten.find((a) => a.proQm);
-const zelle = (p: number[] | null | undefined) => (p ? `${p[0]} bis ${p[1]} €` : 'selten');
+const zelle = (w: number[] | null | undefined) => (w ? `${p(w[0])} bis ${p(w[1])} €` : 'selten');
 ---
 <div class="tabelle-huelle">
   <table class="richtwert-tabelle">
@@ -18,7 +25,8 @@ const zelle = (p: number[] | null | undefined) => (p ? `${p[0]} bis ${p[1]} €`
   </table>
 </div>
 <p class="unter-hinweis">
-  {lager && <>{lager.titel}: {lager.proQm![0]} bis {lager.proQm![1]} € pro m² und Monat, mindestens {lager.mindestens} €. </>}
+  {lager && <>{lager.titel}: {p(lager.proQm![0])} bis {p(lager.proQm![1])} € pro m² und Monat, mindestens {p(lager.mindestens!)} €. </>}
+  {mitGebuehr ? 'Gesamtpreis pro Monat inklusive Servicegebühr. ' : fuer === 'vermieter' ? 'Miete, die Sie als Vermieter erhalten. ' : ''}
   Richtwerte für den {richtwerte.region}. Der tatsächliche Preis hängt von Lage, Zufahrt und Ausstattung ab.
 </p>
 <style>

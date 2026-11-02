@@ -2,7 +2,7 @@
 
 Arbeitsname, wird später geändert (`src/config/site.ts`).
 
-Astro-Website auf Netlify. Phase 1: persönlicher Suchservice, Vermittlung von Hand.
+Astro-Website auf Netlify. Phase 1: persönlicher Suchservice, Vorschläge von Hand.
 
 ## Lokal starten
 

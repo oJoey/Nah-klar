@@ -8,7 +8,7 @@ import { link } from '../../../config/seiten';
 const gefragt = [
   { titel: 'Winterplätze für Wohnmobil und Wohnwagen', text: 'Ab dem Spätsommer suchen viele einen trockenen Platz für die Monate von Oktober bis März. Überdachte Plätze, Scheunen und Hallen sind besonders gefragt.' },
   { titel: 'Garagen in der Stadt', text: 'In dicht bebauten Wohngebieten fehlen Garagen fast überall. Gesucht werden sie für Auto, Motorrad, Oldtimer oder als Lager.' },
-  { titel: 'Stellplätze für Anhänger und Boote', text: 'Anhänger ohne Zugfahrzeug dürfen höchstens zwei Wochen am Stück an der Straße parken. Ein befestigter Platz in der Einfahrt oder auf dem Hof reicht oft schon.' },
+  { titel: 'Stellplätze für Anhänger und Boote', text: 'Viele suchen einen festen Platz für Anhänger, Bootstrailer oder Pferdeanhänger. Ein befestigter Platz in der Einfahrt oder auf dem Hof reicht oft schon.' },
   { titel: 'Lagerräume', text: 'Für Möbel bei einem Umzug, Reifen, Gartengeräte oder Kisten: Ein trockener Keller oder Raum lässt sich gut vermieten.' },
 ];
 ---
@@ -42,7 +42,7 @@ const gefragt = [
         <h2>Was Ihr Platz einbringen kann</h2>
         <p class="einleitung">Übliche Monatsmieten nach Art und Größe. Den Preis legen Sie selbst fest, die Miete erhalten Sie in voller Höhe.</p>
       </div>
-      <Richtwerte />
+      <Richtwerte fuer="vermieter" />
       <p class="mt"><a class="weiter" href={link('verdienstrechner')}>Ertrag für Ihren Platz ausrechnen</a></p>
     </div>
   </section>

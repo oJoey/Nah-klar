@@ -1,6 +1,6 @@
 # Plan für später: Inserate, Konten, Abgleich
 
-**Nicht gebaut.** Zum Start läuft die Vermittlung von Hand: Suchaufträge und Flächenmeldungen kommen über Netlify Forms, der Abgleich und die Rückmeldung an beide Seiten passieren persönlich.
+**Nicht gebaut.** Zum Start laufen die Vorschläge von Hand: Suchaufträge und Flächenmeldungen kommen über Netlify Forms, der Abgleich und die Rückmeldung an beide Seiten passieren persönlich.
 
 ## Ziel
 

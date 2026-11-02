@@ -1,6 +1,6 @@
 // Eckdaten für Preise und die spätere Stripe-Connect-Anbindung (siehe docs/stripe-connect.md).
 export const zahlung = {
-  servicegebuehr: 0.1, // ca. 10 %, zahlt der Mieter mit dem Monatspreis
+  servicegebuehr: 0.1, // 10 %, im Gesamtpreis des Mieters enthalten
   abbuchungTag: 1, // SEPA-Lastschrift beim Mieter
   auszahlungTag: 15, // Überweisung an den Vermieter
   kautionMinEuro: 50, // Kaution = eine Monatsmiete, mindestens dieser Betrag

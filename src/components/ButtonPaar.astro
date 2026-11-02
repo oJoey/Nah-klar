@@ -9,7 +9,7 @@ const { finden = true, mieterZuerst = false } = Astro.props;
     <>
       <div>
         <a class="btn btn-primaer btn-gross" href={link('suchauftrag')}>Platz finden</a>
-        <p class="unter-hinweis">Suchauftrag in 1 Minute, kostenlos</p>
+        <p class="unter-hinweis">Suchauftrag kostenlos, in 1 Minute</p>
       </div>
       <div>
         <a class="btn btn-rahmen btn-gross" href={link('vermieten')}>Platz anbieten</a>
@@ -25,7 +25,7 @@ const { finden = true, mieterZuerst = false } = Astro.props;
       {finden && (
         <div>
           <a class="btn btn-rahmen btn-gross" href={link('suchauftrag')}>Platz finden</a>
-          <p class="unter-hinweis">Suchauftrag in 1 Minute, kostenlos</p>
+          <p class="unter-hinweis">Suchauftrag kostenlos, in 1 Minute</p>
         </div>
       )}
     </>

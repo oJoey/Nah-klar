@@ -26,7 +26,8 @@ export const seiten = {
   // Werkzeuge und Ratgeber
   verdienstrechner: { pfad: '/werkzeuge/verdienstrechner/', live: true, titel: 'Verdienstrechner' },
   einwinterung: { pfad: '/ratgeber/einwinterung-checkliste/', live: true, titel: 'Einwinterungs-Checkliste' },
-  strassenCheck: { pfad: '/werkzeuge/strassen-check-wohnwagen/', live: true, titel: 'Straßen-Check Wohnwagen' },
+  // Offline: rechtliche Einschätzung (Parken im öffentlichen Raum). Seite liegt ungebaut unter src/pages/werkzeuge/_strassen-check-wohnwagen.astro
+  strassenCheck: { pfad: '/werkzeuge/strassen-check-wohnwagen/', live: false, titel: 'Straßen-Check Wohnwagen' },
   winterplatzVergleich: { pfad: '/ratgeber/winterplatz-vergleich/', live: true, titel: 'Winterplatz-Vergleich' },
   // Später: prüft Breite, Höhe und Gewicht gegen die Zufahrt eines Platzes
   passtWohnmobil: { pfad: '/werkzeuge/passt-mein-wohnmobil/', live: false, titel: 'Passt mein Wohnmobil?' },

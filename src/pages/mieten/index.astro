@@ -27,7 +27,7 @@ const schritte = mieterSchritte;
 ---
 <Basis
   titel="Stellplatz, Garage oder Lagerraum mieten in Baden-Württemberg"
-  beschreibung="Abstellplatz, Garage, Auto-Stellplatz, Platz für Wohnwagen oder Lagerraum privat mieten in Baden-Württemberg. Kostenloser Suchauftrag: Wir suchen aktiv in Ihrer Nähe."
+  beschreibung="Abstellplatz, Garage, Auto-Stellplatz, Platz für Wohnwagen oder Lagerraum privat mieten in Baden-Württemberg. Der Suchauftrag ist kostenlos und unverbindlich: Wir suchen aktiv in Ihrer Nähe."
   brotkruemel={[{ name: 'Mieten', pfad: '/mieten/' }]}
 >
   <section class="held-formular abschnitt-grau">
@@ -38,7 +38,7 @@ const schritte = mieterSchritte;
         <h1>Sie sagen, was Sie suchen. Wir finden den <span class="markiert">Platz</span>.</h1>
         <p class="einleitung">Kein Durchklicken durch Inserate: Wir fragen gezielt bei Vermietern in Ihrer Nähe nach und melden uns mit passenden Vorschlägen.</p>
         <ul class="held-punkte">
-          <li><span class="held-icon"><Icon name="check" /></span>Kostenlos und ohne Konto</li>
+          <li><span class="held-icon"><Icon name="check" /></span>Suchauftrag kostenlos</li>
           <li><span class="held-icon"><Icon name="schild" /></span>Jede Fläche von Hand geprüft</li>
           <li><span class="held-icon"><Icon name="kamera" /></span>Vorschläge mit Fotos, Preis und Ortsteil</li>
         </ul>
@@ -69,8 +69,8 @@ const schritte = mieterSchritte;
         <p class="einleitung">Offen und ohne Kleingedrucktes.</p>
       </div>
       <dl class="kosten">
-        <div><dt>Suchauftrag</dt><dd>Kostenlos und unverbindlich.</dd></div>
-        <div><dt>Monatspreis</dt><dd>{texte.mieterKosten} {texte.zahlweiseMieter}</dd></div>
+        <div><dt>Suchauftrag</dt><dd>Der Suchauftrag ist kostenlos und unverbindlich.</dd></div>
+        <div><dt>Monatspreis</dt><dd>{texte.mieterPreisKurz}</dd></div>
         <div><dt>Kaution</dt><dd>Eine Monatsmiete, mindestens {zahlung.kautionMinEuro} €, direkt an den Vermieter.</dd></div>
         <div><dt>Rückzahlung</dt><dd>Innerhalb von {zahlung.kautionRueckzahlungWochen} Wochen nach dem Auszug, abzüglich belegter Schäden.</dd></div>
         <div><dt>Laufzeit</dt><dd>Monatlich kündbar mit einem Monat Frist.</dd></div>
@@ -95,7 +95,7 @@ const schritte = mieterSchritte;
       <h2>Sagen Sie uns, was Sie suchen.</h2>
       <p class="einleitung">Wir melden uns mit passenden Plätzen in Ihrer Nähe.</p>
       <p class="mt"><a class="btn btn-primaer btn-gross" href={link('suchauftrag')}>Suchauftrag anlegen</a></p>
-      <p class="unter-hinweis">Kostenlos, ohne Konto, jederzeit löschbar.</p>
+      <p class="unter-hinweis">Der Suchauftrag ist kostenlos und unverbindlich.</p>
     </div>
   </section>
   <FormSkript />

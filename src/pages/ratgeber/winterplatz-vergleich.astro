@@ -1,11 +1,15 @@
 ---
 import Ratgeber from '../../layouts/Ratgeber.astro';
 import richtwerte from '../../data/richtwerte.json';
+import { mieterpreis } from '../../config/zahlung';
+import { texte } from '../../lib/texte';
+
+const gesamt = (n: number) => (texte.servicegebuehr ? mieterpreis(n) : n);
 
 // Preise je Monat aus den Richtwerten, Klasse „bis 7 m“ (typischer Wohnwagen) und „bis 9 m“ (großes Wohnmobil)
 const preis = (art: string, klasse: string) => {
   const p = richtwerte.arten.find((a) => a.wert === art)?.preise?.[klasse as '7'];
-  return p ? `${p[0]} bis ${p[1]} €` : 'selten verfügbar';
+  return p ? `${gesamt(p[0])} bis ${gesamt(p[1])} €` : 'selten verfügbar';
 };
 const plaetze = [
   { art: 'halle-scheune', titel: 'Halle oder Scheune', schutz: 'Sehr gut', sonne: 'Sehr gut', feucht: 'Auf Lüftung achten, in dichten Hallen bildet sich Kondenswasser', zugang: 'Nach Absprache, oft eingeschränkt, wenn mehrere Fahrzeuge hintereinander stehen', hoehe: 'Meist auch für hohe Wohnmobile, Torhöhe prüfen' },
@@ -25,7 +29,7 @@ const zeilen: [string, keyof (typeof plaetze)[number]][] = [
   kicker="Ratgeber · Vergleich"
   einleitung="Halle, Garage, überdacht oder im Freien: Was schützt Ihr Fahrzeug wirklich, was kostet es, und worauf sollten Sie achten?"
   stand="2026-11-01"
-  verwandt={['einwinterung', 'strassenCheck', 'mieten']}
+  verwandt={['einwinterung', 'preise', 'mieten']}
 >
   <Fragment slot="h1">Welcher <span class="markiert">Winterplatz</span> passt zu Ihrem Fahrzeug?</Fragment>
 
@@ -39,7 +43,7 @@ const zeilen: [string, keyof (typeof plaetze)[number]][] = [
           </tbody>
         </table>
       </div>
-      <p class="unter-hinweis">Preise pro Platz und Monat, Richtwerte für den {richtwerte.region}. Der tatsächliche Preis hängt von Lage und Ausstattung ab.</p>
+      <p class="unter-hinweis">Gesamtpreise pro Platz und Monat{texte.servicegebuehr ? ' inklusive Servicegebühr' : ''}, Richtwerte für den {richtwerte.region}. Der tatsächliche Preis hängt von Lage und Ausstattung ab.</p>
     </div>
   </section>
 

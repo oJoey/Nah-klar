@@ -1,5 +1,5 @@
 ---
-frage: "Wo vermitteln Sie?"
+frage: "In welchen Orten sind Sie aktiv?"
 seiten: [start]
 reihenfolge: 30
 ---

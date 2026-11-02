@@ -5,7 +5,6 @@ import { seiten, istLive, type SeitenSchluessel } from '../config/seiten';
 import type { IconName } from '../lib/icons';
 const teaser: { seite: SeitenSchluessel; icon: IconName; art: string; text: string }[] = [
   { seite: 'einwinterung', icon: 'liste', art: 'Checkliste', text: 'Schritt für Schritt: So machen Sie Wohnmobil und Wohnwagen winterfest.' },
-  { seite: 'strassenCheck', icon: 'anhaenger', art: 'Werkzeug', text: 'Darf Ihr Wohnwagen oder Anhänger an der Straße stehen? Die 2-Wochen-Regel und ihre Ausnahmen.' },
   { seite: 'winterplatzVergleich', icon: 'hof', art: 'Ratgeber', text: 'Halle, Scheune oder Carport: Welcher Winterplatz passt zu Ihrem Fahrzeug?' },
 ];
 const live = teaser.filter((t) => istLive(t.seite));

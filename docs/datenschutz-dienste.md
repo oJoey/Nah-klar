@@ -17,7 +17,7 @@ Stand: Website mit Netlify-Hosting, Netlify Forms und (vorbereitet) Resend. Bitt
 
 ## Angaben zu den Formularen
 
-- **Zweck:** Vermittlung von Stellplätzen, Garagen und Lagerflächen zwischen Privatleuten.
+- **Zweck:** Mieter und Vermieter von Stellplätzen, Garagen und Lagerflächen zusammenbringen (Anbahnung eines Mietvertrags zwischen Privatleuten).
 - **Rechtsgrundlage:** Art. 6 Abs. 1 lit. b DSGVO (Anbahnung eines Vertrags). Keine Werbe-Einwilligung, kein Newsletter.
 - **Benachrichtigungen** zu passenden Plätzen sind Teil des Suchauftrags, keine Werbung. Jede Mail enthält einen Link „Suchauftrag löschen“ (`/daten-loeschen/`).
 - **Speicherdauer:** Suchaufträge ohne Rückmeldung werden nach **12 Monaten** gelöscht. Zum Start geschieht das von Hand (monatlich in Netlify → Forms prüfen). Automatik siehe `docs/plan-inserate.md`.

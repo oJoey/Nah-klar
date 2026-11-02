@@ -11,7 +11,7 @@
 
 import optionen from '../../src/data/optionen.json' with { type: 'json' };
 // Gebührentexte zentral aus texte.ts. Wird von esbuild mitgebündelt, das Datum der Startaktion wird beim Versand geprüft.
-import { texte, vermittlungText } from '../../src/lib/texte.ts';
+import { texte } from '../../src/lib/texte.ts';
 
 // Beschriftungen für die Mail. Feldnamen wie in den Formularen (= spätere Datenbankspalten).
 const BESCHRIFTUNG = {
@@ -31,7 +31,7 @@ const FORMULARE = {
     betreff: 'Ihr Suchauftrag ist angekommen',
     einleitung: 'vielen Dank für Ihren Suchauftrag. Wir gleichen ihn jetzt mit den angebotenen Plätzen ab.',
     schritte: [
-      'Wir melden uns mit passenden Plätzen, mit Fotos, Preis und Ortsteil.',
+      'Wir melden uns mit passenden Plätzen: mit Fotos, Ortsteil und festem Monatspreis.',
       'Sie besichtigen den Platz und unterschreiben den Mustervertrag.',
       'Die Kaution zahlen Sie direkt an den Vermieter.',
     ],
@@ -92,9 +92,9 @@ export const handler = async (event) => {
   const seite = (process.env.URL || '').replace(/\/$/, '');
   const loeschLink = vorlage.ohneLoeschLink || !seite ? '' : `${seite}/daten-loeschen/?email=${encodeURIComponent(empfaenger)}`;
 
-  // Kosten nur in der Mail an Mieter
+  // Kosten nur in der Mail an Mieter, ohne Gebührendetails (die stehen in der Aufschlüsselung vor dem Abschluss)
   const kosten = einsendung.form_name === 'suchauftrag'
-    ? [texte.mieterKosten, vermittlungText(new Date(), wert('mieter_art')), 'Der Suchauftrag selbst ist kostenlos und unverbindlich.'].filter(Boolean)
+    ? ['Der Suchauftrag ist kostenlos und unverbindlich.', texte.mieterPreisKurz, ...(seite ? [`Alle Einzelheiten: ${seite}/preise/`] : [])]
     : [];
   const mitAngaben = zeilen.length > 0;
   const text = [
