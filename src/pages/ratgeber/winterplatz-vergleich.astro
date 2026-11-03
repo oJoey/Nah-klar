@@ -2,15 +2,12 @@
 import Ratgeber from '../../layouts/Ratgeber.astro';
 import richtwerte from '../../data/richtwerte.json';
 import FaqBlock from '../../components/FaqBlock.astro';
-import { mieterpreis } from '../../config/zahlung';
-import { texte } from '../../lib/texte';
 
-const gesamt = (n: number) => (texte.servicegebuehr ? mieterpreis(n) : n);
 
 // Preise je Monat aus den Richtwerten, Klasse „bis 7 m“ (typischer Wohnwagen) und „bis 9 m“ (großes Wohnmobil)
 const preis = (art: string, klasse: string) => {
   const p = richtwerte.arten.find((a) => a.wert === art)?.preise?.[klasse as '7'];
-  return p ? `${gesamt(p[0])} bis ${gesamt(p[1])} €` : 'selten verfügbar';
+  return p ? `${p[0]} bis ${p[1]} €` : 'selten verfügbar';
 };
 const plaetze = [
   { art: 'halle-scheune', titel: 'Halle oder Scheune', schutz: 'Sehr gut', sonne: 'Sehr gut', feucht: 'Auf Lüftung achten, in dichten Hallen bildet sich Kondenswasser', zugang: 'Nach Absprache, oft eingeschränkt, wenn mehrere Fahrzeuge hintereinander stehen', hoehe: 'Meist auch für hohe Wohnmobile, Torhöhe prüfen' },
@@ -39,7 +36,7 @@ const faq = [
 ];
 const zeilen: [string, keyof (typeof plaetze)[number]][] = [
   ['Schutz vor Regen und Schnee', 'schutz'], ['Schutz vor Sonne', 'sonne'], ['Feuchtigkeit', 'feucht'], ['Zugang', 'zugang'], ['Für hohe Fahrzeuge', 'hoehe'],
-  ['Preis bis 7 m (Wohnwagen)', 'preis7'], ['Preis bis 9 m (großes Wohnmobil)', 'preis9'],
+  ['Übliche Monatsmiete bis 7 m (Richtwert)', 'preis7'], ['Übliche Monatsmiete bis 9 m (Richtwert)', 'preis9'],
 ];
 ---
 <Ratgeber
@@ -69,7 +66,7 @@ const zeilen: [string, keyof (typeof plaetze)[number]][] = [
           </tbody>
         </table>
       </div>
-      <p class="unter-hinweis">Gesamtpreise pro Platz und Monat, Richtwerte für den {richtwerte.region}. Der tatsächliche Preis hängt von Lage und Ausstattung ab.</p>
+      <p class="unter-hinweis">Übliche Monatsmiete in der Region (Richtwert), pro Platz, erhoben für den {richtwerte.region}. Die tatsächliche Miete hängt von Lage und Ausstattung ab.</p>
     </div>
   </section>
 

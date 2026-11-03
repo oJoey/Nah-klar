@@ -16,7 +16,7 @@ Ein automatischer Abruf von Kleinanzeigen hat nicht funktioniert: Der Ortsfilter
 
 ## Tabelle zum Ausfüllen
 
-| Art | Klasse | aktuell (Miete) | Angebote (Preise) | neu |
+| Art | Klasse | aktuell | Angebote (Preise) | neu |
 |---|---|---|---|---|
 | Stellplatz im Freien | bis 7 m | 45 bis 70 € | | |
 | Stellplatz im Freien | bis 9 m | 55 bis 85 € | | |
@@ -29,8 +29,6 @@ Ein automatischer Abruf von Kleinanzeigen hat nicht funktioniert: Der Ortsfilter
 | Halle / Scheune | über 9 m | 120 bis 170 € | | |
 | Lagerraum | pro m² | 7 bis 13 € | | |
 
-## Wichtig: Marktpreis und Gesamtpreis
+## Darstellung (entschieden)
 
-Die Werte in `richtwerte.json` sind die Miete, die der Vermieter erhält. Für Mieter zeigt die Website sie **plus 10 %** als Gesamtpreis. Kleinanzeigen-Preise sind aber schon das, was Mieter dort insgesamt zahlen. Wer Kleinanzeigen-Preise 1:1 als Vermieter-Miete einträgt, zeigt Mietern 10 % mehr als den Markt. Entscheiden, ob die Spannen
-- als Vermieter-Miete gelten (dann wirken wir für Mieter 10 % teurer als Kleinanzeigen), oder
-- als Gesamtpreis für Mieter (dann für Vermieter um 10 % niedriger ansetzen).
+Die Spannen erscheinen auf Mieter- und Vermieter-Seiten gleich, beschriftet als „Übliche Monatsmiete in der Region (Richtwert)“. Es wird nichts umgerechnet, also keine 10 % auf- oder abgeschlagen. Gesammelte Marktpreise deshalb direkt als Spanne eintragen.

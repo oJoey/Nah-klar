@@ -58,7 +58,7 @@ const andere = kategorien.filter((x) => x.seite !== k.seite && link(x.seite));
         <h2>Größen und Richtpreise</h2>
         <p class="einleitung">Übliche Monatspreise nach Fahrzeuglänge bzw. Fläche. Es sind Richtwerte, den genauen Preis sehen Sie bei jedem Vorschlag.</p>
       </div>
-      <Richtwerte fuer="mieter" {...k.richtwerte} />
+      <Richtwerte {...k.richtwerte} />
       {link('passtWohnmobil') && k.seite !== 'mietenLager' && <p class="mt"><a class="weiter" href={link('passtWohnmobil')}>Prüfen, ob Ihr Fahrzeug durch Tor und Zufahrt passt</a></p>}
     </div>
   </section>

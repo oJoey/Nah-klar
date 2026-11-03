@@ -1,23 +1,22 @@
 ---
-// Richtpreise je Art und Größe aus src/data/richtwerte.json.
-// fuer="vermieter": Miete, die der Vermieter erhält. fuer="mieter": Gesamtpreis (Miete + Servicegebühr), ohne die Gebühr zu nennen.
+// Richtwerte je Art und Größe aus src/data/richtwerte.json: übliche Monatsmiete in der Region als Spanne.
+// Für Mieter und Vermieter dieselbe Spanne, ohne Umrechnung.
 import richtwerte from '../data/richtwerte.json';
-import { mieterpreis } from '../config/zahlung';
-import { texte } from '../lib/texte';
 // arten/klassen: nur diese Zeilen bzw. Spalten zeigen. lager: Zeile für Lagerraum (pro m²) anzeigen.
-interface Props { fuer: 'mieter' | 'vermieter'; arten?: string[]; klassen?: string[]; lager?: boolean }
-const { fuer, arten, klassen: klassenFilter, lager: mitLager = true } = Astro.props;
+interface Props { arten?: string[]; klassen?: string[]; lager?: boolean }
+const { arten, klassen: klassenFilter, lager: mitLager = true } = Astro.props;
 const klassen = richtwerte.klassen.filter((k) => !klassenFilter || klassenFilter.includes(k.wert));
-const mitGebuehr = fuer === 'mieter' && texte.servicegebuehr;
-const p = (n: number) => (mitGebuehr ? mieterpreis(n) : n);
+
+const richtwertLabel = 'Übliche Monatsmiete in der Region (Richtwert)';
 type Preise = Record<string, number[] | null>;
 const fahrzeug = richtwerte.arten.filter((a) => a.preise && (!arten || arten.includes(a.wert))).map((a) => ({ titel: a.titel, preise: a.preise as Preise }));
 const lager = mitLager ? richtwerte.arten.find((a) => a.proQm) : undefined;
-const zelle = (w: number[] | null | undefined) => (w ? `${p(w[0])} bis ${p(w[1])} €` : 'selten');
+const zelle = (w: number[] | null | undefined) => (w ? `${w[0]} bis ${w[1]} €` : 'selten');
 ---
+<p class="richtwert-label">{richtwertLabel}, pro Platz</p>
 {fahrzeug.length > 0 && (<div class="tabelle-huelle">
   <table class="richtwert-tabelle">
-    <caption class="sr-only">Richtpreise pro Platz und Monat, {richtwerte.region}</caption>
+    <caption class="sr-only">{richtwertLabel}, pro Platz, {richtwerte.region}</caption>
     <thead><tr><th scope="col">Art</th>{klassen.map((k) => <th scope="col">{k.titel}<span>{k.passt}</span></th>)}</tr></thead>
     <tbody>
       {fahrzeug.map((a) => (
@@ -27,11 +26,11 @@ const zelle = (w: number[] | null | undefined) => (w ? `${p(w[0])} bis ${p(w[1])
   </table>
 </div>)}
 <p class="unter-hinweis">
-  {lager && <>{lager.titel}: {p(lager.proQm![0])} bis {p(lager.proQm![1])} € pro m² und Monat, mindestens {p(lager.mindestens!)} €. </>}
-  {fuer === 'mieter' ? 'Richtwerte, Gesamtpreis pro Platz und Monat. ' : 'Richtwerte, Miete pro Platz und Monat, die Sie in voller Höhe erhalten. '}
-  Erhoben für den {richtwerte.region}. Der tatsächliche Preis hängt von Lage, Zufahrt und Ausstattung ab.
+  {lager && <>{lager.titel}: {lager.proQm![0]} bis {lager.proQm![1]} € pro m² und Monat, mindestens {lager.mindestens} €. </>}
+  {richtwertLabel}, erhoben für den {richtwerte.region}. Die tatsächliche Miete hängt von Lage, Zufahrt und Ausstattung ab.
 </p>
 <style>
+  .richtwert-label { margin: 0 0 0.6rem; font-weight: 700; color: var(--ueberschrift); }
   .tabelle-huelle { overflow-x: auto; }
   .richtwert-tabelle { width: 100%; min-width: min(40rem, 100%); border-collapse: collapse; font-size: 1rem; }
   .richtwert-tabelle th, .richtwert-tabelle td { text-align: left; vertical-align: top; padding: 0.85rem; border-bottom: 1px solid var(--linie); }
