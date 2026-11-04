@@ -1,22 +1,15 @@
 ---
-// Aufschlüsselung des Mieterpreises vor dem Abschluss. Während der Startaktion beide Fassungen ausgeben,
-// das Skript in Basis.astro schaltet am Enddatum um (ohne neuen Build).
-import { aufschluesselung, startaktionLaeuft, aktionsEnde, texte } from '../lib/texte';
-interface Props { miete: number; art?: string; titel?: string }
-const { miete, art, titel } = Astro.props;
-const aktion = startaktionLaeuft();
-const fassungen = aktion
-  ? [{ zeilen: aufschluesselung(miete, art), attr: { 'data-aktion-bis': aktionsEnde.toISOString() } },
-     { zeilen: aufschluesselung(miete, art, new Date(aktionsEnde.getTime() + 1000)), attr: { 'data-aktion-ab': aktionsEnde.toISOString(), hidden: true } }]
-  : [{ zeilen: aufschluesselung(miete, art), attr: {} }];
+// Aufschlüsselung des Mieterpreises. Nur direkt vor der Zahlung zeigen, sonst überall nur den Gesamtpreis.
+import { aufschluesselung, texte } from '../lib/texte';
+interface Props { miete: number; zeitraum?: string; titel?: string }
+const { miete, zeitraum = 'Monat', titel } = Astro.props;
+const zeilen = aufschluesselung(miete, zeitraum);
 ---
 <div class="aufschluesselung karte">
   {titel && <h3>{titel}</h3>}
-  {fassungen.map((f) => (
-    <dl {...f.attr}>
-      {f.zeilen.map((z) => <div class:list={[{ summe: z.summe, nebenbei: z.nebenbei }]}><dt>{z.titel}</dt><dd>{z.betrag}</dd></div>)}
-    </dl>
-  ))}
+  <dl>
+    {zeilen.map((z) => <div class:list={[{ summe: z.summe, nebenbei: z.nebenbei }]}><dt>{z.titel}</dt><dd>{z.betrag}</dd></div>)}
+  </dl>
   <p class="unter-hinweis">{texte.zahlungsweg} {texte.ustHinweis}</p>
 </div>
 <style>

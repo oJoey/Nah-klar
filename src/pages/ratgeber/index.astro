@@ -8,7 +8,7 @@ import { ratgeberArtikel } from '../../data/ratgeber';
 const artikel = ratgeberArtikel.filter((a) => istLive(a.seite));
 const werkzeuge = (['passtWohnmobil', 'verdienstrechner'] as const).filter((k) => istLive(k));
 const faq = [
-  { frage: 'Für wen sind die Ratgeber gedacht?', antwort: 'Für alle, die einen Platz für Wohnmobil, Wohnwagen, Anhänger, Auto oder Lagergut suchen, und für Privatleute, die Platz vermieten möchten.' },
+  { frage: 'Für wen sind die Ratgeber gedacht?', antwort: 'Für alle, die einen Platz für Wohnmobil, Wohnwagen oder Lagergut suchen, und für Privatleute, die Platz vermieten möchten.' },
   { frage: 'Kosten die Ratgeber und Werkzeuge etwas?', antwort: 'Nein. Alle Ratgeber, Checklisten und Werkzeuge sind kostenlos und ohne Anmeldung nutzbar.' },
   { frage: 'Ersetzen die Ratgeber eine Beratung?', antwort: 'Nein. Die Ratgeber enthalten praktische Tipps. Eine Rechts-, Steuer- oder Versicherungsberatung bieten wir nicht an.' },
 ];
@@ -18,10 +18,10 @@ const faq = [
   eltern={null}
   typ="CollectionPage"
   titel="Ratgeber: Wohnmobil und Wohnwagen abstellen"
-  beschreibung="Ratgeber rund ums Abstellen: Diebstahlschutz, Einwinterung und Winterplatz-Vergleich für Wohnmobil, Wohnwagen und Anhänger. Praktische Tipps, kostenlos."
+  beschreibung="Ratgeber rund ums Abstellen: Diebstahlschutz, Einwinterung und Winterplatz-Vergleich für Wohnmobil und Wohnwagen. Praktische Tipps, kostenlos."
   kicker="Ratgeber"
-  einleitung="Praktische Tipps rund ums Abstellen von Wohnmobil, Wohnwagen, Anhänger und Lagergut."
-  verwandt={['werkzeuge', 'mietenWohnmobil', 'mietenAnhaenger']}
+  einleitung="Praktische Tipps rund ums Abstellen von Wohnmobil, Wohnwagen und Lagergut."
+  verwandt={['werkzeuge', 'mietenWohnmobil']}
 >
   <Fragment slot="h1">Ratgeber rund ums <span class="markiert">Abstellen</span></Fragment>
   <section class="abschnitt">

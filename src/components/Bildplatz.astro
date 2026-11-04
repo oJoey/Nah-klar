@@ -14,9 +14,9 @@ const foto = treffer?.src;
 
 // Positionen in % der Karte (public/bilder/karte-osm.svg), jeweils auf einer Straße.
 const marken: { icon: IconName; text: string; x: number; y: number }[] = [
-  { icon: 'garage', text: 'Garage', x: 41.5, y: 23 },
+  { icon: 'garage', text: 'Lager', x: 41.5, y: 23 },
   { icon: 'wohnmobil', text: 'Wohnwagen', x: 85, y: 48.5 },
-  { icon: 'anhaenger', text: 'Anhänger', x: 24, y: 54 },
+  { icon: 'wohnmobil', text: 'Wohnmobil', x: 24, y: 54 },
   { icon: 'lager', text: 'Lager', x: 68, y: 84 },
 ];
 const hier = { x: 53, y: 56.5 };
@@ -25,7 +25,7 @@ const hier = { x: 53, y: 56.5 };
   {foto ? (
     <Image src={foto} alt={alt} width={1200} quality={72} widths={[480, 800, 1200]} sizes="(min-width: 60rem) 45vw, 100vw" loading="eager" />
   ) : (
-    <div class="karte-bild" role="img" aria-label="Kartenausschnitt einer Wohnsiedlung mit Plätzen für Garage, Wohnwagen, Anhänger und Lager in der Nähe">
+    <div class="karte-bild" role="img" aria-label="Kartenausschnitt einer Wohnsiedlung mit Plätzen für Wohnwagen, Wohnmobil und Lager in der Nähe">
       <img src="/bilder/karte-osm.svg" alt="" width="1000" height="815" loading="eager" decoding="async" />
       <span class="hier" style={`left:${hier.x}%;top:${hier.y}%`} />
       {marken.map((m, i) => (

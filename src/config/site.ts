@@ -1,12 +1,13 @@
 // Zentrale Angaben zur Marke. Platzhalter in eckigen Klammern vor dem Livegang ersetzen.
 export const site = {
-  name: 'Platz Kompass', // Arbeitsname, wird später geändert
+  // Marke und Domain: nur hier ändern, alle Seiten, Mails und die Sitemap übernehmen es.
+  name: 'nahklar',
   // [DOMAIN]: muss eine gültige Adresse sein, deshalb hier ein Ersatzwert.
   url: 'https://www.domain-eintragen.de',
   beschreibung:
-    'Privatleute in Baden-Württemberg vermieten ungenutzten Platz wie Einfahrt, Hof, Scheune, Garage oder Keller an Nachbarn mit Wohnmobil, Auto, Anhänger oder Lagergut.',
-  region: 'Baden-Württemberg',
-  regionIn: 'in Baden-Württemberg', // für Sätze wie „Platz in Baden-Württemberg“
+    'Die Plattform, die Mieter und Vermieter zusammenbringt: private Abstellplätze für Wohnmobil und Wohnwagen sowie Lagerräume im Raum Stuttgart und Böblingen.',
+  region: 'Stuttgart und Böblingen',
+  regionIn: 'im Raum Stuttgart und Böblingen', // für Sätze wie „Platz im Raum …“
   bundesland: 'Baden-Württemberg',
   ansprechpartner: 'Ihr persönlicher Ansprechpartner',
 
@@ -19,21 +20,15 @@ export const site = {
   // Wie schnell wir uns nach einer Anfrage melden. Bitte nur eintragen, was Sie sicher einhalten.
   antwortzeit: 'innerhalb von zwei Werktagen',
 
-  // GEBÜHREN. Rangfolge: zahlungLive vor servicegebuehrManuell. Alle Texte dazu in src/lib/texte.ts.
+  // GEBÜHREN: Sätze in src/config/gebuehren.ts. Rangfolge: zahlungLive vor servicegebuehrManuell. Texte in src/lib/texte.ts.
   // Stripe Connect: true = Servicegebühr im Gesamtpreis, Miete per Lastschrift eingezogen und ausgezahlt.
   // Erst auf true setzen, wenn Lastschrift und Auszahlung tatsächlich laufen.
   zahlungLive: false,
   // Übergang ohne Stripe: Mieter zahlen die Miete direkt an den Vermieter und die Servicegebühr (10 %) monatlich an uns. Mieter sehen trotzdem immer den Gesamtpreis.
   servicegebuehrManuell: true,
-  // Kleinunternehmer nach § 19 UStG: keine Umsatzsteuer auf Service- und Abschlussgebühr.
+  // Kleinunternehmer nach § 19 UStG: keine Umsatzsteuer auf die Gebühren.
   // Auf false setzen, wenn die Grenze überschritten wird (25.000 € Umsatz im Vorjahr bzw. 100.000 € im laufenden Jahr) → 19 % USt.
   kleinunternehmer: true,
-  // Einmalige Abschlussgebühr für Mieter (Schaltername bleibt intern vermittlungsgebuehr), fällig erst bei Vertragsabschluss. Wird nach der Startaktion erhoben (ab 01.02.2027).
-  vermittlungsgebuehr: { aktiv: true, garageAutoLager: 19, wohnmobilAnhaengerBoot: 39 },
-  // Startaktion: Abschlussgebühr entfällt. Endet automatisch nach dem Enddatum (Balken und Texte), auch ohne neuen Build.
-  // Nur zusammen mit vermittlungsgebuehr.aktiv: true einschalten. Sonst wird mit dem Erlass einer Gebühr geworben, die es nicht gibt.
-  startaktion: { aktiv: true, ende: '2027-01-31', text: 'Startaktion: Bis 31.01. entfällt die Abschlussgebühr' },
-
   // Vertrag digital per Klick unterschreiben. Erst auf true setzen, wenn es das wirklich gibt. Vorher: Mustervertrag zum Unterschreiben.
   vertragDigital: false,
 
@@ -57,7 +52,7 @@ export const site = {
 // Betreiber für Impressum, Datenschutzerklärung und AGB. [ECKIGE KLAMMERN] vor dem Livegang ersetzen.
 export const betreiber = {
   name: '[VORNAME NACHNAME]', // bei Einzelunternehmen der volle Name, Marke allein reicht nicht
-  zusatz: `${site.name}`, // erscheint als „Vorname Nachname, Platz Kompass“
+  zusatz: `${site.name}`, // erscheint als „Vorname Nachname, nahklar“
   strasse: '[STRASSE HAUSNUMMER]', // ladungsfähige Anschrift, kein Postfach
   plzOrt: '[PLZ ORT]',
   // Wirtschafts-Identifikationsnummer (§ 139c AO), sobald vom BZSt zugeteilt. Leer = Zeile entfällt.

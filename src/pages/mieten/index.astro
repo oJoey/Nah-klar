@@ -24,15 +24,15 @@ const kacheln = mietArten.map((a) => ({
 const schritte = mieterSchritte;
 ---
 <Basis
-  titel="Stellplatz, Garage oder Lagerraum mieten in Baden-Württemberg"
-  beschreibung="Abstellplatz, Garage, Auto-Stellplatz, Platz für Wohnwagen oder Lagerraum privat mieten in Baden-Württemberg. Der Suchauftrag ist kostenlos und unverbindlich: Wir suchen aktiv in Ihrer Nähe."
+  titel="Abstellplatz für Wohnmobil oder Lagerraum mieten im Raum Stuttgart und Böblingen"
+  beschreibung="Abstellplatz für Wohnmobil und Wohnwagen oder Lagerraum privat mieten im Raum Stuttgart und Böblingen. Der Suchauftrag ist kostenlos und unverbindlich: Wir suchen aktiv in Ihrer Nähe."
   brotkruemel={[{ name: 'Mieten', pfad: '/mieten/' }]}
 >
   <section class="held-formular abschnitt-grau">
     <div class="held-muster" aria-hidden="true"></div>
     <div class="wrap held-raster">
       <div class="held-text">
-        <p class="kicker">Stellplatz, Garage und Lagerraum mieten</p>
+        <p class="kicker">Abstellplatz für Wohnmobil und Lagerraum mieten</p>
         <h1>Sie sagen, was Sie suchen. Wir finden den <span class="markiert">Platz</span>.</h1>
         <p class="einleitung">Kein Durchklicken durch Inserate: Wir fragen gezielt bei Vermietern in Ihrer Nähe nach und melden uns mit passenden Vorschlägen.</p>
         <ul class="held-punkte">
@@ -40,7 +40,7 @@ const schritte = mieterSchritte;
           <li><span class="held-icon"><Icon name="schild" /></span>Jede Fläche von Hand geprüft</li>
           <li><span class="held-icon"><Icon name="kamera" /></span>Vorschläge mit Fotos, Preis und Ortsteil</li>
         </ul>
-        <p class="vermieter-zeile">Sie haben selbst Platz übrig? <a href={link('platzAnbieten')}>Platz anbieten</a>, für Vermieter kostenlos.</p>
+        <p class="vermieter-zeile">Sie haben selbst Platz übrig? <a href={link('platzAnbieten')}>Platz anbieten</a>, kostenlos.</p>
       </div>
       <SuchauftragFormular mitWohnmobilZahl={false} />
     </div>

@@ -23,7 +23,7 @@ const gruppen = [
       <ol class="schritt-liste">
         {g.schritte!.map((s) => <li><h3>{s.titel}</h3><p>{s.text}</p></li>)}
       </ol>
-      {g.id === 'vermieter' && !umschaltbar && <p class="kostenlos">Für Vermieter immer kostenlos</p>}
+      {g.id === 'vermieter' && !umschaltbar && <p class="kostenlos">Anbieten kostenlos</p>}
     </div>
   ))}
 </div>

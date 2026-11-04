@@ -4,6 +4,6 @@ seiten: [vermieten]
 reihenfolge: 15
 ---
 
-Privatleute aus der Region, die einen Platz für Auto, Wohnwagen, Wohnmobil, Anhänger oder Lagergut suchen.
+Privatleute aus der Region, die einen Platz für Wohnwagen, Wohnmobil oder Lagergut suchen.
 
 {MIETER_PRUEFUNG}

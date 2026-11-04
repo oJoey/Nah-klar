@@ -1,24 +1,20 @@
 ---
 import Ratgeber from '../../layouts/Ratgeber.astro';
 import Richtwerte from '../../components/Richtwerte.astro';
-import Preisaufschluesselung from '../../components/Preisaufschluesselung.astro';
 import { site } from '../../config/site';
 import { zahlung } from '../../config/zahlung';
 import { link } from '../../config/seiten';
-import { texte, abschlussHtml, gesamtpreisText } from '../../lib/texte';
-
-// Beispiel: Wohnwagen-Stellplatz, 70 € Miete → 77 € im Monat
-const beispielMiete = 70;
-const beispielArt = 'wohnmobil-wohnwagen';
+import { texte } from '../../lib/texte';
+const vermieterKostenlos = !zahlung.provisionAnzeigen;
 ---
 <Ratgeber
   seite="preise"
   eltern={null}
   typ="WebPage"
-  titel="Preise: Was kostet ein Stellplatz, eine Garage oder ein Lagerraum?"
-  beschreibung={`Für Vermieter kostenlos. Für Mieter ein fester Monatspreis, die Servicegebühr ist enthalten. Was Stellplatz, Garage und Lagerraum ${site.regionIn} üblicherweise kosten.`}
+  titel="Preise: Was kostet ein Platz für Wohnmobil, Wohnwagen oder Lagergut?"
+  beschreibung={`Für Mieter ein fester Gesamtpreis, die Servicegebühr ist enthalten. Was Abstellplätze für Wohnmobil und Wohnwagen und Lagerräume ${site.regionIn} üblicherweise kosten.`}
   kicker="Preise"
-  einleitung="Für Vermieter immer kostenlos. Für Mieter ein fester Monatspreis: Was Sie zahlen, steht vor dem Abschluss fest."
+  einleitung="Für Mieter ein fester Gesamtpreis pro Monat oder pro Saison. Vor der Besichtigung zahlen Sie nichts."
   verwandt={['soFunktionierts', 'verdienstrechner', 'winterplatzVergleich']}
 >
   <Fragment slot="h1">Klare <span class="markiert">Preise</span>, keine Überraschungen</Fragment>
@@ -27,45 +23,32 @@ const beispielArt = 'wohnmobil-wohnwagen';
     <div class="wrap preis-raster">
       <div class="karte preis-karte">
         <p class="preis-wer">Für Mieter</p>
-        <h2>Ein fester Monatspreis</h2>
+        <h2>Ein fester Gesamtpreis</h2>
         <ul class="haken">
           <li>{texte.mieterKosten}</li>
           {texte.servicegebuehr && <li>Die Servicegebühr von {texte.prozent} der Miete ist {texte.servicegebuehrZweck}.</li>}
-          {abschlussHtml() && <li set:html={abschlussHtml()} />}
+          <li>Vor der Besichtigung zahlen Sie nichts.</li>
           <li>Kaution: eine Monatsmiete, mindestens {zahlung.kautionMinEuro} €, direkt an den Vermieter. Zurück innerhalb von {zahlung.kautionRueckzahlungWochen} Wochen nach dem Auszug, abzüglich belegter Schäden.</li>
           <li>Der Suchauftrag ist kostenlos und unverbindlich.</li>
         </ul>
       </div>
       <div class="karte preis-karte">
         <p class="preis-wer">Für Vermieter</p>
-        <h2><span class="kostenlos">Kostenlos</span></h2>
+        <h2>{vermieterKostenlos ? <span class="kostenlos">Anbieten kostenlos</span> : 'Einmalige Provision'}</h2>
         <ul class="haken">
           <li>{texte.vermieterKosten}</li>
           <li>Sie legen den Preis selbst fest. Auf Wunsch sagen wir Ihnen, was in Ihrer Gegend üblich ist.</li>
-          <li>Kein Konto, keine Grundgebühr, keine Laufzeit bei uns.</li>
+          <li>Keine Grundgebühr, keine Laufzeit bei uns.</li>
         </ul>
       </div>
     </div>
   </section>
 
-  {texte.servicegebuehr && (
-    <section class="abschnitt abschnitt-grau">
-      <div class="wrap beispiel-raster">
-        <div>
-          <h2>Ein Beispiel</h2>
-          <p class="einleitung">Ein Stellplatz für den Wohnwagen kostet im Vorschlag <strong>{gesamtpreisText(beispielMiete)}</strong>. Mehr steht dort nicht, denn das ist der Preis, den Sie zahlen.</p>
-          <p>Bevor Sie sich verbindlich entscheiden, zeigen wir Ihnen, wie sich der Preis zusammensetzt:</p>
-        </div>
-        <Preisaufschluesselung miete={beispielMiete} art={beispielArt} titel="Aufschlüsselung vor dem Abschluss" />
-      </div>
-    </section>
-  )}
-
   <section class="abschnitt">
     <div class="wrap">
       <div class="kopfzeile">
         <h2>Was kostet ein Platz im Monat?</h2>
-        <p class="einleitung">Übliche Monatspreise nach Art und Fahrzeuglänge. Den genauen Preis sehen Sie bei jedem Vorschlag.</p>
+        <p class="einleitung">Übliche Monatspreise nach Art und Fahrzeuglänge. Den genauen Gesamtpreis sehen Sie bei jedem Inserat.</p>
       </div>
       <Richtwerte />
       <p class="mt"><a class="weiter" href={link('suchauftrag')}>Passenden Platz suchen lassen</a></p>
@@ -77,6 +60,4 @@ const beispielArt = 'wohnmobil-wohnwagen';
   .preis-karte { border: 1.5px solid var(--ueberschrift); box-shadow: 4px 4px 0 var(--ueberschrift); }
   .preis-karte .haken { margin: 0; }
   .preis-wer { margin: 0 0 0.25rem; font-weight: 700; font-size: 0.95rem; }
-  .beispiel-raster { display: grid; gap: 2rem; align-items: start; }
-  @media (min-width: 56rem) { .beispiel-raster { grid-template-columns: 1fr 1fr; gap: 4rem; } }
 </style>

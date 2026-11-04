@@ -4,7 +4,8 @@ import { site, betreiber } from './src/config/site.ts';
 import { entwuerfe } from './src/config/seiten.ts';
 
 // Rechtstexte erst in die Sitemap, wenn die Betreiberangaben eingetragen sind (vorher noindex).
-const rechtstexte = betreiber.name.includes('[') ? ['/impressum/', '/datenschutz/', '/agb/'] : [];
+// AGB sind ein Platzhalter (Anwalt), deshalb immer ausgeschlossen. Impressum/Datenschutz erst mit Betreiberangaben.
+const rechtstexte = ['/agb/', ...(betreiber.name.includes('[') ? ['/impressum/', '/datenschutz/'] : [])];
 const entwurfPfade = [...entwuerfe.map(([, s]) => s.pfad), ...rechtstexte];
 
 export default defineConfig({

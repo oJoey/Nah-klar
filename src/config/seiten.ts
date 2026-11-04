@@ -39,14 +39,11 @@ export const seiten = {
 
   // Kategorieseiten Mieten (Inhalt: src/data/kategorien.ts, Seite: src/pages/mieten/[kategorie].astro)
   mietenWohnmobil: { pfad: '/mieten/wohnmobil-wohnwagen-stellplatz/', live: true, titel: 'Wohnmobil und Wohnwagen' },
-  mietenAuto: { pfad: '/mieten/auto-stellplatz/', live: true, titel: 'Auto und Motorrad' },
-  mietenGarage: { pfad: '/mieten/garage/', live: true, titel: 'Garage' },
   mietenLager: { pfad: '/mieten/lagerraum/', live: true, titel: 'Lagerraum' },
-  mietenAnhaenger: { pfad: '/mieten/anhaenger-boot/', live: true, titel: 'Anhänger und Boot' },
 
   // Unterseiten Vermieten (Ersatz: Formular mit vorausgewählter Fläche)
-  vermietenGarage: { pfad: '/vermieten/garage/', live: true, titel: 'Garage vermieten' },
-  vermietenEinfahrt: { pfad: '/vermieten/einfahrt/', live: true, titel: 'Einfahrt vermieten' },
+  vermietenGarage: { pfad: '/vermieten/garage-als-lager/', live: true, titel: 'Garage als Lager vermieten' },
+  vermietenEinfahrt: { pfad: '/vermieten/hofflaeche-wohnmobil/', live: true, titel: 'Hoffläche für Wohnmobile vermieten' },
   vermietenKeller: { pfad: '/vermieten/keller-raum/', live: true, titel: 'Keller und Raum vermieten' },
   vermietenScheune: { pfad: '/vermieten/scheune-hofflaeche/', live: true, titel: 'Scheune und Hof vermieten' },
 } satisfies Record<string, Seite>;

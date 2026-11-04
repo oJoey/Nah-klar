@@ -33,16 +33,16 @@ const such = link('suchauftrag');
 const orte = startorte.map((o) => ({ ort: o.ort, href: o.pfad ?? (such ? `${such}?ort=${encodeURIComponent(o.ort)}` : null) }));
 ---
 <Basis
-  titel={`Stellplatz, Garage und Lagerraum mieten in Baden-Württemberg | ${site.name}`}
-  beschreibung="Stellplatz für Wohnmobil, Anhänger oder Auto, Garage oder Lagerraum bei Privatleuten in Baden-Württemberg mieten oder vermieten. Mustervertrag, geprüfte Plätze, persönlicher Ansprechpartner."
+  titel={`Abstellplatz für Wohnmobil und Lagerraum mieten im Raum Stuttgart und Böblingen | ${site.name}`}
+  beschreibung="Abstellplatz für Wohnmobil und Wohnwagen oder Lagerraum bei Privatleuten im Raum Stuttgart und Böblingen mieten oder vermieten. Mustervertrag, geprüfte Plätze, persönlicher Ansprechpartner."
 >
   <section class="held">
     <div class="wrap">
       <div class="held-raster">
         <div>
-          <p class="kicker">Stellplatz, Garage und Lagerraum in Baden-Württemberg</p>
+          <p class="kicker">Abstellplatz für Wohnmobil und Lagerraum im Raum Stuttgart und Böblingen</p>
           <h1>Platz gesucht? Ihre <span class="markiert">Nachbarn</span> haben welchen.</h1>
-          <p class="einleitung">Für Wohnmobil, Anhänger, Auto oder Lagergut. Bei Privatleuten in Ihrer Nähe, mit Mustervertrag und persönlichem Ansprechpartner.</p>
+          <p class="einleitung">Für Wohnmobil, Wohnwagen oder Lagergut. Bei Privatleuten in Ihrer Nähe, mit Mustervertrag und persönlichem Ansprechpartner.</p>
         </div>
         <Bildplatz name="" alt="" class="held-bild" />
       </div>
@@ -82,7 +82,7 @@ const orte = startorte.map((o) => ({ ort: o.ort, href: o.pfad ?? (such ? `${such
     <div class="wrap">
       <div class="kopfzeile">
         <h2 id="regionen-titel">Wo wir starten</h2>
-        <p class="einleitung">Wir beginnen im Großraum Stuttgart und suchen auf Wunsch in ganz Baden-Württemberg.</p>
+        <p class="einleitung">Wir beginnen im Großraum Stuttgart und suchen auf Wunsch im Raum Stuttgart und Böblingen.</p>
       </div>
       <ul class="chips orte">
         {orte.map((o) => <li>{o.href ? <a class="chip" href={o.href} rel={o.href.includes('?') ? 'nofollow' : undefined}>{o.ort}</a> : <span class="chip">{o.ort}</span>}</li>)}

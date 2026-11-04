@@ -20,10 +20,10 @@ import NachfrageHinweis from '../../components/NachfrageHinweis.astro';
 import { texte } from '../../lib/texte';
 import richtwerte from '../../data/richtwerte.json';
 
-// Beispiel im Hero: Werte aus richtwerte.json (Garage bis 5 m), damit Beispiel und Rechner zusammenpassen
-const beispielPreis = richtwerte.arten.find((a) => a.wert === 'garage')!.preise!['5']!;
+// Beispiel im Hero: Werte aus richtwerte.json (Halle/Scheune bis 7 m), damit Beispiel und Rechner zusammenpassen
+const beispielPreis = richtwerte.arten.find((a) => a.wert === 'halle-scheune')!.preise!['7']!;
 const jahr = (n: number) => (Math.round((n * 12) / 10) * 10).toLocaleString('de-DE');
-const beispiel = { titel: 'Garage in Sindelfingen', groesse: 'bis 5 m', von: jahr(beispielPreis[0]), bis: jahr(beispielPreis[1]) };
+const beispiel = { titel: 'Hallenplatz in Sindelfingen', groesse: 'Wohnmobil bis 7 m', von: jahr(beispielPreis[0]), bis: jahr(beispielPreis[1]) };
 
 const kacheln = flaechenArten.map((a) => ({
   titel: a.titel,
@@ -57,17 +57,17 @@ const schritte = vermieterSchritte;
 
 ---
 <Basis
-  titel="Stellplatz, Garage oder Lagerraum vermieten in Baden-Württemberg"
-  beschreibung="Stellplatz, Garage, Einfahrt, Lagerraum oder Scheune vermieten, mit fairem Nebenverdienst. Für Vermieter immer kostenlos: jede Fläche von Hand geprüft, Mustervertrag, persönlicher Ansprechpartner."
+  titel="Abstellplatz für Wohnmobil oder Lagerraum vermieten im Raum Stuttgart und Böblingen"
+  beschreibung="Hoffläche, Halle, Scheune, Garage oder Keller vermieten, mit fairem Nebenverdienst. Anbieten kostenlos: jede Fläche von Hand geprüft, Mustervertrag, persönlicher Ansprechpartner."
   brotkruemel={[{ name: 'Vermieten', pfad: '/vermieten/' }]}
 >
   <section class="held-formular abschnitt-grau">
     <div class="held-muster" aria-hidden="true"></div>
     <div class="wrap held-raster">
       <div class="held-text">
-        <p class="kicker">Stellplatz, Garage oder Lagerraum vermieten</p>
+        <p class="kicker">Abstellplatz für Wohnmobil oder Lagerraum vermieten</p>
         <h1>Leerer Platz? Machen Sie <span class="markiert">Miete</span> daraus.</h1>
-        <p class="einleitung">Für Vermieter immer kostenlos. Sie bestimmen den Preis und erhalten die volle Miete.</p>
+        <p class="einleitung">Anbieten kostenlos. Sie bestimmen den Preis.</p>
         <ul class="held-punkte">
           <li><span class="held-icon"><Icon name="schild" /></span>Jede Fläche von Hand geprüft</li>
           <li><span class="held-icon"><Icon name="vertrag" /></span>Mustervertrag und Kaution</li>
@@ -90,7 +90,7 @@ const schritte = vermieterSchritte;
     <div class="wrap">
       <div class="kopfzeile">
         <h2>Diese Flächen sind gefragt</h2>
-        <p class="einleitung">Eine Garage, ein freier Platz in der Einfahrt oder ein trockener Keller reichen schon. Gesucht werden Plätze für Autos, Anhänger, Wohnwagen und Lagergut.</p>
+        <p class="einleitung">Ein freier Platz auf dem Hof, eine Halle, eine Garage oder ein trockener Keller reichen schon. Gesucht werden Plätze für Wohnmobile, Wohnwagen und Lagergut.</p>
       </div>
       <NachfrageHinweis />
       {link('nachfrage') && <p class="nachfrage-link"><a class="weiter" href={link('nachfrage')!}>Was gefragt ist und was es einbringt</a></p>}
@@ -169,7 +169,7 @@ const schritte = vermieterSchritte;
         <Bildplatz name="vermieten-hof" ersatz="hof" alt="Blick durch eine Hofeinfahrt auf eine Scheune" />
         <div>
           <h2>Sie haben einen Hof oder eine Scheune?</h2>
-          <p>Auf größeren Flächen ist oft Platz für mehrere Autos, Anhänger, Wohnwagen oder Wohnmobile. Wir schlagen auch für mehrere Plätze auf einer Fläche passende Mieter vor und stimmen Zufahrt und Zeiten mit Ihnen ab.</p>
+          <p>Auf größeren Flächen ist oft Platz für mehrere Wohnwagen oder Wohnmobile. Wir schlagen auch für mehrere Plätze auf einer Fläche passende Mieter vor und stimmen Zufahrt und Zeiten mit Ihnen ab.</p>
           <p><a class="weiter" href={link('vermietenScheune')}>{istLive('vermietenScheune') ? seiten.vermietenScheune.titel : 'Hof oder Scheune anbieten'}</a></p>
         </div>
       </div>

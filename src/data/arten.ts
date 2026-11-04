@@ -5,17 +5,14 @@ type Art = { wert: string; titel: string; kurz: string; icon: IconName; nutzen: 
 
 // Was Mieter suchen (Werte passen zu ?art= im Suchauftrag)
 export const mietArten: Art[] = [
-  { wert: 'auto-motorrad', titel: 'Stellplatz für Auto oder Motorrad', kurz: 'Auto / Motorrad', icon: 'einfahrt', nutzen: 'Draußen oder überdacht, nah an Ihrer Wohnung.', seite: 'mietenAuto' },
-  { wert: 'garage', titel: 'Garage', kurz: 'Garage', icon: 'garage', nutzen: 'Abschließbar und trocken, für Auto, Motorrad oder Oldtimer.', seite: 'mietenGarage' },
-  { wert: 'wohnmobil-wohnwagen', titel: 'Stellplatz für Wohnmobil oder Wohnwagen', kurz: 'Wohnmobil / Wohnwagen', icon: 'wohnmobil', nutzen: 'Winterplatz oder ganzjährig, unter Dach oder im Freien.', seite: 'mietenWohnmobil' },
-  { wert: 'anhaenger-boot', titel: 'Stellplatz für Anhänger oder Boot', kurz: 'Anhänger / Boot', icon: 'anhaenger', nutzen: 'Für Anhänger, Bootstrailer oder Pferdeanhänger.', seite: 'mietenAnhaenger' },
-  { wert: 'lagerraum', titel: 'Lagerraum', kurz: 'Lagerraum', icon: 'lager', nutzen: 'Trockener Raum für Möbel, Reifen, Kisten oder Gartengeräte.', seite: 'mietenLager' },
+  { wert: 'wohnmobil-wohnwagen', titel: 'Abstellplatz für Wohnmobil oder Wohnwagen', kurz: 'Wohnmobil / Wohnwagen', icon: 'wohnmobil', nutzen: 'Winterplatz oder ganzjährig, in der Halle, überdacht oder im Freien.', seite: 'mietenWohnmobil' },
+  { wert: 'lagerraum', titel: 'Lagerraum', kurz: 'Lagerraum', icon: 'lager', nutzen: 'Keller, Garage oder Halle für Möbel, Reifen, Kisten oder Gartengeräte.', seite: 'mietenLager' },
 ];
 
 // Was Vermieter anbieten (Werte passen zu ?art= in „Platz anbieten“)
 export const flaechenArten: Art[] = [
-  { wert: 'garage', titel: 'Garage', kurz: 'Garage', icon: 'garage', nutzen: 'Für Auto oder Motorrad oder als trockenes Lager.', seite: 'vermietenGarage', bild: 'garage' },
-  { wert: 'stellplatz-frei', titel: 'Einfahrt oder Stellplatz', kurz: 'Einfahrt / Stellplatz', icon: 'einfahrt', nutzen: 'Freie Fläche für Auto, Anhänger oder Wohnwagen.', seite: 'vermietenEinfahrt', bild: 'stellplatz' },
+  { wert: 'halle-scheune', titel: 'Halle und Scheune', kurz: 'Halle / Scheune', icon: 'hof', nutzen: 'Trockene Winterplätze für Wohnmobile und Wohnwagen. Bringt oft den höchsten Ertrag, weil mehrere Plätze möglich sind.', seite: 'vermietenScheune', bild: 'hof' },
+  { wert: 'stellplatz-frei', titel: 'Hof- und Freifläche', kurz: 'Hof / Freifläche', icon: 'einfahrt', nutzen: 'Befestigte Fläche im Freien oder überdacht für Wohnmobil oder Wohnwagen.', seite: 'vermietenEinfahrt', bild: 'stellplatz' },
+  { wert: 'garage', titel: 'Garage als Lager', kurz: 'Garage', icon: 'garage', nutzen: 'Abschließbar und ebenerdig, für Reifen, Möbel oder Kisten.', seite: 'vermietenGarage', bild: 'garage' },
   { wert: 'lagerraum', titel: 'Keller und Raum', kurz: 'Keller / Raum', icon: 'keller', nutzen: 'Trockener Raum für Kisten, Möbel oder Reifen.', seite: 'vermietenKeller', bild: 'lager' },
-  { wert: 'halle-scheune', titel: 'Scheune und Hof', kurz: 'Scheune / Hof', icon: 'hof', nutzen: 'Platz für mehrere Autos, Anhänger oder Wohnmobile. Bringt oft den höchsten Ertrag, weil mehrere Plätze möglich sind.', seite: 'vermietenScheune', bild: 'hof' },
 ];

@@ -3,12 +3,10 @@ import Ratgeber from '../../layouts/Ratgeber.astro';
 import { site } from '../../config/site';
 import { link } from '../../config/seiten';
 
-// Größere Städte je Regierungsbezirk. Links öffnen den Suchauftrag mit vorausgefülltem Ort.
+// Orte im Einzugsgebiet. Links öffnen den Suchauftrag mit vorausgefülltem Ort (Ortsseiten folgen mit den SEO-Seiten).
 const bezirke = [
-  { titel: 'Region Stuttgart, Heilbronn und Ostwürttemberg', staedte: ['Stuttgart', 'Böblingen', 'Sindelfingen', 'Esslingen am Neckar', 'Ludwigsburg', 'Waiblingen', 'Göppingen', 'Heilbronn', 'Schwäbisch Hall', 'Schwäbisch Gmünd', 'Aalen', 'Heidenheim an der Brenz'] },
-  { titel: 'Region Karlsruhe, Rhein-Neckar und Nordschwarzwald', staedte: ['Karlsruhe', 'Mannheim', 'Heidelberg', 'Pforzheim', 'Baden-Baden', 'Rastatt', 'Bruchsal', 'Calw', 'Sinsheim', 'Mosbach'] },
-  { titel: 'Region Freiburg, Ortenau und Bodensee West', staedte: ['Freiburg im Breisgau', 'Offenburg', 'Lörrach', 'Emmendingen', 'Konstanz', 'Singen', 'Villingen-Schwenningen', 'Rottweil', 'Tuttlingen', 'Waldshut-Tiengen'] },
-  { titel: 'Region Tübingen, Ulm und Oberschwaben', staedte: ['Tübingen', 'Reutlingen', 'Ulm', 'Ravensburg', 'Friedrichshafen', 'Biberach an der Riß', 'Sigmaringen', 'Balingen', 'Albstadt', 'Ehingen'] },
+  { titel: 'Landkreis Böblingen', staedte: ['Böblingen', 'Sindelfingen', 'Herrenberg', 'Leonberg', 'Holzgerlingen', 'Renningen', 'Weil der Stadt', 'Gärtringen', 'Ehningen', 'Schönaich', 'Weil im Schönbuch', 'Magstadt'] },
+  { titel: 'Stuttgart und Umgebung', staedte: ['Stuttgart', 'Leinfelden-Echterdingen', 'Filderstadt', 'Ostfildern', 'Esslingen am Neckar', 'Ludwigsburg', 'Ditzingen', 'Gerlingen', 'Korntal-Münchingen', 'Waiblingen'] },
 ];
 const such = link('suchauftrag');
 const ortLink = (ort: string) => (such ? `${such}?ort=${encodeURIComponent(ort)}` : null);
@@ -17,19 +15,19 @@ const ortLink = (ort: string) => (such ? `${such}?ort=${encodeURIComponent(ort)}
   seite="regionen"
   eltern={null}
   typ="CollectionPage"
-  titel={`Stellplatz, Garage und Lagerraum in ganz ${site.region}`}
-  beschreibung={`Stellplatz, Garage, Wohnmobil-Winterplatz oder Lagerraum mieten und vermieten in ${site.region}: in Stuttgart, Karlsruhe, Mannheim, Freiburg, Ulm, Heilbronn und auf dem Land.`}
+  titel={`Platz für Wohnmobil, Wohnwagen und Lagergut: Orte im Raum ${site.region}`}
+  beschreibung={`Abstellplatz für Wohnmobil und Wohnwagen oder Lagerraum mieten und vermieten ${site.regionIn}: Böblingen, Sindelfingen, Herrenberg, Leonberg, Stuttgart und Umgebung.`}
   kicker="Regionen"
-  einleitung={`Wir bringen Mieter und Vermieter in ganz ${site.region} zusammen: in Städten wie Stuttgart, Karlsruhe, Freiburg oder Ulm und auf dem Land.`}
+  einleitung={`Wir bringen Mieter und Vermieter ${site.regionIn} zusammen, in der Stadt und im Umland.`}
   verwandt={['mieten', 'vermieten', 'preise']}
 >
-  <Fragment slot="h1">Platz finden in ganz <span class="markiert">{site.region}</span></Fragment>
+  <Fragment slot="h1">Platz finden im Raum <span class="markiert">{site.region}</span></Fragment>
 
   <section class="abschnitt">
     <div class="wrap">
       <div class="kopfzeile">
         <h2>Wo suchen Sie?</h2>
-        <p class="einleitung">Wählen Sie Ihre Stadt, der Ort wird im Suchauftrag schon eingetragen. Ihr Ort ist nicht dabei? Kein Problem, wir suchen überall im Land.</p>
+        <p class="einleitung">Wählen Sie Ihre Stadt, der Ort wird im Suchauftrag schon eingetragen. Ihr Ort ist nicht dabei? Geben Sie ihn im Suchauftrag einfach selbst ein.</p>
       </div>
       {link('regionBoeblingen') && <p class="region-link"><a class="weiter" href={link('regionBoeblingen')}>Alles zum Landkreis Böblingen</a></p>}
       <div class="bezirke">
@@ -49,11 +47,11 @@ const ortLink = (ort: string) => (such ? `${such}?ort=${encodeURIComponent(ort)}
     <div class="wrap inhalt">
       <h2>Stadt oder Land: Was Sie erwarten können</h2>
       <h3>In den Städten</h3>
-      <p>In Stuttgart, Mannheim, Karlsruhe oder Freiburg sind Garagen und Stellplätze knapp und teurer. Für Wohnmobile gibt es in der Stadt selbst kaum Platz, oft findet sich aber etwas in den Orten am Stadtrand.</p>
+      <p>In Stuttgart, Böblingen und Sindelfingen ist Platz knapp und teurer. Für Wohnmobile gibt es in der Stadt selbst kaum Platz, oft findet sich aber etwas in den Orten am Stadtrand.</p>
       <h3>Im Umland und auf dem Land</h3>
-      <p>Scheunen, Hallen und große Höfe gibt es vor allem außerhalb der Städte. Hier finden sich die meisten Winterplätze für Wohnmobil, Wohnwagen und Boot, meist günstiger als in der Stadt.</p>
+      <p>Scheunen, Hallen und große Höfe gibt es vor allem außerhalb der Städte. Hier finden sich die meisten Winterplätze für Wohnmobil und Wohnwagen, meist günstiger als in der Stadt.</p>
       <p>Wie schnell wir einen Platz finden, hängt davon ab, wie viele Angebote es in Ihrer Gegend gibt. Nach Ihrem Suchauftrag sagen wir Ihnen ehrlich, wie die Chancen stehen.</p>
-      <p>Sie haben selbst Platz frei? <a href={link('platzAnbieten')}>Platz anbieten</a>, für Vermieter kostenlos.</p>
+      <p>Sie haben selbst Platz frei? <a href={link('platzAnbieten')}>Platz anbieten</a>, kostenlos.</p>
     </div>
   </section>
 </Ratgeber>

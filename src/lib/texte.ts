@@ -1,6 +1,6 @@
 // Texte, die davon abhängen, ob die Zahlung über Stripe schon läuft (site.zahlungLive).
 import { site } from '../config/site';
-import { zahlung } from '../config/zahlung';
+import { zahlung, gesamtpreis } from '../config/zahlung';
 
 const live = site.zahlungLive;
 // Servicegebühr wird erhoben: über Stripe (live) oder im Übergang manuell. live hat Vorrang.
@@ -20,10 +20,10 @@ export const texte = {
     : 'Bei Problemen mit der Zahlung helfen wir persönlich weiter, stellen Vorlagen für die Kündigung bereit und suchen kostenlos einen neuen Mieter.',
   zahlungKurz: live ? 'Automatische Zahlung' : 'Klare Zahlungsregeln',
   zahlungLang: live
-    ? `Die Miete wird am ${zahlung.abbuchungTag}. des Monats per Lastschrift eingezogen und am ${zahlung.auszahlungTag}. an den Vermieter überwiesen.`
+    ? 'Die Miete wird über unseren Zahlungsdienstleister eingezogen und an den Vermieter ausgezahlt.'
     : 'Höhe, Termin und Weg der Zahlung stehen im Mietvertrag, für beide Seiten nachlesbar.',
   zahlweiseMieter: live
-    ? `Sie zahlen bequem per SEPA-Lastschrift, eingezogen am ${zahlung.abbuchungTag}. des Monats.`
+    ? 'Sie zahlen bequem über unseren Zahlungsdienstleister.'
     : 'Wie und wann Sie zahlen, steht in Ihrem Mietvertrag.',
   mieterSchritt4: live ? 'Vertrag und Lastschrift' : 'Vertrag unterschreiben',
   mieterSchritt4Text: live
@@ -36,23 +36,20 @@ export const texte = {
   zahlungPuenktlich: live
     ? 'Die Miete wird jeden Monat automatisch per Lastschrift eingezogen und an Sie ausgezahlt.'
     : 'Höhe, Termin und Weg der Zahlung stehen im Mietvertrag, für beide Seiten nachlesbar.',
-  steuer: live
-    ? 'Sie erhalten jedes Jahr eine Übersicht Ihrer Einnahmen. Als Plattform, über die die Miete läuft, sind wir gesetzlich verpflichtet, Vermieter und Einnahmen jährlich an das Bundeszentralamt für Steuern zu melden. Eine Steuerberatung bieten wir nicht an.'
-    : 'Einnahmen aus der Vermietung sind grundsätzlich steuerpflichtig. Eine Steuerberatung bieten wir nicht an.',
   servicegebuehr,
   // Hinweis zur Umsatzsteuer für Preisangaben und Rechnungen
   ustHinweis: site.kleinunternehmer
     ? 'Gemäß § 19 UStG wird keine Umsatzsteuer berechnet.'
     : 'Alle Gebühren inklusive 19 % Umsatzsteuer.',
   vermieterKosten: servicegebuehr
-    ? `Nichts. ${site.name} ist für Vermieter immer kostenlos, Sie erhalten die volle vereinbarte Miete. Die Servicegebühr zahlt der Mieter mit seinem Monatspreis.`
-    : `Nichts. ${site.name} ist für Vermieter immer kostenlos, Sie erhalten die volle vereinbarte Miete.`,
+    ? `Anbieten und Anfragen erhalten kostet Sie nichts. Sie legen fest, welchen Betrag Sie bekommen möchten. Die Servicegebühr zahlt der Mieter mit seinem Gesamtpreis.`
+    : `Anbieten und Anfragen erhalten kostet Sie nichts. Sie legen fest, welchen Betrag Sie bekommen möchten.`,
   // Vollständige Erklärung nur hier (FAQ „Was kostet die Miete?“, Preise-Seite). Sonst nur den Gesamtpreis nennen.
   mieterKosten: servicegebuehr
-    ? `Sie sehen bei jedem Vorschlag einen festen Monatspreis. Darin ist unsere Servicegebühr von ${prozent} enthalten. Vor dem Abschluss zeigen wir Ihnen genau, wie sich der Preis zusammensetzt.`
-    : 'Sie sehen bei jedem Vorschlag einen festen Monatspreis. Er steht im Mietvertrag, den Sie mit dem Vermieter schließen.',
+    ? `Bei jedem Inserat sehen Sie einen festen Gesamtpreis pro Monat oder pro Saison. Darin ist unsere Servicegebühr von ${prozent} enthalten. Direkt vor der Zahlung zeigen wir Ihnen genau, wie sich der Preis zusammensetzt.`
+    : 'Bei jedem Inserat sehen Sie einen festen Gesamtpreis pro Monat oder pro Saison.',
   // Kurzform ohne Gebührendetails, z. B. für /mieten/ und /so-funktionierts/
-  mieterPreisKurz: 'Bei jedem Vorschlag sehen Sie einen festen Monatspreis. Vor dem Abschluss zeigen wir Ihnen, wie er sich zusammensetzt.',
+  mieterPreisKurz: 'Bei jedem Inserat sehen Sie einen festen Gesamtpreis. Direkt vor der Zahlung zeigen wir Ihnen, wie er sich zusammensetzt.',
   servicegebuehrZweck: 'für Vertragsvorlage, Abwicklung und Betreuung',
   // Hinweis unter der Aufschlüsselung: wohin welches Geld geht
   zahlungsweg: live
@@ -61,33 +58,6 @@ export const texte = {
 };
 
 const html = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
-
-// ---- Abschlussgebühr und Startaktion (abhängig vom Datum). Schalter in site.ts heißt intern vermittlungsgebuehr. ----
-const v = site.vermittlungsgebuehr;
-/** Letzter Moment der Startaktion (Ende des Tages, deutsche Zeit). */
-export const aktionsEnde = new Date(`${site.startaktion.ende}T23:59:59+01:00`);
-export const startaktionLaeuft = (jetzt = new Date()) => site.startaktion.aktiv && jetzt <= aktionsEnde;
-const tagMonat = aktionsEnde.toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', timeZone: 'Europe/Berlin' });
-const beide = `${v.garageAutoLager} € (Garage, Auto, Lager) bzw. ${v.wohnmobilAnhaengerBoot} € (Wohnmobil, Wohnwagen, Anhänger, Boot)`;
-/** Betrag für eine Mieter-Art (mieter_art aus optionen.json). */
-export const abschlussBetrag = (art?: string) => (art === 'wohnmobil-wohnwagen' || art === 'anhaenger-boot' ? v.wohnmobilAnhaengerBoot : v.garageAutoLager);
-
-/** Satz zur Abschlussgebühr zum Zeitpunkt „jetzt“. Leer, wenn sie nicht erwähnt werden soll. Mit art nur der passende Betrag. */
-export function abschlussText(jetzt = new Date(), art?: string): string {
-  const betrag = art ? `${abschlussBetrag(art)} €` : beide;
-  if (startaktionLaeuft(jetzt)) return `Einmalige Abschlussgebühr: ${betrag}, fällig erst bei Vertragsabschluss. Bis ${tagMonat} entfällt sie.`;
-  if (v.aktiv) return `Einmalige Abschlussgebühr: ${betrag}, nur fällig, wenn Sie einen Mietvertrag abschließen.`;
-  return '';
-}
-
-/** Für statische Seiten: beide Fassungen ausgeben, ein Skript im Layout schaltet am Enddatum um (ohne neuen Build). */
-export function abschlussHtml(art?: string): string {
-  const jetzt = abschlussText(new Date(), art);
-  if (!startaktionLaeuft()) return jetzt ? html(jetzt) : '';
-  const danach = abschlussText(new Date(aktionsEnde.getTime() + 1000), art);
-  const bis = aktionsEnde.toISOString();
-  return `<span data-aktion-bis="${bis}">${html(jetzt)}</span>` + (danach ? `<span data-aktion-ab="${bis}" hidden>${html(danach)}</span>` : '');
-}
 
 /** Ersetzt Platzhalter in Markdown-Texten (z. B. FAQ) durch aktuelle Werte. */
 export function ersetze(text: string): string {
@@ -104,7 +74,6 @@ export function ersetze(text: string): string {
     .replaceAll('{KAUTION_MIN}', String(zahlung.kautionMinEuro))
     .replaceAll('{RUECKZAHLUNG_WOCHEN}', String(zahlung.kautionRueckzahlungWochen))
     .replaceAll('{SERVICEGARANTIE}', texte.serviceGarantie)
-    .replaceAll('{STEUER}', texte.steuer)
     .replaceAll('{VERMIETER_KOSTEN}', texte.vermieterKosten)
     .replaceAll('{MIETER_KOSTEN}', texte.mieterKosten)
     .replaceAll('{ZAHLWEISE_MIETER}', texte.zahlweiseMieter);
@@ -116,39 +85,35 @@ export function absaetze(text: string): string {
   return ersetze(text)
     .trim()
     .split(/\n\s*\n/)
-    .map((p) => `<p>${html(p.trim()).replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, '<a href="$2">$1</a>').replace('{ABSCHLUSS}', abschlussHtml())}</p>`)
+    .map((p) => `<p>${html(p.trim()).replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, '<a href="$2">$1</a>')}</p>`)
     .filter((p) => p !== '<p></p>')
     .join('');
 }
 
 /** Klartext ohne Link-Syntax, z. B. für das FAQPage-Schema. */
 export const klartext = (text: string) =>
-  ersetze(text).replace('{ABSCHLUSS}', abschlussText()).trim().replace(/\[([^\]]+)\]\([^)]+\)/g, '$1').replace(/\s*\n\s*/g, ' ');
+  ersetze(text).trim().replace(/\[([^\]]+)\]\([^)]+\)/g, '$1').replace(/\s*\n\s*/g, ' ');
 
 /** JSON-LD sicher in <script> einbetten. */
 // ---- Preisaufschlüsselung vor dem Abschluss (Vorschlag, Vertragsbestätigung, später Checkout) ----
 export type PreisZeile = { titel: string; betrag: string; summe?: boolean; nebenbei?: boolean };
 const euro = (n: number) => `${n.toLocaleString('de-DE')} €`;
 
-/** Zeilen der Aufschlüsselung. Gesamtpreis = Miete + Servicegebühr. Die Abschlussgebühr hängt vom Datum ab (Startaktion). */
-export function aufschluesselung(miete: number, art?: string, jetzt = new Date()): PreisZeile[] {
-  const gebuehr = servicegebuehr ? Math.round(miete * zahlung.servicegebuehr) : 0;
+/** Zeilen der Aufschlüsselung (nur direkt vor der Zahlung zeigen). Gesamtpreis = Miete + Servicegebühr, aufgerundet. */
+export function aufschluesselung(miete: number, zeitraum = 'Monat'): PreisZeile[] {
+  const gesamt = servicegebuehr ? gesamtpreis(miete) : miete;
   const zeilen: PreisZeile[] = [{ titel: 'Miete', betrag: euro(miete) }];
-  if (gebuehr) zeilen.push({ titel: `Servicegebühr (${prozent})`, betrag: euro(gebuehr) });
-  zeilen.push({ titel: 'Gesamt pro Monat', betrag: euro(miete + gebuehr), summe: true });
-  if (v.aktiv) {
-    const b = abschlussBetrag(art);
-    zeilen.push({ titel: 'Einmalige Abschlussgebühr', betrag: startaktionLaeuft(jetzt) ? `entfällt bis ${tagMonat} (sonst ${euro(b)})` : euro(b) });
-  }
+  if (gesamt > miete) zeilen.push({ titel: `Servicegebühr (${prozent}, aufgerundet)`, betrag: euro(Math.round((gesamt - miete) * 100) / 100) });
+  zeilen.push({ titel: `Gesamt pro ${zeitraum}`, betrag: euro(gesamt), summe: true });
   zeilen.push({ titel: 'Kaution an den Vermieter', betrag: `${euro(Math.max(miete, zahlung.kautionMinEuro))} (separat, direkt an den Vermieter)`, nebenbei: true });
   return zeilen;
 }
 
 /** Gesamtpreis pro Monat als Text, z. B. „77 € im Monat“. So erscheint jeder Preis für Mieter. */
-export const gesamtpreisText = (miete: number) => `${euro(miete + (servicegebuehr ? Math.round(miete * zahlung.servicegebuehr) : 0))} im Monat`;
+export const gesamtpreisText = (miete: number) => `${euro(servicegebuehr ? gesamtpreis(miete) : miete)} im Monat`;
 
 /** Aufschlüsselung als Klartext für E-Mail und WhatsApp. */
-export const aufschluesselungText = (miete: number, art?: string, jetzt = new Date()) =>
-  aufschluesselung(miete, art, jetzt).map((z) => `${z.titel}: ${z.betrag}`).join('\n') + `\n\n${texte.zahlungsweg}`;
+export const aufschluesselungText = (miete: number, zeitraum = 'Monat') =>
+  aufschluesselung(miete, zeitraum).map((z) => `${z.titel}: ${z.betrag}`).join('\n') + `\n\n${texte.zahlungsweg}`;
 
 export const jsonLd = (obj: unknown) => JSON.stringify(obj).replace(/</g, '\\u003c');

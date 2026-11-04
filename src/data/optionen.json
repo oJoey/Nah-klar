@@ -2,28 +2,8 @@
   "_hinweis": "Werte für Formulare, Suchmaske, Rechner und Bestätigungsmail. Die Schlüssel (wert) sind später die Werte in der Datenbank. Bitte nicht umbenennen, nur Titel ändern. mieter_art: flaechen_art und geeignet_fuer zeigen, welche angebotenen Plätze zu einem Suchauftrag passen.",
   "mieter_art": [
     {
-      "wert": "auto-motorrad",
-      "titel": "Stellplatz für Auto oder Motorrad",
-      "groesse": "fahrzeug",
-      "flaechen_art": [
-        "stellplatz-frei",
-        "stellplatz-ueberdacht"
-      ],
-      "geeignet_fuer": "auto-motorrad"
-    },
-    {
-      "wert": "garage",
-      "titel": "Garage",
-      "groesse": "fahrzeug",
-      "hoehe": true,
-      "flaechen_art": [
-        "garage"
-      ],
-      "geeignet_fuer": "auto-motorrad"
-    },
-    {
       "wert": "wohnmobil-wohnwagen",
-      "titel": "Stellplatz für Wohnmobil oder Wohnwagen",
+      "titel": "Abstellplatz für Wohnmobil oder Wohnwagen",
       "groesse": "fahrzeug",
       "hoehe": true,
       "strom": true,
@@ -33,18 +13,6 @@
         "halle-scheune"
       ],
       "geeignet_fuer": "wohnmobil-wohnwagen"
-    },
-    {
-      "wert": "anhaenger-boot",
-      "titel": "Stellplatz für Anhänger oder Boot",
-      "groesse": "fahrzeug",
-      "flaechen_art": [
-        "stellplatz-frei",
-        "stellplatz-ueberdacht",
-        "garage",
-        "halle-scheune"
-      ],
-      "geeignet_fuer": "anhaenger-boot"
     },
     {
       "wert": "lagerraum",
@@ -187,7 +155,7 @@
   "flaechen_art": [
     {
       "wert": "stellplatz-frei",
-      "titel": "Stellplatz im Freien",
+      "titel": "Hof- oder Freifläche",
       "kurz": "Im Freien"
     },
     {
@@ -197,7 +165,7 @@
     },
     {
       "wert": "garage",
-      "titel": "Garage",
+      "titel": "Garage (als Lager)",
       "kurz": "Garage"
     },
     {
@@ -215,14 +183,6 @@
     {
       "wert": "wohnmobil-wohnwagen",
       "titel": "Wohnmobil / Wohnwagen"
-    },
-    {
-      "wert": "auto-motorrad",
-      "titel": "Auto / Motorrad"
-    },
-    {
-      "wert": "anhaenger-boot",
-      "titel": "Anhänger / Boot"
     },
     {
       "wert": "lagergut",

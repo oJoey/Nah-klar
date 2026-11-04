@@ -53,7 +53,7 @@ const artikel = typ === 'Article'
     ...(typ === 'AboutPage' || typ === 'ContactPage' ? { mainEntity: { '@id': `${site.url}/#organisation` } } : {}),
   };
 const cta = fuer === 'vermieter'
-  ? { titel: 'Sie haben Platz frei?', text: 'Bieten Sie ihn in zwei Minuten an. Für Vermieter immer kostenlos.', knopf: 'Platz anbieten', href: link('platzAnbieten') }
+  ? { titel: 'Sie haben Platz frei?', text: 'Bieten Sie ihn in zwei Minuten an. Anbieten kostenlos.', knopf: 'Platz anbieten', href: link('platzAnbieten') }
   : { titel: 'Sie suchen einen Platz?', text: 'Legen Sie einen Suchauftrag an. Wir melden uns mit passenden Plätzen in Ihrer Nähe.', knopf: 'Platz finden', href: link('suchauftrag') };
 ---
 <Basis titel={titel} beschreibung={beschreibung} brotkruemel={kruemel}>
