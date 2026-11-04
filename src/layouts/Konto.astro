@@ -1,0 +1,39 @@
+---
+// Rahmen für alle Seiten im Konto- und Admin-Bereich (nicht indexiert).
+import Basis from './Basis.astro';
+interface Props { titel: string; breit?: boolean }
+const { titel, breit = false } = Astro.props;
+const nutzer = Astro.locals.nutzer;
+const pfad = Astro.url.pathname;
+const punkte = [
+  { pfad: '/konto/', titel: 'Meine Inserate' },
+  ...(nutzer?.istAdmin ? [{ pfad: '/admin/inserate/', titel: 'Admin: Inserate prüfen' }] : []),
+];
+---
+<Basis titel={titel} beschreibung={titel} noindex>
+  <section class="abschnitt konto">
+    <div class:list={['wrap', { schmal: !breit }]}>
+      {nutzer && (
+        <nav class="konto-nav" aria-label="Konto">
+          <ul>
+            {punkte.map((p) => <li><a href={p.pfad} aria-current={pfad === p.pfad ? 'page' : undefined}>{p.titel}</a></li>)}
+          </ul>
+          <form method="post" action="/konto/abmelden/">
+            <span class="konto-email">{nutzer.email}</span>
+            <button class="btn btn-rahmen" type="submit">Abmelden</button>
+          </form>
+        </nav>
+      )}
+      <slot />
+    </div>
+  </section>
+</Basis>
+<style>
+  .konto { padding-top: clamp(1.5rem, 4vw, 2.5rem); }
+  .konto-nav { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 0.75rem; margin-bottom: 2rem; padding-bottom: 1rem; border-bottom: 1px solid var(--linie); }
+  .konto-nav ul { display: flex; flex-wrap: wrap; gap: 0.25rem 1.25rem; list-style: none; margin: 0; padding: 0; }
+  .konto-nav a { font-weight: 600; }
+  .konto-nav a[aria-current='page'] { text-decoration-thickness: 3px; }
+  .konto-nav form { display: flex; align-items: center; gap: 0.75rem; margin: 0; }
+  .konto-email { font-size: 0.95rem; color: var(--text); overflow-wrap: anywhere; }
+</style>

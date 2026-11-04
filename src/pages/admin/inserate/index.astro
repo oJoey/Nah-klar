@@ -1,0 +1,81 @@
+---
+// Admin: Inserate prüfen, freigeben, sperren (mit Begründung an den Vermieter, Art. 17 DSA).
+export const prerender = false;
+import Konto from '../../../layouts/Konto.astro';
+import { statusTitel, typTitel } from '../../../lib/inserat';
+
+const { supabase } = Astro.locals;
+const filter = ['pruefung', 'aktiv', 'gesperrt', 'alle'].includes(Astro.url.searchParams.get('status') ?? '') ? Astro.url.searchParams.get('status')! : 'pruefung';
+let meldung = '';
+let fehler = '';
+
+if (Astro.request.method === 'POST') {
+  const form = await Astro.request.formData();
+  const id = String(form.get('id') ?? '');
+  const aktion = String(form.get('aktion') ?? '');
+  const grund = String(form.get('sperrgrund') ?? '').trim().slice(0, 1000);
+  if (aktion === 'freigeben') {
+    const { error } = await supabase.from('inserate').update({ status: 'aktiv', sperrgrund: null }).eq('id', id);
+    if (error) fehler = error.message; else meldung = 'Freigegeben.';
+  } else if (aktion === 'zurueck') {
+    const { error } = await supabase.from('inserate').update({ status: 'entwurf', sperrgrund: grund || null }).eq('id', id);
+    if (error) fehler = error.message; else meldung = 'An den Vermieter zurückgegeben.';
+  } else if (aktion === 'sperren') {
+    if (!grund) fehler = 'Bitte eine Begründung angeben. Sie wird dem Vermieter angezeigt.';
+    else {
+      const { error } = await supabase.from('inserate').update({ status: 'gesperrt', sperrgrund: grund }).eq('id', id);
+      if (error) fehler = error.message; else meldung = 'Gesperrt.';
+    }
+  }
+}
+
+let abfrage = supabase
+  .from('inserate')
+  .select('id, typ, titel, status, eingereicht_am, aktualisiert_am, sperrgrund, orte(name), profile(email)')
+  .order('eingereicht_am', { ascending: true, nullsFirst: false })
+  .limit(200);
+if (filter !== 'alle') abfrage = abfrage.eq('status', filter);
+const { data: inserate } = await abfrage;
+---
+<Konto titel="Admin: Inserate" breit>
+  <h1>Inserate prüfen</h1>
+  <nav class="filter" aria-label="Status">
+    {['pruefung', 'aktiv', 'gesperrt', 'alle'].map((s) => <a href={`?status=${s}`} aria-current={s === filter ? 'page' : undefined}>{s === 'alle' ? 'Alle' : statusTitel[s]}</a>)}
+  </nav>
+  {meldung && <p class="erfolgbox" role="status">{meldung}</p>}
+  {fehler && <div class="fehlerbox" role="alert"><p>{fehler}</p></div>}
+  <p>Prüfen: Fotos ohne Personen und Kennzeichen, keine Kontaktdaten im Text, Art passt (nur Wohnmobil/Wohnwagen und Lager, keine Pkw-Stellplätze), Preis plausibel.</p>
+
+  {!inserate?.length ? <p>Keine Inserate in dieser Liste.</p> : (
+    <ul class="liste">
+      {inserate.map((i: any) => (
+        <li class="karte">
+          <span class="marke-status" data-status={i.status}>{statusTitel[i.status]}</span>
+          <h2><a href={`/inserat/${i.id}/`} target="_blank">{i.titel ?? 'Ohne Titel'}</a></h2>
+          <p>{typTitel[i.typ as 'womo' | 'lager']} · {i.orte?.name ?? 'ohne Ort'} · {i.profile?.email}{i.eingereicht_am ? ` · eingereicht ${new Date(i.eingereicht_am).toLocaleString('de-DE')}` : ''}</p>
+          {i.sperrgrund && <p><strong>Begründung:</strong> {i.sperrgrund}</p>}
+          <form method="post" class="aktionen">
+            <input type="hidden" name="id" value={i.id} />
+            <div class="feld">
+              <label for={`grund-${i.id}`}>Begründung an den Vermieter <span class="optional">(Pflicht beim Sperren)</span></label>
+              <textarea id={`grund-${i.id}`} name="sperrgrund" rows="2" maxlength="1000"></textarea>
+            </div>
+            <div class="knopfzeile">
+              {i.status !== 'aktiv' && <button class="btn btn-primaer" name="aktion" value="freigeben">Freigeben</button>}
+              {i.status === 'pruefung' && <button class="btn btn-rahmen" name="aktion" value="zurueck">Zurück an Vermieter</button>}
+              {i.status !== 'gesperrt' && <button class="btn btn-rahmen" name="aktion" value="sperren">Sperren</button>}
+            </div>
+          </form>
+        </li>
+      ))}
+    </ul>
+  )}
+</Konto>
+<style>
+  .filter { display: flex; flex-wrap: wrap; gap: 0.5rem 1.25rem; margin-bottom: 1.25rem; font-weight: 600; }
+  .filter a[aria-current='page'] { text-decoration-thickness: 3px; }
+  .liste { list-style: none; padding: 0; display: grid; gap: 1rem; }
+  .liste h2 { font-size: 1.25rem; margin: 0.5rem 0 0.25rem; }
+  .aktionen { margin-top: 1rem; }
+  .aktionen .knopfzeile { margin-top: 0.5rem; }
+</style>

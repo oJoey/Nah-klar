@@ -9,6 +9,10 @@ export const seiten = {
   vermieten: { pfad: '/vermieten/', live: true, titel: 'Vermieten' },
   suchauftrag: { pfad: '/suchauftrag/', live: true, titel: 'Suchauftrag' },
   platzAnbieten: { pfad: '/platz-anbieten/', live: true, titel: 'Platz anbieten' },
+  // Marktplatz (serverseitig erzeugt). anfrage wird in Etappe b gebaut, bis dahin live: false.
+  suche: { pfad: '/suche/', live: true, titel: 'Plätze finden' },
+  anfrage: { pfad: '/konto/anfragen/neu/', live: false, titel: 'Besichtigung anfragen' },
+  konto: { pfad: '/konto/', live: true, titel: 'Mein Konto' },
   impressum: { pfad: '/impressum/', live: true, titel: 'Impressum' },
   datenschutz: { pfad: '/datenschutz/', live: true, titel: 'Datenschutz' },
 

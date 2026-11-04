@@ -165,7 +165,7 @@ details.klapp > .klapp-inhalt p:last-child { margin-bottom: 0; }
 .feld > label, fieldset > legend { display: block; font-weight: 600; margin-bottom: 0.4rem; }
 .feld-hilfe { display: block; font-size: 1rem; color: var(--text); margin-top: 0.35rem; }
 .pflicht { color: var(--text); font-weight: 400; font-size: 1rem; }
-input[type='text'], input[type='email'], input[type='tel'], input[type='number'], select, textarea {
+input[type='text'], input[type='email'], input[type='tel'], input[type='number'], input[type='date'], select, textarea {
   width: 100%; min-height: 3.25rem; padding: 0.65rem 0.95rem;
   font: inherit; font-size: 1.125rem; color: var(--text);
   background: var(--hintergrund); border: 1px solid var(--ueberschrift); border-radius: var(--r-klein);
@@ -257,3 +257,17 @@ fieldset > legend { font-size: 1.05rem; margin-bottom: 0.6rem; }
 .rechtstext .stand { margin-top: 3rem; font-size: 0.95rem; color: var(--text); }
 .rechtstext .inhaltsverzeichnis { columns: 2 16rem; padding-left: 1.25rem; }
 .rechtstext [id] { scroll-margin-top: 5rem; }
+
+/* Konto, Assistent, Suche */
+.fehlerbox { background: #fde8e8; border: 1.5px solid #9b1c1c; color: #5f1212; border-radius: var(--r); padding: 1rem 1.25rem; margin-bottom: 1.25rem; }
+.fehlerbox p:last-child, .fehlerbox ul:last-child { margin-bottom: 0; }
+.erfolgbox { background: var(--tertiaer); border-radius: var(--r); padding: 1rem 1.25rem; margin-bottom: 1.25rem; }
+.feld-fehler { display: block; color: #9b1c1c; font-weight: 600; font-size: 1rem; margin-top: 0.35rem; }
+.feld-paar { display: grid; gap: 0 1rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr)); }
+.schmal { max-width: 40rem; }
+.knopfzeile { display: flex; flex-wrap: wrap; gap: 0.75rem; align-items: center; margin-top: 1.5rem; }
+.marke-status { display: inline-block; font-size: 0.9rem; font-weight: 700; padding: 0.15rem 0.6rem; border-radius: 999px; background: var(--sekundaer); color: var(--ueberschrift); }
+.marke-status[data-status='aktiv'] { background: var(--tertiaer); }
+.marke-status[data-status='gesperrt'] { background: #fde8e8; color: #5f1212; }
+.preis-gross { font-size: 1.6rem; font-weight: 800; color: var(--ueberschrift); letter-spacing: -0.02em; }
+.preis-zusatz { font-size: 1rem; font-weight: 500; color: var(--text); }

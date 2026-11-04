@@ -1,0 +1,29 @@
+---
+// Platzhalter mit Knopf „Karte laden“. Erst nach dem Klick wird die Karte geladen (Datenschutz).
+// Das eigentliche Laden übernimmt das Skript der jeweiligen Seite (Ereignis „karte-laden“ am Element).
+import { karte } from '../config/karte';
+interface Props { id: string; hoehe?: string; text?: string }
+const { id, hoehe = '24rem', text = 'Karte laden' } = Astro.props;
+const verfuegbar = Boolean(import.meta.env.PUBLIC_KARTE_KEY);
+---
+{verfuegbar && (
+  <div class="karte-rahmen" id={id} style={`--hoehe:${hoehe}`} data-karte>
+    <div class="karte-platzhalter">
+      <button type="button" class="btn btn-rahmen" data-karte-knopf>{text}</button>
+      <p>{karte.hinweis} Mehr in der <a href="/datenschutz/#karte">Datenschutzerklärung</a>.</p>
+    </div>
+  </div>
+)}
+<script>
+  document.querySelectorAll<HTMLElement>('[data-karte]').forEach((rahmen) => {
+    rahmen.querySelector('[data-karte-knopf]')?.addEventListener('click', () => {
+      rahmen.querySelector('.karte-platzhalter')?.remove();
+      rahmen.dispatchEvent(new CustomEvent('karte-laden'));
+    });
+  });
+</script>
+<style>
+  .karte-rahmen { position: relative; height: var(--hoehe); border: 1px solid var(--ueberschrift); border-radius: var(--r); overflow: hidden; background: var(--sekundaer); z-index: 0; }
+  .karte-platzhalter { position: absolute; inset: 0; display: grid; place-content: center; justify-items: center; gap: 0.75rem; padding: 1rem; text-align: center; }
+  .karte-platzhalter p { max-width: 28rem; font-size: 0.95rem; margin: 0; }
+</style>

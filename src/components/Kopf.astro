@@ -17,6 +17,7 @@ const aktiv = (k: SeitenSchluessel) => (k === 'start' ? aktuell === '/' : aktuel
       </ul>
     </nav>
     <div class="kopf-cta">
+      <a class="konto-link" href="/konto/">Mein Konto</a>
       <a class="btn btn-primaer" href={link('platzAnbieten')}>Platz anbieten</a>
     </div>
     <details class="nav-klein">
@@ -29,13 +30,15 @@ const aktiv = (k: SeitenSchluessel) => (k === 'start' ? aktuell === '/' : aktuel
             <a class="btn btn-primaer btn-gross btn-voll" href={link('platzAnbieten')}>Platz anbieten</a>
           </li>
           {sichtbar.map((k) => <li><a class="nav-link" href={seiten[k].pfad} aria-current={aktiv(k) ? 'page' : undefined}>{navTitel(k)}</a></li>)}
-          <li><a class="nav-link" href={link('suchauftrag')}>Platz finden</a></li>
+          <li><a class="nav-link" href={link('suche') ?? link('suchauftrag')}>Platz finden</a></li>
+          <li><a class="nav-link" href="/konto/">Mein Konto</a></li>
         </ul>
       </nav>
     </details>
   </div>
 </header>
 <style>
+  .konto-link { font-weight: 600; margin-right: 1rem; white-space: nowrap; }
   /* Deckende Leiste ohne backdrop-filter: der Weichzeichner wurde bei jedem Scroll-Frame neu berechnet und hat geruckelt */
   .kopf {
     position: sticky; top: 0; z-index: 20;

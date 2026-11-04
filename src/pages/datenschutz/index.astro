@@ -1,5 +1,6 @@
 ---
 import Basis from '../../layouts/Basis.astro';
+import { karte } from '../../config/karte';
 import { site, betreiber, betreiberAnschrift, emailHref } from '../../config/site';
 // ENTWURF zur anwaltlichen Prüfung. Offene Punkte: docs/rechtstexte-pruefung.md, Dienste: docs/datenschutz-dienste.md
 // Abschnitte zu Umami, Resend und Stripe erscheinen nur, wenn der jeweilige Schalter in site.ts an ist.
@@ -13,7 +14,7 @@ const stand = 'November 2026';
   <section class="abschnitt">
     <div class="wrap rechtstext">
       <h1>Datenschutzerklärung</h1>
-      <p class="einleitung">Kurz gesagt: Wir nutzen Ihre Angaben nur, um Mieter und Vermieter zusammenzubringen. Keine Werbung, kein Newsletter, keine Cookies{umami ? ', Besucherstatistik ohne Cookies' : ''}.</p>
+      <p class="einleitung">Kurz gesagt: Wir nutzen Ihre Angaben nur, um Mieter und Vermieter zusammenzubringen. Keine Werbung, kein Newsletter, Cookies nur für die Anmeldung{umami ? ', Besucherstatistik ohne Cookies' : ''}.</p>
 
       <ol class="inhaltsverzeichnis">
         <li><a href="#verantwortlich">Verantwortlicher</a></li>
@@ -24,8 +25,10 @@ const stand = 'November 2026';
         {resend && <li><a href="#mails">Bestätigungsmails</a></li>}
         {umami && <li><a href="#statistik">Besucherstatistik</a></li>}
         {stripe && <li><a href="#zahlung">Zahlungsabwicklung und Steuermeldung</a></li>}
-        <li><a href="#browser">Speicherung im Browser</a></li>
-        <li><a href="#extern">Keine externen Inhalte</a></li>
+        <li><a href="#konto">Konto, Inserate und Fotos</a></li>
+        <li><a href="#browser">Cookies und Speicherung im Browser</a></li>
+        <li><a href="#karte">Karte</a></li>
+        <li><a href="#extern">Externe Inhalte</a></li>
         <li><a href="#dauer">Speicherdauer</a></li>
         <li><a href="#rechte">Ihre Rechte</a></li>
       </ol>
@@ -89,16 +92,25 @@ const stand = 'November 2026';
         </>
       )}
 
-      <h2 id="browser">Speicherung im Browser</h2>
-      <p>Wir setzen keine Cookies. Zwei Funktionen speichern Daten nur in Ihrem Browser, sie werden nicht an uns übertragen:</p>
+      {/* PLATZHALTER: Abschnitte „Konto“, „Cookies“ und „Karte“ vor dem Livegang anwaltlich prüfen lassen
+          (Supabase: Auftragsverarbeitung abschließen, Region Frankfurt; Kartenanbieter siehe src/config/karte.ts). */}
+      <h2 id="konto">Konto, Inserate und Fotos</h2>
+      <p class="hinweis">[PLATZHALTER, wird vor dem Start ergänzt und geprüft] Für Konto, Anmeldung per E-Mail-Code, Inserate und Fotos nutzen wir Supabase (Datenspeicherung in Frankfurt am Main). Gespeichert werden Ihre E-Mail-Adresse, die Angaben im Inserat, die Adresse der Fläche (nicht öffentlich) und hochgeladene Fotos. Beim Hochladen entfernen wir Standortdaten aus den Fotos.</p>
+
+      <h2 id="browser">Cookies und Speicherung im Browser</h2>
+      <p class="hinweis">[PLATZHALTER, wird vor dem Start geprüft] Wenn Sie sich anmelden, speichern wir ein Cookie mit Ihrer Anmeldung. Es ist für die Funktion „Konto“ unbedingt erforderlich und wird beim Abmelden gelöscht. Werbe- oder Statistik-Cookies setzen wir nicht.</p>
+      <p>Zwei weitere Funktionen speichern Daten nur in Ihrem Browser, sie werden nicht an uns übertragen:</p>
       <ul>
         <li><strong>Herkunft:</strong> Enthält die Adresse, über die Sie kommen, einen Kampagnen- oder Flyer-Hinweis, merkt sich der Browser diesen bis zum Schließen des Tabs (Session Storage), damit er beim Absenden eines Formulars mitgeschickt werden kann.</li>
         <li><strong>Checkliste:</strong> Auf der Einwinterungs-Checkliste speichert der Browser, welche Punkte Sie abgehakt haben (Local Storage), bis Sie die Liste zurücksetzen oder die Browserdaten löschen.</li>
       </ul>
       <p>Die Speicherung der Checkliste ist für die von Ihnen gewünschte Funktion unbedingt erforderlich (§ 25 Abs. 2 Nr. 2 TDDDG).</p>
 
-      <h2 id="extern">Keine externen Inhalte</h2>
-      <p>Schriften, Bilder und Karten liegen auf unserem eigenen Server. Beim Aufruf der Website werden keine Inhalte von Google, sozialen Netzwerken oder anderen Drittanbietern geladen{umami ? ', mit Ausnahme des Statistik-Skripts von Umami' : ''}.</p>
+      <h2 id="karte">Karte</h2>
+      <p class="hinweis">[PLATZHALTER, wird vor dem Start ergänzt und geprüft] Karten laden wir erst, wenn Sie auf „Karte laden“ klicken. Dann ruft Ihr Browser Kartenbilder beim Kartenanbieter {karte.name} ab und überträgt dabei Ihre IP-Adresse. Ohne Klick findet keine Übertragung statt.</p>
+
+      <h2 id="extern">Externe Inhalte</h2>
+      <p>Schriften und Bilder liegen auf unserem eigenen Server. Beim Aufruf der Website werden keine Inhalte von Google, sozialen Netzwerken oder anderen Drittanbietern geladen{umami ? ', mit Ausnahme des Statistik-Skripts von Umami' : ''}. Fotos in Inseraten laden wir von unserem Speicher bei Supabase. Kartenbilder werden nur nach Ihrem Klick geladen (siehe Abschnitt Karte).</p>
 
       <h2 id="dauer">Speicherdauer</h2>
       <ul>

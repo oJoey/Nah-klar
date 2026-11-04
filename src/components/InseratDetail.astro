@@ -1,0 +1,104 @@
+---
+// Inhalt der Detailseite (die Seite selbst lädt die Daten und behandelt „nicht gefunden“).
+import Basis from '../layouts/Basis.astro';
+import KarteLaden from './KarteLaden.astro';
+import { fotoUrl } from '../lib/supabase';
+import { preisZeile, eckdaten, typTitel, titelVon, flaechenArten, ausstattungen, datumText, statusTitel } from '../lib/inserat';
+import { link } from '../config/seiten';
+interface Props { i: Record<string, any>; fotos: { pfad: string; breite: number | null; hoehe: number | null }[] }
+const { i, fotos } = Astro.props;
+
+const vorschau = i.status !== 'aktiv';
+const preis = preisZeile(i as any);
+const art = titelVon(flaechenArten[i.typ as 'womo' | 'lager'], i.flaechen_art);
+const merkmale = (i.ausstattung ?? []).map((a: string) => titelVon(ausstattungen, a)).filter(Boolean);
+const anfrage = link('anfrage');
+const zuletzt = i.aktualisiert_am ? new Date(i.aktualisiert_am).toLocaleDateString('de-DE') : '';
+const titel = `${i.titel} in ${i.ort_name}`;
+const beschreibung = `${typTitel[i.typ as 'womo' | 'lager']}: ${art} in ${i.ort_name}${i.ortsteil ? `-${i.ortsteil}` : ''}. ${preis.betrag} ${preis.zusatz}, inklusive Servicegebühr.`;
+---
+<Basis titel={titel} beschreibung={beschreibung} noindex={vorschau} brotkruemel={[{ name: 'Plätze finden', pfad: '/suche/' }, { name: i.titel, pfad: `/inserat/${i.id}/` }]}>
+  <section class="abschnitt detail">
+    <div class="wrap">
+      {vorschau && <p class="hinweis">Vorschau, nicht öffentlich sichtbar. Status: {statusTitel[i.status]}.</p>}
+      <p class="kicker">{typTitel[i.typ as 'womo' | 'lager']} · {art}</p>
+      <h1>{i.titel}</h1>
+      <p class="ort">{i.ort_name}{i.ortsteil ? `, ${i.ortsteil}` : ''}</p>
+
+      <div class="raster">
+        <div>
+          {fotos?.length ? (
+            <div class="galerie" tabindex="0" aria-label="Fotos, seitlich wischen">
+              {fotos.map((f, n) => <img src={fotoUrl(f.pfad)} alt={`Foto ${n + 1} von ${fotos.length}`} width={f.breite ?? 1200} height={f.hoehe ?? 900} loading={n === 0 ? 'eager' : 'lazy'} />)}
+            </div>
+          ) : <div class="ohne-foto">Keine Fotos</div>}
+
+          <h2>Eckdaten</h2>
+          <dl class="daten">
+            <div><dt>Art</dt><dd>{art}</dd></div>
+            {eckdaten(i).map(([t, v]) => <div><dt>{t}</dt><dd>{v}</dd></div>)}
+            <div><dt>Mietart</dt><dd>{i.mietart === 'saisonal' ? `Saisonal, ${datumText(i.saison_von)} bis ${datumText(i.saison_bis)}` : 'Monatlich'}</dd></div>
+            {i.mindestmietdauer_monate && <div><dt>Mindestmietdauer</dt><dd>{i.mindestmietdauer_monate} {i.mindestmietdauer_monate === 1 ? 'Monat' : 'Monate'}</dd></div>}
+            {i.verfuegbar_ab && <div><dt>Verfügbar ab</dt><dd>{datumText(i.verfuegbar_ab)}</dd></div>}
+          </dl>
+          {merkmale.length > 0 && <ul class="merkmale">{merkmale.map((m: string) => <li>{m}</li>)}</ul>}
+
+          {i.beschreibung && (<><h2>Beschreibung</h2><p class="text">{i.beschreibung}</p></>)}
+          {i.zufahrt && (<><h2>Zufahrt</h2><p class="text">{i.zufahrt}</p></>)}
+
+          <h2>Lage</h2>
+          <p>{i.ort_name}{i.ortsteil ? `, ${i.ortsteil}` : ''}. Die genaue Adresse erfahren Sie, sobald ein Besichtigungstermin bestätigt ist. Die Karte zeigt nur die ungefähre Gegend.</p>
+          {i.lat && <KarteLaden id="lage-karte" hoehe="18rem" />}
+          <div id="lage-daten" data-lat={i.lat} data-lng={i.lng} hidden></div>
+        </div>
+
+        <aside class="karte seitenleiste">
+          <p class="preis"><span class="preis-gross">{preis.betrag}</span> <span class="preis-zusatz">{preis.zusatz}</span></p>
+          <p class="klein">Gesamtpreis inklusive Servicegebühr. Vor der Besichtigung zahlen Sie nichts.</p>
+          <ol class="ablauf">
+            <li>Besichtigung anfragen</li>
+            <li>Platz in Ruhe ansehen</li>
+            <li>Erst dann buchen</li>
+          </ol>
+          {anfrage ? (
+            <a class="btn btn-primaer btn-gross btn-voll" href={`${anfrage}?inserat=${i.id}`}>Besichtigung anfragen</a>
+          ) : (
+            <p class="hinweis klein">Anfragen ist in Kürze direkt hier möglich. {link('suchauftrag') && <a href={link('suchauftrag')!}>Suchauftrag anlegen</a>}</p>
+          )}
+          {zuletzt && <p class="klein stand">Zuletzt aktualisiert: {zuletzt}</p>}
+        </aside>
+      </div>
+    </div>
+  </section>
+</Basis>
+<script>
+  import { ladeKarte } from '../lib/karte-client';
+  const rahmen = document.getElementById('lage-karte');
+  rahmen?.addEventListener('karte-laden', async () => {
+    const d = document.getElementById('lage-daten')!.dataset;
+    const mitte: [number, number] = [Number(d.lat), Number(d.lng)];
+    const { L, map } = await ladeKarte(rahmen, mitte, 13);
+    // Kreis statt Punkt: die Lage ist absichtlich ungenau
+    L.circle(mitte, { radius: 600, color: '#272343', weight: 2, fillColor: '#ffd803', fillOpacity: 0.35 }).addTo(map);
+  });
+</script>
+<style>
+  .detail { padding-top: clamp(1.5rem, 4vw, 2.5rem); }
+  .ort { font-weight: 600; margin-top: -0.5rem; }
+  .raster { display: grid; gap: 2rem; align-items: start; }
+  @media (min-width: 60rem) { .raster { grid-template-columns: 1fr 22rem; } .seitenleiste { position: sticky; top: calc(var(--kopf-hoehe) + 1rem); } }
+  .galerie { display: grid; grid-auto-flow: column; grid-auto-columns: 100%; overflow-x: auto; scroll-snap-type: x mandatory; border-radius: var(--r-gross); gap: 0.5rem; }
+  .galerie img { width: 100%; height: auto; aspect-ratio: 4 / 3; object-fit: cover; scroll-snap-align: start; }
+  .ohne-foto { display: grid; place-items: center; aspect-ratio: 4 / 3; background: var(--sekundaer); border-radius: var(--r-gross); }
+  h2 { font-size: 1.35rem; margin-top: 2rem; }
+  .daten { margin: 0; }
+  .daten div { display: flex; justify-content: space-between; gap: 1rem; padding: 0.5rem 0; border-bottom: 1px solid var(--linie); }
+  .daten dd { margin: 0; font-weight: 600; text-align: right; }
+  .merkmale { display: flex; flex-wrap: wrap; gap: 0.5rem; list-style: none; padding: 0; margin: 1rem 0 0; }
+  .merkmale li { background: var(--tertiaer); border-radius: 999px; padding: 0.25rem 0.8rem; font-weight: 600; font-size: 0.95rem; }
+  .text { white-space: pre-line; }
+  .preis { margin: 0 0 0.25rem; }
+  .klein { font-size: 0.95rem; }
+  .ablauf { padding-left: 1.25rem; margin: 1rem 0 1.25rem; }
+  .stand { margin-top: 1rem; }
+</style>

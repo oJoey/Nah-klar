@@ -1,0 +1,91 @@
+---
+// Übersicht im Konto: eigene Inserate. (Anfragen, Termine und Suchaufträge folgen in Etappe b.)
+export const prerender = false;
+import Konto from '../../layouts/Konto.astro';
+import { statusTitel, typTitel, preisZeile } from '../../lib/inserat';
+import { gesamtpreis } from '../../config/zahlung';
+import { ladeGebuehren } from '../../lib/gebuehren';
+
+const { supabase, nutzer } = Astro.locals;
+let meldung = '';
+
+// Statuswechsel durch den Vermieter: pausieren, wieder online, vermietet, Entwurf löschen
+if (Astro.request.method === 'POST') {
+  const form = await Astro.request.formData();
+  const id = String(form.get('id') ?? '');
+  const aktion = String(form.get('aktion') ?? '');
+  const neu: Record<string, string> = { pausieren: 'pausiert', aktivieren: 'aktiv', vermietet: 'vermietet' };
+  if (aktion === 'loeschen') {
+    const { error } = await supabase.from('inserate').delete().eq('id', id).eq('vermieter_id', nutzer!.id);
+    meldung = error ? 'Das Inserat konnte nicht gelöscht werden.' : 'Das Inserat wurde gelöscht.';
+  } else if (neu[aktion]) {
+    const { error } = await supabase.from('inserate').update({ status: neu[aktion] }).eq('id', id).eq('vermieter_id', nutzer!.id);
+    meldung = error ? 'Das hat nicht geklappt. Bitte laden Sie die Seite neu.' : 'Gespeichert.';
+  }
+}
+
+const { data: inserate } = await supabase
+  .from('inserate')
+  .select('id, typ, titel, status, mietart, saison_von, saison_bis, vermieterpreis, sperrgrund, aktualisiert_am, orte(name)')
+  .eq('vermieter_id', nutzer!.id)
+  .order('erstellt_am', { ascending: false });
+const gebuehren = await ladeGebuehren(supabase);
+---
+<Konto titel="Meine Inserate">
+  <div class="kopf">
+    <h1>Meine Inserate</h1>
+    <a class="btn btn-primaer" href="/konto/inserate/neu/">Neues Inserat</a>
+  </div>
+  {meldung && <p class="erfolgbox" role="status">{meldung}</p>}
+  {Astro.url.searchParams.has('eingereicht') && <p class="erfolgbox" role="status">Danke! Ihr Inserat ist eingereicht. Wir prüfen es und melden uns per E-Mail, sobald es online ist.</p>}
+
+  {!inserate?.length ? (
+    <div class="karte">
+      <h2>Noch keine Inserate</h2>
+      <p>Bieten Sie einen Platz für Wohnmobil oder Wohnwagen oder einen Lagerraum an. Das Anbieten ist kostenlos. Wir prüfen jedes Inserat, bevor es online geht.</p>
+      <a class="btn btn-primaer" href="/konto/inserate/neu/">Erstes Inserat anlegen</a>
+    </div>
+  ) : (
+    <ul class="liste">
+      {inserate.map((i: any) => {
+        const preis = i.vermieterpreis && i.mietart ? preisZeile({ gesamtpreis: gesamtpreis(Number(i.vermieterpreis), gebuehren.servicegebuehr), mietart: i.mietart, saison_von: i.saison_von, saison_bis: i.saison_bis }) : null;
+        return (
+          <li class="karte eintrag">
+            <div>
+              <span class="marke-status" data-status={i.status}>{statusTitel[i.status]}</span>
+              <h2>{i.titel ?? 'Ohne Titel'}</h2>
+              <p>{typTitel[i.typ as 'womo' | 'lager']}{i.orte?.name ? ` · ${i.orte.name}` : ''}{preis ? ` · Mieter sehen ${preis.betrag} ${preis.zusatz}` : ''}</p>
+              {i.status === 'pruefung' && <p class="klein">Wir prüfen Ihr Inserat und melden uns per E-Mail.</p>}
+              {i.status === 'gesperrt' && i.sperrgrund && <p class="klein"><strong>Grund der Sperrung:</strong> {i.sperrgrund}</p>}
+              {i.status === 'entwurf' && i.sperrgrund && <p class="klein"><strong>Hinweis von uns:</strong> {i.sperrgrund}</p>}
+            </div>
+            <div class="knopfzeile">
+              {i.status !== 'gesperrt' && <a class="btn btn-rahmen" href={`/konto/inserate/${i.id}/lage/`}>Bearbeiten</a>}
+              {i.status === 'aktiv' && <a class="btn btn-rahmen" href={`/inserat/${i.id}/`}>Ansehen</a>}
+              <form method="post">
+                <input type="hidden" name="id" value={i.id} />
+                {i.status === 'aktiv' && <button class="btn btn-rahmen" name="aktion" value="pausieren">Pausieren</button>}
+                {i.status === 'aktiv' && <button class="btn btn-rahmen" name="aktion" value="vermietet">Als vermietet markieren</button>}
+                {(i.status === 'pausiert' || i.status === 'vermietet') && <button class="btn btn-rahmen" name="aktion" value="aktivieren">Wieder online stellen</button>}
+                {(i.status === 'entwurf' || i.status === 'pausiert') && <button class="btn btn-rahmen" name="aktion" value="loeschen" data-bestaetigen="Inserat endgültig löschen?">Löschen</button>}
+              </form>
+            </div>
+          </li>
+        );
+      })}
+    </ul>
+  )}
+</Konto>
+<script>
+  document.querySelectorAll<HTMLButtonElement>('[data-bestaetigen]').forEach((b) =>
+    b.addEventListener('click', (e) => { if (!confirm(b.dataset.bestaetigen)) e.preventDefault(); }));
+</script>
+<style>
+  .kopf { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 1rem; margin-bottom: 1.5rem; }
+  .kopf h1 { margin: 0; }
+  .liste { list-style: none; padding: 0; margin: 0; display: grid; gap: 1rem; }
+  .eintrag h2 { font-size: 1.3rem; margin: 0.5rem 0 0.25rem; }
+  .eintrag .knopfzeile { margin-top: 1rem; }
+  .eintrag form { display: contents; }
+  .klein { font-size: 1rem; }
+</style>

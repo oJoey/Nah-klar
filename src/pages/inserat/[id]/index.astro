@@ -1,0 +1,31 @@
+---
+// Detailseite eines Inserats. Öffentlich nur für freigegebene Inserate,
+// Vermieter und Admins sehen hier auch Entwürfe als Vorschau.
+export const prerender = false;
+import Basis from '../../../layouts/Basis.astro';
+import InseratDetail from '../../../components/InseratDetail.astro';
+
+const { supabase } = Astro.locals;
+const id = Astro.params.id ?? '';
+const gueltig = /^[0-9a-f-]{36}$/.test(id);
+const [{ data: i }, { data: fotos }] = gueltig
+  ? await Promise.all([
+      supabase.from('inserate_oeffentlich').select('*').eq('id', id).maybeSingle(),
+      supabase.from('inserat_fotos').select('pfad, breite, hoehe').eq('inserat_id', id).order('reihenfolge').order('erstellt_am'),
+    ])
+  : [{ data: null }, { data: null }];
+
+if (!i) Astro.response.status = 404;
+else if (i.status !== 'aktiv') Astro.response.headers.set('Cache-Control', 'private, no-store');
+---
+{i ? <InseratDetail i={i} fotos={fotos ?? []} /> : (
+  <Basis titel="Inserat nicht gefunden" beschreibung="Dieses Inserat gibt es nicht oder nicht mehr." noindex>
+    <section class="abschnitt">
+      <div class="wrap schmal">
+        <h1>Inserat nicht gefunden</h1>
+        <p class="einleitung">Dieses Inserat gibt es nicht oder nicht mehr. Vielleicht ist der Platz gerade vermietet.</p>
+        <a class="btn btn-primaer" href="/suche/">Andere Plätze ansehen</a>
+      </div>
+    </section>
+  </Basis>
+)}

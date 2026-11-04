@@ -1,0 +1,470 @@
+---
+// Inserat-Assistent: ein Schritt pro Seite. Jeder Schritt speichert sofort (Entwurf).
+export const prerender = false;
+import Konto from '../../../../layouts/Konto.astro';
+import KarteLaden from '../../../../components/KarteLaden.astro';
+import {
+  schritte, naechsterSchritt, vorherigerSchritt, leseSchritt, fehlendeAngaben, flaechenArten, zugaenge, mietarten,
+  ausstattungen, typTitel, statusTitel, preisZeile, eckdaten, type SchrittSlug, type Inserat,
+} from '../../../../lib/inserat';
+import { ladeGebuehren, provisionBetrag } from '../../../../lib/gebuehren';
+import { gesamtpreis } from '../../../../config/zahlung';
+import { fotoUrl, supabaseUrl, supabaseKey } from '../../../../lib/supabase';
+import { karte } from '../../../../config/karte';
+
+const { supabase, nutzer } = Astro.locals;
+const { id, schritt: schrittParam } = Astro.params;
+const schritt = schritte.find((s) => s.slug === schrittParam)?.slug as SchrittSlug | undefined;
+if (!schritt || !id || !/^[0-9a-f-]{36}$/.test(id)) return Astro.redirect('/konto/');
+
+const ladeInserat = async () => (await supabase.from('inserate').select('*').eq('id', id).eq('vermieter_id', nutzer!.id).maybeSingle()).data as Inserat | null;
+let inserat = await ladeInserat();
+if (!inserat) return new Response('Inserat nicht gefunden', { status: 404 });
+if (inserat.status === 'gesperrt') return Astro.redirect('/konto/');
+
+const [{ data: adresseDaten }, { data: orte }, { data: fotosDaten }, gebuehren] = await Promise.all([
+  supabase.from('inserat_adressen').select('*').eq('inserat_id', id).maybeSingle(),
+  supabase.from('orte').select('id, name, kreis, lat, lng').eq('aktiv', true).order('name'),
+  supabase.from('inserat_fotos').select('id, pfad, reihenfolge').eq('inserat_id', id).order('reihenfolge').order('erstellt_am'),
+  ladeGebuehren(supabase),
+]);
+const adresse = adresseDaten as Record<string, any> | null;
+let fotos = (fotosDaten ?? []) as { id: string; pfad: string; reihenfolge: number }[];
+
+let fehler: Record<string, string> = {};
+let allgemeinerFehler = '';
+let roh: FormData | null = null; // bei Fehlern: Eingaben wieder anzeigen
+
+if (Astro.request.method === 'POST') {
+  const form = await Astro.request.formData();
+  const aktion = String(form.get('aktion') ?? 'weiter');
+
+  if (schritt === 'fotos' && aktion.startsWith('foto-')) {
+    const foto = fotos.find((f) => f.id === form.get('foto_id'));
+    if (foto && aktion === 'foto-loeschen') {
+      await supabase.storage.from('inserat-fotos').remove([foto.pfad]);
+      await supabase.from('inserat_fotos').delete().eq('id', foto.id);
+    }
+    if (foto && aktion === 'foto-nach-vorn') {
+      // Gewähltes Foto wird Titelfoto, die anderen rücken nach
+      const neu = [foto, ...fotos.filter((f) => f.id !== foto.id)];
+      await Promise.all(neu.map((f, i) => supabase.from('inserat_fotos').update({ reihenfolge: i }).eq('id', f.id)));
+    }
+    return Astro.redirect(Astro.url.pathname);
+  }
+
+  if (schritt === 'pruefen' && aktion === 'einreichen') {
+    const { error } = await supabase.from('inserate').update({ status: 'pruefung' }).eq('id', id);
+    if (!error) return Astro.redirect('/konto/?eingereicht=1');
+    allgemeinerFehler = error.message.includes('Foto') ? 'Bitte laden Sie mindestens ein Foto hoch.' : 'Es fehlen noch Angaben. Bitte prüfen Sie die Liste unten.';
+  }
+
+  if (['lage', 'details', 'preis', 'beschreibung'].includes(schritt)) {
+    const ergebnis = leseSchritt(schritt, form, inserat, (orte ?? []).map((o) => o.id));
+    fehler = ergebnis.fehler;
+    if (!Object.keys(fehler).length) {
+      const { error } = await supabase.from('inserate').update(ergebnis.daten).eq('id', id);
+      let fehlerAdresse = null;
+      if (!error && ergebnis.adresse) fehlerAdresse = (await supabase.from('inserat_adressen').upsert(ergebnis.adresse)).error;
+      if (error || fehlerAdresse) {
+        allgemeinerFehler = 'Speichern hat nicht geklappt. Bitte prüfen Sie Ihre Angaben und versuchen Sie es erneut.';
+        roh = form;
+      } else {
+        const ziel = aktion === 'pause' ? '/konto/' : `/konto/inserate/${id}/${naechsterSchritt(schritt)}/`;
+        return Astro.redirect(ziel);
+      }
+    } else {
+      roh = form;
+    }
+  }
+}
+
+// Wert für ein Feld: nach fehlerhaftem Absenden die Eingabe, sonst der gespeicherte Wert
+const w = (name: string, quelle: Record<string, any> | null = inserat): string => {
+  if (roh) return String(roh.get(name) ?? '');
+  const v = quelle?.[name];
+  return v === null || v === undefined ? '' : String(v);
+};
+const hat = (name: string, wert: string) => (roh ? roh.getAll(name).map(String).includes(wert) : (inserat![name] ?? []).includes?.(wert));
+const jaNein = (name: string) => (roh ? String(roh.get(name) ?? '') : inserat![name] === true ? 'ja' : inserat![name] === false ? 'nein' : '');
+
+const index = schritte.findIndex((s) => s.slug === schritt);
+const zurueck = vorherigerSchritt(schritt);
+const fehlend = fehlendeAngaben(inserat, adresse, fotos.length);
+const istOnline = ['aktiv', 'pausiert', 'vermietet'].includes(inserat.status);
+const gewaehlterOrt = (orte ?? []).find((o) => String(o.id) === w('ort_id'));
+const vorschau = inserat.vermieterpreis && inserat.mietart
+  ? preisZeile({ gesamtpreis: gesamtpreis(Number(inserat.vermieterpreis), gebuehren.servicegebuehr), mietart: inserat.mietart, saison_von: inserat.saison_von, saison_bis: inserat.saison_bis })
+  : null;
+---
+<Konto titel={`Inserat: ${schritte[index].titel}`}>
+  <p class="kicker">{typTitel[inserat.typ]} · {statusTitel[inserat.status]}</p>
+  <h1>{schritte[index].titel}</h1>
+
+  <ol class="fortschritt" aria-label="Schritte">
+    {schritte.map((s, i) => (
+      <li class:list={{ fertig: i < index, jetzt: i === index }}>
+        <a href={`/konto/inserate/${id}/${s.slug}/`} aria-current={i === index ? 'step' : undefined}><span>{i + 1}</span> {s.titel}</a>
+      </li>
+    ))}
+  </ol>
+
+  {istOnline && <p class="hinweis">Ihr Inserat ist bereits freigegeben. Wenn Sie Inhalte ändern, prüfen wir es erneut. Bis dahin ist es nicht sichtbar.</p>}
+  {allgemeinerFehler && <div class="fehlerbox" role="alert"><p>{allgemeinerFehler}</p></div>}
+  {Object.keys(fehler).length > 0 && (
+    <div class="fehlerbox" role="alert">
+      <p>Bitte prüfen Sie:</p>
+      <ul>{Object.values(fehler).map((t) => <li>{t}</li>)}</ul>
+    </div>
+  )}
+
+  {schritt === 'lage' && (
+    <form method="post" class="formular-karte">
+      <p>Öffentlich zeigen wir nur den Ort, den Ortsteil und einen ungefähren Punkt auf der Karte (250 bis 500 m daneben). Die genaue Adresse sehen Mieter erst nach einem bestätigten Besichtigungstermin.</p>
+      <div class="feld">
+        <label for="ort_id">Ort</label>
+        <select id="ort_id" name="ort_id" required data-ort>
+          <option value="">Bitte wählen</option>
+          {(orte ?? []).map((o) => <option value={o.id} data-lat={o.lat} data-lng={o.lng} selected={w('ort_id') === String(o.id)}>{o.name}</option>)}
+        </select>
+        <span class="feld-hilfe">Ihr Ort fehlt? Schreiben Sie uns, wir nehmen ihn auf.</span>
+      </div>
+      <div class="feld">
+        <label for="ortsteil">Ortsteil <span class="optional">(optional, wird angezeigt)</span></label>
+        <input id="ortsteil" name="ortsteil" type="text" maxlength="60" value={w('ortsteil')} />
+      </div>
+      <div class="feld-paar">
+        <div class="feld">
+          <label for="strasse">Straße</label>
+          <input id="strasse" name="strasse" type="text" maxlength="100" autocomplete="address-line1" required value={w('strasse', adresse)} />
+        </div>
+        <div class="feld">
+          <label for="hausnummer">Hausnummer</label>
+          <input id="hausnummer" name="hausnummer" type="text" maxlength="10" required value={w('hausnummer', adresse)} />
+        </div>
+        <div class="feld">
+          <label for="plz">Postleitzahl</label>
+          <input id="plz" name="plz" type="text" inputmode="numeric" pattern="[0-9]{5}" maxlength="5" autocomplete="postal-code" required value={w('plz', adresse)} />
+        </div>
+      </div>
+      <div class="feld">
+        <label for="zufahrt">Zufahrt <span class="optional">(optional)</span></label>
+        <textarea id="zufahrt" name="zufahrt" rows="3" maxlength="1000" placeholder="z. B. Zufahrt über Feldweg, Tor 3,20 m breit, Wendemöglichkeit auf dem Hof">{w('zufahrt')}</textarea>
+      </div>
+      <input type="hidden" name="lat" value={w('lat', adresse)} data-lat />
+      <input type="hidden" name="lng" value={w('lng', adresse)} data-lng />
+      <div class="feld">
+        <p class="feld-titel">Genauer Punkt <span class="optional">(optional)</span></p>
+        <p class="feld-hilfe">Klicken Sie auf der Karte auf Ihren Platz. Ohne Punkt rechnen wir mit der Ortsmitte, dann stimmt die Entfernung in der Umkreissuche weniger genau.</p>
+        <KarteLaden id="pin-karte" hoehe="20rem" text="Karte laden und Punkt setzen" />
+      </div>
+      <div class="knopfzeile">
+        <button class="btn btn-primaer btn-gross" type="submit" name="aktion" value="weiter">Speichern und weiter</button>
+        <button class="btn btn-rahmen" type="submit" name="aktion" value="pause">Speichern und später weitermachen</button>
+      </div>
+    </form>
+  )}
+
+  {schritt === 'details' && (
+    <form method="post" class="formular-karte">
+      <fieldset>
+        <legend>Art der Fläche</legend>
+        <div class="wahl-raster">
+          {flaechenArten[inserat.typ].map((a) => <label class="wahl"><input type="radio" name="flaechen_art" value={a.wert} required checked={w('flaechen_art') === a.wert} /> {a.titel}</label>)}
+        </div>
+      </fieldset>
+
+      {inserat.typ === 'womo' ? (
+        <>
+          <div class="feld-paar">
+            <div class="feld">
+              <label for="einfahrtshoehe_cm">Einfahrtshöhe in cm</label>
+              <input id="einfahrtshoehe_cm" name="einfahrtshoehe_cm" type="number" min="100" max="800" required value={w('einfahrtshoehe_cm')} />
+              <span class="feld-hilfe">Niedrigste Stelle: Tor, Dach oder Balken. Im Freien ohne Begrenzung: 800.</span>
+            </div>
+            <div class="feld">
+              <label for="max_laenge_cm">Fahrzeuglänge bis (cm)</label>
+              <input id="max_laenge_cm" name="max_laenge_cm" type="number" min="200" max="2500" required value={w('max_laenge_cm')} />
+            </div>
+            <div class="feld">
+              <label for="einfahrtsbreite_cm">Einfahrtsbreite in cm <span class="optional">(optional)</span></label>
+              <input id="einfahrtsbreite_cm" name="einfahrtsbreite_cm" type="number" min="100" max="1500" value={w('einfahrtsbreite_cm')} />
+            </div>
+            <div class="feld">
+              <label for="anzahl_plaetze">Anzahl Plätze</label>
+              <input id="anzahl_plaetze" name="anzahl_plaetze" type="number" min="1" max="50" value={w('anzahl_plaetze') || '1'} />
+            </div>
+          </div>
+          <fieldset>
+            <legend>Strom am Platz</legend>
+            <div class="chips">
+              <label class="chip"><input type="radio" name="strom" value="ja" required checked={jaNein('strom') === 'ja'} /> Ja</label>
+              <label class="chip"><input type="radio" name="strom" value="nein" checked={jaNein('strom') === 'nein'} /> Nein</label>
+            </div>
+          </fieldset>
+        </>
+      ) : (
+        <div class="feld-paar">
+          <div class="feld">
+            <label for="flaeche_qm">Fläche in m²</label>
+            <input id="flaeche_qm" name="flaeche_qm" type="text" inputmode="decimal" required value={w('flaeche_qm')} />
+          </div>
+          <div class="feld">
+            <label for="raumhoehe_cm">Raumhöhe in cm <span class="optional">(optional)</span></label>
+            <input id="raumhoehe_cm" name="raumhoehe_cm" type="number" min="50" max="1500" value={w('raumhoehe_cm')} />
+          </div>
+          <div class="feld">
+            <label for="volumen_m3">Volumen in m³ <span class="optional">(optional)</span></label>
+            <input id="volumen_m3" name="volumen_m3" type="text" inputmode="decimal" value={w('volumen_m3')} />
+            <span class="feld-hilfe">Fläche × Raumhöhe, falls bekannt.</span>
+          </div>
+        </div>
+      )}
+
+      <fieldset>
+        <legend>Zugang {inserat.typ === 'lager' && <span class="optional">(optional)</span>}</legend>
+        <div class="chips">
+          {zugaenge.map((z) => <label class="chip"><input type="radio" name="zugang" value={z.wert} required={inserat!.typ === 'womo'} checked={w('zugang') === z.wert} /> {z.titel}</label>)}
+        </div>
+      </fieldset>
+      <fieldset>
+        <legend>Ausstattung <span class="optional">(optional)</span></legend>
+        <div class="chips">
+          {ausstattungen.map((a) => <label class="chip"><input type="checkbox" name="ausstattung" value={a.wert} checked={hat('ausstattung', a.wert)} /> {a.titel}</label>)}
+        </div>
+      </fieldset>
+      <div class="knopfzeile">
+        <button class="btn btn-primaer btn-gross" type="submit" name="aktion" value="weiter">Speichern und weiter</button>
+        <button class="btn btn-rahmen" type="submit" name="aktion" value="pause">Speichern und später weitermachen</button>
+      </div>
+    </form>
+  )}
+
+  {schritt === 'preis' && (
+    <form method="post" class="formular-karte" data-preis data-satz={gebuehren.servicegebuehr}>
+      <fieldset>
+        <legend>Mietart</legend>
+        <div class="wahl-raster">
+          {mietarten.map((m) => <label class="wahl"><input type="radio" name="mietart" value={m.wert} required checked={w('mietart') === m.wert} data-mietart /> <span><strong>{m.titel}</strong><br /><span class="feld-hilfe">{m.hilfe}</span></span></label>)}
+        </div>
+      </fieldset>
+      <div class="feld-paar" data-nur="saisonal">
+        <div class="feld">
+          <label for="saison_von">Saison von</label>
+          <input id="saison_von" name="saison_von" type="date" value={w('saison_von')} />
+        </div>
+        <div class="feld">
+          <label for="saison_bis">Saison bis</label>
+          <input id="saison_bis" name="saison_bis" type="date" value={w('saison_bis')} />
+        </div>
+      </div>
+      <div class="feld">
+        <label for="vermieterpreis"><span data-preis-label>Ihr Wunschbetrag</span> in Euro</label>
+        <input id="vermieterpreis" name="vermieterpreis" type="text" inputmode="decimal" required value={w('vermieterpreis')} data-betrag />
+        <span class="feld-hilfe">Das ist der Betrag, den Sie bekommen möchten{gebuehren.provisionAnzeigen ? ' (vor Abzug der einmaligen Provision)' : ''}.</span>
+      </div>
+      <p class="hinweis" aria-live="polite">Mieter sehen den Gesamtpreis inklusive Servicegebühr: <strong data-gesamt>–</strong></p>
+      {gebuehren.provisionAnzeigen && (
+        <p class="feld-hilfe">Einmalige Provision bei Vermietung: {gebuehren.provision.art === 'prozent' ? `${Math.round(gebuehren.provision.wert * 100)} % der ersten Miete` : `${gebuehren.provision.wert} €`}. Sie wird von der ersten Auszahlung abgezogen.</p>
+      )}
+      <div class="feld-paar">
+        <div class="feld">
+          <label for="verfuegbar_ab">Verfügbar ab <span class="optional">(optional)</span></label>
+          <input id="verfuegbar_ab" name="verfuegbar_ab" type="date" value={w('verfuegbar_ab')} />
+        </div>
+        <div class="feld" data-nur="monatlich">
+          <label for="mindestmietdauer_monate">Mindestmietdauer in Monaten <span class="optional">(optional)</span></label>
+          <input id="mindestmietdauer_monate" name="mindestmietdauer_monate" type="number" min="1" max="60" value={w('mindestmietdauer_monate')} />
+        </div>
+      </div>
+      <div class="knopfzeile">
+        <button class="btn btn-primaer btn-gross" type="submit" name="aktion" value="weiter">Speichern und weiter</button>
+        <button class="btn btn-rahmen" type="submit" name="aktion" value="pause">Speichern und später weitermachen</button>
+      </div>
+    </form>
+  )}
+
+  {schritt === 'beschreibung' && (
+    <form method="post" class="formular-karte">
+      <div class="feld">
+        <label for="titel">Titel</label>
+        <input id="titel" name="titel" type="text" minlength="5" maxlength="80" required value={w('titel')} placeholder={inserat.typ === 'womo' ? 'z. B. Hallenplatz für Wohnmobil bis 7,5 m' : 'z. B. Trockener Kellerraum, 12 m²'} />
+      </div>
+      <div class="feld">
+        <label for="beschreibung">Beschreibung <span class="optional">(optional)</span></label>
+        <textarea id="beschreibung" name="beschreibung" rows="8" maxlength="3000" placeholder="Was zeichnet den Platz aus? Was ist erlaubt, was nicht? Gibt es Besonderheiten bei der Zufahrt?">{w('beschreibung')}</textarea>
+        <span class="feld-hilfe">Bitte keine Telefonnummern, E-Mail-Adressen oder genaue Adresse. Kontakt läuft über die Plattform.</span>
+      </div>
+      <div class="knopfzeile">
+        <button class="btn btn-primaer btn-gross" type="submit" name="aktion" value="weiter">Speichern und weiter</button>
+        <button class="btn btn-rahmen" type="submit" name="aktion" value="pause">Speichern und später weitermachen</button>
+      </div>
+    </form>
+  )}
+
+  {schritt === 'fotos' && (
+    <div class="formular-karte" data-fotos data-inserat={id} data-anzahl={fotos.length} data-url={supabaseUrl} data-key={supabaseKey}>
+      <p>Bis zu 12 Fotos. Am besten: Zufahrt von der Straße, der Platz selbst, Tor oder Einfahrt. Bitte ohne Personen, Kennzeichen und Hausnummern.</p>
+      <p class="feld-hilfe">Wir verkleinern die Fotos vor dem Hochladen und entfernen dabei die Standortdaten aus der Bilddatei.</p>
+      <div class="feld">
+        <label for="foto-datei">Fotos auswählen</label>
+        <input id="foto-datei" type="file" accept="image/jpeg,image/png,image/webp,image/heic" multiple data-datei />
+      </div>
+      <p aria-live="polite" data-status></p>
+      {fotos.length > 0 && (
+        <ul class="fotoliste">
+          {fotos.map((f, i) => (
+            <li>
+              <img src={fotoUrl(f.pfad)} alt={`Foto ${i + 1}`} loading="lazy" width="240" height="180" />
+              {i === 0 && <span class="marke-status">Titelfoto</span>}
+              <form method="post" class="foto-knoepfe">
+                <input type="hidden" name="foto_id" value={f.id} />
+                {i > 0 && <button class="btn btn-rahmen" name="aktion" value="foto-nach-vorn">Als Titelfoto</button>}
+                <button class="btn btn-rahmen" name="aktion" value="foto-loeschen">Löschen</button>
+              </form>
+            </li>
+          ))}
+        </ul>
+      )}
+      <div class="knopfzeile">
+        <a class="btn btn-primaer btn-gross" href={`/konto/inserate/${id}/pruefen/`}>Weiter</a>
+      </div>
+    </div>
+  )}
+
+  {schritt === 'pruefen' && (
+    <div class="formular-karte">
+      {fehlend.length > 0 ? (
+        <>
+          <p>Es fehlen noch Angaben:</p>
+          <ul>{fehlend.map((f) => <li><a href={`/konto/inserate/${id}/${f.schritt}/`}>{f.text}</a></li>)}</ul>
+        </>
+      ) : (
+        <>
+          <h2>{inserat.titel}</h2>
+          {fotos[0] && <img class="titelbild" src={fotoUrl(fotos[0].pfad)} alt="Titelfoto" width="640" height="420" />}
+          <p>{gewaehlterOrt?.name}{inserat.ortsteil ? `, ${inserat.ortsteil}` : ''}</p>
+          {vorschau && <p><span class="preis-gross">{vorschau.betrag}</span> <span class="preis-zusatz">{vorschau.zusatz}</span></p>}
+          <dl class="daten">{eckdaten(inserat).map(([t, v]) => <div><dt>{t}</dt><dd>{v}</dd></div>)}</dl>
+          {inserat.status === 'entwurf' ? (
+            <form method="post">
+              <p>Wir prüfen Ihr Inserat und schalten es dann frei. Sie bekommen eine E-Mail, sobald es online ist.</p>
+              <button class="btn btn-primaer btn-gross" name="aktion" value="einreichen">Zur Prüfung einreichen</button>
+            </form>
+          ) : (
+            <p class="hinweis">Status: {statusTitel[inserat.status]}. {inserat.status === 'pruefung' ? 'Wir prüfen Ihr Inserat.' : ''}</p>
+          )}
+        </>
+      )}
+    </div>
+  )}
+
+  <p class="unten-nav">
+    {zurueck && <a href={`/konto/inserate/${id}/${zurueck}/`}>Zurück</a>}
+    <a href="/konto/">Zur Übersicht</a>
+  </p>
+</Konto>
+
+<script>
+  import { ladeKarte, punktStil } from '../../../../lib/karte-client';
+
+  // Preis: Gesamtpreis live anzeigen und Saisonfelder ein-/ausblenden
+  const preisForm = document.querySelector<HTMLFormElement>('[data-preis]');
+  if (preisForm) {
+    const satz = Number(preisForm.dataset.satz);
+    const betrag = preisForm.querySelector<HTMLInputElement>('[data-betrag]')!;
+    const ausgabe = preisForm.querySelector<HTMLElement>('[data-gesamt]')!;
+    const label = preisForm.querySelector<HTMLElement>('[data-preis-label]')!;
+    const aktualisieren = () => {
+      const art = preisForm.querySelector<HTMLInputElement>('[data-mietart]:checked')?.value ?? 'monatlich';
+      preisForm.querySelectorAll<HTMLElement>('[data-nur]').forEach((el) => (el.hidden = el.dataset.nur !== art));
+      label.textContent = art === 'saisonal' ? 'Ihr Wunschbetrag für die ganze Saison' : 'Ihr Wunschbetrag pro Monat';
+      const n = Number(betrag.value.replace(',', '.'));
+      ausgabe.textContent = n > 0 ? `${Math.ceil(Math.round(n * (1 + satz) * 100) / 100).toLocaleString('de-DE')} € ${art === 'saisonal' ? 'pro Saison' : 'pro Monat'}` : '–';
+    };
+    preisForm.addEventListener('input', aktualisieren);
+    aktualisieren();
+  }
+
+  // Lage: Punkt auf der Karte setzen
+  const pin = document.getElementById('pin-karte');
+  if (pin) {
+    pin.addEventListener('karte-laden', async () => {
+      const latFeld = document.querySelector<HTMLInputElement>('[data-lat]')!;
+      const lngFeld = document.querySelector<HTMLInputElement>('[data-lng]')!;
+      const ort = document.querySelector<HTMLSelectElement>('[data-ort]')!.selectedOptions[0];
+      const start: [number, number] | null = latFeld.value ? [Number(latFeld.value), Number(lngFeld.value)] : ort?.dataset.lat ? [Number(ort.dataset.lat), Number(ort.dataset.lng)] : null;
+      const { L, map } = await ladeKarte(pin, start ?? undefined, start ? 15 : undefined);
+      let punkt = latFeld.value ? L.circleMarker(start!, punktStil).addTo(map) : null;
+      map.on('click', (e: any) => {
+        latFeld.value = e.latlng.lat.toFixed(6);
+        lngFeld.value = e.latlng.lng.toFixed(6);
+        if (punkt) punkt.setLatLng(e.latlng); else punkt = L.circleMarker(e.latlng, punktStil).addTo(map);
+      });
+    });
+  }
+
+  // Fotos: verkleinern (max. 1600 px, JPEG), dabei Metadaten entfernen, hochladen
+  const fotoBox = document.querySelector<HTMLElement>('[data-fotos]');
+  if (fotoBox) {
+    const eingabe = fotoBox.querySelector<HTMLInputElement>('[data-datei]')!;
+    const status = fotoBox.querySelector<HTMLElement>('[data-status]')!;
+    const verkleinern = async (datei: File) => {
+      const bild = await createImageBitmap(datei, { imageOrientation: 'from-image' } as ImageBitmapOptions);
+      const faktor = Math.min(1, 1600 / Math.max(bild.width, bild.height));
+      const canvas = document.createElement('canvas');
+      canvas.width = Math.round(bild.width * faktor);
+      canvas.height = Math.round(bild.height * faktor);
+      canvas.getContext('2d')!.drawImage(bild, 0, 0, canvas.width, canvas.height);
+      const blob = await new Promise<Blob | null>((ok) => canvas.toBlob(ok, 'image/jpeg', 0.82));
+      if (!blob) throw new Error('Bild konnte nicht umgewandelt werden');
+      return { blob, breite: canvas.width, hoehe: canvas.height };
+    };
+    eingabe.addEventListener('change', async () => {
+      const { createBrowserClient } = await import('@supabase/ssr');
+      const supabase = createBrowserClient(fotoBox.dataset.url!, fotoBox.dataset.key!);
+      const inserat = fotoBox.dataset.inserat!;
+      let anzahl = Number(fotoBox.dataset.anzahl);
+      const dateien = Array.from(eingabe.files ?? []).slice(0, Math.max(0, 12 - anzahl));
+      let fehler = 0;
+      for (const [i, datei] of dateien.entries()) {
+        status.textContent = `Foto ${i + 1} von ${dateien.length} wird hochgeladen …`;
+        try {
+          const { blob, breite, hoehe } = await verkleinern(datei);
+          const pfad = `${inserat}/${crypto.randomUUID()}.jpg`;
+          const hoch = await supabase.storage.from('inserat-fotos').upload(pfad, blob, { contentType: 'image/jpeg' });
+          if (hoch.error) throw hoch.error;
+          const zeile = await supabase.from('inserat_fotos').insert({ inserat_id: inserat, pfad, reihenfolge: anzahl, breite, hoehe });
+          if (zeile.error) { await supabase.storage.from('inserat-fotos').remove([pfad]); throw zeile.error; }
+          anzahl++;
+        } catch (e) {
+          console.error(e);
+          fehler++;
+        }
+      }
+      status.textContent = fehler ? `${fehler} Foto(s) konnten nicht hochgeladen werden. Format JPEG, PNG oder WebP verwenden.` : 'Fertig.';
+      location.reload();
+    });
+  }
+</script>
+<style>
+  .fortschritt { list-style: none; padding: 0; margin: 0 0 1.5rem; display: flex; flex-wrap: wrap; gap: 0.4rem 1rem; font-size: 0.95rem; }
+  .fortschritt a { text-decoration: none; color: var(--text); }
+  .fortschritt span { display: inline-grid; place-items: center; width: 1.6rem; height: 1.6rem; border-radius: 50%; border: 1.5px solid var(--ueberschrift); font-weight: 700; margin-right: 0.2rem; }
+  .fortschritt .fertig span { background: var(--tertiaer); }
+  .fortschritt .jetzt a { font-weight: 700; color: var(--ueberschrift); }
+  .fortschritt .jetzt span { background: var(--akzent); }
+  .feld-titel { font-weight: 600; margin: 0 0 0.25rem; }
+  .fotoliste { list-style: none; padding: 0; margin: 1rem 0; display: grid; gap: 1rem; grid-template-columns: repeat(auto-fill, minmax(min(100%, 14rem), 1fr)); }
+  .fotoliste li { position: relative; }
+  .fotoliste img { width: 100%; height: auto; aspect-ratio: 4 / 3; object-fit: cover; border-radius: var(--r-klein); }
+  .fotoliste .marke-status { position: absolute; top: 0.5rem; left: 0.5rem; }
+  .foto-knoepfe { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.4rem; }
+  .foto-knoepfe .btn { min-height: 2.5rem; padding: 0.3rem 0.8rem; font-size: 0.95rem; }
+  .titelbild { width: 100%; height: auto; max-height: 26rem; object-fit: cover; border-radius: var(--r); }
+  .daten { display: grid; gap: 0; margin: 1rem 0; }
+  .daten div { display: flex; justify-content: space-between; gap: 1rem; padding: 0.45rem 0; border-bottom: 1px solid var(--linie); }
+  .daten dd { margin: 0; font-weight: 600; }
+  .unten-nav { display: flex; gap: 1.5rem; margin-top: 1.5rem; }
+  [hidden] { display: none !important; }
+</style>

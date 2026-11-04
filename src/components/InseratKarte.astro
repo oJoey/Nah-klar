@@ -1,0 +1,37 @@
+---
+// Karte eines Inserats in der Ergebnisliste. Zeigt nur den Gesamtpreis (inkl. Servicegebühr).
+import { fotoUrl } from '../lib/supabase';
+import { preisZeile, eckdaten, typTitel, titelVon, flaechenArten } from '../lib/inserat';
+interface Props { i: Record<string, any>; entfernung?: number | null }
+const { i, entfernung } = Astro.props;
+const preis = preisZeile(i as any);
+const art = titelVon(flaechenArten[i.typ as 'womo' | 'lager'], i.flaechen_art);
+---
+<article class="inserat-karte">
+  <a href={`/inserat/${i.id}/`} class="bild">
+    {i.titelfoto ? <img src={fotoUrl(i.titelfoto)} alt="" loading="lazy" width="480" height="360" /> : <span class="ohne-foto">Kein Foto</span>}
+  </a>
+  <div class="text">
+    <p class="ort">{i.ort_name}{i.ortsteil ? `, ${i.ortsteil}` : ''}{typeof entfernung === 'number' ? ` · ${entfernung.toLocaleString('de-DE')} km` : ''}</p>
+    <h3><a href={`/inserat/${i.id}/`}>{i.titel}</a></h3>
+    <p class="art">{typTitel[i.typ as 'womo' | 'lager']} · {art}</p>
+    <ul class="fakten">{eckdaten(i).slice(0, 4).map(([t, v]) => <li><span>{t}</span> {v}</li>)}</ul>
+    <p class="preis"><span class="preis-gross">{preis.betrag}</span> <span class="preis-zusatz">{preis.zusatz}</span></p>
+  </div>
+</article>
+<style>
+  .inserat-karte { display: grid; grid-template-columns: 1fr; background: var(--hintergrund); border: 1px solid var(--linie); border-radius: var(--r-gross); overflow: hidden; }
+  @media (min-width: 40rem) { .inserat-karte { grid-template-columns: 15rem 1fr; } }
+  .bild { display: block; background: var(--sekundaer); aspect-ratio: 4 / 3; }
+  .bild img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .ohne-foto { display: grid; place-items: center; height: 100%; color: var(--text); font-size: 0.95rem; }
+  .text { padding: 1rem 1.25rem; }
+  .ort { margin: 0 0 0.2rem; font-size: 0.95rem; font-weight: 600; }
+  h3 { font-size: 1.2rem; margin: 0 0 0.25rem; }
+  h3 a { text-decoration: none; color: var(--ueberschrift); }
+  h3 a:hover { text-decoration: underline; }
+  .art { margin: 0 0 0.5rem; font-size: 0.95rem; }
+  .fakten { list-style: none; padding: 0; margin: 0 0 0.5rem; display: flex; flex-wrap: wrap; gap: 0.25rem 1rem; font-size: 0.95rem; }
+  .fakten span { color: var(--text); }
+  .preis { margin: 0; }
+</style>

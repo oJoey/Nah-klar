@@ -1,0 +1,34 @@
+---
+// Neues Inserat, Schritt 0: Was bieten Sie an? Legt einen Entwurf an und führt zum Assistenten.
+export const prerender = false;
+import Konto from '../../../../layouts/Konto.astro';
+
+const { supabase, nutzer } = Astro.locals;
+let fehler = '';
+
+if (Astro.request.method === 'POST') {
+  const typ = String((await Astro.request.formData()).get('typ') ?? '');
+  if (typ !== 'womo' && typ !== 'lager') {
+    fehler = 'Bitte wählen Sie aus, was Sie anbieten.';
+  } else {
+    const { data, error } = await supabase.from('inserate').insert({ vermieter_id: nutzer!.id, typ }).select('id').single();
+    if (error || !data) fehler = 'Das Inserat konnte nicht angelegt werden. Bitte versuchen Sie es erneut.';
+    else return Astro.redirect(`/konto/inserate/${data.id}/lage/`);
+  }
+}
+---
+<Konto titel="Neues Inserat">
+  <h1>Was möchten Sie anbieten?</h1>
+  <p class="einleitung">In sechs kurzen Schritten zum Inserat. Sie können jederzeit unterbrechen, Ihre Angaben werden bei jedem Schritt gespeichert.</p>
+  <form method="post" class="formular-karte">
+    {fehler && <div class="fehlerbox" role="alert"><p>{fehler}</p></div>}
+    <fieldset>
+      <legend>Art des Platzes</legend>
+      <div class="wahl-raster">
+        <label class="wahl"><input type="radio" name="typ" value="womo" required /> Platz für Wohnmobil oder Wohnwagen</label>
+        <label class="wahl"><input type="radio" name="typ" value="lager" /> Lagerraum (Keller, Garage, Halle)</label>
+      </div>
+    </fieldset>
+    <button class="btn btn-primaer btn-gross btn-voll" type="submit">Weiter</button>
+  </form>
+</Konto>

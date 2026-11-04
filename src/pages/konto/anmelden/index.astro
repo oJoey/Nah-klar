@@ -1,0 +1,84 @@
+---
+// Anmeldung ohne Passwort: E-Mail eingeben → 6-stelligen Code aus der Mail eingeben.
+// Neue Nutzer werden dabei automatisch angelegt (ein Konto für Mieter und Vermieter).
+export const prerender = false;
+import Konto from '../../../layouts/Konto.astro';
+
+// Nur interne Ziele erlauben (kein Weiterleiten auf fremde Seiten)
+const sicheresZiel = (z: string | null) => (z && z.startsWith('/') && !z.startsWith('//') ? z : '/konto/');
+const weiter = sicheresZiel(Astro.url.searchParams.get('weiter'));
+const supabase = Astro.locals.supabase;
+
+if (Astro.locals.nutzer) return Astro.redirect(weiter);
+
+let schritt: 'email' | 'code' = 'email';
+let email = '';
+let fehler = '';
+
+if (Astro.request.method === 'POST') {
+  const form = await Astro.request.formData();
+  email = String(form.get('email') ?? '').trim().toLowerCase();
+  const aktion = String(form.get('aktion') ?? '');
+
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || email.length > 200) {
+    fehler = 'Bitte geben Sie eine gültige E-Mail-Adresse ein.';
+  } else if (aktion === 'code-senden') {
+    const { error } = await supabase.auth.signInWithOtp({ email, options: { shouldCreateUser: true } });
+    if (error) {
+      fehler = error.status === 429
+        ? 'Zu viele Versuche. Bitte warten Sie einen Moment und versuchen Sie es dann erneut.'
+        : 'Der Code konnte nicht gesendet werden. Bitte versuchen Sie es später erneut.';
+    } else {
+      schritt = 'code';
+    }
+  } else if (aktion === 'code-pruefen') {
+    schritt = 'code';
+    const code = String(form.get('code') ?? '').replace(/\D/g, '');
+    if (code.length !== 6) {
+      fehler = 'Der Code hat 6 Ziffern.';
+    } else {
+      const { error } = await supabase.auth.verifyOtp({ email, token: code, type: 'email' });
+      if (error) fehler = 'Der Code stimmt nicht oder ist abgelaufen. Prüfen Sie die Ziffern oder fordern Sie einen neuen Code an.';
+      else return Astro.redirect(weiter);
+    }
+  }
+}
+---
+<Konto titel="Anmelden">
+  <h1>Anmelden</h1>
+  {schritt === 'email' ? (
+    <>
+      <p class="einleitung">Ohne Passwort: Wir schicken Ihnen einen 6-stelligen Code per E-Mail. Neu hier? Dann legen wir Ihr Konto dabei automatisch an.</p>
+      <form method="post" class="formular-karte">
+        {fehler && <div class="fehlerbox" role="alert"><p>{fehler}</p></div>}
+        <input type="hidden" name="aktion" value="code-senden" />
+        <div class="feld">
+          <label for="email">E-Mail-Adresse</label>
+          <input id="email" name="email" type="email" autocomplete="email" required value={email} />
+        </div>
+        <button class="btn btn-primaer btn-gross btn-voll" type="submit">Code senden</button>
+        <p class="datenschutz-hinweis">Wir nutzen Ihre E-Mail-Adresse nur für Ihr Konto. Mehr dazu in der <a href="/datenschutz/">Datenschutzerklärung</a>.</p>
+      </form>
+    </>
+  ) : (
+    <>
+      <p class="einleitung">Wir haben einen Code an <strong>{email}</strong> geschickt. Er ist eine Stunde gültig. Schauen Sie auch im Spam-Ordner nach.</p>
+      <form method="post" class="formular-karte">
+        {fehler && <div class="fehlerbox" role="alert"><p>{fehler}</p></div>}
+        <input type="hidden" name="aktion" value="code-pruefen" />
+        <input type="hidden" name="email" value={email} />
+        <div class="feld">
+          <label for="code">Code aus der E-Mail</label>
+          <input id="code" name="code" type="text" inputmode="numeric" autocomplete="one-time-code" pattern="[0-9 ]{6,7}" maxlength="7" required autofocus />
+        </div>
+        <button class="btn btn-primaer btn-gross btn-voll" type="submit">Anmelden</button>
+      </form>
+      <form method="post" class="knopfzeile">
+        <input type="hidden" name="aktion" value="code-senden" />
+        <input type="hidden" name="email" value={email} />
+        <button class="btn btn-rahmen" type="submit">Neuen Code senden</button>
+        <a href={Astro.url.pathname + Astro.url.search}>Andere E-Mail-Adresse</a>
+      </form>
+    </>
+  )}
+</Konto>

@@ -1,0 +1,204 @@
+---
+// Suche: Liste und (nach Klick) Karte. Filter über die Adresse, z. B. /suche/?ort=boeblingen&radius=15&typ=womo
+export const prerender = false;
+import Basis from '../../layouts/Basis.astro';
+import InseratKarte from '../../components/InseratKarte.astro';
+import KarteLaden from '../../components/KarteLaden.astro';
+import { abstellarten, zugaenge } from '../../lib/inserat';
+import { link } from '../../config/seiten';
+
+const { supabase } = Astro.locals;
+const q = Astro.url.searchParams;
+const radien = [5, 10, 15, 25, 50];
+
+// Eingaben lesen und begrenzen
+const zahlOder = (name: string, min: number, max: number) => {
+  const n = Number((q.get(name) ?? '').replace(',', '.'));
+  return Number.isFinite(n) && n >= min && n <= max && q.get(name) !== '' && q.get(name) !== null ? n : null;
+};
+const f = {
+  ort: /^[a-z0-9-]{1,60}$/.test(q.get('ort') ?? '') ? q.get('ort')! : '',
+  radius: radien.includes(Number(q.get('radius'))) ? Number(q.get('radius')) : 15,
+  typ: ['womo', 'lager'].includes(q.get('typ') ?? '') ? (q.get('typ') as 'womo' | 'lager') : '',
+  hoehe: zahlOder('hoehe', 1, 6), // Fahrzeughöhe in m
+  laenge: zahlOder('laenge', 2, 25), // Fahrzeuglänge in m
+  abstellart: q.getAll('abstellart').filter((a) => abstellarten.some((x) => x.wert === a)),
+  strom: q.get('strom') === '1',
+  zugang: q.get('zugang') === '24-7' ? '24-7' : '',
+  flaeche: zahlOder('flaeche', 1, 9999),
+  volumen: zahlOder('volumen', 1, 99999),
+  mietart: ['monatlich', 'saisonal'].includes(q.get('mietart') ?? '') ? q.get('mietart')! : '',
+};
+
+const { data: orte } = await supabase.from('orte').select('slug, name').eq('aktiv', true).order('name');
+const womo = f.typ === 'womo';
+const lager = f.typ === 'lager';
+const { data, error } = await supabase.rpc('suche_inserate', {
+  p_ort_slug: f.ort || null,
+  p_radius_km: f.radius,
+  p_typ: f.typ || null,
+  p_min_hoehe_cm: womo && f.hoehe ? Math.round(f.hoehe * 100) : null,
+  p_min_laenge_cm: womo && f.laenge ? Math.round(f.laenge * 100) : null,
+  p_abstellart: womo && f.abstellart.length ? f.abstellart : null,
+  p_strom: womo && f.strom ? true : null,
+  p_zugang: womo && f.zugang ? f.zugang : null,
+  p_min_flaeche_qm: lager ? f.flaeche : null,
+  p_min_volumen_m3: lager ? f.volumen : null,
+  p_mietart: f.mietart || null,
+  p_limit: 60,
+});
+const treffer = ((data ?? []) as { inserat: Record<string, any>; entfernung_km: number | null }[]);
+const ortName = orte?.find((o) => o.slug === f.ort)?.name;
+const punkte = treffer.map(({ inserat: i }) => ({ id: i.id, lat: i.lat, lng: i.lng, titel: i.titel, preis: i.gesamtpreis, saison: i.mietart === 'saisonal' }));
+const suchauftrag = link('suchauftrag');
+Astro.response.headers.set('Cache-Control', 'public, max-age=0, must-revalidate');
+---
+<Basis titel={ortName ? `Plätze in ${ortName} und Umgebung` : 'Plätze finden'} beschreibung="Abstellplätze für Wohnmobil und Wohnwagen und Lagerräume bei Privatleuten finden." noindex>
+  <section class="abschnitt suche">
+    <div class="wrap">
+      <h1>{ortName ? <>Plätze in <span class="markiert">{ortName}</span> und Umgebung</> : 'Plätze finden'}</h1>
+      <div class="raster">
+        <form method="get" class="filter karte" data-filter>
+          <div class="feld">
+            <label for="typ">Was suchen Sie?</label>
+            <select id="typ" name="typ" data-typ>
+              <option value="">Alles</option>
+              <option value="womo" selected={f.typ === 'womo'}>Wohnmobil / Wohnwagen</option>
+              <option value="lager" selected={f.typ === 'lager'}>Lagerraum</option>
+            </select>
+          </div>
+          <div class="feld">
+            <label for="ort">Ort</label>
+            <select id="ort" name="ort">
+              <option value="">Ganze Region</option>
+              {(orte ?? []).map((o) => <option value={o.slug} selected={o.slug === f.ort}>{o.name}</option>)}
+            </select>
+          </div>
+          <div class="feld">
+            <label for="radius">Umkreis</label>
+            <select id="radius" name="radius">
+              {radien.map((r) => <option value={r} selected={r === f.radius}>{r} km</option>)}
+            </select>
+          </div>
+          <div class="feld">
+            <label for="mietart">Mietart</label>
+            <select id="mietart" name="mietart">
+              <option value="">Monatlich oder saisonal</option>
+              <option value="monatlich" selected={f.mietart === 'monatlich'}>Monatlich</option>
+              <option value="saisonal" selected={f.mietart === 'saisonal'}>Saisonal</option>
+            </select>
+          </div>
+
+          <div data-nur="womo">
+            <div class="feld-paar">
+              <div class="feld">
+                <label for="hoehe">Fahrzeughöhe (m)</label>
+                <input id="hoehe" name="hoehe" type="text" inputmode="decimal" placeholder="z. B. 3,1" value={f.hoehe?.toLocaleString('de-DE') ?? ''} />
+              </div>
+              <div class="feld">
+                <label for="laenge">Fahrzeuglänge (m)</label>
+                <input id="laenge" name="laenge" type="text" inputmode="decimal" placeholder="z. B. 7,2" value={f.laenge?.toLocaleString('de-DE') ?? ''} />
+              </div>
+            </div>
+            <fieldset>
+              <legend>Abstellart</legend>
+              <div class="chips">
+                {abstellarten.map((a) => <label class="chip"><input type="checkbox" name="abstellart" value={a.wert} checked={f.abstellart.includes(a.wert)} /> {a.titel}</label>)}
+              </div>
+            </fieldset>
+            <fieldset>
+              <legend>Ausstattung</legend>
+              <div class="chips">
+                <label class="chip"><input type="checkbox" name="strom" value="1" checked={f.strom} /> Strom</label>
+                <label class="chip"><input type="checkbox" name="zugang" value="24-7" checked={f.zugang === '24-7'} /> {zugaenge[0].titel}</label>
+              </div>
+            </fieldset>
+          </div>
+
+          <div data-nur="lager" class="feld-paar">
+            <div class="feld">
+              <label for="flaeche">Fläche ab (m²)</label>
+              <input id="flaeche" name="flaeche" type="text" inputmode="decimal" value={f.flaeche ?? ''} />
+            </div>
+            <div class="feld">
+              <label for="volumen">Volumen ab (m³)</label>
+              <input id="volumen" name="volumen" type="text" inputmode="decimal" value={f.volumen ?? ''} />
+            </div>
+          </div>
+
+          <button class="btn btn-primaer btn-voll" type="submit">Suchen</button>
+          <p class="klein"><a href="/suche/">Filter zurücksetzen</a></p>
+        </form>
+
+        <div class="ergebnisse">
+          {error && <div class="fehlerbox" role="alert"><p>Die Suche ist gerade nicht erreichbar. Bitte versuchen Sie es gleich noch einmal.</p></div>}
+          <p class="anzahl" role="status">{treffer.length === 0 ? 'Keine passenden Plätze gefunden.' : `${treffer.length} ${treffer.length === 1 ? 'Platz' : 'Plätze'} gefunden`}{treffer.length >= 60 ? ' (die ersten 60)' : ''}</p>
+          <p class="klein">Alle Preise sind Gesamtpreise inklusive Servicegebühr. Vor der Besichtigung zahlen Sie nichts.</p>
+
+          {treffer.length > 0 && (
+            <div class="karte-block">
+              <KarteLaden id="ergebnis-karte" hoehe="22rem" text="Ergebnisse auf der Karte zeigen" />
+              <script type="application/json" id="punkte" set:html={JSON.stringify(punkte).replace(/</g, '\\u003c')} />
+            </div>
+          )}
+
+          {treffer.length === 0 && suchauftrag && (
+            <div class="hinweis">
+              <p><strong>Nichts Passendes dabei?</strong> Sagen Sie uns, was Sie suchen. Wir melden uns, sobald etwas frei wird.</p>
+              <p><a class="btn btn-primaer" href={`${suchauftrag}${f.ort ? `?ort=${encodeURIComponent(ortName ?? '')}` : ''}`}>Suchauftrag anlegen</a></p>
+            </div>
+          )}
+
+          <div class="liste">
+            {treffer.map((t) => <InseratKarte i={t.inserat} entfernung={t.entfernung_km} />)}
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</Basis>
+
+<script>
+  import { ladeKarte, punktStil } from '../../lib/karte-client';
+
+  // Filter je nach Typ zeigen (ohne JavaScript sind alle Filter sichtbar)
+  const typ = document.querySelector<HTMLSelectElement>('[data-typ]');
+  const zeigen = () => document.querySelectorAll<HTMLElement>('[data-nur]').forEach((el) => {
+    const aus = el.dataset.nur !== typ!.value;
+    el.hidden = aus;
+    el.querySelectorAll<HTMLInputElement>('input').forEach((i) => (i.disabled = aus));
+  });
+  typ?.addEventListener('change', zeigen);
+  if (typ) zeigen();
+
+  const rahmen = document.getElementById('ergebnis-karte');
+  rahmen?.addEventListener('karte-laden', async () => {
+    const punkte: { id: string; lat: number; lng: number; titel: string; preis: number; saison: boolean }[] =
+      JSON.parse(document.getElementById('punkte')!.textContent || '[]');
+    const { L, map } = await ladeKarte(rahmen);
+    const gruppe = L.featureGroup();
+    for (const p of punkte) {
+      if (p.lat == null || p.lng == null) continue;
+      const popup = document.createElement('div');
+      const a = document.createElement('a');
+      a.href = `/inserat/${p.id}/`;
+      a.textContent = p.titel;
+      popup.append(a, document.createElement('br'), `${p.preis.toLocaleString('de-DE')} € ${p.saison ? 'pro Saison' : 'pro Monat'}`);
+      L.circleMarker([p.lat, p.lng], punktStil).bindPopup(popup).addTo(gruppe);
+    }
+    gruppe.addTo(map);
+    if (gruppe.getLayers().length) map.fitBounds(gruppe.getBounds(), { padding: [30, 30], maxZoom: 13 });
+  });
+</script>
+<style>
+  .suche { padding-top: clamp(1.5rem, 4vw, 2.5rem); }
+  .raster { display: grid; gap: 1.5rem; align-items: start; }
+  @media (min-width: 60rem) { .raster { grid-template-columns: 20rem 1fr; } .filter { position: sticky; top: calc(var(--kopf-hoehe) + 1rem); } }
+  .filter .feld { margin-bottom: 1rem; }
+  .filter .chip { min-height: 2.6rem; padding: 0.4rem 0.8rem; font-size: 0.95rem; }
+  .klein { font-size: 0.95rem; }
+  .anzahl { font-weight: 700; margin-bottom: 0.25rem; }
+  .karte-block { margin: 1rem 0 1.5rem; }
+  .liste { display: grid; gap: 1rem; }
+  [hidden] { display: none !important; }
+</style>
