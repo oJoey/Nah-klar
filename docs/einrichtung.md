@@ -37,8 +37,66 @@ Die Datenbankregeln lassen sich ohne Supabase mit einem normalen Postgres testen
 Netlify: **Forms → Form notifications → Add notification → Email notification**, Formular „Any form“, deine E-Mail-Adresse.
 Formular-Erkennung muss an sein (**Forms → Enable form detection**).
 
-## Servicegebühr einschalten (später)
-Zwei Stellen, dann neu veröffentlichen:
-1. Datenbank: `update public.einstellungen set wert = 'true' where schluessel = 'servicegebuehr_aktiv';`
-2. `src/config/zahlung.ts`: `servicegebuehrAktiv: true`
-Der Admin-Bereich warnt, wenn beide nicht übereinstimmen.
+## 6. Mailversand mit Resend
+
+**Ja, beides ist nötig:**
+- `RESEND_API_KEY`: ohne Schlüssel nimmt Resend keine Mails an.
+- **Verifizierte Absender-Domain**: Ohne sie lässt Resend nur Testmails an die eigene Konto-Adresse zu, nicht an Mieter und Vermieter.
+
+Resend wird an zwei Stellen gebraucht:
+1. **Anmeldecodes** (Supabase verschickt sie). Der Standardversand von Supabase ist nur zum Testen gedacht: sehr wenige Mails pro Stunde und je nach Projekt nur an Adressen von Mitgliedern deines Supabase-Teams. **Kommt beim Test kein Code an, liegt es meist daran.**
+2. **Benachrichtigungen** (neue Anfrage, Termin, später Nachricht) und Bestätigungsmails der Formulare, verschickt von der Website über Netlify.
+
+### Schritte
+1. Konto bei resend.com anlegen.
+2. **Domains → Add Domain**: am besten eine Unterdomain wie `mail.deine-domain.de`. Als Region **EU** wählen, falls angeboten.
+3. Die DNS-Einträge, die Resend anzeigt (SPF, DKIM, meist auch MX für Rückläufer), bei deinem Domain-Anbieter eintragen. Warten, bis Resend „Verified“ zeigt. Das dauert Minuten bis einige Stunden.
+4. Empfohlen: einen DMARC-Eintrag für die Domain anlegen (Resend zeigt ein Beispiel). Ohne ihn landen Mails eher im Spam.
+5. **API Keys → Create API Key**, Berechtigung „Sending access“, auf die Domain beschränkt.
+6. Bei Resend den Vertrag zur Auftragsverarbeitung (DPA) abschließen. Die Datenschutzerklärung muss Resend als Dienst nennen (Platzhalter folgt mit Etappe b).
+
+### Eintragen bei Supabase (Anmeldecodes)
+**Authentication → Emails → SMTP Settings → Enable custom SMTP:**
+- Host `smtp.resend.com`, Port `465`, Benutzername `resend`, Passwort = der Resend-API-Schlüssel
+- Absender: z. B. `anmeldung@mail.deine-domain.de`, Name „nahklar“
+
+Danach unter **Authentication → Rate Limits** das Limit für E-Mails nach Bedarf erhöhen.
+
+### Eintragen bei Netlify (Benachrichtigungen)
+**Site configuration → Environment variables:**
+
+| Name | Wert | Wofür |
+|---|---|---|
+| `RESEND_API_KEY` | Resend-Schlüssel | Versand |
+| `MAIL_ABSENDER` | `nahklar <hallo@mail.deine-domain.de>` | Absender, Domain muss verifiziert sein |
+| `MAIL_ANTWORT` | optional, z. B. deine normale Adresse | Antworten landen dort |
+| `MAIL_ADMIN` | deine Adresse | Kopie jeder neuen Anfrage an dich (ab Etappe b1) |
+| `MARKENNAME` | `nahklar` | Name in den Mails |
+| `NETLIFY_API_TOKEN` | Netlify → User settings → Applications → Personal access tokens | Schutz der Bestätigungsmails vor Missbrauch |
+
+Danach neu veröffentlichen. Die Bestätigungsmails der Formulare schaltest du mit `bestaetigungsmail: true` in `src/config/site.ts` ein.
+
+## 7. Checkliste: Servicegebühr später einschalten
+
+Erst einschalten, wenn die Zahlungsabwicklung über den Zahlungsdienstleister läuft und AGB, Preisseite und Datenschutzerklärung angepasst sind.
+
+**Vorher**
+- [ ] Satz prüfen: `select wert from public.einstellungen where schluessel = 'servicegebuehr';` (Standard `{"satz": 0.10}`)
+- [ ] Gleicher Satz in `src/config/zahlung.ts` (`servicegebuehr: 0.1`)
+- [ ] Provision prüfen (`vermieter_provision`), und ob sie im Formular erscheinen soll (`provision_anzeigen` in der Datenbank und `provisionAnzeigen` in `zahlung.ts`)
+
+**Umschalten (beide Stellen, direkt nacheinander)**
+1. [ ] Datenbank: `update public.einstellungen set wert = 'true' where schluessel = 'servicegebuehr_aktiv';`
+2. [ ] `src/config/zahlung.ts`: `servicegebuehrAktiv: true`, committen und neu veröffentlichen
+
+Zwischen Schritt 1 und dem fertigen Deploy zeigen Suche und Inserate schon den neuen Preis, die Info-Seiten noch den alten Text. Deshalb beides zügig hintereinander erledigen.
+
+**Danach prüfen**
+- [ ] `/admin/inserate/`: keine rote Warnung „Schalter … stimmt nicht überein“
+- [ ] Ein Inserat mit 85 € Wunschbetrag zeigt in Suche und Detailseite **94 €** (85 € + 10 % = 93,50 €, aufgerundet)
+- [ ] Unter dem Preis steht „Gesamtpreis inklusive Servicegebühr“ statt „Endpreis ohne weitere Gebühren“
+- [ ] `/preise/` und FAQ „Was kostet die Miete?“ nennen die Servicegebühr
+- [ ] Im Inserat-Assistenten, Schritt Preis: „Mieter sehen den Gesamtpreis inklusive Servicegebühr“, die Provision nur, wenn `provision_anzeigen` an ist
+- [ ] Laufende Mietverhältnisse: Die Buchungen speichern Gebührensatz und Provision beim Abschluss. Bestehende Buchungen ändern sich nicht.
+
+**Zurückschalten:** dieselben zwei Stellen auf `false` setzen, dann dieselbe Prüfung.
