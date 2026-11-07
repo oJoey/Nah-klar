@@ -3,7 +3,8 @@ import type { SupabaseClient } from '@supabase/supabase-js';
 import { zahlung } from '../config/zahlung';
 
 export type Gebuehren = {
-  servicegebuehr: number;
+  aktiv: boolean; // Servicegebühr wird erhoben
+  servicegebuehr: number; // wirksamer Satz (0, wenn nicht aktiv)
   provision: { art: 'prozent' | 'betrag'; wert: number };
   provisionAnzeigen: boolean;
 };
@@ -11,10 +12,13 @@ export type Gebuehren = {
 export async function ladeGebuehren(supabase: SupabaseClient): Promise<Gebuehren> {
   const { data } = await supabase.from('einstellungen').select('schluessel, wert');
   const w = Object.fromEntries((data ?? []).map((z: { schluessel: string; wert: any }) => [z.schluessel, z.wert]));
+  const aktiv = Boolean(w.servicegebuehr_aktiv ?? zahlung.servicegebuehrAktiv);
   return {
-    servicegebuehr: Number(w.servicegebuehr?.satz ?? zahlung.servicegebuehr),
+    aktiv,
+    servicegebuehr: aktiv ? Number(w.servicegebuehr?.satz ?? zahlung.servicegebuehr) : 0,
     provision: w.vermieter_provision ?? zahlung.vermieterProvision,
-    provisionAnzeigen: Boolean(w.provision_anzeigen ?? zahlung.provisionAnzeigen),
+    // Provision nur zusammen mit der Servicegebühr
+    provisionAnzeigen: aktiv && Boolean(w.provision_anzeigen ?? zahlung.provisionAnzeigen),
   };
 }
 

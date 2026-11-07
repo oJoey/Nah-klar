@@ -2,11 +2,15 @@
 // Inhalt der Detailseite (die Seite selbst lädt die Daten und behandelt „nicht gefunden“).
 import Basis from '../layouts/Basis.astro';
 import KarteLaden from './KarteLaden.astro';
+import FormVersteckt from './FormVersteckt.astro';
+import FormSkript from './FormSkript.astro';
+import { site } from '../config/site';
 import { fotoUrl } from '../lib/supabase';
 import { preisZeile, eckdaten, typTitel, titelVon, flaechenArten, ausstattungen, datumText, statusTitel } from '../lib/inserat';
 import { link } from '../config/seiten';
-interface Props { i: Record<string, any>; fotos: { pfad: string; breite: number | null; hoehe: number | null }[] }
-const { i, fotos } = Astro.props;
+interface Props { i: Record<string, any>; fotos: { pfad: string; breite: number | null; hoehe: number | null }[]; mitGebuehr: boolean }
+const { i, fotos, mitGebuehr } = Astro.props;
+const preisHinweis = mitGebuehr ? 'Gesamtpreis inklusive Servicegebühr.' : 'Endpreis ohne weitere Gebühren.';
 
 const vorschau = i.status !== 'aktiv';
 const preis = preisZeile(i as any);
@@ -15,7 +19,7 @@ const merkmale = (i.ausstattung ?? []).map((a: string) => titelVon(ausstattungen
 const anfrage = link('anfrage');
 const zuletzt = i.aktualisiert_am ? new Date(i.aktualisiert_am).toLocaleDateString('de-DE') : '';
 const titel = `${i.titel} in ${i.ort_name}`;
-const beschreibung = `${typTitel[i.typ as 'womo' | 'lager']}: ${art} in ${i.ort_name}${i.ortsteil ? `-${i.ortsteil}` : ''}. ${preis.betrag} ${preis.zusatz}, inklusive Servicegebühr.`;
+const beschreibung = `${typTitel[i.typ as 'womo' | 'lager']}: ${art} in ${i.ort_name}${i.ortsteil ? `-${i.ortsteil}` : ''}. ${preis.betrag} ${preis.zusatz}.`;
 ---
 <Basis titel={titel} beschreibung={beschreibung} noindex={vorschau} brotkruemel={[{ name: 'Plätze finden', pfad: '/suche/' }, { name: i.titel, pfad: `/inserat/${i.id}/` }]}>
   <section class="abschnitt detail">
@@ -54,7 +58,7 @@ const beschreibung = `${typTitel[i.typ as 'womo' | 'lager']}: ${art} in ${i.ort_
 
         <aside class="karte seitenleiste">
           <p class="preis"><span class="preis-gross">{preis.betrag}</span> <span class="preis-zusatz">{preis.zusatz}</span></p>
-          <p class="klein">Gesamtpreis inklusive Servicegebühr. Vor der Besichtigung zahlen Sie nichts.</p>
+          <p class="klein">{preisHinweis} Vor der Besichtigung zahlen Sie nichts.</p>
           <ol class="ablauf">
             <li>Besichtigung anfragen</li>
             <li>Platz in Ruhe ansehen</li>
@@ -62,14 +66,48 @@ const beschreibung = `${typTitel[i.typ as 'womo' | 'lager']}: ${art} in ${i.ort_
           </ol>
           {anfrage ? (
             <a class="btn btn-primaer btn-gross btn-voll" href={`${anfrage}?inserat=${i.id}`}>Besichtigung anfragen</a>
+          ) : vorschau ? (
+            <p class="hinweis klein">In der Vorschau ist keine Anfrage möglich.</p>
           ) : (
-            <p class="hinweis klein">Anfragen ist in Kürze direkt hier möglich. {link('suchauftrag') && <a href={link('suchauftrag')!}>Suchauftrag anlegen</a>}</p>
+            <details class="anfrage" open={Astro.url.searchParams.has('anfragen')}>
+              <summary class="btn btn-primaer btn-gross btn-voll">Besichtigung anfragen</summary>
+              {/* Übergangslösung bis Etappe b: Netlify Forms, Mail an uns (Form notifications). Felder auch in public/__forms.html. */}
+              <form name="besichtigung" method="POST" action="/besichtigung/danke/" data-formular>
+                <FormVersteckt name="besichtigung" />
+                <input type="hidden" name="inserat_id" value={i.id} />
+                <input type="hidden" name="inserat_titel" value={`${i.titel} (${i.ort_name})`} />
+                <input type="hidden" name="inserat_link" value={new URL(`/inserat/${i.id}/`, site.url).href} />
+                <div class="feld">
+                  <label for="a-vorname">Vorname</label>
+                  <input id="a-vorname" name="vorname" type="text" autocomplete="given-name" maxlength="60" required />
+                </div>
+                <div class="feld">
+                  <label for="a-email">E-Mail</label>
+                  <input id="a-email" name="email" type="email" autocomplete="email" maxlength="200" required />
+                </div>
+                <div class="feld">
+                  <label for="a-telefon">Telefon <span class="optional">(optional)</span></label>
+                  <input id="a-telefon" name="telefon" type="tel" autocomplete="tel" maxlength="30" />
+                </div>
+                <div class="feld">
+                  <label for="a-termin">Wann passt es Ihnen? <span class="optional">(optional)</span></label>
+                  <textarea id="a-termin" name="wunschtermin" rows="2" maxlength="300" placeholder="z. B. Samstagvormittag oder werktags ab 17 Uhr"></textarea>
+                </div>
+                <div class="feld">
+                  <label for="a-nachricht">Nachricht <span class="optional">(optional)</span></label>
+                  <textarea id="a-nachricht" name="nachricht" rows="3" maxlength="1000" placeholder={i.typ === 'womo' ? 'z. B. Fahrzeuglänge und -höhe, gewünschter Zeitraum' : 'z. B. was Sie einlagern möchten, gewünschter Zeitraum'}></textarea>
+                </div>
+                <button class="btn btn-primaer btn-voll" type="submit">Anfrage senden</button>
+                <p class="datenschutz-hinweis">Unverbindlich und kostenlos. Wir nutzen Ihre Angaben nur, um die Besichtigung abzustimmen. Mehr in der <a href="/datenschutz/">Datenschutzerklärung</a>.</p>
+              </form>
+            </details>
           )}
           {zuletzt && <p class="klein stand">Zuletzt aktualisiert: {zuletzt}</p>}
         </aside>
       </div>
     </div>
   </section>
+  <FormSkript />
 </Basis>
 <script>
   import { ladeKarte } from '../lib/karte-client';
@@ -101,4 +139,8 @@ const beschreibung = `${typTitel[i.typ as 'womo' | 'lager']}: ${art} in ${i.ort_
   .klein { font-size: 0.95rem; }
   .ablauf { padding-left: 1.25rem; margin: 1rem 0 1.25rem; }
   .stand { margin-top: 1rem; }
+  .anfrage summary { list-style: none; cursor: pointer; }
+  .anfrage summary::-webkit-details-marker { display: none; }
+  .anfrage[open] summary { display: none; }
+  .anfrage form { margin-top: 0.5rem; }
 </style>

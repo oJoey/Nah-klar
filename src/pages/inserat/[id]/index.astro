@@ -4,6 +4,7 @@
 export const prerender = false;
 import Basis from '../../../layouts/Basis.astro';
 import InseratDetail from '../../../components/InseratDetail.astro';
+import { ladeGebuehren } from '../../../lib/gebuehren';
 
 const { supabase } = Astro.locals;
 const id = Astro.params.id ?? '';
@@ -15,10 +16,11 @@ const [{ data: i }, { data: fotos }] = gueltig
     ])
   : [{ data: null }, { data: null }];
 
+const gebuehren = await ladeGebuehren(supabase);
 if (!i) Astro.response.status = 404;
 else if (i.status !== 'aktiv') Astro.response.headers.set('Cache-Control', 'private, no-store');
 ---
-{i ? <InseratDetail i={i} fotos={fotos ?? []} /> : (
+{i ? <InseratDetail i={i} fotos={fotos ?? []} mitGebuehr={gebuehren.aktiv} /> : (
   <Basis titel="Inserat nicht gefunden" beschreibung="Dieses Inserat gibt es nicht oder nicht mehr." noindex>
     <section class="abschnitt">
       <div class="wrap schmal">

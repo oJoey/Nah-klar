@@ -35,20 +35,16 @@ const kacheln = flaechenArten.map((a) => ({
 }));
 
 const sorgen = [
-  { titel: 'Zahlung: Kommt die Miete pünktlich?', text: texte.zahlungPuenktlich },
-  { titel: 'Ausfall: Was, wenn der Mieter nicht zahlt?', text: texte.serviceGarantie },
-  { titel: 'Schäden: Wer kommt dafür auf?', text: `Jeder Mieter zahlt eine Kaution von einer Monatsmiete, mindestens ${zahlung.kautionMinEuro} €, direkt an Sie. Bei Ein- und Auszug wird der Zustand mit Fotos festgehalten.${site.mieterPruefung ? ' Bei Fahrzeugen muss der Mieter eine gültige Kfz-Versicherung nachweisen.' : ''}` },
   { titel: 'Fremde auf dem Grundstück?', text: site.mieterPruefung
       ? 'Wir prüfen jeden Mieter vorab: Ausweis, bei Fahrzeugen auch Fahrzeugschein und Versicherung. Sie lernen den Mieter bei der Besichtigung kennen und entscheiden selbst, ob Sie vermieten.'
       : 'Sie lernen jeden Interessenten bei der Besichtigung kennen und entscheiden selbst, ob Sie vermieten. Anfragen laufen gebündelt über uns, Ihre Telefonnummer steht nirgends öffentlich.' },
-  { titel: 'Nachbarn: Gibt es Ärger?', text: 'Zufahrtszeiten und Regeln, etwa keine Reparaturen auf dem Hof, legen Sie im Vertrag fest. So wissen alle, woran sie sind.' },
+  { titel: 'Nachbarn: Gibt es Ärger?', text: 'Zufahrtszeiten und Regeln, etwa keine Reparaturen auf dem Hof, sprechen Sie vorher ab und nennen sie im Inserat. So wissen alle, woran sie sind.' },
 ];
 
-// Vergleich aus Sicht der Vermieter: Vertrag, Zahlung, Kaution, Anfragen. Nur, was wirklich angeboten wird (Schalter in site.ts).
+// Vergleich aus Sicht der Vermieter. Nur, was es wirklich gibt.
 const vergleich = [
-  { punkt: 'Vertrag', anzeige: 'Meist per Handschlag', wir: site.vertragDigital ? 'Mustervertrag, digital per Klick unterschrieben' : 'Schriftlicher Mustervertrag mit Regeln zu Zufahrt, Kündigung und Zahlung' },
-  { punkt: 'Zahlung', anzeige: 'Sie laufen dem Geld hinterher', wir: site.zahlungLive ? 'Automatischer Einzug jeden Monat, Auszahlung an Sie' : 'Termin und Weg im Vertrag geregelt, wir helfen bei Problemen' },
-  { punkt: 'Kaution', anzeige: 'Verhandeln Sie selbst, oft gar nicht', wir: `Verpflichtend: eine Monatsmiete, mindestens ${zahlung.kautionMinEuro} €, direkt an Sie` },
+  { punkt: 'Adresse', anzeige: 'Steht oft in der Anzeige', wir: 'Nur der Ortsteil ist öffentlich, die Adresse gibt es erst zur Besichtigung' },
+  { punkt: 'Prüfung', anzeige: 'Jeder kann alles einstellen', wir: 'Jedes Inserat wird geprüft, bevor es online geht' },
   { punkt: 'Anfragen', anzeige: 'Viele Anrufe, Ihre Nummer steht öffentlich', wir: site.mieterPruefung ? 'Vorab geprüfte Interessenten, gebündelt über uns' : 'Nur passende Interessenten, gebündelt über uns' },
 ];
 
@@ -57,7 +53,7 @@ const schritte = vermieterSchritte;
 ---
 <Basis
   titel="Abstellplatz für Wohnmobil oder Lagerraum vermieten im Raum Stuttgart und Böblingen"
-  beschreibung="Hoffläche, Halle, Scheune, Garage oder Keller vermieten, mit fairem Nebenverdienst. Anbieten kostenlos: jede Fläche von Hand geprüft, Mustervertrag, persönlicher Ansprechpartner."
+  beschreibung="Hoffläche, Halle, Scheune, Garage oder Keller vermieten, mit fairem Nebenverdienst. Anbieten kostenlos: jedes Inserat geprüft, Adresse geschützt, persönlicher Ansprechpartner."
   brotkruemel={[{ name: 'Vermieten', pfad: '/vermieten/' }]}
 >
   <section class="held-formular abschnitt-grau">
@@ -69,7 +65,7 @@ const schritte = vermieterSchritte;
         <p class="einleitung">Anbieten kostenlos. Sie bestimmen den Preis.</p>
         <ul class="held-punkte">
           <li><span class="held-icon"><Icon name="schild" /></span>Jede Fläche von Hand geprüft</li>
-          <li><span class="held-icon"><Icon name="vertrag" /></span>Mustervertrag und Kaution</li>
+          <li><span class="held-icon"><Icon name="ort" /></span>Adresse bleibt privat</li>
           <li><span class="held-icon"><Icon name="chat" /></span>Persönlicher Ansprechpartner per WhatsApp und E-Mail</li>
         </ul>
         <a class="beispiel" href="#rechner">
@@ -151,7 +147,7 @@ const schritte = vermieterSchritte;
           <li>Die Fläche selbst, möglichst bei Tageslicht</li>
           <li>Tor, Tür oder Eingang</li>
         </ol>
-        <p>Daraus erstellen wir die Beschreibung für Mieter und bereiten den Mustervertrag vor. Sie prüfen alles und geben es frei.</p>
+        <p>Daraus entsteht Ihr Inserat. Wir prüfen es, bevor es online geht.</p>
       </div>
     </div>
   </section>

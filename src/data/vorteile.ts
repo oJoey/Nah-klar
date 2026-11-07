@@ -1,25 +1,23 @@
-// Vorteile für Startseite und /vermieten/. Nur, was wirklich angeboten wird: Punkte hängen an den Schaltern in site.ts.
-import { site } from '../config/site';
-
-const vertrag = site.vertragDigital ? 'Vertrag digital per Klick' : 'Mustervertrag inklusive, schriftlich und klar';
+// Vorteile für Startseite und /vermieten/. Nur, was es wirklich gibt.
+// Kaution, Mustervertrag, Mieteinzug, Mahnung und Zahlungsgarantie erst nennen, wenn sie existieren.
 
 export const mieterVorteile = [
-  'Suchauftrag kostenlos',
-  'Wir melden uns, sobald ein passender Platz frei ist',
-  'Geprüfte Angaben zu Zufahrt, Maßen und Zugang',
-  vertrag,
+  'Vor der Besichtigung zahlen Sie nichts',
+  'Suchauftrag kostenlos: Wir melden uns, sobald etwas frei wird',
+  'Geprüfte Inserate mit Angaben zu Zufahrt, Maßen und Zugang',
+  'Fester Preis pro Monat oder pro Saison',
 ];
 
 export const vermieterVorteile = [
   'Kein Abo und keine Kosten fürs Anbieten',
-  site.zahlungLive ? 'Automatischer Monatseinzug, Auszahlung jeden Monat' : 'Volle Miete, Zahlungstermin im Vertrag geregelt',
-  'Kaution geregelt: eine Monatsmiete, direkt an Sie',
-  site.vertragDigital ? 'Vertrag digital per Klick' : 'Mustervertrag inklusive',
+  'Sie legen Preis, Mietart und Zeitraum selbst fest',
+  'Ihre Adresse ist nicht öffentlich, nur der Ortsteil',
+  'Sie lernen jeden Interessenten vorher kennen',
 ];
 
 // Vertrauens-Symbole unter dem Suchfeld der Startseite
 export const vertrauen = [
-  { icon: 'schild', text: 'Geprüfte Plätze' },
-  { icon: 'vertrag', text: 'Mustervertrag inklusive' },
+  { icon: 'schild', text: 'Geprüfte Inserate' },
+  { icon: 'euro', text: 'Vor der Besichtigung zahlen Sie nichts' },
   { icon: 'chat', text: 'Persönlicher Ansprechpartner' },
 ] as const;

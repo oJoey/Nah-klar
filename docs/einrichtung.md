@@ -3,7 +3,8 @@
 ## 1. Datenbank anlegen
 1. Supabase-Projekt (Region Frankfurt) öffnen → **SQL Editor** → **New query**.
 2. Inhalt von `supabase/migrations/20261104000100_basis.sql` einfügen → **Run**.
-3. Danach genauso `supabase/migrations/20261104000200_vorbereitet_zahlung_bewertung.sql`.
+3. Danach genauso `supabase/migrations/20261104000200_vorbereitet_zahlung_bewertung.sql`
+   und `supabase/migrations/20261107000300_pruefung_und_servicegebuehr.sql` (immer in dieser Reihenfolge).
 
 ## 2. Login per 6-stelligem Code
 1. **Authentication → Sign In / Providers → Email**: aktiv lassen, „Confirm email“ an.
@@ -30,3 +31,14 @@ Freigabe der Inserate: `/admin/inserate/`.
 ## Lokal testen (optional)
 `.env.example` nach `.env` kopieren, Werte eintragen, `npm run dev`.
 Die Datenbankregeln lassen sich ohne Supabase mit einem normalen Postgres testen: `supabase/test/` (stubs.sql, dann Migrationen, dann test_basis.sql).
+
+## 5. Mails bei Anfragen (Übergang bis Etappe b)
+„Besichtigung anfragen“ und „Platz anbieten“ laufen vorerst über Netlify Forms.
+Netlify: **Forms → Form notifications → Add notification → Email notification**, Formular „Any form“, deine E-Mail-Adresse.
+Formular-Erkennung muss an sein (**Forms → Enable form detection**).
+
+## Servicegebühr einschalten (später)
+Zwei Stellen, dann neu veröffentlichen:
+1. Datenbank: `update public.einstellungen set wert = 'true' where schluessel = 'servicegebuehr_aktiv';`
+2. `src/config/zahlung.ts`: `servicegebuehrAktiv: true`
+Der Admin-Bereich warnt, wenn beide nicht übereinstimmen.

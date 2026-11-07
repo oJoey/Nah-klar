@@ -20,18 +20,12 @@ export const site = {
   // Wie schnell wir uns nach einer Anfrage melden. Bitte nur eintragen, was Sie sicher einhalten.
   antwortzeit: 'innerhalb von zwei Werktagen',
 
-  // GEBÜHREN: Sätze in src/config/gebuehren.ts. Rangfolge: zahlungLive vor servicegebuehrManuell. Texte in src/lib/texte.ts.
-  // Stripe Connect: true = Servicegebühr im Gesamtpreis, Miete per Lastschrift eingezogen und ausgezahlt.
-  // Erst auf true setzen, wenn Lastschrift und Auszahlung tatsächlich laufen.
+  // GEBÜHREN: Schalter servicegebuehrAktiv in src/config/zahlung.ts. Texte in src/lib/texte.ts.
+  // Zahlungsabwicklung (Stripe Connect) ist nicht Teil des MVP. Erst auf true setzen, wenn sie wirklich läuft.
   zahlungLive: false,
-  // Übergang ohne Stripe: Mieter zahlen die Miete direkt an den Vermieter und die Servicegebühr (10 %) monatlich an uns. Mieter sehen trotzdem immer den Gesamtpreis.
-  servicegebuehrManuell: true,
   // Kleinunternehmer nach § 19 UStG: keine Umsatzsteuer auf die Gebühren.
   // Auf false setzen, wenn die Grenze überschritten wird (25.000 € Umsatz im Vorjahr bzw. 100.000 € im laufenden Jahr) → 19 % USt.
   kleinunternehmer: true,
-  // Vertrag digital per Klick unterschreiben. Erst auf true setzen, wenn es das wirklich gibt. Vorher: Mustervertrag zum Unterschreiben.
-  vertragDigital: false,
-
   // Prüfung der Mieter (Ausweis, Fahrzeugschein, Versicherung). Erst auf true setzen, wenn Sie das wirklich bei jedem Mieter machen.
   mieterPruefung: false,
 

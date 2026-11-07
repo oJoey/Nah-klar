@@ -4,4 +4,4 @@ seiten: [mieten]
 reihenfolge: 35
 ---
 
-Mit dem Vorschlag erhalten Sie Fotos, Preis und den Ortsteil. Die genaue Adresse nennen wir, sobald Sie einen Besichtigungstermin vereinbaren. So schützen wir die Vermieter.
+Im Inserat sehen Sie Fotos, Preis und den Ortsteil. Die genaue Adresse nennen wir, sobald Sie einen Besichtigungstermin vereinbaren. So schützen wir die Vermieter.

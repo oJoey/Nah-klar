@@ -85,7 +85,13 @@ end $$;
 select pg_temp.als('00000000-0000-0000-0000-00000000000c');
 update public.inserate set status = 'aktiv' where id = '11111111-1111-1111-1111-111111111111';
 
--- 4) Gast sieht das Inserat mit Gesamtpreis (330 € + 10 % = 363 €), aber keine Adresse
+-- 4) Servicegebühr aus (Standard): Mieter sehen 330 €. An: 330 € + 10 % = 363 €
+select pg_temp.als(null);
+do $$ begin
+  assert (select gesamtpreis from public.inserate_oeffentlich where id = '11111111-1111-1111-1111-111111111111') = 330, 'ohne Servicegebühr';
+end $$;
+reset role;
+update public.einstellungen set wert = 'true' where schluessel = 'servicegebuehr_aktiv';
 select pg_temp.als(null);
 do $$ begin
   assert (select gesamtpreis from public.inserate_oeffentlich where id = '11111111-1111-1111-1111-111111111111') = 363, 'Gesamtpreis';
@@ -106,7 +112,34 @@ do $$ begin
   assert (select titel from public.inserate where id = '11111111-1111-1111-1111-111111111111') <> 'gekapert', 'fremdes Inserat geändert';
 end $$;
 
--- 6) Vermieter ändert Text eines aktiven Inserats → zurück in Prüfung
+-- 6a) Preis, verfügbar ab, Maße und Pausieren gehen ohne Prüfung durch
+select pg_temp.als('00000000-0000-0000-0000-00000000000a');
+update public.inserate set vermieterpreis = 350, verfuegbar_ab = '2026-12-01', einfahrtshoehe_cm = 360 where id = '11111111-1111-1111-1111-111111111111';
+update public.inserate set status = 'pausiert' where id = '11111111-1111-1111-1111-111111111111';
+update public.inserate set status = 'aktiv' where id = '11111111-1111-1111-1111-111111111111';
+update public.inserat_fotos set reihenfolge = 3 where inserat_id = '11111111-1111-1111-1111-111111111111';
+do $$ begin
+  assert (select status from public.inserate where id = '11111111-1111-1111-1111-111111111111') = 'aktiv', 'Preis/Pause darf nicht in Prüfung';
+end $$;
+
+-- 6b) Neues Foto → Prüfung
+insert into public.inserat_fotos (inserat_id, pfad) values ('11111111-1111-1111-1111-111111111111', '11111111-1111-1111-1111-111111111111/b.jpg');
+do $$ begin
+  assert (select status from public.inserate where id = '11111111-1111-1111-1111-111111111111') = 'pruefung', 'Foto → Prüfung';
+end $$;
+select pg_temp.als('00000000-0000-0000-0000-00000000000c');
+update public.inserate set status = 'aktiv' where id = '11111111-1111-1111-1111-111111111111';
+
+-- 6c) Adresse geändert → Prüfung
+select pg_temp.als('00000000-0000-0000-0000-00000000000a');
+update public.inserat_adressen set hausnummer = '2' where inserat_id = '11111111-1111-1111-1111-111111111111';
+do $$ begin
+  assert (select status from public.inserate where id = '11111111-1111-1111-1111-111111111111') = 'pruefung', 'Adresse → Prüfung';
+end $$;
+select pg_temp.als('00000000-0000-0000-0000-00000000000c');
+update public.inserate set status = 'aktiv' where id = '11111111-1111-1111-1111-111111111111';
+
+-- 6d) Vermieter ändert Text eines aktiven Inserats → zurück in Prüfung
 select pg_temp.als('00000000-0000-0000-0000-00000000000a');
 update public.inserate set titel = 'Hallenplatz mit Strom' where id = '11111111-1111-1111-1111-111111111111';
 do $$ begin

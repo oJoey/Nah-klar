@@ -19,10 +19,8 @@ export type VermietKategorie = {
   verwandt: SeitenSchluessel[];
 };
 
-const faqKosten = { frage: 'Was kostet es mich?', antwort: zahlung.provisionAnzeigen ? 'Das Anbieten ist kostenlos, ohne Abo und ohne Laufzeit bei uns. Erst wenn Sie vermieten, fällt eine einmalige Provision an. Sie wird von der ersten Auszahlung abgezogen.' : 'Das Anbieten ist kostenlos, ohne Abo und ohne Laufzeit bei uns. Sie legen fest, welchen Betrag Sie bekommen möchten.' };
+const faqKosten = { frage: 'Was kostet es mich?', antwort: zahlung.servicegebuehrAktiv && zahlung.provisionAnzeigen ? 'Das Anbieten ist kostenlos, ohne Abo und ohne Laufzeit bei uns. Erst wenn Sie vermieten, fällt eine einmalige Provision an. Sie wird von der ersten Auszahlung abgezogen.' : 'Das Anbieten ist kostenlos, ohne Abo und ohne Laufzeit bei uns. Sie legen fest, welchen Betrag Sie bekommen möchten.' };
 const faqMieter = { frage: 'Wer sind die Mieter?', antwort: 'Privatleute aus der Region. Sie lernen jeden Interessenten bei der Besichtigung kennen und entscheiden selbst, ob Sie vermieten.' };
-const faqKuendigen = { frage: 'Kann ich wieder kündigen?', antwort: 'Ja. Der Mustervertrag ist monatlich kündbar, mit einer Frist von einem Monat.' };
-const faqKaution = { frage: 'Gibt es eine Kaution?', antwort: `Ja. Jeder Mieter zahlt eine Kaution von einer Monatsmiete, mindestens ${zahlung.kautionMinEuro} €, direkt an Sie. Bei Ein- und Auszug wird der Zustand mit Fotos festgehalten.` };
 
 export const vermietKategorien: VermietKategorie[] = [
   {
@@ -37,7 +35,7 @@ export const vermietKategorien: VermietKategorie[] = [
     faq: [
       { frage: 'Kann ich nur einen Teil des Hofs vermieten?', antwort: 'Ja. Viele vermieten genau einen Platz und nutzen den Rest selbst. Wichtig ist, dass beide gut ein- und ausfahren können.' },
       { frage: 'Was, wenn ich die Fläche zeitweise selbst brauche?', antwort: 'Legen Sie Zugangszeiten und Regeln vorher fest und nennen Sie sie im Inserat. So wissen beide Seiten vorher Bescheid.' },
-      faqKosten, faqMieter, faqKaution, faqKuendigen,
+      faqKosten, faqMieter,
     ],
     verwandt: ['vermietenScheune', 'verdienstrechner', 'nachfrage'],
   },
@@ -53,7 +51,7 @@ export const vermietKategorien: VermietKategorie[] = [
     faq: [
       { frage: 'Was darf eingelagert werden?', antwort: 'Das bestimmen Sie. Typisch sind Möbel, Kisten, Reifen und Gartengeräte. Nennen Sie im Inserat, was ausgeschlossen ist.' },
       { frage: 'Wie gibt der Mieter den Schlüssel zurück?', antwort: 'Halten Sie bei Übergabe und Auszug in einem Protokoll mit Fotos fest, wie viele Schlüssel oder Handsender es gibt.' },
-      faqKosten, faqMieter, faqKaution, faqKuendigen,
+      faqKosten, faqMieter,
     ],
     verwandt: ['vermietenKeller', 'mietenLager', 'verdienstrechner'],
   },
@@ -67,9 +65,9 @@ export const vermietKategorien: VermietKategorie[] = [
     gesucht: ['Leute im Umzug, die Möbel zwischenlagern', 'Familien mit wenig Platz für Kisten und Saisonartikel', 'Leute, die Reifen einlagern möchten', 'Hobbygärtner mit Geräten und Möbeln für den Garten'],
     checkliste: ['Fläche in m² und Raumhöhe messen', 'Prüfen, ob der Raum trocken ist, und regelmäßig lüften', 'Weg zum Raum ansehen: Treppen, Türbreite, eigener Eingang', 'Zugangszeiten festlegen, etwa nach Absprache oder zu festen Zeiten', 'Festlegen, was nicht eingelagert werden darf, etwa Benzin oder Lebensmittel'],
     faq: [
-      { frage: 'Muss ich dabei sein, wenn der Mieter an seine Sachen will?', antwort: 'Das legen Sie fest. Manche geben einen eigenen Schlüssel aus, andere vereinbaren feste Zeiten. Wir halten das im Mustervertrag fest.' },
-      { frage: 'Was darf eingelagert werden?', antwort: 'Das bestimmen Sie. Typisch sind Möbel, Kisten, Reifen und Gartengeräte. Schreiben Sie im Vertrag fest, was ausgeschlossen ist.' },
-      faqKosten, faqMieter, faqKaution, faqKuendigen,
+      { frage: 'Muss ich dabei sein, wenn der Mieter an seine Sachen will?', antwort: 'Das legen Sie fest. Manche geben einen eigenen Schlüssel aus, andere vereinbaren feste Zeiten.' },
+      { frage: 'Was darf eingelagert werden?', antwort: 'Das bestimmen Sie. Typisch sind Möbel, Kisten, Reifen und Gartengeräte. Nennen Sie im Inserat, was ausgeschlossen ist.' },
+      faqKosten, faqMieter,
     ],
     verwandt: ['vermietenGarage', 'mietenLager', 'verdienstrechner'],
   },
@@ -85,7 +83,7 @@ export const vermietKategorien: VermietKategorie[] = [
     faq: [
       { frage: 'Wie viele Plätze kann ich anbieten?', antwort: 'So viele, wie mit genug Platz zum Rangieren hineinpassen. Geben Sie die Zahl im Inserat an.' },
       { frage: 'Was ist, wenn Fahrzeuge hintereinander stehen?', antwort: 'Dann kommt nicht jeder jederzeit heraus. Legen Sie fest, ob Zugang nur nach Absprache möglich ist. Das steht dann im Inserat.' },
-      faqKosten, faqMieter, faqKaution, faqKuendigen,
+      faqKosten, faqMieter,
     ],
     verwandt: ['nachfrage', 'mietenWohnmobil', 'verdienstrechner'],
   },

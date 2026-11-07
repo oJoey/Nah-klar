@@ -7,27 +7,18 @@ import { link } from '../../config/seiten';
 import { mieterSchritte, vermieterSchritte } from '../../data/ablauf';
 import { texte } from '../../lib/texte';
 
-const vertrag = [
-  'Ort, Art und Größe des Platzes',
-  'Monatsmiete und wie sie gezahlt wird',
-  `Kaution: eine Monatsmiete, mindestens ${zahlung.kautionMinEuro} €`,
-  `Kündigung: monatlich, mit einer Frist von ${zahlung.kuendigungsfristMonate === 1 ? 'einem Monat' : `${zahlung.kuendigungsfristMonate} Monaten`}`,
-  'Zufahrt und Zugangszeiten',
-  'Hausregeln, etwa keine Reparaturen auf dem Hof',
-  'Zustand bei Ein- und Auszug, mit Fotos festgehalten',
-];
 ---
 <Ratgeber
   seite="soFunktionierts"
   eltern={null}
   typ="WebPage"
   titel="So funktioniert es: Abstellplatz für Wohnmobil und Lagerraum finden oder vermieten"
-  beschreibung={`Vom Suchauftrag bis zum Mietvertrag: So bringt ${site.name} Mieter und Vermieter von Abstellplätzen für Wohnmobile und Wohnwagen sowie Lagerräumen ${site.regionIn} zusammen. Kostenlos für Vermieter, mit Mustervertrag und Kaution.`}
+  beschreibung={`Von der Suche bis zur Besichtigung: So bringt ${site.name} Mieter und Vermieter von Abstellplätzen für Wohnmobile und Wohnwagen sowie Lagerräumen ${site.regionIn} zusammen. Vor der Besichtigung zahlen Mieter nichts.`}
   kicker="So funktioniert's"
-  einleitung="Kein Inserateportal, sondern persönlich: Sie sagen uns, was Sie suchen oder anbieten. Wir bringen die passenden Leute zusammen."
+  einleitung="Die Plattform, die Mieter und Vermieter zusammenbringt: Inserate ansehen, Besichtigung anfragen, erst dann buchen."
   verwandt={['preise', 'sicherheit', 'hilfe']}
 >
-  <Fragment slot="h1">Vom Suchauftrag zum <span class="markiert">Vertrag</span></Fragment>
+  <Fragment slot="h1">Von der Suche zur <span class="markiert">Besichtigung</span></Fragment>
 
   <section class="abschnitt">
     <div class="wrap">
@@ -39,10 +30,7 @@ const vertrag = [
   <section class="abschnitt abschnitt-grau">
     <div class="wrap inhalt">
       <h2>Was ist anders als bei Kleinanzeigen?</h2>
-      <p>Bei einer Anzeige schreiben Sie selbst, verhandeln selbst und regeln alles per Handschlag. Bei uns prüfen wir jede Fläche von Hand, bevor wir sie vorschlagen. Anfragen laufen gebündelt über uns, die Telefonnummer des Vermieters steht nirgends öffentlich. Und am Ende gibt es einen schriftlichen Mustervertrag statt einer mündlichen Absprache.</p>
-      <h2>Was steht im Mustervertrag?</h2>
-      <ul class="haken">{vertrag.map((v) => <li>{v}</li>)}</ul>
-      <p>Mieter und Vermieter können den Vertrag vor der Zusage in Ruhe lesen. Geschlossen wird er direkt zwischen beiden.</p>
+      <p>Bei einer Anzeige schreiben Sie selbst, verhandeln selbst und regeln alles per Handschlag. Bei uns prüfen wir jedes Inserat, bevor es online geht. Anfragen laufen gebündelt über uns, die Telefonnummer des Vermieters steht nirgends öffentlich. Und vor der Besichtigung zahlen Sie nichts.</p>
     </div>
   </section>
 </Ratgeber>

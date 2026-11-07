@@ -3,6 +3,8 @@
 export const prerender = false;
 import Konto from '../../../layouts/Konto.astro';
 import { statusTitel, typTitel } from '../../../lib/inserat';
+import { ladeGebuehren } from '../../../lib/gebuehren';
+import { zahlung } from '../../../config/zahlung';
 
 const { supabase } = Astro.locals;
 const filter = ['pruefung', 'aktiv', 'gesperrt', 'alle'].includes(Astro.url.searchParams.get('status') ?? '') ? Astro.url.searchParams.get('status')! : 'pruefung';
@@ -36,9 +38,13 @@ let abfrage = supabase
   .limit(200);
 if (filter !== 'alle') abfrage = abfrage.eq('status', filter);
 const { data: inserate } = await abfrage;
+// Schalter Servicegebühr muss in Datenbank und src/config/zahlung.ts gleich stehen
+const gebuehren = await ladeGebuehren(supabase);
+const schalterUngleich = gebuehren.aktiv !== zahlung.servicegebuehrAktiv;
 ---
 <Konto titel="Admin: Inserate" breit>
   <h1>Inserate prüfen</h1>
+  {schalterUngleich && <div class="fehlerbox" role="alert"><p><strong>Achtung:</strong> Der Schalter Servicegebühr steht in der Datenbank auf „{gebuehren.aktiv ? 'an' : 'aus'}“, in src/config/zahlung.ts auf „{zahlung.servicegebuehrAktiv ? 'an' : 'aus'}“. Preise in Suche und Inseraten folgen der Datenbank, die Texte auf den Info-Seiten der Datei. Bitte beides gleich stellen und neu veröffentlichen.</p></div>}
   <nav class="filter" aria-label="Status">
     {['pruefung', 'aktiv', 'gesperrt', 'alle'].map((s) => <a href={`?status=${s}`} aria-current={s === filter ? 'page' : undefined}>{s === 'alle' ? 'Alle' : statusTitel[s]}</a>)}
   </nav>

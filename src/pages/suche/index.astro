@@ -6,6 +6,7 @@ import InseratKarte from '../../components/InseratKarte.astro';
 import KarteLaden from '../../components/KarteLaden.astro';
 import { abstellarten, zugaenge } from '../../lib/inserat';
 import { link } from '../../config/seiten';
+import { ladeGebuehren } from '../../lib/gebuehren';
 
 const { supabase } = Astro.locals;
 const q = Astro.url.searchParams;
@@ -30,6 +31,7 @@ const f = {
   mietart: ['monatlich', 'saisonal'].includes(q.get('mietart') ?? '') ? q.get('mietart')! : '',
 };
 
+const gebuehren = await ladeGebuehren(supabase);
 const { data: orte } = await supabase.from('orte').select('slug, name').eq('aktiv', true).order('name');
 const womo = f.typ === 'womo';
 const lager = f.typ === 'lager';
@@ -133,7 +135,7 @@ Astro.response.headers.set('Cache-Control', 'public, max-age=0, must-revalidate'
         <div class="ergebnisse">
           {error && <div class="fehlerbox" role="alert"><p>Die Suche ist gerade nicht erreichbar. Bitte versuchen Sie es gleich noch einmal.</p></div>}
           <p class="anzahl" role="status">{treffer.length === 0 ? 'Keine passenden Plätze gefunden.' : `${treffer.length} ${treffer.length === 1 ? 'Platz' : 'Plätze'} gefunden`}{treffer.length >= 60 ? ' (die ersten 60)' : ''}</p>
-          <p class="klein">Alle Preise sind Gesamtpreise inklusive Servicegebühr. Vor der Besichtigung zahlen Sie nichts.</p>
+          <p class="klein">{gebuehren.aktiv ? 'Alle Preise sind Gesamtpreise inklusive Servicegebühr.' : 'Alle Preise sind Endpreise ohne weitere Gebühren.'} Vor der Besichtigung zahlen Sie nichts.</p>
 
           {treffer.length > 0 && (
             <div class="karte-block">

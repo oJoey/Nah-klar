@@ -263,7 +263,7 @@ const vorschau = inserat.vermieterpreis && inserat.mietart
         <input id="vermieterpreis" name="vermieterpreis" type="text" inputmode="decimal" required value={w('vermieterpreis')} data-betrag />
         <span class="feld-hilfe">Das ist der Betrag, den Sie bekommen möchten{gebuehren.provisionAnzeigen ? ' (vor Abzug der einmaligen Provision)' : ''}.</span>
       </div>
-      <p class="hinweis" aria-live="polite">Mieter sehen den Gesamtpreis inklusive Servicegebühr: <strong data-gesamt>–</strong></p>
+      <p class="hinweis" aria-live="polite">{gebuehren.aktiv ? 'Mieter sehen den Gesamtpreis inklusive Servicegebühr:' : 'Mieter sehen diesen Preis:'} <strong data-gesamt>–</strong></p>
       {gebuehren.provisionAnzeigen && (
         <p class="feld-hilfe">Einmalige Provision bei Vermietung: {gebuehren.provision.art === 'prozent' ? `${Math.round(gebuehren.provision.wert * 100)} % der ersten Miete` : `${gebuehren.provision.wert} €`}. Sie wird von der ersten Auszahlung abgezogen.</p>
       )}

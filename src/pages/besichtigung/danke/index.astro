@@ -1,0 +1,20 @@
+---
+import Basis from '../../../layouts/Basis.astro';
+import { site, whatsappLink, emailHref } from '../../../config/site';
+---
+<Basis titel="Danke für Ihre Anfrage" beschreibung="Ihre Besichtigungsanfrage ist bei uns angekommen." noindex>
+  <section class="abschnitt">
+    <div class="wrap schmal">
+      <h1>Danke, Ihre Anfrage ist angekommen.</h1>
+      <p class="einleitung">Wir leiten sie an den Vermieter weiter und melden uns {site.antwortzeit} mit einem Terminvorschlag.</p>
+      <h2>So geht es weiter</h2>
+      <ol>
+        <li>Wir stimmen einen Besichtigungstermin mit Ihnen und dem Vermieter ab.</li>
+        <li>Sobald der Termin steht, erfahren Sie die genaue Adresse.</li>
+        <li>Sie sehen sich den Platz in Ruhe an. Vor der Besichtigung zahlen Sie nichts.</li>
+      </ol>
+      <p>Fragen? Schreiben Sie uns per <a href={whatsappLink} rel="noopener">WhatsApp</a> oder <a href={emailHref}>E-Mail</a>.</p>
+      <p><a class="btn btn-rahmen" href="/suche/">Weitere Plätze ansehen</a></p>
+    </div>
+  </section>
+</Basis>

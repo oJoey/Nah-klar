@@ -5,8 +5,7 @@ import { wohnmobilSatz } from './nachfrage';
 
 // Gemeinsame FAQ für alle Kategorien
 const faqSuchauftrag = { frage: 'Was passiert, wenn gerade kein Platz frei ist?', antwort: 'Mit einem Suchauftrag müssen Sie nicht immer wieder nachsehen. Wir melden uns, sobald ein passender Platz in Ihrer Nähe frei wird. Der Suchauftrag ist kostenlos und unverbindlich.' };
-const faqBesichtigung = { frage: 'Kann ich den Platz vorher ansehen?', antwort: 'Ja. Mit dem Vorschlag erhalten Sie Fotos und den Ortsteil. Wenn der Platz passt, vereinbaren wir einen Besichtigungstermin, dann erfahren Sie auch die genaue Adresse.' };
-const faqVertrag = { frage: 'Wie lange bin ich gebunden?', antwort: 'Der Mustervertrag ist monatlich kündbar, mit einer Frist von einem Monat. Sie können ihn vor Ihrer Zusage in Ruhe lesen.' };
+const faqBesichtigung = { frage: 'Kann ich den Platz vorher ansehen?', antwort: 'Ja. Im Inserat sehen Sie Fotos und den Ortsteil. Wenn der Platz passt, vereinbaren wir einen Besichtigungstermin, dann erfahren Sie auch die genaue Adresse.' };
 
 export type Tipp = { titel: string; punkte: string[] };
 export type Kategorie = {
@@ -37,9 +36,9 @@ export const kategorien: Kategorie[] = [
     seite: 'mietenWohnmobil', keyword: 'Wohnmobil Stellplatz mieten',
     richtwerte: { klassen: ['7', '9', 'ueber-9'], lager: false },
     faq: [
-      { frage: 'Ab wann sollte ich einen Winterplatz suchen?', antwort: 'Viele suchen ab dem Spätsommer. Je früher Sie Ihren Suchauftrag anlegen, desto mehr Zeit bleibt für Besichtigung und Vertrag, bevor die Saison endet.' },
+      { frage: 'Ab wann sollte ich einen Winterplatz suchen?', antwort: 'Viele suchen ab dem Spätsommer. Je früher Sie Ihren Suchauftrag anlegen, desto mehr Zeit bleibt für die Besichtigung, bevor die Saison endet.' },
       { frage: 'Welche Maße brauchen Sie von mir?', antwort: 'Länge mit Deichsel und Heckträger, Höhe mit Dachaufbauten wie Klimaanlage oder SAT-Antenne und die Breite. Damit schlagen wir nur Plätze vor, deren Zufahrt und Tor passen.' },
-      faqBesichtigung, faqVertrag, faqSuchauftrag,
+      faqBesichtigung, faqSuchauftrag,
     ],
     art: 'wohnmobil-wohnwagen', icon: 'wohnmobil', bild: 'wohnmobil',
     kurz: 'Wohnmobil / Wohnwagen', kachelText: 'Winterplatz oder ganzjährig, unter Dach oder im Freien.',
@@ -60,7 +59,7 @@ export const kategorien: Kategorie[] = [
     faq: [
       { frage: 'Wie viel Platz brauche ich?', antwort: 'Als grobe Hilfe: Kisten und kleine Möbel aus einem Zimmer passen oft auf wenige Quadratmeter, wenn Sie stapeln können. Messen Sie große Stücke vorher aus und geben Sie im Suchauftrag die ungefähre Fläche an.' },
       { frage: 'Kann ich auch Reifen einlagern?', antwort: 'Ja, Reifen sind ein typisches Lagergut. Ein trockener, kühler Raum ist ideal. Sagen Sie uns im Suchauftrag, wie viele Sätze es sind.' },
-      faqBesichtigung, faqVertrag, faqSuchauftrag,
+      faqBesichtigung, faqSuchauftrag,
     ],
     art: 'lagerraum', icon: 'lager', bild: 'lager',
     kurz: 'Lagerraum', kachelText: 'Trockener Raum für Möbel, Reifen, Kisten oder Gartengeräte.',

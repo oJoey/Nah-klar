@@ -1,5 +1,5 @@
 ---
-// Karte eines Inserats in der Ergebnisliste. Zeigt nur den Gesamtpreis (inkl. Servicegebühr).
+// Karte eines Inserats in der Ergebnisliste. Zeigt nur den Preis für Mieter (mit Servicegebühr, falls aktiv).
 import { fotoUrl } from '../lib/supabase';
 import { preisZeile, eckdaten, typTitel, titelVon, flaechenArten } from '../lib/inserat';
 interface Props { i: Record<string, any>; entfernung?: number | null }
