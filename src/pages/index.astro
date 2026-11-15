@@ -11,7 +11,6 @@ import NachfrageHinweis from '../components/NachfrageHinweis.astro';
 import WerkzeugeTeaser from '../components/WerkzeugeTeaser.astro';
 import Faq from '../components/Faq.astro';
 import Icon from '../components/Icon.astro';
-import Bildplatz from '../components/Bildplatz.astro';
 import { site, whatsappLink, emailHref } from '../config/site';
 import { link } from '../config/seiten';
 import { kategorien } from '../data/kategorien';
@@ -37,20 +36,58 @@ const orte = startorte.map((o) => ({ ort: o.ort, href: o.pfad ?? (such ? `${such
   beschreibung="Stellplatz für Wohnmobil, Anhänger oder Auto, Garage oder Lagerraum bei Privatleuten in Baden-Württemberg mieten oder vermieten. Mustervertrag, geprüfte Plätze, persönlicher Ansprechpartner."
 >
   <section class="held">
-    <div class="wrap">
-      <div class="held-raster">
-        <div>
-          <p class="kicker">Stellplatz, Garage und Lagerraum in Baden-Württemberg</p>
-          <h1>Platz gesucht? Ihre <span class="markiert">Nachbarn</span> haben welchen.</h1>
-          <p class="einleitung">Für Wohnmobil, Anhänger, Auto oder Lagergut. Bei Privatleuten in Ihrer Nähe, mit Mustervertrag und persönlichem Ansprechpartner.</p>
+    <div class="wrap held-raster">
+      <div class="held-text">
+        <p class="held-pille">Baden-Württemberg</p>
+        <h1>Platz gesucht? Ihre Nachbarn haben welchen.</h1>
+        <p class="einleitung">Stellplatz, Garage oder Lagerraum bei Privatleuten in Ihrer Nähe. Mit Mustervertrag und persönlichem Ansprechpartner.</p>
+        <div class="held-knoepfe">
+          <a class="btn btn-primaer btn-gross" href="#suche"><Icon name="ort" /> Platz finden</a>
+          <a class="btn btn-rahmen btn-gross" href={link('platzAnbieten')}>Platz anbieten</a>
         </div>
-        <Bildplatz name="" alt="" class="held-bild" />
+        <ul class="vertrauen">
+          {vertrauen.map((v) => <li><span class="vertrauen-icon" aria-hidden="true"><Icon name={v.icon} /></span>{v.text}</li>)}
+        </ul>
       </div>
-      <Suchmaske titel="" arten={arten} mitZeitraum={false} />
-      <ul class="vertrauen">
-        {vertrauen.map((v) => <li><span class="vertrauen-icon" aria-hidden="true"><Icon name={v.icon} /></span>{v.text}</li>)}
-      </ul>
+
+      <div class="buehne" aria-hidden="true">
+        <div class="vogel-glut"></div>
+        <img class="vogel" src="/bilder/vogel.svg" alt="" width="600" height="760" loading="eager" decoding="async" />
+
+        <div class="schwebe schwebe-oben">
+          <span class="schwebe-icon warm"><Icon name="ort" /></span>
+          <div>
+            <strong>Platz in Ihrer Nähe</strong>
+            <span>Wir melden uns per WhatsApp oder E-Mail.</span>
+          </div>
+        </div>
+
+        <div class="plan">
+          <p class="plan-titel">Ihr Suchauftrag</p>
+          <p class="plan-zeile"><span>So läuft es ab</span><span>4 Schritte</span></p>
+          <div class="plan-balken"><span></span></div>
+          <ul class="plan-liste">
+            <li class="erledigt"><span class="punkt"></span><span class="txt">Suchauftrag anlegen</span><em>kostenlos</em></li>
+            <li class="erledigt"><span class="punkt"></span><span class="txt">Platz wird geprüft</span><em>Zufahrt, Maße</em></li>
+            <li class="aktiv"><span class="punkt"></span>Vorschlag erhalten<em>persönlich</em></li>
+            <li><span class="punkt"></span>Mustervertrag unterschreiben</li>
+          </ul>
+          <p class="plan-fuss"><span class="haken-rund"><Icon name="check" /></span>Unverbindlich bis zur Unterschrift</p>
+        </div>
+
+        <div class="schwebe schwebe-rechts">
+          <span class="schwebe-icon"><Icon name="schild" /></span>
+          <div>
+            <strong>Geprüfte Plätze</strong>
+            <span>Zufahrt, Maße und Zugang</span>
+          </div>
+        </div>
+      </div>
     </div>
+  </section>
+
+  <section id="suche" class="such-band" aria-label="Platz suchen">
+    <div class="wrap"><Suchmaske titel="Was suchen Sie?" arten={arten} mitZeitraum={false} /></div>
   </section>
 
   <section class="abschnitt abschnitt-grau" aria-labelledby="arten-titel">
@@ -111,18 +148,70 @@ const orte = startorte.map((o) => ({ ort: o.ort, href: o.pfad ?? (such ? `${such
   </section>
 </Basis>
 <style>
-  .held { padding-block: clamp(1.5rem, 6vw, 4rem) clamp(3rem, 8vw, 5rem); }
-  .held-raster { display: grid; gap: 2rem; align-items: center; margin-bottom: clamp(1.5rem, 4vw, 2.5rem); }
-  .held .einleitung { margin-top: 1.25rem; margin-bottom: 0; }
-  .held :global(.held-bild) { display: none; }
-  @media (min-width: 60rem) {
-    .held-raster { grid-template-columns: 1.4fr 1fr; gap: 4rem; }
-    .held :global(.held-bild) { display: block; aspect-ratio: 5 / 4; }
+  /* Hero: warmer Cremeton (aus Akzent abgeleitet), große enge Überschrift, Vogel mit schwebenden Karten */
+  :global(body) { --creme: color-mix(in srgb, var(--akzent) 9%, var(--hintergrund)); --warm: #e9785a; --gruen: #86a83f; }
+  :global(body .kopf.kopf) { background: var(--creme); border-bottom-color: transparent; }
+  .held { background: radial-gradient(ellipse 60% 70% at 78% 40%, color-mix(in srgb, var(--akzent) 16%, var(--creme)), var(--creme) 70%); padding-block: clamp(1.5rem, 5vw, 3.5rem) clamp(2.5rem, 6vw, 4rem); overflow: hidden; }
+  .held-raster { display: grid; gap: 2.5rem; align-items: center; }
+  .held-pille { display: inline-block; margin: 0 0 1.5rem; padding: 0.35rem 1.1rem; border-radius: 999px; background: color-mix(in srgb, var(--akzent) 45%, var(--hintergrund)); border: 1.5px solid color-mix(in srgb, var(--akzent) 80%, var(--ueberschrift)); font-weight: 600; color: var(--ueberschrift); font-size: 1rem; }
+  .held h1 { font-size: clamp(2.8rem, 6vw, 4.6rem); line-height: 1; letter-spacing: -0.055em; font-weight: 800; color: #14121f; }
+  .held .einleitung { margin: 1.5rem 0 0; color: color-mix(in srgb, var(--text) 80%, var(--hintergrund)); max-width: 34rem; }
+  .held-knoepfe { display: flex; flex-wrap: wrap; gap: 1rem; margin-top: 2.25rem; }
+  .held-knoepfe .btn { border-radius: var(--r); }
+  .held-knoepfe .btn-primaer { box-shadow: 0 6px 18px color-mix(in srgb, var(--akzent) 45%, transparent); border-color: transparent; }
+  .held-knoepfe .btn-rahmen { background: transparent; border-width: 2px; }
+  .held-knoepfe :global(.symbol) { width: 1.3rem; height: 1.3rem; }
+  .vertrauen { list-style: none; padding: 0; margin: 2.25rem 0 0; display: flex; flex-wrap: wrap; gap: 0.75rem 1.5rem; font-weight: 600; font-size: 1rem; color: var(--ueberschrift); }
+  .vertrauen li { display: flex; align-items: center; gap: 0.55rem; }
+  .vertrauen-icon { display: grid; place-items: center; width: 2.25rem; height: 2.25rem; border-radius: var(--r-klein); background: var(--ueberschrift); }
+  .vertrauen-icon :global(.symbol) { color: var(--akzent); width: 1.25rem; height: 1.25rem; }
+
+  /* Bühne: Vogel rechts, Karten darüber */
+  .buehne { position: relative; min-height: 34rem; }
+  .vogel-glut { position: absolute; right: -20%; top: -2rem; width: 100%; aspect-ratio: 1; border-radius: 50%; background: radial-gradient(circle, rgb(255 255 255 / 0.7), transparent 65%); }
+  .vogel { position: absolute; right: -14%; top: -1rem; width: 92%; height: auto; filter: drop-shadow(0 30px 40px rgb(80 60 20 / 0.18)); }
+  .plan, .schwebe { position: absolute; background: var(--hintergrund); border-radius: var(--r-gross); box-shadow: 0 1px 2px rgb(40 30 10 / 0.06), 0 18px 40px rgb(40 30 10 / 0.12); }
+  .plan { left: 0; top: 15rem; width: min(26rem, 82%); padding: 1.5rem 1.5rem 1.25rem; }
+  .plan-titel { font-size: 1.45rem; font-weight: 800; letter-spacing: -0.02em; color: #14121f; margin: 0 0 0.6rem; }
+  .plan-zeile { display: flex; justify-content: space-between; font-size: 0.95rem; margin: 0 0 0.6rem; }
+  .plan-balken { height: 0.6rem; border-radius: 999px; background: color-mix(in srgb, var(--ueberschrift) 8%, transparent); overflow: hidden; }
+  .plan-balken span { display: block; width: 58%; height: 100%; border-radius: inherit; background: var(--gruen); }
+  .plan-liste { list-style: none; margin: 1rem 0 0; padding: 0; font-size: 0.98rem; }
+  .plan-liste li { display: flex; align-items: center; gap: 0.7rem; padding: 0.6rem 0; border-bottom: 1px solid var(--linie); font-weight: 600; color: var(--ueberschrift); }
+  .plan-liste em { margin-left: auto; font-style: normal; font-weight: 500; font-size: 0.85rem; color: color-mix(in srgb, var(--text) 70%, var(--hintergrund)); }
+  .punkt { flex: none; width: 1.3rem; height: 1.3rem; border-radius: 50%; border: 2px solid var(--linie); }
+  .erledigt .txt { color: color-mix(in srgb, var(--text) 60%, var(--hintergrund)); text-decoration: line-through; text-decoration-color: color-mix(in srgb, var(--text) 40%, transparent); }
+  .erledigt .punkt { border: 0; background: var(--gruen) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M6 12.5l4 4 8-9' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / 75% no-repeat; }
+  .aktiv .punkt { border-color: var(--warm); }
+  .aktiv em { color: var(--warm); font-weight: 700; }
+  .plan-fuss { display: flex; align-items: center; gap: 0.6rem; margin: 1rem 0 0; font-size: 0.95rem; font-weight: 600; color: var(--ueberschrift); }
+  .haken-rund { display: grid; place-items: center; width: 1.3rem; height: 1.3rem; border-radius: 50%; background: var(--gruen); }
+  .haken-rund :global(.symbol) { width: 0.85rem; height: 0.85rem; color: var(--hintergrund); stroke-width: 3; }
+  .schwebe { display: flex; gap: 0.8rem; align-items: flex-start; padding: 1rem 1.15rem; width: 16rem; font-size: 0.9rem; line-height: 1.35; animation: schweben 5s ease-in-out infinite; }
+  .schwebe strong { display: block; color: #14121f; font-size: 0.95rem; margin-bottom: 0.2rem; }
+  .schwebe-oben { left: 2%; top: 3rem; }
+  .schwebe-rechts { right: -3%; top: 29rem; animation-delay: -2.5s; }
+  .schwebe-icon { flex: none; display: grid; place-items: center; width: 2.25rem; height: 2.25rem; border-radius: 50%; background: var(--warm); }
+  .schwebe-icon.warm { background: var(--akzent); }
+  .schwebe-icon.warm :global(.symbol) { color: var(--ueberschrift); }
+  .schwebe-icon :global(.symbol) { width: 1.2rem; height: 1.2rem; color: var(--hintergrund); }
+  @keyframes schweben { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+  @media (prefers-reduced-motion: reduce) { .schwebe { animation: none; } }
+
+  /* Handy: Bühne kompakter, rechte Karte unter dem Plan */
+  @media (max-width: 40rem) {
+    .buehne { min-height: 37rem; }
+    .vogel { width: 95%; right: -30%; top: 0; }
+    .plan { left: 0; top: 11rem; width: 92%; }
+    .schwebe { width: 14rem; }
+    .schwebe-rechts { display: none; }
   }
-  .vertrauen { list-style: none; padding: 0; margin: 1.75rem 0 0; display: flex; flex-wrap: wrap; gap: 0.75rem 2rem; font-weight: 600; color: var(--ueberschrift); }
-  .vertrauen li { display: flex; align-items: center; gap: 0.6rem; }
-  .vertrauen-icon { display: grid; place-items: center; width: 2.5rem; height: 2.5rem; border-radius: var(--r); background: var(--ueberschrift); }
-  .vertrauen-icon :global(.symbol) { color: var(--akzent); width: 1.4rem; height: 1.4rem; }
+  @media (min-width: 60rem) {
+    .held-raster { grid-template-columns: 1.1fr 1fr; gap: 2rem; }
+    .buehne { min-height: 46rem; }
+  }
+
+  .such-band { background: var(--creme); padding-bottom: clamp(3rem, 7vw, 5rem); }
   .nachfrage-abschnitt { padding-block: clamp(2rem, 5vw, 3rem); }
   .nachfrage-abschnitt :global(.nachfrage-hinweis) { margin: 0 auto; }
   .orte { list-style: none; padding: 0; margin: 0; }
