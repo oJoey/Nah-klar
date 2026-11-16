@@ -37,12 +37,12 @@ const jahr = new Date().getFullYear();
 <style>
   .region-karte { margin: 0; }
   svg { display: block; width: 100%; height: auto; overflow: hidden; }
-  .kreise path { fill: none; stroke: rgb(31 42 18 / 0.14); stroke-width: 1; stroke-linejoin: round; }
-  .kreise path.kern { fill: #f3efe4; stroke: rgb(31 42 18 / 0.3); }
-  .kreise path.start { fill: var(--akzent-hell); stroke: var(--koralle-text); stroke-width: 1.5; }
+  .kreise path { fill: none; stroke: rgb(9 64 103 / 0.14); stroke-width: 1; stroke-linejoin: round; }
+  .kreise path.kern { fill: #f2f8fd; stroke: rgb(9 64 103 / 0.28); }
+  .kreise path.start { fill: var(--akzent-hell); stroke: var(--akzent); stroke-width: 1.5; }
   .route { fill: none; stroke: var(--route-farbe); stroke-width: var(--route-strich); stroke-dasharray: var(--route-muster); stroke-linecap: round; stroke-linejoin: round; }
   .ort circle { fill: var(--hintergrund); stroke: var(--ueberschrift); stroke-width: 2; }
-  .ort.start circle { fill: var(--akzent); stroke: var(--ueberschrift); }
+  .ort.start circle { fill: var(--koralle); stroke: var(--ueberschrift); }
   .ort text { font: 600 15px var(--schrift); fill: var(--ueberschrift); paint-order: stroke; stroke: var(--flaeche); stroke-width: 4px; stroke-linejoin: round; }
   .ort.start text { font-weight: 800; }
   figcaption { margin-top: 0.5rem; font-size: 0.75rem; color: var(--text-leise); text-align: right; }

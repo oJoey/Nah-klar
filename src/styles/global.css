@@ -1,29 +1,31 @@
 /* Gestaltung: ruhige Flächen statt Kästen, Hierarchie über Größe, Gewicht und Weißraum. */
 :root {
-  /* Palette (verbindlich), abgeleitet aus dem Maskottchen (Unzertrennlicher):
-     Pistaziengrün vom Gefieder, Apricot vom Gesicht, Gold vom Scheitel, tiefes Olivgrün als Tinte.
-     Flächen wechseln zwischen Creme, hellem Pistazie und hellem Pfirsich. Kontraste geprüft (WCAG AA). */
-  --flaeche: #fbf8f1;       /* Seitenhintergrund (helles Creme) */
-  --sekundaer: #eef3dc;     /* abgesetzte Abschnitte (helles Pistazie); Fließtext auf Dunkel (13,2:1) */
-  --pfirsich-hell: #fde8da; /* zweite Abschnittsfarbe, Badges */
-  --hintergrund: #ffffff;   /* Karten, Formularfelder; Überschriften auf Dunkel */
-  --ueberschrift: #1f2a12;  /* Tinte (tiefes Oliv): Überschriften, Icons, dunkle Abschnitte (14,2:1) */
-  --text: #3b4231;          /* Fließtext (9,9:1) */
-  --text-leise: #646a58;    /* Unterzeilen (5,3:1) */
-  --akzent: #f4935a;        /* Apricot: Haupt-Buttons, Text darauf in Tinte (6,6:1). Nie als Schrift auf Hell */
-  --akzent-hell: #fde8da;   /* Badge-Grund */
-  --gold: #f7cb45;          /* Scheitel-Gold: Markierungen, Icons auf Dunkel, Zahlen */
-  --salbei: #8db43c;        /* Pistazie: erledigt, Fortschritt, Häkchen (Icons) */
-  --salbei-text: #4d6b1b;   /* Grüne Schrift auf Weiß (6,1:1) */
-  --tertiaer: #e3edc4;      /* Hinweisboxen, Tags (Pistazie mittel) */
-  --koralle: #e8735a;       /* Aufmerksamkeit (Icons) */
-  --koralle-text: #b4472f;  /* Korallfarbene Schrift auf Weiß (5,4:1) */
+  /* Palette (verbindlich): „Happy Hues 6“ (Navy, Himmelblau, Rot), für Barrierefreiheit minimal angepasst.
+     Kontraste geprüft (WCAG AA). Abweichungen vom Original: Buttons in dunklerem Blau (weiß auf #3da9fc hätte nur 2,5:1),
+     Fließtext auf Navy in #90b4ce (#5f6c7b hätte dort nur 2,0:1), roter Text in #d12d50 (#ef4565 hätte 3,7:1). */
+  --flaeche: #fffffe;       /* Seitenhintergrund (Original: Background) */
+  --sekundaer: #d8eefe;     /* helles Blau: Badges, Hervorhebungen, abgesetzte Flächen auf Unterseiten; Text auf Navy (9,1:1) */
+  --pfirsich-hell: #d8eefe;
+  --hintergrund: #ffffff;   /* Karten, Formularfelder; Schrift auf Navy und auf Buttons */
+  --ueberschrift: #094067;  /* Navy (Original: Headline, Stroke): Überschriften, Icons, dunkle Flächen (10,8:1) */
+  --text: #5f6c7b;          /* Fließtext (Original: Paragraph, 5,4:1) */
+  --text-leise: #6a7684;    /* Unterzeilen (4,6:1) */
+  --akzent: #3da9fc;        /* Himmelblau (Original: Button/Highlight): Häkchen, Fortschritt, Icons, Punkte. Nie als Schrift auf Hell */
+  --knopf: #1872c0;         /* Haupt-Buttons, Schrift weiß (5,0:1) */
+  --knopf-hover: #135f9f;
+  --akzent-hell: #d8eefe;   /* Badge-Grund */
+  --gold: #9fd3fd;          /* helles Blau: Links und Labels auf Navy (6,8:1), Markierungen */
+  --salbei: #3da9fc;        /* Häkchen und Fortschritt (Icons) */
+  --salbei-text: #1872c0;   /* blaue Schrift auf Weiß (5,0:1) */
+  --tertiaer: #d8eefe;      /* Hinweisboxen, Tags */
+  --koralle: #ef4565;       /* Rot (Original: Tertiary): Akzentpunkte, Kompassnadel. Nie als Schrift */
+  --koralle-text: #d12d50;  /* rote Schrift, z. B. Labels (5,0:1) */
 
-  /* Anker: die eine dunkle Sektion (aus der Tinte abgeleitet, etwas grüner). Text darauf in --flaeche (13,2:1) bzw. --auf-dunkel-leise (8,4:1) */
-  --anker: #22301a;
-  --auf-dunkel-leise: #c3ccb1;
+  /* Anker: die eine dunkle Sektion (Navy). Text darauf in Weiß (10,8:1) bzw. --auf-dunkel-leise (5,0:1) */
+  --anker: #094067;
+  --auf-dunkel-leise: #90b4ce;
   /* Route: das wiederkehrende Motiv (dünne gestrichelte Linie wie auf einer Karte) */
-  --route-farbe: rgb(31 42 18 / 0.32);
+  --route-farbe: rgb(9 64 103 / 0.3);
   --route-strich: 1.5px;
   --route-muster: 6 7;
   /* Radien: Karten 16 px, Buttons 10 px */
@@ -34,15 +36,15 @@
   --h2-gross: clamp(1.8rem, 3.4vw, 2.75rem);
   /* Abstand zwischen Sektionen */
   --abstand-sektion: clamp(4.5rem, 10vw, 8rem);
-  /* Warme, einheitliche Fotobehandlung */
-  --foto-filter: saturate(0.95) sepia(0.08) contrast(1.02);
+  /* Einheitliche Fotobehandlung */
+  --foto-filter: saturate(0.95) contrast(1.02);
 
   /* Abgeleitet */
-  --linie: #e6e2d0;
-  --akzent-hover: #f6a676;
-  --dunkel-hover: #10170a;
-  --schatten-karte: 0 1px 2px rgb(31 42 18 / 0.05), 0 12px 32px rgb(31 42 18 / 0.08);
-  --schatten-karte-hoch: 0 2px 4px rgb(31 42 18 / 0.06), 0 20px 44px rgb(31 42 18 / 0.12);
+  --linie: #e1e9f1;
+  --akzent-hover: #135f9f;
+  --dunkel-hover: #062f4d;
+  --schatten-karte: 0 1px 2px rgb(9 64 103 / 0.05), 0 12px 32px rgb(9 64 103 / 0.09);
+  --schatten-karte-hoch: 0 2px 4px rgb(9 64 103 / 0.06), 0 20px 44px rgb(9 64 103 / 0.13);
 
   --r: 10px;
   --r-gross: 16px;
@@ -118,8 +120,8 @@ ul, ol { padding-left: 1.25rem; }
   -webkit-tap-highlight-color: transparent;
 }
 .btn:active { transform: scale(0.97); }
-.btn-primaer { background: var(--akzent); border-color: var(--akzent); color: var(--ueberschrift); box-shadow: 0 6px 18px rgb(244 147 90 / 0.35); }
-.btn-primaer:hover { background: var(--akzent-hover); color: var(--ueberschrift); }
+.btn-primaer { background: var(--knopf); border-color: var(--knopf); color: var(--hintergrund); box-shadow: 0 6px 18px rgb(24 114 192 / 0.28); }
+.btn-primaer:hover { background: var(--knopf-hover); border-color: var(--knopf-hover); color: var(--hintergrund); }
 .btn-primaer:active { box-shadow: none; }
 .btn-rahmen { background: transparent; color: var(--ueberschrift); border-width: 2px; }
 .btn-dunkel { background: var(--ueberschrift); border-color: var(--ueberschrift); color: var(--hintergrund); }
@@ -200,22 +202,22 @@ details.klapp > .klapp-inhalt p:last-child { margin-bottom: 0; }
 input[type='text'], input[type='email'], input[type='tel'], input[type='number'], select, textarea {
   width: 100%; min-height: 3.25rem; padding: 0.65rem 0.95rem;
   font: inherit; font-size: 1.125rem; color: var(--text);
-  background: var(--hintergrund); border: 1px solid #cdd2b8; border-radius: var(--r-klein);
+  background: var(--hintergrund); border: 1px solid #c5d3e0; border-radius: var(--r-klein);
   transition: border-color 150ms ease, box-shadow 150ms ease;
 }
-select { appearance: none; padding-right: 2.5rem; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%233d3832' stroke-width='2'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 1rem center; }
-input:focus-visible, select:focus-visible, textarea:focus-visible { outline: none; border-color: var(--ueberschrift); box-shadow: 0 0 0 4px rgb(31 42 18 / 0.2); }
+select { appearance: none; padding-right: 2.5rem; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%235f6c7b' stroke-width='2'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 1rem center; }
+input:focus-visible, select:focus-visible, textarea:focus-visible { outline: none; border-color: var(--ueberschrift); box-shadow: 0 0 0 4px rgb(9 64 103 / 0.2); }
 input[type='file'] { font: inherit; font-size: 1rem; min-height: 3rem; max-width: 100%; }
 fieldset { border: 0; padding: 0; margin: 0 0 1.25rem; min-width: 0; }
 .wahl-raster { display: grid; gap: 0.6rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr)); }
 .wahl {
   display: flex; align-items: center; gap: 0.7rem; min-height: 3.5rem; padding: 0.6rem 1rem;
-  border: 1px solid #cdd2b8; border-radius: var(--r-klein); background: var(--hintergrund);
+  border: 1px solid #c5d3e0; border-radius: var(--r-klein); background: var(--hintergrund);
   cursor: pointer; font-weight: 500; transition: border-color 150ms ease, background-color 150ms ease;
 }
 .wahl input { width: 1.35rem; height: 1.35rem; accent-color: var(--ueberschrift); flex: none; margin: 0; }
 .wahl:has(input:checked) { border-color: var(--ueberschrift); background: var(--sekundaer); box-shadow: inset 0 0 0 1px var(--ueberschrift); }
-.wahl:has(input:focus-visible) { box-shadow: 0 0 0 4px rgb(31 42 18 / 0.2); }
+.wahl:has(input:focus-visible) { box-shadow: 0 0 0 4px rgb(9 64 103 / 0.2); }
 .datenschutz-hinweis { font-size: 1rem; color: var(--text); margin: 1.25rem 0 0; }
 .unsichtbar { display: none !important; }
 .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
@@ -276,7 +278,7 @@ fieldset > legend { font-size: 1.05rem; margin-bottom: 0.6rem; }
 /* Fotos und Platzhalter: gleiche Ecken, warmer Ton, festes Seitenverhältnis */
 .foto { position: relative; overflow: hidden; border-radius: var(--r-karte); background: var(--sekundaer); aspect-ratio: var(--seiten, 4 / 3); }
 .foto img { display: block; width: 100%; height: 100%; object-fit: cover; filter: var(--foto-filter); }
-.foto-platzhalter { display: grid; place-items: center; padding: 1.25rem; background: #ece6d8; color: var(--text-leise); text-align: center; font-size: 0.9rem; line-height: 1.4; }
+.foto-platzhalter { display: grid; place-items: center; padding: 1.25rem; background: #eaf3fb; color: var(--text-leise); text-align: center; font-size: 0.9rem; line-height: 1.4; }
 .foto-platzhalter span { max-width: 24ch; }
 .foto-platzhalter small { display: block; margin-top: 0.35rem; font-size: 0.75rem; opacity: 0.8; }
 
