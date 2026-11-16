@@ -139,7 +139,7 @@ const orte = startorte.map((o) => ({ ort: o.ort, href: o.pfad ?? (such ? `${such
     </div>
   </section>
 
-  <section class="abschnitt abschnitt-dunkel zentriert abschluss">
+  <section class="abschnitt zentriert abschluss">
     <div class="wrap">
       <h2>Platz finden oder Platz anbieten?</h2>
       <p class="einleitung">Beides geht schnell und ist unverbindlich.</p>
@@ -212,12 +212,55 @@ const orte = startorte.map((o) => ({ ort: o.ort, href: o.pfad ?? (such ? `${such
   }
 
   .such-band { background: var(--creme); padding-bottom: clamp(3rem, 7vw, 5rem); }
+  .such-band :global(.formular-karte) { border: 0; border-radius: 20px; box-shadow: 0 1px 2px rgb(40 30 10 / 0.05), 0 18px 40px rgb(40 30 10 / 0.1); }
+  .such-band :global(input), .such-band :global(select) { border-color: color-mix(in srgb, var(--ueberschrift) 22%, transparent); border-radius: var(--r); }
+  .such-band :global(.btn-primaer) { border-color: transparent; box-shadow: none; }
+
+  /* Rest der Startseite im selben Stil: Cremeflächen, weiße Karten mit weichem Schatten statt harter Rahmen */
+  :global(body) { background: var(--creme); --karte-schatten: 0 1px 2px rgb(40 30 10 / 0.05), 0 14px 34px rgb(40 30 10 / 0.08); --creme-tief: color-mix(in srgb, var(--akzent) 15%, var(--hintergrund)); }
+  :global(.nav-gross a[aria-current='page']), :global(.nav-gross a:hover) { background: var(--creme-tief) !important; }
+  :global(main .abschnitt) { background: var(--creme); }
+  :global(main .abschnitt-grau) { background: var(--creme-tief); }
+  :global(main .abschnitt h2) { letter-spacing: -0.045em; color: #14121f; }
+
+  /* Kacheln */
+  :global(main .kachel) { border: 0 !important; box-shadow: var(--karte-schatten) !important; border-radius: 20px; }
+  :global(main .kachel .illu) { background: radial-gradient(circle, rgb(120 90 20 / 0.14) 1px, transparent 1.5px) 0 0 / 14px 14px, var(--creme); border-bottom: 0; }
+  @media (hover: hover) { :global(main .kachel:has(a):hover) { transform: translateY(-4px) !important; box-shadow: 0 2px 4px rgb(40 30 10 / 0.06), 0 22px 44px rgb(40 30 10 / 0.12) !important; } }
+
+  /* Ablauf: Zahlen farbig wie im Plan */
+  :global(main .schritt-liste li) { border: 0 !important; box-shadow: var(--karte-schatten) !important; border-radius: 20px; }
+  :global(main .schritt-liste li)::before { color: var(--gruen) !important; font-weight: 800 !important; }
+  :global(main .schritt-liste li:nth-child(even))::before { color: var(--warm) !important; }
+  :global(main .umschalter) { background: rgb(40 30 10 / 0.07) !important; border-radius: 999px !important; }
+  :global(main .umschalter button) { border-radius: 999px !important; }
+
+  /* Vorteile, Werkzeuge, Nachfrage */
+  :global(main .vorteil-karte), :global(main .karte) { border: 0 !important; box-shadow: var(--karte-schatten) !important; border-radius: 20px; }
+  :global(main .werkzeug) { background: var(--hintergrund) !important; box-shadow: var(--karte-schatten); border-radius: 20px !important; }
+  :global(main .werkzeug-bild) { border-radius: 50% !important; background: var(--akzent) !important; }
+  :global(main .werkzeug-bild .symbol) { color: var(--ueberschrift) !important; }
+  :global(main .nachfrage-hinweis) { background: var(--hintergrund) !important; box-shadow: var(--karte-schatten); border-radius: 999px !important; padding-right: 1.75rem !important; }
+  :global(main .nachfrage-icon) { border-radius: 50% !important; background: var(--warm) !important; }
+  :global(main .nachfrage-icon .symbol) { color: var(--hintergrund) !important; }
+
+  /* Orte als weiche Pillen */
+  .orte .chip { border: 0; border-radius: 999px; background: var(--hintergrund); box-shadow: 0 1px 2px rgb(40 30 10 / 0.06), 0 6px 16px rgb(40 30 10 / 0.07); padding-inline: 1.25rem; }
+  @media (hover: hover) { .orte .chip:hover { background: color-mix(in srgb, var(--akzent) 45%, var(--hintergrund)); } }
+
+  /* FAQ als Karte */
+  :global(main details.klapp > summary) { letter-spacing: -0.02em; }
+
+  /* Abschluss: gelbe Fläche statt dunkel, wie der Haupt-Button */
+  .abschluss { background: var(--akzent); }
+  .abschluss :global(h2) { color: #14121f !important; }
+  .abschluss :global(p) { color: var(--ueberschrift) !important; }
+  .abschluss :global(.btn-primaer) { background: var(--ueberschrift); color: var(--hintergrund); box-shadow: none; }
+  .abschluss :global(.btn-rahmen) { background: transparent; border-color: var(--ueberschrift); border-width: 2px; }
   .nachfrage-abschnitt { padding-block: clamp(2rem, 5vw, 3rem); }
   .nachfrage-abschnitt :global(.nachfrage-hinweis) { margin: 0 auto; }
   .orte { list-style: none; padding: 0; margin: 0; }
   .orte .chip { text-decoration: none; color: var(--ueberschrift); }
   .alle-regionen { margin-left: 1.5rem; }
   .abschluss :global(.button-paar) { margin-inline: auto; }
-  .abschluss :global(.btn-rahmen) { border-color: var(--hintergrund); }
-  .abschluss :global(.unter-hinweis) { color: var(--sekundaer); }
 </style>
