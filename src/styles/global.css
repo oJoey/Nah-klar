@@ -1,28 +1,30 @@
 /* Gestaltung: ruhige Flächen statt Kästen, Hierarchie über Größe, Gewicht und Weißraum. */
 :root {
-  /* Palette (verbindlich). Warmes Papier statt Weiß, fast schwarze Tinte, Gelb nur für Handlungen.
-     Grün = erledigt/sicher, Koralle = Hinweis/Aufmerksamkeit. Kontraste geprüft (WCAG AA).
-     Regel: Flächen sind neutral. Farbe nur auf Buttons, Badges, Icons und Zahlen, nie auf ganzen Abschnitten. */
-  --flaeche: #f7f4ee;       /* Seitenhintergrund (warmes Papier) */
-  --sekundaer: #eee9df;     /* abgesetzte Abschnitte; Fließtext auf Dunkel */
+  /* Palette (verbindlich), abgeleitet aus dem Maskottchen (Unzertrennlicher):
+     Pistaziengrün vom Gefieder, Apricot vom Gesicht, Gold vom Scheitel, tiefes Olivgrün als Tinte.
+     Flächen wechseln zwischen Creme, hellem Pistazie und hellem Pfirsich. Kontraste geprüft (WCAG AA). */
+  --flaeche: #fbf8f1;       /* Seitenhintergrund (helles Creme) */
+  --sekundaer: #eef3dc;     /* abgesetzte Abschnitte (helles Pistazie); Fließtext auf Dunkel (13,2:1) */
+  --pfirsich-hell: #fde8da; /* zweite Abschnittsfarbe, Badges */
   --hintergrund: #ffffff;   /* Karten, Formularfelder; Überschriften auf Dunkel */
-  --ueberschrift: #1c1a17;  /* Tinte: Überschriften, Icons, dunkle Abschnitte, Text auf Gelb (15,8:1) */
-  --text: #3d3832;          /* Fließtext (10,6:1) */
-  --text-leise: #6b6459;    /* Unterzeilen, Metadaten (5,3:1) */
-  --akzent: #f5c518;        /* Haupt-Buttons, Badges. Nie als Schrift auf Hell */
-  --akzent-hell: #fcefc0;   /* Badge-Grund */
-  --salbei: #7a9a44;        /* Erledigt, Fortschritt, Häkchen (Icons) */
-  --salbei-text: #56702b;   /* Grüne Schrift auf Weiß (5,6:1) */
-  --tertiaer: #e5ecd7;      /* Hinweisboxen, Tags, Vermieter-Block (helles Salbei) */
-  --koralle: #e0694c;       /* Aufmerksamkeit (Icons, Punkte) */
-  --koralle-text: #b8492f;  /* Korallfarbene Schrift auf Weiß (5,2:1) */
+  --ueberschrift: #1f2a12;  /* Tinte (tiefes Oliv): Überschriften, Icons, dunkle Abschnitte (14,2:1) */
+  --text: #3b4231;          /* Fließtext (9,9:1) */
+  --text-leise: #646a58;    /* Unterzeilen (5,3:1) */
+  --akzent: #f4935a;        /* Apricot: Haupt-Buttons, Text darauf in Tinte (6,6:1). Nie als Schrift auf Hell */
+  --akzent-hell: #fde8da;   /* Badge-Grund */
+  --gold: #f7cb45;          /* Scheitel-Gold: Markierungen, Icons auf Dunkel, Zahlen */
+  --salbei: #8db43c;        /* Pistazie: erledigt, Fortschritt, Häkchen (Icons) */
+  --salbei-text: #4d6b1b;   /* Grüne Schrift auf Weiß (6,1:1) */
+  --tertiaer: #e3edc4;      /* Hinweisboxen, Tags (Pistazie mittel) */
+  --koralle: #e8735a;       /* Aufmerksamkeit (Icons) */
+  --koralle-text: #b4472f;  /* Korallfarbene Schrift auf Weiß (5,4:1) */
 
   /* Abgeleitet */
-  --linie: #e4ddd1;
-  --akzent-hover: #f8d24a;
-  --dunkel-hover: #000000;
-  --schatten-karte: 0 1px 2px rgb(28 26 23 / 0.05), 0 12px 32px rgb(28 26 23 / 0.08);
-  --schatten-karte-hoch: 0 2px 4px rgb(28 26 23 / 0.06), 0 20px 44px rgb(28 26 23 / 0.12);
+  --linie: #e6e2d0;
+  --akzent-hover: #f6a676;
+  --dunkel-hover: #10170a;
+  --schatten-karte: 0 1px 2px rgb(31 42 18 / 0.05), 0 12px 32px rgb(31 42 18 / 0.08);
+  --schatten-karte-hoch: 0 2px 4px rgb(31 42 18 / 0.06), 0 20px 44px rgb(31 42 18 / 0.12);
 
   --r: 10px;
   --r-gross: 16px;
@@ -71,6 +73,7 @@ ul, ol { padding-left: 1.25rem; }
 .abschnitt { padding-block: var(--abstand); }
 .abschnitt-grau { background: var(--sekundaer); }
 .abschnitt-blau { background: var(--sekundaer); }
+.abschnitt-pfirsich { background: var(--pfirsich-hell); }
 .zentriert { text-align: center; }
 .zentriert .einleitung, .zentriert .button-paar { margin-inline: auto; }
 .mt { margin-top: 1.75rem; }
@@ -97,7 +100,7 @@ ul, ol { padding-left: 1.25rem; }
   -webkit-tap-highlight-color: transparent;
 }
 .btn:active { transform: scale(0.97); }
-.btn-primaer { background: var(--akzent); border-color: var(--akzent); color: var(--ueberschrift); box-shadow: 0 6px 16px rgb(245 197 24 / 0.35); }
+.btn-primaer { background: var(--akzent); border-color: var(--akzent); color: var(--ueberschrift); box-shadow: 0 6px 18px rgb(244 147 90 / 0.35); }
 .btn-primaer:hover { background: var(--akzent-hover); color: var(--ueberschrift); }
 .btn-primaer:active { box-shadow: none; }
 .btn-rahmen { background: transparent; color: var(--ueberschrift); border-width: 2px; }
@@ -108,7 +111,7 @@ ul, ol { padding-left: 1.25rem; }
 .btn-voll { width: 100%; }
 
 /* Hervorgehobenes Wort in Überschriften: gelbe Unterstreichung hinter dem Text */
-.markiert { background: linear-gradient(transparent 64%, var(--akzent-hell) 64%, var(--akzent-hell) 92%, transparent 92%); padding-inline: 0.06em; -webkit-box-decoration-break: clone; box-decoration-break: clone; }
+.markiert { background: linear-gradient(transparent 64%, var(--gold) 64%, var(--gold) 92%, transparent 92%); padding-inline: 0.06em; -webkit-box-decoration-break: clone; box-decoration-break: clone; }
 
 /* „Kostenlos“: warmer Akzent, sparsam */
 .kostenlos { color: var(--ueberschrift); font-weight: 600; text-decoration: underline; text-decoration-color: var(--akzent); text-decoration-thickness: 0.3em; text-underline-offset: 0.08em; text-decoration-skip-ink: none; }
@@ -137,8 +140,8 @@ ul, ol { padding-left: 1.25rem; }
 .abschnitt-dunkel :is(h1, h2, h3), .abschnitt-kobalt :is(h1, h2, h3) { color: var(--hintergrund); }
 .abschnitt-dunkel :is(p, li, .einleitung, .kicker), .abschnitt-kobalt :is(p, li, .einleitung, .kicker) { color: var(--sekundaer); }
 .abschnitt-dunkel .karte { background: rgb(255 255 255 / 0.06); border-color: rgb(255 255 255 / 0.14); }
-.abschnitt-dunkel .symbol { color: var(--akzent); }
-.abschnitt-dunkel a:not(.btn), .abschnitt-kobalt a:not(.btn) { color: var(--akzent); }
+.abschnitt-dunkel .symbol { color: var(--gold); }
+.abschnitt-dunkel a:not(.btn), .abschnitt-kobalt a:not(.btn) { color: var(--gold); }
 /* Formulare und Karten in dunklen Abschnitten sind hell: dort gelten wieder die hellen Regeln */
 :is(.abschnitt-dunkel, .abschnitt-kobalt) .formular-karte :is(p, li, label, legend) { color: var(--text); }
 :is(.abschnitt-dunkel, .abschnitt-kobalt) .formular-karte :is(h2, h3) { color: var(--ueberschrift); }
@@ -179,22 +182,22 @@ details.klapp > .klapp-inhalt p:last-child { margin-bottom: 0; }
 input[type='text'], input[type='email'], input[type='tel'], input[type='number'], select, textarea {
   width: 100%; min-height: 3.25rem; padding: 0.65rem 0.95rem;
   font: inherit; font-size: 1.125rem; color: var(--text);
-  background: var(--hintergrund); border: 1px solid #cfc6b8; border-radius: var(--r-klein);
+  background: var(--hintergrund); border: 1px solid #cdd2b8; border-radius: var(--r-klein);
   transition: border-color 150ms ease, box-shadow 150ms ease;
 }
 select { appearance: none; padding-right: 2.5rem; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%233d3832' stroke-width='2'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 1rem center; }
-input:focus-visible, select:focus-visible, textarea:focus-visible { outline: none; border-color: var(--ueberschrift); box-shadow: 0 0 0 4px rgb(28 26 23 / 0.2); }
+input:focus-visible, select:focus-visible, textarea:focus-visible { outline: none; border-color: var(--ueberschrift); box-shadow: 0 0 0 4px rgb(31 42 18 / 0.2); }
 input[type='file'] { font: inherit; font-size: 1rem; min-height: 3rem; max-width: 100%; }
 fieldset { border: 0; padding: 0; margin: 0 0 1.25rem; min-width: 0; }
 .wahl-raster { display: grid; gap: 0.6rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr)); }
 .wahl {
   display: flex; align-items: center; gap: 0.7rem; min-height: 3.5rem; padding: 0.6rem 1rem;
-  border: 1px solid #cfc6b8; border-radius: var(--r-klein); background: var(--hintergrund);
+  border: 1px solid #cdd2b8; border-radius: var(--r-klein); background: var(--hintergrund);
   cursor: pointer; font-weight: 500; transition: border-color 150ms ease, background-color 150ms ease;
 }
 .wahl input { width: 1.35rem; height: 1.35rem; accent-color: var(--ueberschrift); flex: none; margin: 0; }
 .wahl:has(input:checked) { border-color: var(--ueberschrift); background: var(--sekundaer); box-shadow: inset 0 0 0 1px var(--ueberschrift); }
-.wahl:has(input:focus-visible) { box-shadow: 0 0 0 4px rgb(28 26 23 / 0.2); }
+.wahl:has(input:focus-visible) { box-shadow: 0 0 0 4px rgb(31 42 18 / 0.2); }
 .datenschutz-hinweis { font-size: 1rem; color: var(--text); margin: 1.25rem 0 0; }
 .unsichtbar { display: none !important; }
 .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }

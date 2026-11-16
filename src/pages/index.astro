@@ -11,6 +11,8 @@ import NachfrageHinweis from '../components/NachfrageHinweis.astro';
 import WerkzeugeTeaser from '../components/WerkzeugeTeaser.astro';
 import Faq from '../components/Faq.astro';
 import Icon from '../components/Icon.astro';
+import { Image } from 'astro:assets';
+import vogel from '../assets/bilder/vogel.png';
 import { site, whatsappLink, emailHref } from '../config/site';
 import { link } from '../config/seiten';
 import { kategorien } from '../data/kategorien';
@@ -52,7 +54,7 @@ const orte = startorte.map((o) => ({ ort: o.ort, href: o.pfad ?? (such ? `${such
 
       <div class="buehne" aria-hidden="true">
         <div class="vogel-glut"></div>
-        <img class="vogel" src="/bilder/vogel.svg" alt="" width="600" height="760" loading="eager" decoding="async" />
+        <Image class="vogel" src={vogel} alt="" width={700} widths={[360, 560, 700]} sizes="(min-width: 60rem) 40vw, 80vw" loading="eager" />
 
         <div class="schwebe schwebe-oben">
           <span class="schwebe-icon warm"><Icon name="ort" /></span>
@@ -104,7 +106,7 @@ const orte = startorte.map((o) => ({ ort: o.ort, href: o.pfad ?? (such ? `${such
     </div>
   </section>
 
-  <section class="abschnitt abschnitt-grau" aria-labelledby="vorteile-titel">
+  <section class="abschnitt abschnitt-pfirsich" aria-labelledby="vorteile-titel">
     <div class="wrap">
       <div class="kopfzeile"><h2 id="vorteile-titel">Ihre Vorteile</h2></div>
       <Vorteile />
@@ -133,7 +135,7 @@ const orte = startorte.map((o) => ({ ort: o.ort, href: o.pfad ?? (such ? `${such
 
   <WerkzeugeTeaser />
 
-  <section class="abschnitt abschnitt-grau">
+  <section class="abschnitt abschnitt-pfirsich">
     <div class="wrap">
       <Faq seite="start"><p>Noch etwas offen? {site.ansprechpartner} per <a href={whatsappLink} rel="noopener">WhatsApp</a> oder <a href={emailHref}>E-Mail</a>.</p></Faq>
     </div>
@@ -151,7 +153,7 @@ const orte = startorte.map((o) => ({ ort: o.ort, href: o.pfad ?? (such ? `${such
   /* Hero: warmer Cremeton (aus Akzent abgeleitet), große enge Überschrift, Vogel mit schwebenden Karten */
   :global(body) { --creme: var(--flaeche); --warm: var(--koralle); --gruen: var(--salbei); }
   :global(body .kopf.kopf) { border-bottom-color: transparent; }
-  .held { background: radial-gradient(ellipse 55% 65% at 80% 40%, #fff, var(--flaeche) 70%); padding-block: clamp(1.5rem, 5vw, 3.5rem) clamp(2.5rem, 6vw, 4rem); overflow: hidden; }
+  .held { background: radial-gradient(ellipse 45% 55% at 82% 35%, var(--sekundaer), transparent 70%), radial-gradient(ellipse 40% 45% at 55% 85%, var(--pfirsich-hell), transparent 70%), var(--flaeche); padding-block: clamp(1.5rem, 5vw, 3.5rem) clamp(2.5rem, 6vw, 4rem); overflow: hidden; }
   .held-raster { display: grid; gap: 2.5rem; align-items: center; }
   .held-pille { display: inline-block; margin: 0 0 1.5rem; padding: 0.35rem 1.1rem; border-radius: 999px; background: var(--akzent-hell); border: 0; font-weight: 600; color: var(--ueberschrift); font-size: 1rem; }
   .held h1 { font-size: clamp(2.8rem, 6vw, 4.6rem); line-height: 1; letter-spacing: -0.055em; font-weight: 800; color: #14121f; }
@@ -168,10 +170,10 @@ const orte = startorte.map((o) => ({ ort: o.ort, href: o.pfad ?? (such ? `${such
 
   /* Bühne: Vogel rechts, Karten darüber */
   .buehne { position: relative; min-height: 34rem; }
-  .vogel-glut { position: absolute; right: -20%; top: -2rem; width: 100%; aspect-ratio: 1; border-radius: 50%; background: radial-gradient(circle, rgb(255 255 255 / 0.7), transparent 65%); }
-  .vogel { position: absolute; right: -14%; top: -1rem; width: 92%; height: auto; filter: drop-shadow(0 30px 40px rgb(80 60 20 / 0.18)); }
-  .plan, .schwebe { position: absolute; background: var(--hintergrund); border-radius: var(--r-gross); box-shadow: 0 1px 2px rgb(40 30 10 / 0.06), 0 18px 40px rgb(40 30 10 / 0.12); }
-  .plan { left: 0; top: 15rem; width: min(26rem, 82%); padding: 1.5rem 1.5rem 1.25rem; }
+  .vogel-glut { position: absolute; right: -10%; top: 0; width: 80%; aspect-ratio: 1; border-radius: 50%; background: radial-gradient(circle, rgb(255 255 255 / 0.85), transparent 62%); }
+  .vogel { position: absolute; right: 0; top: 0; width: 60%; height: auto; filter: drop-shadow(0 24px 30px rgb(31 42 18 / 0.16)); }
+  .plan, .schwebe { position: absolute; background: var(--hintergrund); border-radius: var(--r-gross); box-shadow: var(--schatten-karte-hoch); }
+  .plan { left: 0; top: 19rem; width: min(25rem, 74%); padding: 1.5rem 1.5rem 1.25rem; }
   .plan-titel { font-size: 1.45rem; font-weight: 800; letter-spacing: -0.02em; color: #14121f; margin: 0 0 0.6rem; }
   .plan-zeile { display: flex; justify-content: space-between; font-size: 0.95rem; margin: 0 0 0.6rem; }
   .plan-balken { height: 0.6rem; border-radius: 999px; background: color-mix(in srgb, var(--ueberschrift) 8%, transparent); overflow: hidden; }
@@ -190,7 +192,7 @@ const orte = startorte.map((o) => ({ ort: o.ort, href: o.pfad ?? (such ? `${such
   .schwebe { display: flex; gap: 0.8rem; align-items: flex-start; padding: 1rem 1.15rem; width: 16rem; font-size: 0.9rem; line-height: 1.35; animation: schweben 5s ease-in-out infinite; }
   .schwebe strong { display: block; color: #14121f; font-size: 0.95rem; margin-bottom: 0.2rem; }
   .schwebe-oben { left: 2%; top: 3rem; }
-  .schwebe-rechts { right: -3%; top: 29rem; animation-delay: -2.5s; }
+  .schwebe-rechts { right: 0; top: 12.5rem; animation-delay: -2.5s; }
   .schwebe-icon { flex: none; display: grid; place-items: center; width: 2.25rem; height: 2.25rem; border-radius: 50%; background: var(--warm); }
   .schwebe-icon.warm { background: var(--akzent); }
   .schwebe-icon.warm :global(.symbol) { color: var(--ueberschrift); }
@@ -201,7 +203,7 @@ const orte = startorte.map((o) => ({ ort: o.ort, href: o.pfad ?? (such ? `${such
   /* Handy: Bühne kompakter, rechte Karte unter dem Plan */
   @media (max-width: 40rem) {
     .buehne { min-height: 37rem; }
-    .vogel { width: 95%; right: -30%; top: 0; }
+    .vogel { width: 58%; right: 0; top: 0; }
     .plan { left: 0; top: 11rem; width: 92%; }
     .schwebe { width: 14rem; }
     .schwebe-rechts { display: none; }
