@@ -11,8 +11,10 @@
   --text: #5f6c7b;          /* Fließtext (Original: Paragraph, 5,4:1) */
   --text-leise: #6a7684;    /* Unterzeilen (4,6:1) */
   --akzent: #3da9fc;        /* Himmelblau (Original: Button/Highlight): Häkchen, Fortschritt, Icons, Punkte. Nie als Schrift auf Hell */
-  --knopf: #1872c0;         /* Haupt-Buttons, Schrift weiß (5,0:1) */
-  --knopf-hover: #135f9f;
+  --knopf: #ffb020;         /* CTA-Amber: NUR für Haupt-Buttons, Schrift in Navy (5,9:1). Gegenfarbe zum Blau, damit klar ist, wo man klickt */
+  --knopf-hover: #f5a300;   /* Navy darauf 5,2:1 */
+  --knopf-rand: #e09400;    /* Kante, damit der Button sich auch ohne Schrift vom Weiß abhebt */
+  --knopf-text: #094067;
   --akzent-hell: #d8eefe;   /* Badge-Grund */
   --gold: #9fd3fd;          /* helles Blau: Links und Labels auf Navy (6,8:1), Markierungen */
   --salbei: #3da9fc;        /* Häkchen und Fortschritt (Icons) */
@@ -120,8 +122,8 @@ ul, ol { padding-left: 1.25rem; }
   -webkit-tap-highlight-color: transparent;
 }
 .btn:active { transform: scale(0.97); }
-.btn-primaer { background: var(--knopf); border-color: var(--knopf); color: var(--hintergrund); box-shadow: 0 6px 18px rgb(24 114 192 / 0.28); }
-.btn-primaer:hover { background: var(--knopf-hover); border-color: var(--knopf-hover); color: var(--hintergrund); }
+.btn-primaer { background: var(--knopf); border-color: var(--knopf-rand); color: var(--knopf-text); font-weight: 700; box-shadow: 0 1px 0 var(--knopf-rand), 0 8px 20px rgb(255 176 32 / 0.35); }
+.btn-primaer:hover { background: var(--knopf-hover); border-color: var(--knopf-rand); color: var(--knopf-text); }
 .btn-primaer:active { box-shadow: none; }
 .btn-rahmen { background: transparent; color: var(--ueberschrift); border-width: 2px; }
 .btn-dunkel { background: var(--ueberschrift); border-color: var(--ueberschrift); color: var(--hintergrund); }
@@ -265,7 +267,7 @@ fieldset > legend { font-size: 1.05rem; margin-bottom: 0.6rem; }
 .haken li::before { content: ''; position: absolute; left: 0; top: 0.3em; width: 1.15rem; height: 1.15rem; border-radius: 50%; background: var(--salbei) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M6 12.5l4 4 8-9' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / 75% no-repeat; }
 
 /* Label über Überschriften (z. B. „Ablauf“, „Für Vermieter“) */
-.label { display: block; margin: 0 0 0.75rem; font-size: 0.875rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--koralle-text); }
+.label { display: block; margin: 0 0 0.75rem; font-size: 0.875rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--salbei-text); }
 .label-leise { color: var(--text-leise); }
 .sektion { padding-block: var(--abstand-sektion); }
 
