@@ -1,6 +1,6 @@
 ---
 frage: "Was kostet die Miete?"
-seiten: [start, mieten]
+seiten: [mieten]
 reihenfolge: 10
 ---
 

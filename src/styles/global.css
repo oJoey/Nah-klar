@@ -4,7 +4,7 @@
      Creme als Grund, Pistazie vom Gefieder, Apricot vom Gesicht, Gold vom Scheitel, tiefes Oliv als Tinte.
      Ein Hintergrund (Creme). Pistazie und Pfirsich nur als kleine Flächen (Badges, Platzhalter), nie als Sektion.
      Kontraste geprüft (WCAG AA). */
-  --flaeche: #fbf8f1;       /* Seitenhintergrund (Creme) */
+  --flaeche: #fdfcf8;       /* Seitenhintergrund: fast Weiß, nur ein Hauch Creme */
   --sekundaer: #eef3dc;     /* helles Pistazie: kleine Flächen; Text auf Dunkel (13,2:1) */
   --pfirsich-hell: #fde8da; /* helles Pfirsich: Badges */
   --hintergrund: #ffffff;   /* Karten, Formularfelder */
@@ -12,9 +12,9 @@
   --text: #3b4231;          /* Fließtext (9,9:1) */
   --text-leise: #646a58;    /* Unterzeilen (5,3:1) */
   --akzent: #f4935a;        /* Apricot: Icons und Punkte, auch auf Dunkel (6,1:1). Nie als Schrift auf Hell */
-  --knopf: #f4935a;         /* CTA-Apricot: NUR Haupt-Buttons, Schrift in Oliv (6,6:1) */
-  --knopf-hover: #f6a676;   /* Oliv darauf 7,6:1 */
-  --knopf-rand: #e07a40;
+  --knopf: #ff8a4c;         /* CTA-Orange, gesättigt: NUR Haupt-Buttons, Schrift in Oliv (6,4:1) */
+  --knopf-hover: #ff9a62;   /* Oliv darauf 7,1:1 */
+  --knopf-rand: #d9622a;    /* feste Unterkante, wirkt drückbar */
   --knopf-text: #1f2a12;
   --akzent-hell: #fde8da;   /* Badge-Grund */
   --gold: #f7cb45;          /* Scheitel-Gold: Links und Labels auf Dunkel (9,1:1), Markierungen */
@@ -24,9 +24,9 @@
   --koralle: #e8735a;       /* Aufmerksamkeit (Icons, Punkte) */
   --koralle-text: #b4472f;  /* Korallfarbene Schrift, z. B. Labels (5,1:1) */
 
-  /* Anker: dunkle Flächen (Sektionen, Fuß, Buttons, Icons), sattes Gefiedergrün. Weiß 7,9:1, Pistazie 7,0:1, Gold 5,1:1, --auf-dunkel-leise 4,7:1 */
-  --anker: #3a5a1c;
-  --anker-hover: #2e4916;
+  /* Anker: dunkle Flächen (Sektionen, Fuß, Buttons, Icons), kühles Tannengrün statt Oliv. Weiß 8,6:1, Pistazie 7,6:1, Gold 5,6:1, --auf-dunkel-leise 5,2:1 */
+  --anker: #22553f;
+  --anker-hover: #1b4633;
   --auf-dunkel-leise: #c3ccb1;
   /* Route: das wiederkehrende Motiv (dünne gestrichelte Linie wie auf einer Karte) */
   --route-farbe: rgb(31 42 18 / 0.32);
@@ -72,7 +72,17 @@ body {
   font-size: 1.125rem; /* 18 px */
   line-height: 1.6;
   color: var(--text);
-  background: var(--flaeche);
+  /* Weiche Farbtupfer (Pistazie, Pfirsich) wie im Hero, verschieden groß über die ganze Seite verteilt */
+  background:
+    radial-gradient(circle 340px at 92% 9%, rgb(238 243 220 / 0.9), transparent 70%),
+    radial-gradient(circle 220px at 4% 18%, rgb(253 232 218 / 0.7), transparent 70%),
+    radial-gradient(circle 420px at 98% 31%, rgb(253 232 218 / 0.55), transparent 70%),
+    radial-gradient(circle 280px at 2% 44%, rgb(238 243 220 / 0.85), transparent 70%),
+    radial-gradient(circle 180px at 70% 55%, rgb(238 243 220 / 0.6), transparent 70%),
+    radial-gradient(circle 360px at 6% 68%, rgb(253 232 218 / 0.6), transparent 70%),
+    radial-gradient(circle 260px at 95% 79%, rgb(238 243 220 / 0.85), transparent 70%),
+    radial-gradient(circle 200px at 30% 92%, rgb(253 232 218 / 0.55), transparent 70%),
+    var(--flaeche);
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
@@ -124,9 +134,10 @@ ul, ol { padding-left: 1.25rem; }
   -webkit-tap-highlight-color: transparent;
 }
 .btn:active { transform: scale(0.97); }
-.btn-primaer { background: var(--knopf); border-color: var(--knopf-rand); color: var(--knopf-text); font-weight: 700; box-shadow: 0 1px 0 var(--knopf-rand), 0 8px 20px rgb(244 147 90 / 0.35); }
-.btn-primaer:hover { background: var(--knopf-hover); border-color: var(--knopf-rand); color: var(--knopf-text); }
-.btn-primaer:active { box-shadow: none; }
+/* Haupt-Button: kräftige Fläche ohne Rand, feste dunklere Unterkante statt weichem Schein. Hebt sich beim Hover, sinkt beim Drücken ein */
+.btn-primaer { background: var(--knopf); border-color: var(--knopf); color: var(--knopf-text); font-weight: 800; box-shadow: 0 4px 0 var(--knopf-rand); transition: background-color 150ms ease, transform 160ms var(--ease-out), box-shadow 160ms var(--ease-out); }
+.btn-primaer:hover { background: var(--knopf-hover); border-color: var(--knopf-hover); color: var(--knopf-text); transform: translateY(-2px); box-shadow: 0 6px 0 var(--knopf-rand); }
+.btn-primaer:active { transform: translateY(3px); box-shadow: 0 1px 0 var(--knopf-rand); }
 .btn-rahmen { background: transparent; color: var(--ueberschrift); border-width: 2px; }
 .btn-dunkel { background: var(--anker); border-color: var(--anker); color: var(--hintergrund); }
 .btn-dunkel:hover { background: var(--anker-hover); border-color: var(--anker-hover); color: var(--hintergrund); }

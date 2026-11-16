@@ -7,10 +7,6 @@ import karte from '../data/karte-region.json';
 // Lage der Beschriftung je Ort (damit nahe Orte nicht übereinander stehen)
 const lage: Record<string, 'l' | 'r' | 'o' | 'u'> = { Sindelfingen: 'l', Böblingen: 'r', Herrenberg: 'r', Leonberg: 'l', Stuttgart: 'r', Ludwigsburg: 'r', Waiblingen: 'r', 'Esslingen am Neckar': 'r' };
 const kurz = (o: string) => o.replace(' am Neckar', '');
-// Route: verbindet die Startorte von Böblingen aus
-const reihenfolge = ['Herrenberg', 'Böblingen', 'Sindelfingen', 'Leonberg', 'Ludwigsburg', 'Waiblingen', 'Esslingen am Neckar', 'Stuttgart'];
-const punkte = reihenfolge.map((o) => karte.orte.find((p) => p.ort === o)).filter(Boolean) as { ort: string; x: number; y: number }[];
-const route = 'M' + punkte.map((p) => `${p.x} ${p.y}`).join(' L');
 const jahr = new Date().getFullYear();
 ---
 <figure class="region-karte">
@@ -18,7 +14,6 @@ const jahr = new Date().getFullYear();
     <g class="kreise">
       {karte.kreise.map((k) => <path d={k.d} class:list={[{ kern: k.kern, start: k.start }]} />)}
     </g>
-    <path class="route" d={route} />
     {karte.orte.map((o) => {
       const l = lage[o.ort] ?? 'r';
       const dx = l === 'l' ? -10 : l === 'r' ? 10 : 0;
@@ -40,7 +35,6 @@ const jahr = new Date().getFullYear();
   .kreise path { fill: none; stroke: rgb(31 42 18 / 0.14); stroke-width: 1; stroke-linejoin: round; }
   .kreise path.kern { fill: #f3efe4; stroke: rgb(31 42 18 / 0.3); }
   .kreise path.start { fill: var(--akzent-hell); stroke: var(--koralle-text); stroke-width: 1.5; }
-  .route { fill: none; stroke: var(--route-farbe); stroke-width: var(--route-strich); stroke-dasharray: var(--route-muster); stroke-linecap: round; stroke-linejoin: round; }
   .ort circle { fill: var(--hintergrund); stroke: var(--ueberschrift); stroke-width: 2; }
   .ort.start circle { fill: var(--koralle); stroke: var(--ueberschrift); }
   .ort text { font: 600 15px var(--schrift); fill: var(--ueberschrift); paint-order: stroke; stroke: var(--flaeche); stroke-width: 4px; stroke-linejoin: round; }
