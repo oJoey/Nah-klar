@@ -1,227 +1,360 @@
 ---
-// Startseite: Suche, Kategorien, Ablauf, Vorteile, Nachfrage, Regionen, Ratgeber, FAQ, Abschluss.
-// Keine Kundenstimmen, Logos oder Zähler, bis es echte gibt. Gebühren nur in der FAQ.
+// Startseite: ein durchgehender Creme-Hintergrund, Sektionen nur durch Abstand getrennt.
+// Bildsprache: schwebende UI-Karten, verbunden durch eine gestrichelte Route (Motiv aus dem Kompass-Logo).
+// Genau ein Kartenraster (Kategorien), genau eine dunkle Sektion (Vermieter). Beispielwerte sind als „Beispiel“ gekennzeichnet.
+// Keine Kundenstimmen, Logos oder Zähler, bis es echte gibt. Gebühren nur in der FAQ. Fotos: siehe BILDER.md
 import Basis from '../layouts/Basis.astro';
 import ButtonPaar from '../components/ButtonPaar.astro';
-import Suchmaske from '../components/Suchmaske.astro';
-import Kacheln from '../components/Kacheln.astro';
-import Schritte from '../components/Schritte.astro';
-import Vorteile from '../components/Vorteile.astro';
-import NachfrageHinweis from '../components/NachfrageHinweis.astro';
-import WerkzeugeTeaser from '../components/WerkzeugeTeaser.astro';
+import Zeitstrahl from '../components/Zeitstrahl.astro';
+import RegionKarte from '../components/RegionKarte.astro';
+import Foto from '../components/Foto.astro';
 import Faq from '../components/Faq.astro';
 import Icon from '../components/Icon.astro';
-import { Image } from 'astro:assets';
-import vogel from '../assets/bilder/vogel.png';
 import { site, whatsappLink, emailHref } from '../config/site';
-import { link } from '../config/seiten';
+import { seiten, istLive, link, type SeitenSchluessel } from '../config/seiten';
 import { kategorien } from '../data/kategorien';
-import { mieterSchritte, vermieterSchritte } from '../data/ablauf';
-import { vertrauen } from '../data/vorteile';
+import { vermieterVorteile } from '../data/vorteile';
 import { startorte } from '../data/startorte';
+import richtwerte from '../data/richtwerte.json';
 
 const startKategorien = kategorien.filter((k) => k.startseite !== false);
 const arten = startKategorien.map((k) => ({ wert: k.art, titel: k.kurz }));
-const kacheln = startKategorien.map((k) => ({
-  titel: k.kurz,
-  text: k.kachelText,
-  icon: k.icon,
-  href: link(k.seite),
-  bild: `kachel-${k.art}`, // Foto unter src/assets/bilder/kachel-<art>.jpg ablegen, sonst Illustration
-  linkText: 'Mehr erfahren',
-}));
+const fotoText: Record<string, string> = {
+  'wohnmobil-wohnwagen': 'Wohnmobil in einer offenen Scheune, warmes Abendlicht',
+  'anhaenger-boot': 'Boot unter Plane auf einem Trailer an einer Hofeinfahrt',
+  'auto-motorrad': 'Auto und Motorrad in einer Garage bei Privatleuten',
+  'lagerraum': 'Garage mit gestapelten Kisten und Regal',
+};
 const such = link('suchauftrag');
 const orte = startorte.map((o) => ({ ort: o.ort, href: o.pfad ?? (such ? `${such}?ort=${encodeURIComponent(o.ort)}` : null) }));
+const scheune = richtwerte.arten.find((a) => a.wert === 'halle-scheune')?.preise?.['9'] as [number, number] | undefined;
+
+const teaser: { seite: SeitenSchluessel; art: string; text: string; foto: string }[] = [
+  { seite: 'diebstahlschutz', art: 'Ratgeber', text: 'Wohnwagen, Wohnmobil oder Anhänger sicher abstellen: Platzwahl, Schlösser und Tracker.', foto: 'Wohnwagen mit Deichselschloss auf einem Hof' },
+  { seite: 'einwinterung', art: 'Checkliste', text: 'Schritt für Schritt: So machen Sie Wohnmobil und Wohnwagen winterfest.', foto: '' },
+  { seite: 'winterplatzVergleich', art: 'Ratgeber', text: 'Halle, Scheune oder Carport: Welcher Winterplatz passt zu Ihrem Fahrzeug?', foto: '' },
+];
+const beitraege = teaser.filter((t) => istLive(t.seite));
+const [hauptBeitrag, ...weitere] = beitraege;
 ---
 <Basis
   titel={`Stellplatz, Garage und Lagerraum mieten in Baden-Württemberg | ${site.name}`}
   beschreibung="Stellplatz für Wohnmobil, Anhänger oder Auto, Garage oder Lagerraum bei Privatleuten in Baden-Württemberg mieten oder vermieten. Mustervertrag, geprüfte Plätze, persönlicher Ansprechpartner."
 >
+  <!-- 1. Hero -->
   <section class="held">
     <div class="wrap held-raster">
       <div class="held-text">
-        <p class="held-pille">Baden-Württemberg</p>
+        <p class="label">Stellplatz, Garage und Lagerraum in Baden-Württemberg</p>
         <h1>Platz gesucht? Ihre Nachbarn haben welchen.</h1>
-        <p class="einleitung">Stellplatz, Garage oder Lagerraum bei Privatleuten in Ihrer Nähe. Mit Mustervertrag und persönlichem Ansprechpartner.</p>
+        <p class="einleitung">Für Wohnmobil, Anhänger, Auto oder Lagergut. Bei Privatleuten in Ihrer Nähe, mit Mustervertrag und persönlichem Ansprechpartner.</p>
         <div class="held-knoepfe">
-          <a class="btn btn-primaer btn-gross" href="#suche"><Icon name="ort" /> Platz finden</a>
-          <a class="btn btn-rahmen btn-gross" href={link('platzAnbieten')}>Platz anbieten</a>
+          <a class="btn btn-primaer btn-gross" href="#suche">Platz finden</a>
+          <a class="btn btn-rahmen btn-gross" href={link('vermieten')}>Platz anbieten</a>
         </div>
-        <ul class="vertrauen">
-          {vertrauen.map((v) => <li><span class="vertrauen-icon" aria-hidden="true"><Icon name={v.icon} /></span>{v.text}</li>)}
-        </ul>
       </div>
 
-      <div class="buehne" aria-hidden="true">
-        <div class="vogel-glut"></div>
-        <Image class="vogel" src={vogel} alt="" width={700} widths={[360, 560, 700]} sizes="(min-width: 60rem) 40vw, 80vw" loading="eager" />
+      <div class="komposition" aria-hidden="true">
+        <Foto name="start-hero" alt="Wohnwagen auf einem Hof vor einer Scheune, warmes Licht" seiten="4 / 5" eager breiten={[480, 720, 960]} sizes="(min-width: 60rem) 38vw, 90vw" class="komposition-foto" />
+        <svg class="komposition-route" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M24 17 C 8 30, 6 42, 18 52 M74 62 C 86 70, 92 76, 88 84" /></svg>
 
-        <div class="schwebe schwebe-oben">
-          <span class="schwebe-icon warm"><Icon name="ort" /></span>
-          <div>
-            <strong>Platz in Ihrer Nähe</strong>
-            <span>Wir melden uns per WhatsApp oder E-Mail.</span>
-          </div>
+        <div class="ui-karte k-naehe">
+          <Icon name="ort" />
+          <div><strong>Platz in Ihrer Nähe</strong><br />Wir melden uns per WhatsApp oder E-Mail.</div>
         </div>
 
-        <div class="plan">
-          <p class="plan-titel">Ihr Suchauftrag</p>
-          <p class="plan-zeile"><span>So läuft es ab</span><span>4 Schritte</span></p>
+        <div class="ui-karte k-plan">
+          <p class="plan-kopf"><strong>Ihr Suchauftrag</strong><span class="beispiel-label">Beispiel</span></p>
+          <p class="plan-stand"><span>2 von 4 Schritten</span></p>
           <div class="plan-balken"><span></span></div>
           <ul class="plan-liste">
-            <li class="erledigt"><span class="punkt"></span><span class="txt">Suchauftrag anlegen</span><em>kostenlos</em></li>
-            <li class="erledigt"><span class="punkt"></span><span class="txt">Platz wird geprüft</span><em>Zufahrt, Maße</em></li>
-            <li class="aktiv"><span class="punkt"></span>Vorschlag erhalten<em>persönlich</em></li>
-            <li><span class="punkt"></span>Mustervertrag unterschreiben</li>
+            <li><span class="check"></span>Suchauftrag anlegen</li>
+            <li><span class="check"></span>Platz wird geprüft</li>
+            <li class="naechster"><span class="offen"></span>Vorschlag erhalten</li>
+            <li><span class="offen"></span>Mustervertrag unterschreiben</li>
           </ul>
-          <p class="plan-fuss"><span class="haken-rund"><Icon name="check" /></span>Unverbindlich bis zur Unterschrift</p>
         </div>
 
-        <div class="schwebe schwebe-rechts">
-          <span class="schwebe-icon"><Icon name="schild" /></span>
-          <div>
-            <strong>Geprüfte Plätze</strong>
-            <span>Zufahrt, Maße und Zugang</span>
-          </div>
+        <div class="ui-karte k-geprueft">
+          <span class="check"></span>
+          <div><strong>Geprüfte Plätze</strong><br />Zufahrt, Maße und Zugang</div>
         </div>
       </div>
     </div>
-  </section>
 
-  <section id="suche" class="such-band" aria-label="Platz suchen">
-    <div class="wrap"><Suchmaske titel="Was suchen Sie?" arten={arten} mitZeitraum={false} /></div>
-  </section>
-
-  <section class="abschnitt abschnitt-grau" aria-labelledby="arten-titel">
     <div class="wrap">
-      <div class="kopfzeile"><h2 id="arten-titel">Was möchten Sie unterstellen?</h2></div>
-      <Kacheln kacheln={kacheln} />
-    </div>
-  </section>
-
-  <section class="abschnitt" aria-labelledby="ablauf-titel">
-    <div class="wrap">
-      <div class="kopfzeile"><h2 id="ablauf-titel">So funktioniert's</h2></div>
-      <Schritte mieter={mieterSchritte} vermieter={vermieterSchritte} />
-    </div>
-  </section>
-
-  <section class="abschnitt abschnitt-pfirsich" aria-labelledby="vorteile-titel">
-    <div class="wrap">
-      <div class="kopfzeile"><h2 id="vorteile-titel">Ihre Vorteile</h2></div>
-      <Vorteile />
-    </div>
-  </section>
-
-  <section class="abschnitt nachfrage-abschnitt">
-    <div class="wrap"><NachfrageHinweis /></div>
-  </section>
-
-  <section class="abschnitt abschnitt-grau" aria-labelledby="regionen-titel">
-    <div class="wrap">
-      <div class="kopfzeile">
-        <h2 id="regionen-titel">Wo wir starten</h2>
-        <p class="einleitung">Wir beginnen im Großraum Stuttgart und suchen auf Wunsch in ganz Baden-Württemberg.</p>
-      </div>
-      <ul class="chips orte">
-        {orte.map((o) => <li>{o.href ? <a class="chip" href={o.href} rel={o.href.includes('?') ? 'nofollow' : undefined}>{o.ort}</a> : <span class="chip">{o.ort}</span>}</li>)}
+      <form id="suche" class="suchzeile" method="get" action={such}>
+        <h2 class="sr-only">Platz suchen</h2>
+        <label class="sr-only" for="such-ort">PLZ oder Ort</label>
+        <input id="such-ort" name="ort" type="text" autocomplete="postal-code" placeholder="PLZ oder Ort, z. B. Böblingen" />
+        <label class="sr-only" for="such-art">Was möchten Sie unterstellen?</label>
+        <select id="such-art" name="mieter_art">
+          {arten.map((a) => <option value={a.wert}>{a.titel}</option>)}
+        </select>
+        <button class="btn btn-primaer" type="submit">Platz finden</button>
+      </form>
+      <ul class="such-vorteile">
+        <li><span class="check" aria-hidden="true"></span>Suchauftrag kostenlos</li>
+        <li><span class="check" aria-hidden="true"></span>Geprüfte Angaben zu Zufahrt und Maßen</li>
+        <li><span class="check" aria-hidden="true"></span>Mustervertrag inklusive</li>
+        <li><span class="check" aria-hidden="true"></span>Persönlicher Ansprechpartner</li>
       </ul>
-      <p class="mt">
-        {link('regionBoeblingen') && <a class="weiter" href={link('regionBoeblingen')}>Landkreis Böblingen</a>}
-        {link('regionen') && <a class="weiter alle-regionen" href={link('regionen')}>Alle Regionen</a>}
-      </p>
     </div>
   </section>
 
-  <WerkzeugeTeaser />
-
-  <section class="abschnitt abschnitt-pfirsich">
+  <!-- 2. Kategorien: das einzige Kartenraster -->
+  <section class="sektion" aria-labelledby="arten-titel">
     <div class="wrap">
-      <Faq seite="start"><p>Noch etwas offen? {site.ansprechpartner} per <a href={whatsappLink} rel="noopener">WhatsApp</a> oder <a href={emailHref}>E-Mail</a>.</p></Faq>
+      <div class="kopf einblenden">
+        <p class="label label-leise">Kategorien</p>
+        <h2 id="arten-titel">Was möchten Sie unterstellen?</h2>
+      </div>
+      <ul class="kategorien">
+        {startKategorien.map((k, i) => (
+          <li class:list={['kategorie einblenden', { breit: i === 0 }]} style={`--verzoegerung:${i * 80}ms`}>
+            <Foto name={`kategorie-${k.art}`} alt={fotoText[k.art] ?? k.kurz} seiten={i === 0 ? '16 / 10' : '4 / 3'} breiten={i === 0 ? [640, 960, 1280] : [400, 640, 800]} sizes={i === 0 ? '(min-width: 60rem) 60vw, 100vw' : '(min-width: 60rem) 30vw, 100vw'} />
+            <div class="kategorie-text">
+              <h3><a href={link(k.seite)}>{k.kurz}</a></h3>
+              <p>{k.kachelText}</p>
+              <span class="pfeil" aria-hidden="true">Mehr erfahren →</span>
+            </div>
+          </li>
+        ))}
+      </ul>
     </div>
   </section>
 
-  <section class="abschnitt abschnitt-dunkel zentriert abschluss">
+  <!-- 3. Ablauf als Zeitstrahl -->
+  <section class="sektion" aria-labelledby="ablauf-titel">
     <div class="wrap">
+      <div class="kopf einblenden">
+        <p class="label label-leise">Ablauf</p>
+        <h2 id="ablauf-titel">So funktioniert's</h2>
+      </div>
+      <div class="einblenden"><Zeitstrahl /></div>
+    </div>
+  </section>
+
+  <!-- 4. Vermieter: die eine dunkle Sektion -->
+  <section class="sektion vermieter" aria-labelledby="vermieter-titel">
+    <div class="wrap vermieter-raster">
+      <div class="einblenden">
+        <p class="label">Für Vermieter</p>
+        <h2 id="vermieter-titel">Ungenutzter Platz, der sich bezahlt macht</h2>
+        <p class="vermieter-einleitung">Eine Garage, ein Stück Hof oder eine halbe Scheune reichen. Sie bestimmen den Preis und entscheiden, wer einzieht.</p>
+        <ul class="vermieter-liste">
+          {vermieterVorteile.map((v) => <li><span class="check" aria-hidden="true"></span>{v}</li>)}
+        </ul>
+        <a class="btn btn-primaer btn-gross" href={link('vermieten')}>Platz anbieten</a>
+      </div>
+      <div class="vermieter-karten" aria-hidden="true">
+        <svg class="vermieter-route" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M30 34 C 28 52, 50 56, 62 66" /></svg>
+        <div class="ui-karte v-anfrage einblenden">
+          <p class="plan-kopf"><strong>Neue Anfrage für Ihre Scheune</strong><span class="beispiel-label">Beispiel</span></p>
+          <p class="v-zeile">Wohnwagen, 6,8 m lang, ab Oktober</p>
+          <p class="v-zeile v-ok"><span class="check"></span>Angaben geprüft</p>
+        </div>
+        {scheune && (
+          <div class="ui-karte v-betrag einblenden" style="--verzoegerung:150ms">
+            <p class="plan-kopf"><span>Ihr Platz bringt ca.</span><span class="beispiel-label">Beispiel</span></p>
+            <p class="v-preis">{scheune[0]} bis {scheune[1]} € <span>im Monat</span></p>
+            <p class="v-zeile">Halle oder Scheune, Fahrzeug bis 9 m. Richtwert {richtwerte.region}.</p>
+          </div>
+        )}
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. Region mit Karte -->
+  <section class="sektion" aria-labelledby="region-titel">
+    <div class="wrap region-raster">
+      <div class="einblenden">
+        <p class="label label-leise">Region</p>
+        <h2 id="region-titel">Wo wir starten</h2>
+        <p class="region-text">Wir beginnen im Großraum Stuttgart, zuerst im Landkreis Böblingen. Auf Wunsch suchen wir in ganz Baden-Württemberg.</p>
+        <p class="region-links">
+          {link('regionBoeblingen') && <a class="weiter" href={link('regionBoeblingen')}>Landkreis Böblingen</a>}
+          {link('regionen') && <a class="weiter" href={link('regionen')}>Alle Regionen</a>}
+        </p>
+        <p class="orte-titel">Startorte</p>
+        <ul class="orte">
+          {orte.map((o) => <li>{o.href ? <a href={o.href} rel={o.href.includes('?') ? 'nofollow' : undefined}>{o.ort}</a> : o.ort}</li>)}
+        </ul>
+      </div>
+      <div class="einblenden" style="--verzoegerung:120ms"><RegionKarte /></div>
+    </div>
+  </section>
+
+  <!-- 6. Ratgeber -->
+  {hauptBeitrag && (
+    <section class="sektion" aria-labelledby="ratgeber-titel">
+      <div class="wrap">
+        <div class="kopf einblenden">
+          <p class="label label-leise">Ratgeber</p>
+          <h2 id="ratgeber-titel">Ratgeber und Werkzeuge</h2>
+        </div>
+        <div class="ratgeber-raster">
+          <article class="beitrag-gross einblenden">
+            <Foto name={`ratgeber-${hauptBeitrag.seite}`} alt={hauptBeitrag.foto} seiten="16 / 9" breiten={[480, 800, 1100]} sizes="(min-width: 60rem) 55vw, 100vw" />
+            <p class="beitrag-art">{hauptBeitrag.art}</p>
+            <h3><a href={seiten[hauptBeitrag.seite].pfad}>{seiten[hauptBeitrag.seite].titel}</a></h3>
+            <p>{hauptBeitrag.text}</p>
+          </article>
+          <ul class="beitrag-liste einblenden" style="--verzoegerung:120ms">
+            {weitere.map((t) => (
+              <li>
+                <p class="beitrag-art">{t.art}</p>
+                <h3><a href={seiten[t.seite].pfad}>{seiten[t.seite].titel}</a></h3>
+                <p>{t.text}</p>
+              </li>
+            ))}
+            {link('ratgeber') && <li class="alle"><a class="weiter" href={link('ratgeber')}>Alle Ratgeber</a></li>}
+          </ul>
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- FAQ -->
+  <section class="sektion">
+    <div class="wrap einblenden">
+      <Faq seite="start" label="Fragen"><p>Noch etwas offen? {site.ansprechpartner} per <a href={whatsappLink} rel="noopener">WhatsApp</a> oder <a href={emailHref}>E-Mail</a>.</p></Faq>
+    </div>
+  </section>
+
+  <!-- 7. Abschluss: Ende der Route -->
+  <section class="sektion abschluss">
+    <div class="wrap einblenden">
+      <div class="ziel" aria-hidden="true"><span class="ziel-linie"></span><span class="ziel-punkt"></span></div>
       <h2>Platz finden oder Platz anbieten?</h2>
-      <p class="einleitung">Beides geht schnell und ist unverbindlich.</p>
+      <p class="abschluss-text">Beides geht schnell und ist unverbindlich.</p>
       <ButtonPaar mieterZuerst />
     </div>
   </section>
 </Basis>
+
 <style>
-  /* Hero: warmer Cremeton (aus Akzent abgeleitet), große enge Überschrift, Vogel mit schwebenden Karten */
-  :global(body) { --creme: var(--flaeche); --warm: var(--koralle); --gruen: var(--salbei); }
-  :global(body .kopf.kopf) { border-bottom-color: transparent; }
-  .held { background: radial-gradient(ellipse 45% 55% at 82% 35%, var(--sekundaer), transparent 70%), radial-gradient(ellipse 40% 45% at 55% 85%, var(--pfirsich-hell), transparent 70%), var(--flaeche); padding-block: clamp(1.5rem, 5vw, 3.5rem) clamp(2.5rem, 6vw, 4rem); overflow: hidden; }
-  .held-raster { display: grid; gap: 2.5rem; align-items: center; }
-  .held-pille { display: inline-block; margin: 0 0 1.5rem; padding: 0.35rem 1.1rem; border-radius: 999px; background: var(--akzent-hell); border: 0; font-weight: 600; color: var(--ueberschrift); font-size: 1rem; }
-  .held h1 { font-size: clamp(2.8rem, 6vw, 4.6rem); line-height: 1; letter-spacing: -0.055em; font-weight: 800; color: #14121f; }
+  /* Sektionen nur durch Abstand getrennt, ein Hintergrund */
+  .kopf { margin-bottom: clamp(2rem, 4vw, 3rem); max-width: 44rem; }
+  .kopf h2 { margin: 0; }
+
+  /* 1. Hero */
+  .held { padding-block: clamp(2rem, 5vw, 4rem) 0; }
+  .held-raster { display: grid; gap: 3rem; align-items: center; }
+  .held h1 { font-size: var(--h1-gross); line-height: 1; letter-spacing: -0.05em; font-weight: 800; margin-bottom: 0; }
   .held .einleitung { margin: 1.5rem 0 0; color: var(--text-leise); max-width: 34rem; }
-  .held-knoepfe { display: flex; flex-wrap: wrap; gap: 1rem; margin-top: 2.25rem; }
-  .held-knoepfe .btn { border-radius: var(--r); }
-  .held-knoepfe .btn-primaer { }
-  .held-knoepfe .btn-rahmen { background: transparent; border-width: 2px; }
-  .held-knoepfe :global(.symbol) { width: 1.3rem; height: 1.3rem; }
-  .vertrauen { list-style: none; padding: 0; margin: 2.25rem 0 0; display: flex; flex-wrap: wrap; gap: 0.75rem 1.5rem; font-weight: 600; font-size: 1rem; color: var(--ueberschrift); }
-  .vertrauen li { display: flex; align-items: center; gap: 0.55rem; }
-  .vertrauen-icon { display: grid; place-items: center; width: 2.25rem; height: 2.25rem; border-radius: 50%; background: var(--tertiaer); }
-  .vertrauen-icon :global(.symbol) { color: var(--salbei-text); width: 1.25rem; height: 1.25rem; }
+  .held-knoepfe { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 2rem; }
 
-  /* Bühne: Vogel rechts, Karten darüber */
-  .buehne { position: relative; min-height: 34rem; }
-  .vogel-glut { position: absolute; right: -10%; top: 0; width: 80%; aspect-ratio: 1; border-radius: 50%; background: radial-gradient(circle, rgb(255 255 255 / 0.85), transparent 62%); }
-  .vogel { position: absolute; right: 0; top: 0; width: 60%; height: auto; filter: drop-shadow(0 24px 30px rgb(31 42 18 / 0.16)); }
-  .plan, .schwebe { position: absolute; background: var(--hintergrund); border-radius: var(--r-gross); box-shadow: var(--schatten-karte-hoch); }
-  .plan { left: 0; top: 19rem; width: min(25rem, 74%); padding: 1.5rem 1.5rem 1.25rem; }
-  .plan-titel { font-size: 1.45rem; font-weight: 800; letter-spacing: -0.02em; color: #14121f; margin: 0 0 0.6rem; }
-  .plan-zeile { display: flex; justify-content: space-between; font-size: 0.95rem; margin: 0 0 0.6rem; }
-  .plan-balken { height: 0.6rem; border-radius: 999px; background: color-mix(in srgb, var(--ueberschrift) 8%, transparent); overflow: hidden; }
-  .plan-balken span { display: block; width: 58%; height: 100%; border-radius: inherit; background: var(--gruen); }
-  .plan-liste { list-style: none; margin: 1rem 0 0; padding: 0; font-size: 0.98rem; }
-  .plan-liste li { display: flex; align-items: center; gap: 0.7rem; padding: 0.6rem 0; border-bottom: 1px solid var(--linie); font-weight: 600; color: var(--ueberschrift); }
-  .plan-liste em { margin-left: auto; font-style: normal; font-weight: 500; font-size: 0.85rem; color: var(--text-leise); }
-  .punkt { flex: none; width: 1.3rem; height: 1.3rem; border-radius: 50%; border: 2px solid var(--linie); }
-  .erledigt .txt { color: var(--text-leise); text-decoration: line-through; text-decoration-color: color-mix(in srgb, var(--text) 40%, transparent); }
-  .erledigt .punkt { border: 0; background: var(--gruen) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M6 12.5l4 4 8-9' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / 75% no-repeat; }
-  .aktiv .punkt { border-color: var(--warm); }
-  .aktiv em { color: var(--koralle-text); font-weight: 700; }
-  .plan-fuss { display: flex; align-items: center; gap: 0.6rem; margin: 1rem 0 0; font-size: 0.95rem; font-weight: 600; color: var(--ueberschrift); }
-  .haken-rund { display: grid; place-items: center; width: 1.3rem; height: 1.3rem; border-radius: 50%; background: var(--gruen); }
-  .haken-rund :global(.symbol) { width: 0.85rem; height: 0.85rem; color: var(--hintergrund); stroke-width: 3; }
-  .schwebe { display: flex; gap: 0.8rem; align-items: flex-start; padding: 1rem 1.15rem; width: 16rem; font-size: 0.9rem; line-height: 1.35; animation: schweben 5s ease-in-out infinite; }
-  .schwebe strong { display: block; color: #14121f; font-size: 0.95rem; margin-bottom: 0.2rem; }
-  .schwebe-oben { left: 2%; top: 3rem; }
-  .schwebe-rechts { right: 0; top: 12.5rem; animation-delay: -2.5s; }
-  .schwebe-icon { flex: none; display: grid; place-items: center; width: 2.25rem; height: 2.25rem; border-radius: 50%; background: var(--warm); }
-  .schwebe-icon.warm { background: var(--akzent); }
-  .schwebe-icon.warm :global(.symbol) { color: var(--ueberschrift); }
-  .schwebe-icon :global(.symbol) { width: 1.2rem; height: 1.2rem; color: var(--hintergrund); }
-  @keyframes schweben { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
-  @media (prefers-reduced-motion: reduce) { .schwebe { animation: none; } }
+  .komposition { position: relative; display: grid; gap: 1rem; }
+  .komposition :global(.komposition-foto) { width: 100%; aspect-ratio: 16 / 10; }
+  .komposition-route { display: none; }
+  .k-naehe, .k-geprueft { display: flex; gap: 0.75rem; align-items: flex-start; }
+  .k-naehe :global(.symbol) { width: 1.4rem; height: 1.4rem; color: var(--koralle-text); flex: none; margin-top: 0.1rem; }
+  .plan-kopf { display: flex; justify-content: space-between; align-items: center; gap: 0.75rem; margin: 0 0 0.5rem; }
+  .plan-kopf strong { font-size: 1.1rem; }
+  .plan-stand { margin: 0 0 0.45rem; font-size: 0.85rem; color: var(--text-leise); }
+  .plan-balken { height: 0.45rem; border-radius: 999px; background: var(--sekundaer); overflow: hidden; }
+  .plan-balken span { display: block; width: 50%; height: 100%; border-radius: inherit; background: var(--salbei); }
+  .plan-liste { list-style: none; margin: 0.85rem 0 0; padding: 0; }
+  .plan-liste li { display: flex; align-items: center; gap: 0.65rem; padding: 0.5rem 0; border-top: 1px solid var(--linie); font-weight: 600; color: var(--ueberschrift); }
+  .plan-liste .naechster .offen { border-color: var(--akzent); }
 
-  /* Handy: Bühne kompakter, rechte Karte unter dem Plan */
-  @media (max-width: 40rem) {
-    .buehne { min-height: 37rem; }
-    .vogel { width: 58%; right: 0; top: 0; }
-    .plan { left: 0; top: 11rem; width: 92%; }
-    .schwebe { width: 14rem; }
-    .schwebe-rechts { display: none; }
-  }
+  /* Breite Bildschirme: schwebende Komposition */
   @media (min-width: 60rem) {
-    .held-raster { grid-template-columns: 1.1fr 1fr; gap: 2rem; }
-    .buehne { min-height: 46rem; }
+    .held-raster { grid-template-columns: 1.05fr 1fr; gap: 3rem; }
+    .komposition { display: block; height: 36rem; }
+    .komposition :global(.komposition-foto) { position: absolute; right: 0; top: 0; width: 78%; height: 100%; aspect-ratio: auto; }
+    .komposition-route { display: block; position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; z-index: 1; }
+    .komposition-route path { fill: none; stroke: var(--route-farbe); stroke-width: var(--route-strich); stroke-dasharray: var(--route-muster); stroke-linecap: round; vector-effect: non-scaling-stroke; }
+    .ui-karte { position: absolute; z-index: 2; }
+    .k-naehe { left: 0; top: 2.5rem; width: 15.5rem; }
+    .k-plan { left: 4%; top: 13.5rem; width: 21rem; }
+    .k-geprueft { right: -1rem; bottom: 1.5rem; width: 15rem; }
   }
 
-  .such-band { background: var(--creme); padding-bottom: clamp(3rem, 7vw, 5rem); }
+  /* Suchzeile: kompakt, an den Hero angebunden */
+  .suchzeile { display: grid; gap: 0.6rem; margin-top: clamp(2.5rem, 5vw, 3.5rem); padding: 0.6rem; background: var(--hintergrund); border: 1px solid var(--linie); border-radius: var(--r-karte); }
+  .suchzeile input, .suchzeile select { min-height: 3.25rem; border-color: transparent; background-color: var(--flaeche); }
+  .suchzeile .btn { min-height: 3.25rem; }
+  @media (min-width: 48rem) { .suchzeile { grid-template-columns: 1.4fr 1fr auto; } }
+  .such-vorteile { list-style: none; margin: 1rem 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 0.5rem 1.75rem; font-size: 0.95rem; font-weight: 600; color: var(--text); }
+  .such-vorteile li { display: flex; align-items: center; gap: 0.5rem; }
 
-  .abschluss :global(.btn-rahmen) { border-color: var(--hintergrund); color: var(--hintergrund); }
-  .abschluss :global(.btn-rahmen:hover) { background: rgb(255 255 255 / 0.08); }
-  .abschluss :global(.unter-hinweis) { color: var(--sekundaer); }
-  .orte .chip { text-decoration: none; color: var(--ueberschrift); }
-  .orte { list-style: none; padding: 0; margin: 0; }
-  .alle-regionen { margin-left: 1.5rem; }
-  .nachfrage-abschnitt { padding-block: clamp(2rem, 5vw, 3rem); }
-  .nachfrage-abschnitt :global(.nachfrage-hinweis) { margin: 0 auto; }
+  /* 2. Kategorien */
+  .kategorien { list-style: none; margin: 0; padding: 0; display: grid; gap: 1.25rem; }
+  .kategorie { position: relative; display: grid; gap: 1rem; }
+  .kategorie h3 { margin: 0 0 0.3rem; font-size: 1.2rem; }
+  .kategorie h3 a { color: inherit; text-decoration: none; }
+  .kategorie h3 a::after { content: ''; position: absolute; inset: 0; border-radius: var(--r-karte); }
+  .kategorie p { margin: 0 0 0.5rem; color: var(--text-leise); font-size: 1rem; }
+  .pfeil { font-weight: 600; color: var(--ueberschrift); font-size: 1rem; }
+  .kategorie :global(.foto img) { transition: transform 500ms var(--ease-out); }
+  @media (hover: hover) { .kategorie:hover :global(.foto img) { transform: scale(1.03); } .kategorie:hover h3 { text-decoration: underline; text-underline-offset: 0.2em; } }
+  .kategorie:has(a:focus-visible) { outline: 3px solid var(--ueberschrift); outline-offset: 4px; border-radius: var(--r-karte); }
+  .kategorie h3 a:focus-visible { outline: none; }
+  @media (min-width: 40rem) { .kategorien { grid-template-columns: repeat(2, 1fr); } .breit { grid-column: 1 / -1; } }
+  @media (min-width: 60rem) {
+    .kategorien { grid-template-columns: repeat(3, 1fr); gap: 2rem 1.5rem; }
+    .breit { grid-template-columns: 1.6fr 1fr; align-items: center; gap: 2.5rem; }
+    .breit h3 { font-size: 1.6rem; }
+    .breit p { font-size: 1.1rem; }
+  }
+
+  /* 4. Vermieter (dunkel) */
+  .vermieter { background: var(--anker); color: var(--auf-dunkel-leise); }
+  .vermieter h2 { color: var(--flaeche); }
+  .vermieter .label { color: var(--akzent); }
+  .vermieter-raster { display: grid; gap: 3rem; align-items: center; }
+  .vermieter-einleitung { font-size: 1.15rem; max-width: 34rem; margin: 1rem 0 1.5rem; }
+  .vermieter-liste { list-style: none; margin: 0 0 2rem; padding: 0; display: grid; gap: 0.7rem; }
+  .vermieter-liste li { display: flex; gap: 0.7rem; align-items: flex-start; color: var(--flaeche); font-weight: 600; }
+  .vermieter-liste .check { margin-top: 0.15rem; }
+  .vermieter-karten { position: relative; display: grid; gap: 1rem; }
+  .vermieter-route { display: none; }
+  .v-zeile { margin: 0.3rem 0 0; color: var(--text-leise); }
+  .v-ok { display: flex; align-items: center; gap: 0.5rem; color: var(--ueberschrift); font-weight: 600; }
+  .v-preis { margin: 0.2rem 0 0; font-size: 1.9rem; font-weight: 800; letter-spacing: -0.03em; color: var(--ueberschrift); }
+  .v-preis span { font-size: 1rem; font-weight: 500; color: var(--text-leise); }
+  @media (min-width: 60rem) {
+    .vermieter-raster { grid-template-columns: 1fr 1fr; gap: 4rem; }
+    .vermieter-karten { display: block; height: 22rem; }
+    .vermieter-route { display: block; position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+    .vermieter-route path { fill: none; stroke: rgb(251 248 241 / 0.35); stroke-width: var(--route-strich); stroke-dasharray: var(--route-muster); vector-effect: non-scaling-stroke; }
+    .v-anfrage { position: absolute; left: 0; top: 1rem; width: 20rem; }
+    .v-betrag { position: absolute; right: 0; bottom: 1rem; width: 21rem; }
+  }
+
+  /* 5. Region */
+  .region-raster { display: grid; gap: 2.5rem; align-items: center; }
+  .region-text { font-size: 1.15rem; color: var(--text); max-width: 32rem; margin-top: 1rem; }
+  .region-links { display: flex; flex-wrap: wrap; gap: 0 1.5rem; margin: 0 0 1.75rem; }
+  .orte-titel { margin: 0 0 0.4rem; font-size: 0.875rem; font-weight: 700; color: var(--text-leise); }
+  .orte { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 0.2rem 0; font-size: 1rem; }
+  .orte li:not(:last-child)::after { content: '·'; margin: 0 0.55rem; color: var(--text-leise); }
+  .orte a { color: var(--text); }
+  @media (min-width: 60rem) { .region-raster { grid-template-columns: 0.9fr 1.1fr; gap: 4rem; } }
+
+  /* 6. Ratgeber */
+  .ratgeber-raster { display: grid; gap: 2.5rem; }
+  .beitrag-gross { position: relative; }
+  .beitrag-gross h3 { font-size: 1.5rem; margin: 0.3rem 0 0.4rem; }
+  .beitrag-art { margin: 1rem 0 0; font-size: 0.8rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-leise); }
+  .ratgeber-raster h3 a { color: inherit; text-decoration: none; }
+  .ratgeber-raster h3 a:hover { text-decoration: underline; text-underline-offset: 0.2em; }
+  .ratgeber-raster p:not(.beitrag-art) { color: var(--text-leise); margin: 0; }
+  .beitrag-liste { list-style: none; margin: 0; padding: 0; }
+  .beitrag-liste li { padding: 1.25rem 0; border-top: 1px solid var(--linie); }
+  .beitrag-liste li .beitrag-art { margin-top: 0; }
+  .beitrag-liste h3 { font-size: 1.2rem; margin: 0.3rem 0; }
+  .beitrag-liste .alle { padding-top: 0.75rem; }
+  @media (min-width: 60rem) { .ratgeber-raster { grid-template-columns: 1.4fr 1fr; gap: 4rem; align-items: start; } .beitrag-liste li:first-child { border-top: 0; padding-top: 0; } }
+
+  /* 7. Abschluss: Ende der Route */
+  .abschluss { text-align: center; padding-top: 2rem; }
+  .ziel { display: flex; flex-direction: column; align-items: center; margin-bottom: 2rem; }
+  .ziel-linie { width: 0; height: 4.5rem; border-left: var(--route-strich) dashed var(--route-farbe); }
+  .ziel-punkt { width: 0.9rem; height: 0.9rem; border-radius: 50%; background: var(--akzent); box-shadow: 0 0 0 5px var(--akzent-hell); }
+  .abschluss h2 { margin-bottom: 0.5rem; }
+  .abschluss-text { color: var(--text-leise); font-size: 1.15rem; }
   .abschluss :global(.button-paar) { margin-inline: auto; }
 </style>

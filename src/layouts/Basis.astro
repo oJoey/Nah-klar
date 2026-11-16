@@ -54,12 +54,13 @@ const website = {
     <meta property="og:title" content={titel} />
     <meta property="og:description" content={beschreibung} />
     <meta property="og:url" content={canonical} />
-    <meta name="theme-color" content="#fffffe" />
+    <meta name="theme-color" content="#fbf8f1" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="sitemap" href="/sitemap-index.xml" />
     <script type="application/ld+json" set:html={jsonLd(organisation)} />
     <script type="application/ld+json" set:html={jsonLd(website)} />
     <script is:inline>
+      document.documentElement.classList.add('js');
       // Herkunft merken (UTM, Flyer-Quelle), damit sie im Formular mitgeschickt werden kann.
       try {
         var p = new URLSearchParams(location.search), o = {};
@@ -106,7 +107,17 @@ const website = {
       <slot />
     </main>
     <Fuss />
-  </body>
+    <script>
+    // Elemente mit class="einblenden" sanft einblenden, sobald sie ins Bild kommen (je einmal).
+    const els = document.querySelectorAll('.einblenden');
+    if ('IntersectionObserver' in window) {
+      const io = new IntersectionObserver((eintraege) => {
+        for (const e of eintraege) if (e.isIntersecting) { e.target.classList.add('sichtbar'); io.unobserve(e.target); }
+      }, { rootMargin: '0px 0px -8% 0px' });
+      els.forEach((el) => io.observe(el));
+    } else els.forEach((el) => el.classList.add('sichtbar'));
+  </script>
+</body>
 </html>
 <style>
   .sprung:focus { position: static; width: auto; height: auto; margin: 0; clip: auto; display: block; padding: 0.75rem 1rem; background: var(--ueberschrift); color: var(--hintergrund); }

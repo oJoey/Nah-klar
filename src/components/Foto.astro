@@ -1,0 +1,27 @@
+---
+// Foto mit festem Seitenverhältnis. Liegt src/assets/bilder/<name>.(jpg|png|webp), wird es als AVIF/WebP ausgeliefert.
+// Sonst erscheint ein ruhiger Platzhalter mit der Bildbeschreibung. Liste aller Bilder: BILDER.md
+import { Picture } from 'astro:assets';
+import { bild } from '../lib/bilder';
+
+interface Props {
+  name: string;
+  alt: string;            // Beschreibung für Screenreader (und Text im Platzhalter)
+  seiten?: string;        // Seitenverhältnis, z. B. '4 / 3'
+  breiten?: number[];
+  sizes?: string;
+  eager?: boolean;        // nur im Hero: sofort laden
+  class?: string;
+}
+const { name, alt, seiten = '4 / 3', breiten = [480, 800, 1200], sizes = '(min-width: 60rem) 50vw, 100vw', eager = false, class: klasse } = Astro.props;
+const treffer = bild(name);
+---
+<div class:list={['foto', klasse]} style={`--seiten: ${seiten}`}>
+  {treffer ? (
+    <Picture src={treffer.src} alt={alt} formats={['avif', 'webp']} widths={breiten} sizes={sizes} quality={72} loading={eager ? 'eager' : 'lazy'} decoding="async" />
+  ) : (
+    <div class="foto-platzhalter" role="img" aria-label={alt} style="position:absolute;inset:0">
+      <span>{alt}<small>Platzhalter: {name}.jpg</small></span>
+    </div>
+  )}
+</div>
