@@ -56,10 +56,10 @@ const gruppen = [
 .schritte { text-align: left; }
   .umschalter {
     display: flex; width: fit-content; margin: 0 auto 2.5rem; padding: 0.25rem;
-    background: rgb(19 33 58 / 0.08); border-radius: var(--r-klein);
+    background: rgb(28 26 23 / 0.07); border-radius: 999px;
   }
   .umschalter button {
-    min-height: 3rem; padding: 0.5rem 1.5rem; border: 0; border-radius: var(--r-klein);
+    min-height: 3rem; padding: 0.5rem 1.5rem; border: 0; border-radius: 999px;
     font: inherit; font-weight: 600; background: transparent; color: var(--text); cursor: pointer;
     transition: background-color 200ms ease, box-shadow 200ms ease;
   }
@@ -69,7 +69,7 @@ const gruppen = [
   .schritt-liste li { counter-increment: schritt; background: var(--hintergrund); border: 1px solid var(--linie); border-radius: var(--r-gross); padding: 1.75rem; }
   .schritt-liste li::before {
     content: counter(schritt); display: block; margin-bottom: 0.75rem;
-    font-size: 2.5rem; font-weight: 700; line-height: 1; letter-spacing: -0.03em; color: var(--ueberschrift);
+    font-size: 2.5rem; font-weight: 800; line-height: 1; letter-spacing: -0.03em; color: var(--salbei-text);
     font-variant-numeric: tabular-nums;
   }
   .schritt-liste p { margin: 0; color: var(--text); }
