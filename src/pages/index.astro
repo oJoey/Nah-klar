@@ -100,7 +100,6 @@ const [hauptBeitrag, ...weitere] = beitraege;
   <section class="sektion" aria-labelledby="arten-titel">
     <div class="wrap">
       <div class="kopf einblenden">
-        <p class="label label-leise">Kategorien</p>
         <h2 id="arten-titel">Was möchten Sie unterstellen?</h2>
       </div>
       <ul class="kategorien">
@@ -122,7 +121,6 @@ const [hauptBeitrag, ...weitere] = beitraege;
   <section class="sektion" aria-labelledby="ablauf-titel">
     <div class="wrap">
       <div class="kopf einblenden">
-        <p class="label label-leise">Ablauf</p>
         <h2 id="ablauf-titel">So funktioniert's</h2>
       </div>
       <div class="einblenden"><Zeitstrahl /></div>
@@ -163,7 +161,6 @@ const [hauptBeitrag, ...weitere] = beitraege;
   <section class="sektion" aria-labelledby="region-titel">
     <div class="wrap region-raster">
       <div class="einblenden">
-        <p class="label label-leise">Region</p>
         <h2 id="region-titel">Wo wir starten</h2>
         <p class="region-text">Wir beginnen im Großraum Stuttgart, zuerst im Landkreis Böblingen. Auf Wunsch suchen wir in ganz Baden-Württemberg.</p>
         <p class="region-links">
@@ -184,7 +181,6 @@ const [hauptBeitrag, ...weitere] = beitraege;
     <section class="sektion" aria-labelledby="ratgeber-titel">
       <div class="wrap">
         <div class="kopf einblenden">
-          <p class="label label-leise">Ratgeber</p>
           <h2 id="ratgeber-titel">Ratgeber und Werkzeuge</h2>
         </div>
         <div class="ratgeber-raster">
@@ -212,20 +208,29 @@ const [hauptBeitrag, ...weitere] = beitraege;
   <!-- FAQ -->
   <section class="sektion">
     <div class="wrap einblenden">
-      <Faq seite="start" label="Fragen"><p>Noch etwas offen? {site.ansprechpartner} per <a href={whatsappLink} rel="noopener">WhatsApp</a> oder <a href={emailHref}>E-Mail</a>.</p></Faq>
+      <Faq seite="start"><p>Noch etwas offen? {site.ansprechpartner} per <a href={whatsappLink} rel="noopener">WhatsApp</a> oder <a href={emailHref}>E-Mail</a>.</p></Faq>
     </div>
   </section>
 
   <!-- 7. Abschluss: Ende der Route -->
   <section class="sektion abschluss">
     <div class="wrap einblenden">
-      <div class="ziel" aria-hidden="true"><span class="ziel-linie"></span><span class="ziel-punkt"></span></div>
+      <div class="ziel" id="ziel" aria-hidden="true"><span class="ziel-linie"></span><span class="ziel-punkt"></span></div>
       <h2>Platz finden oder Platz anbieten?</h2>
       <p class="abschluss-text">Beides geht schnell und ist unverbindlich.</p>
       <ButtonPaar mieterZuerst />
     </div>
   </section>
 </Basis>
+
+<script>
+  // Ziel-Animation erst starten, wenn das Ziel im oberen Teil des Bildschirms angekommen ist
+  const ziel = document.getElementById('ziel');
+  if (ziel && 'IntersectionObserver' in window) {
+    const io = new IntersectionObserver(([e]) => { if (e.isIntersecting) { ziel.classList.add('angekommen'); io.disconnect(); } }, { rootMargin: '0px 0px -35% 0px' });
+    io.observe(ziel);
+  } else ziel?.classList.add('angekommen');
+</script>
 
 <style>
   /* Sektionen nur durch Abstand getrennt, ein Hintergrund */
@@ -349,8 +354,29 @@ const [hauptBeitrag, ...weitere] = beitraege;
   /* 7. Abschluss: Ende der Route */
   .abschluss { text-align: center; padding-top: 2rem; }
   .ziel { display: flex; flex-direction: column; align-items: center; margin-bottom: 2rem; }
-  .ziel-linie { width: 0; height: 4.5rem; border-left: var(--route-strich) dashed var(--route-farbe); }
-  .ziel-punkt { width: 0.9rem; height: 0.9rem; border-radius: 50%; background: var(--koralle); box-shadow: 0 0 0 5px var(--akzent-hell); }
+  /* Ziel der Route: Strichel als Verlauf, damit sie sich bewegen lassen */
+  .ziel-linie { position: relative; width: 2px; height: 7rem; }
+  .ziel-linie::before { content: ''; position: absolute; inset: 0; background: repeating-linear-gradient(to bottom, rgb(31 42 18 / 0.45) 0 7px, transparent 7px 14px); }
+  .ziel-punkt { position: relative; width: 1.1rem; height: 1.1rem; margin-top: 0.15rem; border-radius: 50%; background: var(--koralle); box-shadow: 0 0 0 6px var(--akzent-hell); }
+  .ziel-punkt::before, .ziel-punkt::after { content: ''; position: absolute; inset: 0; border-radius: 50%; border: 2px solid var(--koralle); opacity: 0; }
+
+  /* Ankommen (erst wenn das Ziel gut im Bild ist): ein Punkt fährt die Linie hinunter,
+     der Zielpunkt springt auf und sendet zwei Wellen aus. Danach laufen die Strichel langsam weiter Richtung Ziel. */
+  @media (prefers-reduced-motion: no-preference) {
+    :global(.js) .ziel-linie::before { clip-path: inset(0 0 100% 0); }
+    :global(.js) .ziel-punkt { transform: scale(0); }
+    .ziel-linie::after { content: ''; position: absolute; left: 50%; top: 0; width: 0.6rem; height: 0.6rem; margin-left: -0.3rem; border-radius: 50%; background: var(--koralle); opacity: 0; }
+    .angekommen .ziel-linie::before { animation: linie-zeichnen 1000ms var(--ease-out) forwards, linie-laufen 1.4s linear 1000ms infinite; }
+    .angekommen .ziel-linie::after { animation: punkt-fahren 1000ms cubic-bezier(0.45, 0, 0.2, 1) forwards; }
+    .angekommen .ziel-punkt { animation: punkt-setzen 600ms cubic-bezier(0.34, 1.8, 0.64, 1) 950ms forwards; }
+    .angekommen .ziel-punkt::before { animation: punkt-welle 1400ms var(--ease-out) 1050ms; }
+    .angekommen .ziel-punkt::after { animation: punkt-welle 1400ms var(--ease-out) 1400ms; }
+  }
+  @keyframes linie-zeichnen { to { clip-path: inset(0 0 0 0); } }
+  @keyframes linie-laufen { from { background-position: 0 0; } to { background-position: 0 14px; } }
+  @keyframes punkt-fahren { 0% { top: 0; opacity: 1; } 90% { opacity: 1; } 100% { top: 100%; opacity: 0; } }
+  @keyframes punkt-setzen { to { transform: scale(1); } }
+  @keyframes punkt-welle { from { opacity: 0.8; transform: scale(1); } to { opacity: 0; transform: scale(4); } }
   .abschluss h2 { margin-bottom: 0.5rem; }
   .abschluss-text { color: var(--text-leise); font-size: 1.15rem; }
   .abschluss :global(.button-paar) { margin-inline: auto; }

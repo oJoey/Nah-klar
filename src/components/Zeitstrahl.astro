@@ -147,7 +147,7 @@ const gruppen = [
 <style>
   .umschalter { display: inline-flex; gap: 0.25rem; padding: 0.25rem; margin-bottom: 2.5rem; border: 1px solid var(--linie); border-radius: var(--r-knopf); background: var(--hintergrund); }
   .umschalter button { min-height: 2.75rem; padding: 0.4rem 1.25rem; border: 0; border-radius: 8px; background: transparent; font: inherit; font-weight: 600; color: var(--text-leise); cursor: pointer; transition: background-color 150ms ease, color 150ms ease; }
-  .umschalter button[aria-selected='true'] { background: var(--ueberschrift); color: var(--hintergrund); }
+  .umschalter button[aria-selected='true'] { background: var(--anker); color: var(--hintergrund); }
   /* Ohne JavaScript: beide Abläufe untereinander */
   :global(html:not(.js)) .umschalter { display: none; }
   :global(html:not(.js)) .ablauf[hidden] { display: block; margin-top: 3rem; }
@@ -160,7 +160,7 @@ const gruppen = [
   .nr { display: grid; place-items: center; flex: none; width: 2.5rem; height: 2.5rem; border-radius: 50%; border: 1.5px solid var(--linie); background: var(--flaeche); font-weight: 800; color: var(--text-leise); transition: background-color 250ms ease, color 250ms ease, border-color 250ms ease; }
   .schritt-titel { font-size: 1.25rem; font-weight: 750; letter-spacing: -0.02em; color: var(--text-leise); transition: color 250ms ease; }
   .schritt-text { margin: 0.4rem 0 0; color: var(--text-leise); max-width: 30rem; }
-  .aktiv .nr { background: var(--ueberschrift); border-color: var(--ueberschrift); color: var(--flaeche); }
+  .aktiv .nr { background: var(--anker); border-color: var(--anker); color: var(--flaeche); }
   .aktiv .schritt-titel { color: var(--ueberschrift); }
   .aktiv .schritt-text { color: var(--text); }
   .schritt-karte { margin-top: 1.25rem; max-width: 24rem; }
@@ -189,7 +189,7 @@ const gruppen = [
   .mock-liste li, .bestaetigt { display: flex; align-items: center; gap: 0.6rem; margin: 0; font-weight: 600; color: var(--ueberschrift); }
   .blase { margin: 0; padding: 0.6rem 0.85rem; border-radius: 12px; max-width: 85%; }
   .blase-links { background: var(--flaeche); border: 1px solid var(--linie); }
-  .blase-rechts { justify-self: end; background: var(--ueberschrift); color: var(--flaeche); }
+  .blase-rechts { justify-self: end; background: var(--anker); color: var(--flaeche); }
   .vertrag-zeilen { display: grid; gap: 0.45rem; padding: 0.4rem 0; }
   .vertrag-zeilen span { height: 0.45rem; border-radius: 4px; background: var(--sekundaer); }
   .vertrag-zeilen .kurz { width: 60%; }
