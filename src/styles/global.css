@@ -19,6 +19,24 @@
   --koralle: #e8735a;       /* Aufmerksamkeit (Icons) */
   --koralle-text: #b4472f;  /* Korallfarbene Schrift auf Weiß (5,4:1) */
 
+  /* Anker: die eine dunkle Sektion (aus der Tinte abgeleitet, etwas grüner). Text darauf in --flaeche (13,2:1) bzw. --auf-dunkel-leise (8,4:1) */
+  --anker: #22301a;
+  --auf-dunkel-leise: #c3ccb1;
+  /* Route: das wiederkehrende Motiv (dünne gestrichelte Linie wie auf einer Karte) */
+  --route-farbe: rgb(31 42 18 / 0.32);
+  --route-strich: 1.5px;
+  --route-muster: 6 7;
+  /* Radien: Karten 16 px, Buttons 10 px */
+  --r-karte: 16px;
+  --r-knopf: 10px;
+  /* Typo-Stufen: nur die Hero-Headline ist riesig, H2 ca. 60 % davon */
+  --h1-gross: clamp(2.8rem, 6vw, 4.6rem);
+  --h2-gross: clamp(1.8rem, 3.4vw, 2.75rem);
+  /* Abstand zwischen Sektionen */
+  --abstand-sektion: clamp(4.5rem, 10vw, 8rem);
+  /* Warme, einheitliche Fotobehandlung */
+  --foto-filter: saturate(0.95) sepia(0.08) contrast(1.02);
+
   /* Abgeleitet */
   --linie: #e6e2d0;
   --akzent-hover: #f6a676;
@@ -59,7 +77,7 @@ h1, h2, h3 { color: var(--text); margin: 0 0 0.75rem; text-wrap: balance; font-w
 /* Eine Schrift für alles: Manrope (selbst gehostet), Hierarchie über Größe und Gewicht */
 h1, h2, h3 { font-family: var(--schrift-titel); color: var(--ueberschrift); font-optical-sizing: auto; }
 h1 { font-size: clamp(2.5rem, 7.5vw, 4.5rem); line-height: 1.02; letter-spacing: -0.035em; font-weight: 800; }
-h2 { font-size: clamp(1.9rem, 4.6vw, 3rem); line-height: 1.08; letter-spacing: -0.03em; font-weight: 750; }
+h2 { font-size: var(--h2-gross); line-height: 1.1; letter-spacing: -0.035em; font-weight: 750; }
 h3 { font-size: 1.3rem; line-height: 1.25; letter-spacing: -0.015em; font-weight: 700; }
 p { margin: 0 0 1rem; text-wrap: pretty; }
 a { color: var(--ueberschrift); text-underline-offset: 0.18em; text-decoration-thickness: 1px; }
@@ -243,6 +261,33 @@ fieldset > legend { font-size: 1.05rem; margin-bottom: 0.6rem; }
 .haken { list-style: none; padding: 0; margin: 0 0 1rem; }
 .haken li { padding-left: 2rem; position: relative; margin-bottom: 0.6rem; }
 .haken li::before { content: ''; position: absolute; left: 0; top: 0.3em; width: 1.15rem; height: 1.15rem; border-radius: 50%; background: var(--salbei) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M6 12.5l4 4 8-9' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / 75% no-repeat; }
+
+/* Label über Überschriften (z. B. „Ablauf“, „Für Vermieter“) */
+.label { display: block; margin: 0 0 0.75rem; font-size: 0.875rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--koralle-text); }
+.label-leise { color: var(--text-leise); }
+.sektion { padding-block: var(--abstand-sektion); }
+
+/* Einblenden beim Scrollen: nur mit JavaScript und nur ohne „Bewegung reduzieren“. Ohne beides ist alles sofort sichtbar. */
+@media (prefers-reduced-motion: no-preference) {
+  .js .einblenden { opacity: 0; transform: translateY(14px); transition: opacity 600ms var(--ease-out), transform 600ms var(--ease-out); transition-delay: var(--verzoegerung, 0ms); }
+  .js .einblenden.sichtbar { opacity: 1; transform: none; }
+}
+
+/* Fotos und Platzhalter: gleiche Ecken, warmer Ton, festes Seitenverhältnis */
+.foto { position: relative; overflow: hidden; border-radius: var(--r-karte); background: var(--sekundaer); aspect-ratio: var(--seiten, 4 / 3); }
+.foto img { display: block; width: 100%; height: 100%; object-fit: cover; filter: var(--foto-filter); }
+.foto-platzhalter { display: grid; place-items: center; padding: 1.25rem; background: #ece6d8; color: var(--text-leise); text-align: center; font-size: 0.9rem; line-height: 1.4; }
+.foto-platzhalter span { max-width: 24ch; }
+.foto-platzhalter small { display: block; margin-top: 0.35rem; font-size: 0.75rem; opacity: 0.8; }
+
+/* Kleines Label „Beispiel“ in UI-Karten */
+.beispiel-label { display: inline-block; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-leise); border: 1px solid var(--linie); border-radius: 6px; padding: 0.1rem 0.4rem; }
+
+/* Schwebende UI-Karte: die einzige Stelle mit Schatten */
+.ui-karte { background: var(--hintergrund); border-radius: var(--r-karte); box-shadow: var(--schatten-karte-hoch); padding: 1.1rem 1.25rem; color: var(--text); font-size: 0.95rem; line-height: 1.4; }
+.ui-karte strong { color: var(--ueberschrift); }
+.check { display: inline-grid; place-items: center; flex: none; width: 1.25rem; height: 1.25rem; border-radius: 50%; background: var(--salbei) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M6 12.5l4 4 8-9' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / 75% no-repeat; }
+.offen { display: inline-block; flex: none; width: 1.25rem; height: 1.25rem; border-radius: 50%; border: 2px solid var(--linie); }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { transition-duration: 0.01ms !important; }

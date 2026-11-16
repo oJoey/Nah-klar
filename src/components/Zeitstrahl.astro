@@ -1,0 +1,200 @@
+---
+// Ablauf als Zeitstrahl: links die Schritte (verbunden durch die gestrichelte Route), rechts eine UI-Karte zum aktiven Schritt.
+// Ohne JavaScript und mobil steht jede Karte direkt unter ihrem Schritt. Beispielwerte sind als „Beispiel“ gekennzeichnet.
+import { mieterSchritte, vermieterSchritte } from '../data/ablauf';
+import richtwerte from '../data/richtwerte.json';
+import Foto from './Foto.astro';
+
+const scheune = richtwerte.arten.find((a) => a.wert === 'halle-scheune')?.preise?.['9'] as [number, number] | undefined;
+const gruppen = [
+  { id: 'mieter', titel: 'Für Mieter', schritte: mieterSchritte },
+  { id: 'vermieter', titel: 'Für Vermieter', schritte: vermieterSchritte },
+];
+---
+<div class="zeitstrahl" data-zeitstrahl>
+  <div class="umschalter" role="tablist" aria-label="Ablauf für">
+    {gruppen.map((g, i) => (
+      <button type="button" role="tab" id={`tab-${g.id}`} aria-controls={`ablauf-${g.id}`} aria-selected={i === 0 ? 'true' : 'false'}>{g.titel}</button>
+    ))}
+  </div>
+
+  {gruppen.map((g, gi) => (
+    <div class="ablauf" id={`ablauf-${g.id}`} role="tabpanel" aria-labelledby={`tab-${g.id}`} data-gruppe={g.id} hidden={gi > 0 ? true : undefined}>
+      <ol class="schritte">
+        {g.schritte.map((s, i) => (
+          <li class:list={['schritt', { aktiv: i === 0 }]} data-schritt={i}>
+            <button type="button" class="schritt-kopf" aria-expanded={i === 0 ? 'true' : 'false'}>
+              <span class="nr" aria-hidden="true">{i + 1}</span>
+              <span class="schritt-titel">{s.titel}</span>
+            </button>
+            <p class="schritt-text">{s.text}</p>
+
+            <div class="schritt-karte" aria-hidden="true">
+              {g.id === 'mieter' && i === 0 && (
+                <div class="ui-karte mock">
+                  <p class="mock-kopf"><strong>Suchauftrag</strong><span class="beispiel-label">Beispiel</span></p>
+                  <div class="mock-feld"><span>PLZ oder Ort</span>71032 Böblingen</div>
+                  <div class="mock-feld"><span>Art</span>Wohnmobil / Wohnwagen</div>
+                  <div class="mock-feld"><span>Ab wann</span>ab Oktober</div>
+                  <div class="mock-knopf">Suchauftrag senden</div>
+                </div>
+              )}
+              {g.id === 'mieter' && i === 1 && (
+                <div class="ui-karte mock">
+                  <Foto name="ablauf-vorschlag" alt="Überdachter Stellplatz mit Wohnwagen auf einem Hof" seiten="16 / 9" breiten={[400, 640]} sizes="(min-width: 60rem) 30vw, 90vw" />
+                  <p class="mock-kopf mt-s"><strong>Überdachter Stellplatz</strong><span class="beispiel-label">Beispiel</span></p>
+                  <p class="mock-zeile">Ortsteil: Darmsheim, Sindelfingen</p>
+                  <p class="mock-preis">80 € <span>im Monat</span></p>
+                </div>
+              )}
+              {g.id === 'mieter' && i === 2 && (
+                <div class="ui-karte mock chat">
+                  <p class="mock-kopf"><strong>Nachricht</strong><span class="beispiel-label">Beispiel</span></p>
+                  <p class="blase blase-links">Passt Ihnen Samstag um 10 Uhr für die Besichtigung?</p>
+                  <p class="blase blase-rechts">Ja, sehr gern.</p>
+                  <p class="bestaetigt"><span class="check" aria-hidden="true"></span>Besichtigung am Samstag, 10 Uhr bestätigt</p>
+                </div>
+              )}
+              {i === 3 && g.id === 'mieter' && (
+                <div class="ui-karte mock">
+                  <p class="mock-kopf"><strong>Mustervertrag</strong><span class="beispiel-label">Beispiel</span></p>
+                  <div class="vertrag-zeilen"><span></span><span></span><span class="kurz"></span></div>
+                  <div class="unterschrift">
+                    <svg viewBox="0 0 160 40" aria-hidden="true"><path d="M6 28c10-14 18-20 22-14s-6 16 2 14 12-18 18-16-2 16 6 14 10-10 16-8 4 8 12 6 12-4 20-6" /></svg>
+                    <span>Unterschrift Mieter</span>
+                  </div>
+                  <p class="bestaetigt"><span class="check" aria-hidden="true"></span>Unterschrieben, Schlüssel folgt</p>
+                </div>
+              )}
+
+              {g.id === 'vermieter' && i === 0 && (
+                <div class="ui-karte mock">
+                  <p class="mock-kopf"><strong>Platz anbieten</strong><span class="beispiel-label">Beispiel</span></p>
+                  <div class="mock-feld"><span>Fläche</span>Halle / Scheune</div>
+                  <div class="mock-feld"><span>Größe</span>bis 9 m</div>
+                  <div class="mock-feld"><span>Fotos</span>3 Fotos hochgeladen</div>
+                  <div class="mock-knopf">Weiter</div>
+                </div>
+              )}
+              {g.id === 'vermieter' && i === 1 && (
+                <div class="ui-karte mock">
+                  <p class="mock-kopf"><strong>Interessent für Ihren Platz</strong><span class="beispiel-label">Beispiel</span></p>
+                  <p class="mock-zeile">Wohnwagen, 6,8 m lang, ab Oktober</p>
+                  <ul class="mock-liste">
+                    <li><span class="check" aria-hidden="true"></span>Angaben geprüft</li>
+                    <li><span class="check" aria-hidden="true"></span>Maße passen zu Ihrem Tor</li>
+                    <li><span class="offen" aria-hidden="true"></span>Ihre Entscheidung</li>
+                  </ul>
+                </div>
+              )}
+              {g.id === 'vermieter' && i === 2 && (
+                <div class="ui-karte mock chat">
+                  <p class="mock-kopf"><strong>Nachricht</strong><span class="beispiel-label">Beispiel</span></p>
+                  <p class="blase blase-links">Wir würden den Platz gern am Samstag ansehen.</p>
+                  <p class="bestaetigt"><span class="check" aria-hidden="true"></span>Besichtigung am Samstag, 10 Uhr bestätigt</p>
+                  <p class="bestaetigt"><span class="offen" aria-hidden="true"></span>Mustervertrag liegt bereit</p>
+                </div>
+              )}
+              {g.id === 'vermieter' && i === 3 && (
+                <div class="ui-karte mock">
+                  <p class="mock-kopf"><strong>Monatsmiete laut Vertrag</strong><span class="beispiel-label">Beispiel</span></p>
+                  {scheune && <p class="mock-preis">{scheune[0]} bis {scheune[1]} € <span>im Monat</span></p>}
+                  <p class="mock-zeile">Halle oder Scheune, Fahrzeug bis 9 m. Richtwert {richtwerte.region}.</p>
+                </div>
+              )}
+            </div>
+          </li>
+        ))}
+      </ol>
+    </div>
+  ))}
+</div>
+
+<script>
+  // Umschalter Mieter/Vermieter und aktiver Schritt (per Klick oder beim Scrollen)
+  document.querySelectorAll<HTMLElement>('[data-zeitstrahl]').forEach((wurzel) => {
+    const tabs = [...wurzel.querySelectorAll<HTMLButtonElement>('[role="tab"]')];
+    const panels = [...wurzel.querySelectorAll<HTMLElement>('[role="tabpanel"]')];
+    tabs.forEach((tab, i) => tab.addEventListener('click', () => {
+      tabs.forEach((t, j) => t.setAttribute('aria-selected', String(i === j)));
+      panels.forEach((p, j) => (p.hidden = i !== j));
+    }));
+    const breit = window.matchMedia('(min-width: 56rem)');
+    panels.forEach((panel) => {
+      const schritte = [...panel.querySelectorAll<HTMLElement>('.schritt')];
+      const setze = (n: number) => schritte.forEach((s, j) => {
+        s.classList.toggle('aktiv', j === n);
+        s.querySelector('.schritt-kopf')?.setAttribute('aria-expanded', String(j === n));
+      });
+      schritte.forEach((s, j) => s.querySelector('.schritt-kopf')?.addEventListener('click', () => setze(j)));
+      // Alle Karten auf Höhe des ersten Schritts ausrichten (sie hängen am jeweiligen Schritt)
+      const ausrichten = () => schritte.forEach((s) => s.style.setProperty('--oben', `${-s.offsetTop}px`));
+      ausrichten();
+      window.addEventListener('resize', ausrichten);
+      wurzel.querySelectorAll('[role="tab"]').forEach((t) => t.addEventListener('click', () => requestAnimationFrame(ausrichten)));
+      // Beim Scrollen: der Schritt in der Bildschirmmitte wird aktiv (nur auf breiten Bildschirmen)
+      if ('IntersectionObserver' in window) {
+        const io = new IntersectionObserver((eintraege) => {
+          if (!breit.matches) return;
+          for (const e of eintraege) if (e.isIntersecting) setze(schritte.indexOf(e.target as HTMLElement));
+        }, { rootMargin: '-45% 0px -45% 0px' });
+        schritte.forEach((s) => io.observe(s));
+      }
+    });
+  });
+</script>
+
+<style>
+  .umschalter { display: inline-flex; gap: 0.25rem; padding: 0.25rem; margin-bottom: 2.5rem; border: 1px solid var(--linie); border-radius: var(--r-knopf); background: var(--hintergrund); }
+  .umschalter button { min-height: 2.75rem; padding: 0.4rem 1.25rem; border: 0; border-radius: 8px; background: transparent; font: inherit; font-weight: 600; color: var(--text-leise); cursor: pointer; transition: background-color 150ms ease, color 150ms ease; }
+  .umschalter button[aria-selected='true'] { background: var(--ueberschrift); color: var(--flaeche); }
+  /* Ohne JavaScript: beide Abläufe untereinander */
+  :global(html:not(.js)) .umschalter { display: none; }
+  :global(html:not(.js)) .ablauf[hidden] { display: block; margin-top: 3rem; }
+
+  .schritte { list-style: none; margin: 0; padding: 0; position: relative; }
+  .schritt { position: relative; padding: 0 0 2.25rem 3.75rem; }
+  /* Route zwischen den Nummern */
+  .schritt:not(:last-child)::before { content: ''; position: absolute; left: 1.2rem; top: 2.6rem; bottom: 0.2rem; border-left: var(--route-strich) dashed var(--route-farbe); }
+  .schritt-kopf { display: flex; align-items: center; gap: 1rem; margin-left: -3.75rem; padding: 0; border: 0; background: none; font: inherit; text-align: left; color: inherit; cursor: pointer; }
+  .nr { display: grid; place-items: center; flex: none; width: 2.5rem; height: 2.5rem; border-radius: 50%; border: 1.5px solid var(--linie); background: var(--flaeche); font-weight: 800; color: var(--text-leise); transition: background-color 250ms ease, color 250ms ease, border-color 250ms ease; }
+  .schritt-titel { font-size: 1.25rem; font-weight: 750; letter-spacing: -0.02em; color: var(--text-leise); transition: color 250ms ease; }
+  .schritt-text { margin: 0.4rem 0 0; color: var(--text-leise); max-width: 30rem; }
+  .aktiv .nr { background: var(--ueberschrift); border-color: var(--ueberschrift); color: var(--flaeche); }
+  .aktiv .schritt-titel { color: var(--ueberschrift); }
+  .aktiv .schritt-text { color: var(--text); }
+  .schritt-karte { margin-top: 1.25rem; max-width: 24rem; }
+
+  /* Breite Bildschirme mit JavaScript: Karten rechts, nur die aktive sichtbar */
+  @media (min-width: 56rem) {
+    :global(.js) .ablauf { position: relative; min-height: 26rem; }
+    :global(.js) .schritte { width: 52%; }
+    :global(.js) .schritt-karte { position: absolute; top: var(--oben, 0); left: calc(100% + 4rem); width: min(24rem, 80%); margin: 0; opacity: 0; transform: translateY(10px); pointer-events: none; transition: opacity 350ms var(--ease-out), transform 350ms var(--ease-out); }
+    :global(.js) .aktiv .schritt-karte { opacity: 1; transform: none; }
+    :global(.js) .schritt:not(.aktiv) .schritt-text { color: var(--text-leise); }
+  }
+  @media (prefers-reduced-motion: reduce) { .schritt-karte { transition: none !important; transform: none !important; } }
+
+  /* Inhalte der UI-Karten */
+  .mock { display: grid; gap: 0.6rem; }
+  .mock-kopf { display: flex; justify-content: space-between; align-items: center; gap: 0.75rem; margin: 0; }
+  .mt-s { margin-top: 0.35rem; }
+  .mock-feld { display: grid; gap: 0.1rem; padding: 0.55rem 0.75rem; border: 1px solid var(--linie); border-radius: 8px; color: var(--ueberschrift); font-weight: 600; }
+  .mock-feld span { font-size: 0.75rem; font-weight: 600; color: var(--text-leise); }
+  .mock-knopf { margin-top: 0.2rem; padding: 0.6rem; border-radius: var(--r-knopf); background: var(--akzent); color: var(--ueberschrift); font-weight: 700; text-align: center; }
+  .mock-zeile { margin: 0; color: var(--text-leise); }
+  .mock-preis { margin: 0; font-size: 1.6rem; font-weight: 800; letter-spacing: -0.02em; color: var(--ueberschrift); }
+  .mock-preis span { font-size: 0.95rem; font-weight: 500; color: var(--text-leise); }
+  .mock-liste { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.45rem; }
+  .mock-liste li, .bestaetigt { display: flex; align-items: center; gap: 0.6rem; margin: 0; font-weight: 600; color: var(--ueberschrift); }
+  .blase { margin: 0; padding: 0.6rem 0.85rem; border-radius: 12px; max-width: 85%; }
+  .blase-links { background: var(--flaeche); border: 1px solid var(--linie); }
+  .blase-rechts { justify-self: end; background: var(--ueberschrift); color: var(--flaeche); }
+  .vertrag-zeilen { display: grid; gap: 0.45rem; padding: 0.4rem 0; }
+  .vertrag-zeilen span { height: 0.45rem; border-radius: 4px; background: var(--sekundaer); }
+  .vertrag-zeilen .kurz { width: 60%; }
+  .unterschrift { border-bottom: 1.5px solid var(--ueberschrift); padding-bottom: 0.2rem; }
+  .unterschrift svg { width: 9rem; height: 2.25rem; display: block; }
+  .unterschrift path { fill: none; stroke: var(--ueberschrift); stroke-width: 2; stroke-linecap: round; }
+  .unterschrift span { display: block; font-size: 0.75rem; color: var(--text-leise); }
+</style>

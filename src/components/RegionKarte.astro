@@ -1,0 +1,50 @@
+---
+// Stilisierte Karte Großraum Stuttgart. Kreisgrenzen: © GeoBasis-DE / BKG (VG1000, Daten verändert), Lizenz dl-de/by-2-0.
+// Erzeugt aus den Shapefiles des BKG (vereinfacht, auf 600 px Breite projiziert): src/data/karte-region.json
+// Startorte: src/data/startorte.ts (Koordinaten hier in der JSON-Datei)
+import karte from '../data/karte-region.json';
+
+// Lage der Beschriftung je Ort (damit nahe Orte nicht übereinander stehen)
+const lage: Record<string, 'l' | 'r' | 'o' | 'u'> = { Sindelfingen: 'l', Böblingen: 'r', Herrenberg: 'r', Leonberg: 'l', Stuttgart: 'r', Ludwigsburg: 'r', Waiblingen: 'r', 'Esslingen am Neckar': 'r' };
+const kurz = (o: string) => o.replace(' am Neckar', '');
+// Route: verbindet die Startorte von Böblingen aus
+const reihenfolge = ['Herrenberg', 'Böblingen', 'Sindelfingen', 'Leonberg', 'Ludwigsburg', 'Waiblingen', 'Esslingen am Neckar', 'Stuttgart'];
+const punkte = reihenfolge.map((o) => karte.orte.find((p) => p.ort === o)).filter(Boolean) as { ort: string; x: number; y: number }[];
+const route = 'M' + punkte.map((p) => `${p.x} ${p.y}`).join(' L');
+const jahr = new Date().getFullYear();
+---
+<figure class="region-karte">
+  <svg viewBox={`0 0 ${karte.breite} ${karte.hoehe}`} role="img" aria-label="Karte Großraum Stuttgart mit den Startorten Böblingen, Sindelfingen, Herrenberg, Leonberg, Stuttgart, Ludwigsburg, Waiblingen und Esslingen. Der Landkreis Böblingen ist hervorgehoben.">
+    <g class="kreise">
+      {karte.kreise.map((k) => <path d={k.d} class:list={[{ kern: k.kern, start: k.start }]} />)}
+    </g>
+    <path class="route" d={route} />
+    {karte.orte.map((o) => {
+      const l = lage[o.ort] ?? 'r';
+      const dx = l === 'l' ? -10 : l === 'r' ? 10 : 0;
+      const dy = l === 'o' ? -10 : l === 'u' ? 16 : 4.5;
+      const start = o.ort === 'Böblingen';
+      return (
+        <g class:list={['ort', { start }]}>
+          <circle cx={o.x} cy={o.y} r={start ? 6 : 4} />
+          <text x={o.x + dx} y={o.y + dy} text-anchor={l === 'l' ? 'end' : l === 'r' ? 'start' : 'middle'}>{kurz(o.ort)}</text>
+        </g>
+      );
+    })}
+  </svg>
+  <figcaption><a href="https://www.bkg.bund.de" rel="noopener">© GeoBasis-DE / BKG {jahr}</a> (Daten verändert)</figcaption>
+</figure>
+<style>
+  .region-karte { margin: 0; }
+  svg { display: block; width: 100%; height: auto; overflow: hidden; }
+  .kreise path { fill: none; stroke: rgb(31 42 18 / 0.14); stroke-width: 1; stroke-linejoin: round; }
+  .kreise path.kern { fill: #f3efe4; stroke: rgb(31 42 18 / 0.3); }
+  .kreise path.start { fill: var(--akzent-hell); stroke: var(--koralle-text); stroke-width: 1.5; }
+  .route { fill: none; stroke: var(--route-farbe); stroke-width: var(--route-strich); stroke-dasharray: var(--route-muster); stroke-linecap: round; stroke-linejoin: round; }
+  .ort circle { fill: var(--hintergrund); stroke: var(--ueberschrift); stroke-width: 2; }
+  .ort.start circle { fill: var(--akzent); stroke: var(--ueberschrift); }
+  .ort text { font: 600 15px var(--schrift); fill: var(--ueberschrift); paint-order: stroke; stroke: var(--flaeche); stroke-width: 4px; stroke-linejoin: round; }
+  .ort.start text { font-weight: 800; }
+  figcaption { margin-top: 0.5rem; font-size: 0.75rem; color: var(--text-leise); text-align: right; }
+  figcaption a { color: inherit; }
+</style>

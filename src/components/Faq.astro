@@ -1,8 +1,8 @@
 ---
 import { getCollection } from 'astro:content';
 import { absaetze, klartext, jsonLd } from '../lib/texte';
-interface Props { seite: 'start' | 'mieten' | 'vermieten'; titel?: string; }
-const { seite, titel = 'Häufige Fragen' } = Astro.props;
+interface Props { seite: 'start' | 'mieten' | 'vermieten'; titel?: string; label?: string; }
+const { seite, titel = 'Häufige Fragen', label } = Astro.props;
 const eintraege = (await getCollection('faq', (e) => e.data.seiten.includes(seite)))
   .sort((a, b) => a.data.reihenfolge - b.data.reihenfolge);
 const schema = {
@@ -16,7 +16,7 @@ const schema = {
 };
 ---
 <div class="faq-raster">
-<div class="faq-kopf"><h2>{titel}</h2><slot /></div>
+<div class="faq-kopf">{label && <p class="label label-leise">{label}</p>}<h2>{titel}</h2><slot /></div>
 <div class="faq klapp-liste">
   {eintraege.map((e) => (
     <details class="klapp">
