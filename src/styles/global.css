@@ -1,25 +1,30 @@
 /* Gestaltung: ruhige Flächen statt Kästen, Hierarchie über Größe, Gewicht und Weißraum. */
 :root {
-  /* Palette (verbindlich), abgeleitet aus dem Maskottchen (Unzertrennlicher):
-     Pistaziengrün vom Gefieder, Apricot vom Gesicht, Gold vom Scheitel, tiefes Olivgrün als Tinte.
-     Flächen wechseln zwischen Creme, hellem Pistazie und hellem Pfirsich. Kontraste geprüft (WCAG AA). */
-  --flaeche: #fbf8f1;       /* Seitenhintergrund (helles Creme) */
-  --sekundaer: #eef3dc;     /* abgesetzte Abschnitte (helles Pistazie); Fließtext auf Dunkel (13,2:1) */
-  --pfirsich-hell: #fde8da; /* zweite Abschnittsfarbe, Badges */
-  --hintergrund: #ffffff;   /* Karten, Formularfelder; Überschriften auf Dunkel */
-  --ueberschrift: #1f2a12;  /* Tinte (tiefes Oliv): Überschriften, Icons, dunkle Abschnitte (14,2:1) */
+  /* Palette (verbindlich), abgeleitet aus dem Unzertrennlichen (Vogelfoto):
+     Creme als Grund, Pistazie vom Gefieder, Apricot vom Gesicht, Gold vom Scheitel, tiefes Oliv als Tinte.
+     Ein Hintergrund (Creme). Pistazie und Pfirsich nur als kleine Flächen (Badges, Platzhalter), nie als Sektion.
+     Kontraste geprüft (WCAG AA). */
+  --flaeche: #fbf8f1;       /* Seitenhintergrund (Creme) */
+  --sekundaer: #eef3dc;     /* helles Pistazie: kleine Flächen; Text auf Dunkel (13,2:1) */
+  --pfirsich-hell: #fde8da; /* helles Pfirsich: Badges */
+  --hintergrund: #ffffff;   /* Karten, Formularfelder */
+  --ueberschrift: #1f2a12;  /* Tinte (tiefes Oliv): Überschriften, Icons (14,2:1) */
   --text: #3b4231;          /* Fließtext (9,9:1) */
   --text-leise: #646a58;    /* Unterzeilen (5,3:1) */
-  --akzent: #f4935a;        /* Apricot: Haupt-Buttons, Text darauf in Tinte (6,6:1). Nie als Schrift auf Hell */
+  --akzent: #f4935a;        /* Apricot: Icons und Punkte, auch auf Dunkel (6,1:1). Nie als Schrift auf Hell */
+  --knopf: #f4935a;         /* CTA-Apricot: NUR Haupt-Buttons, Schrift in Oliv (6,6:1) */
+  --knopf-hover: #f6a676;   /* Oliv darauf 7,6:1 */
+  --knopf-rand: #e07a40;
+  --knopf-text: #1f2a12;
   --akzent-hell: #fde8da;   /* Badge-Grund */
-  --gold: #f7cb45;          /* Scheitel-Gold: Markierungen, Icons auf Dunkel, Zahlen */
-  --salbei: #8db43c;        /* Pistazie: erledigt, Fortschritt, Häkchen (Icons) */
-  --salbei-text: #4d6b1b;   /* Grüne Schrift auf Weiß (6,1:1) */
-  --tertiaer: #e3edc4;      /* Hinweisboxen, Tags (Pistazie mittel) */
-  --koralle: #e8735a;       /* Aufmerksamkeit (Icons) */
-  --koralle-text: #b4472f;  /* Korallfarbene Schrift auf Weiß (5,4:1) */
+  --gold: #f7cb45;          /* Scheitel-Gold: Links und Labels auf Dunkel (9,1:1), Markierungen */
+  --salbei: #8db43c;        /* Pistaziengrün: Häkchen, Fortschritt (Icons) */
+  --salbei-text: #4d6b1b;   /* grüne Schrift auf Weiß (6,1:1) */
+  --tertiaer: #e3edc4;      /* Hinweisboxen, Tags */
+  --koralle: #e8735a;       /* Aufmerksamkeit (Icons, Punkte) */
+  --koralle-text: #b4472f;  /* Korallfarbene Schrift, z. B. Labels (5,1:1) */
 
-  /* Anker: die eine dunkle Sektion (aus der Tinte abgeleitet, etwas grüner). Text darauf in --flaeche (13,2:1) bzw. --auf-dunkel-leise (8,4:1) */
+  /* Anker: die eine dunkle Sektion (tiefes Grün aus der Tinte). Text darauf in Weiß (14,9:1) bzw. --auf-dunkel-leise (8,4:1) */
   --anker: #22301a;
   --auf-dunkel-leise: #c3ccb1;
   /* Route: das wiederkehrende Motiv (dünne gestrichelte Linie wie auf einer Karte) */
@@ -118,8 +123,8 @@ ul, ol { padding-left: 1.25rem; }
   -webkit-tap-highlight-color: transparent;
 }
 .btn:active { transform: scale(0.97); }
-.btn-primaer { background: var(--akzent); border-color: var(--akzent); color: var(--ueberschrift); box-shadow: 0 6px 18px rgb(244 147 90 / 0.35); }
-.btn-primaer:hover { background: var(--akzent-hover); color: var(--ueberschrift); }
+.btn-primaer { background: var(--knopf); border-color: var(--knopf-rand); color: var(--knopf-text); font-weight: 700; box-shadow: 0 1px 0 var(--knopf-rand), 0 8px 20px rgb(244 147 90 / 0.35); }
+.btn-primaer:hover { background: var(--knopf-hover); border-color: var(--knopf-rand); color: var(--knopf-text); }
 .btn-primaer:active { box-shadow: none; }
 .btn-rahmen { background: transparent; color: var(--ueberschrift); border-width: 2px; }
 .btn-dunkel { background: var(--ueberschrift); border-color: var(--ueberschrift); color: var(--hintergrund); }
@@ -203,7 +208,7 @@ input[type='text'], input[type='email'], input[type='tel'], input[type='number']
   background: var(--hintergrund); border: 1px solid #cdd2b8; border-radius: var(--r-klein);
   transition: border-color 150ms ease, box-shadow 150ms ease;
 }
-select { appearance: none; padding-right: 2.5rem; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%233d3832' stroke-width='2'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 1rem center; }
+select { appearance: none; padding-right: 2.5rem; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%233b4231' stroke-width='2'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 1rem center; }
 input:focus-visible, select:focus-visible, textarea:focus-visible { outline: none; border-color: var(--ueberschrift); box-shadow: 0 0 0 4px rgb(31 42 18 / 0.2); }
 input[type='file'] { font: inherit; font-size: 1rem; min-height: 3rem; max-width: 100%; }
 fieldset { border: 0; padding: 0; margin: 0 0 1.25rem; min-width: 0; }

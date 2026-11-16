@@ -17,7 +17,7 @@ const aktiv = (k: SeitenSchluessel) => (k === 'start' ? aktuell === '/' : aktuel
       </ul>
     </nav>
     <div class="kopf-cta">
-      <a class="btn btn-primaer" href={link('platzAnbieten')}>Platz anbieten</a>
+      <a class="btn btn-dunkel" href={link('platzAnbieten')}>Platz anbieten</a>
     </div>
     <details class="nav-klein">
       <summary aria-label="Menü">
@@ -26,7 +26,7 @@ const aktiv = (k: SeitenSchluessel) => (k === 'start' ? aktuell === '/' : aktuel
       <nav aria-label="Hauptnavigation mobil">
         <ul>
           <li class="nav-klein-cta">
-            <a class="btn btn-primaer btn-gross btn-voll" href={link('platzAnbieten')}>Platz anbieten</a>
+            <a class="btn btn-dunkel btn-gross btn-voll" href={link('platzAnbieten')}>Platz anbieten</a>
           </li>
           {sichtbar.map((k) => <li><a class="nav-link" href={seiten[k].pfad} aria-current={aktiv(k) ? 'page' : undefined}>{navTitel(k)}</a></li>)}
           <li><a class="nav-link" href={link('suchauftrag')}>Platz finden</a></li>
