@@ -349,8 +349,23 @@ const [hauptBeitrag, ...weitere] = beitraege;
   /* 7. Abschluss: Ende der Route */
   .abschluss { text-align: center; padding-top: 2rem; }
   .ziel { display: flex; flex-direction: column; align-items: center; margin-bottom: 2rem; }
-  .ziel-linie { width: 0; height: 4.5rem; border-left: var(--route-strich) dashed var(--route-farbe); }
-  .ziel-punkt { width: 0.9rem; height: 0.9rem; border-radius: 50%; background: var(--koralle); box-shadow: 0 0 0 5px var(--akzent-hell); }
+  /* Strichel als Verlauf, damit sie sich bewegen lassen (Muster 6px Strich, 7px Lücke wie --route-muster) */
+  .ziel-linie { width: var(--route-strich); height: 4.5rem; background: repeating-linear-gradient(to bottom, var(--route-farbe) 0 6px, transparent 6px 13px); }
+  .ziel-punkt { position: relative; width: 0.9rem; height: 0.9rem; border-radius: 50%; background: var(--koralle); box-shadow: 0 0 0 5px var(--akzent-hell); }
+  .ziel-punkt::after { content: ''; position: absolute; inset: 0; border-radius: 50%; background: var(--koralle); opacity: 0; }
+
+  /* Ankommen: Linie zeichnet sich nach unten, Strichel laufen auf den Punkt zu, Punkt setzt auf und pulsiert einmal */
+  @media (prefers-reduced-motion: no-preference) {
+    :global(.js) .ziel-linie { clip-path: inset(0 0 100% 0); }
+    :global(.js) .ziel-punkt { transform: scale(0); }
+    .sichtbar .ziel-linie { animation: linie-zeichnen 900ms var(--ease-out) 200ms forwards, linie-laufen 1600ms cubic-bezier(0.33, 1, 0.68, 1) 200ms both; }
+    .sichtbar .ziel-punkt { animation: punkt-setzen 500ms cubic-bezier(0.34, 1.56, 0.64, 1) 950ms forwards; }
+    .sichtbar .ziel-punkt::after { animation: punkt-puls 1100ms var(--ease-out) 1250ms; }
+  }
+  @keyframes linie-zeichnen { to { clip-path: inset(0 0 0 0); } }
+  @keyframes linie-laufen { from { background-position: 0 -39px; } to { background-position: 0 0; } }
+  @keyframes punkt-setzen { to { transform: scale(1); } }
+  @keyframes punkt-puls { from { opacity: 0.45; transform: scale(1); } to { opacity: 0; transform: scale(3.2); } }
   .abschluss h2 { margin-bottom: 0.5rem; }
   .abschluss-text { color: var(--text-leise); font-size: 1.15rem; }
   .abschluss :global(.button-paar) { margin-inline: auto; }

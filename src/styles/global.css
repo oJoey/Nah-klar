@@ -24,8 +24,9 @@
   --koralle: #e8735a;       /* Aufmerksamkeit (Icons, Punkte) */
   --koralle-text: #b4472f;  /* Korallfarbene Schrift, z. B. Labels (5,1:1) */
 
-  /* Anker: die eine dunkle Sektion (tiefes Grün aus der Tinte). Text darauf in Weiß (14,9:1) bzw. --auf-dunkel-leise (8,4:1) */
-  --anker: #22301a;
+  /* Anker: dunkle Flächen (Sektionen, Fuß, Buttons, Icons), sattes Gefiedergrün. Weiß 7,9:1, Pistazie 7,0:1, Gold 5,1:1, --auf-dunkel-leise 4,7:1 */
+  --anker: #3a5a1c;
+  --anker-hover: #2e4916;
   --auf-dunkel-leise: #c3ccb1;
   /* Route: das wiederkehrende Motiv (dünne gestrichelte Linie wie auf einer Karte) */
   --route-farbe: rgb(31 42 18 / 0.32);
@@ -127,8 +128,8 @@ ul, ol { padding-left: 1.25rem; }
 .btn-primaer:hover { background: var(--knopf-hover); border-color: var(--knopf-rand); color: var(--knopf-text); }
 .btn-primaer:active { box-shadow: none; }
 .btn-rahmen { background: transparent; color: var(--ueberschrift); border-width: 2px; }
-.btn-dunkel { background: var(--ueberschrift); border-color: var(--ueberschrift); color: var(--hintergrund); }
-.btn-dunkel:hover { background: var(--dunkel-hover); color: var(--hintergrund); }
+.btn-dunkel { background: var(--anker); border-color: var(--anker); color: var(--hintergrund); }
+.btn-dunkel:hover { background: var(--anker-hover); border-color: var(--anker-hover); color: var(--hintergrund); }
 .btn-rahmen:hover { background: var(--hintergrund); color: var(--ueberschrift); }
 .btn-gross { min-height: 3.5rem; font-size: 1.2rem; padding-inline: 2rem; }
 .btn-voll { width: 100%; }
@@ -159,7 +160,7 @@ ul, ol { padding-left: 1.25rem; }
 .karte p { color: var(--text); }
 
 /* Dunkle Abschnitte: Überschriften in --hintergrund, Fließtext in --sekundaer, Links in Gelb. Nie --text auf Dunkel. */
-.abschnitt-dunkel, .abschnitt-kobalt { background: var(--ueberschrift); color: var(--sekundaer); }
+.abschnitt-dunkel, .abschnitt-kobalt { background: var(--anker); color: var(--sekundaer); }
 .abschnitt-dunkel :is(h1, h2, h3), .abschnitt-kobalt :is(h1, h2, h3) { color: var(--hintergrund); }
 .abschnitt-dunkel :is(p, li, .einleitung, .kicker), .abschnitt-kobalt :is(p, li, .einleitung, .kicker) { color: var(--sekundaer); }
 .abschnitt-dunkel .karte { background: rgb(255 255 255 / 0.06); border-color: rgb(255 255 255 / 0.14); }
@@ -229,7 +230,7 @@ fieldset { border: 0; padding: 0; margin: 0 0 1.25rem; min-width: 0; }
 .chips { display: flex; flex-wrap: wrap; gap: 0.5rem; }
 .chip { position: relative; display: inline-flex; align-items: center; min-height: 3rem; padding: 0.55rem 1.15rem; border: 1px solid var(--linie); border-radius: 999px; background: var(--hintergrund); font-weight: 600; cursor: pointer; transition: border-color 150ms ease, background-color 150ms ease, transform 160ms var(--ease-out); -webkit-tap-highlight-color: transparent; user-select: none; }
 .chip input { position: absolute; opacity: 0; width: 1px; height: 1px; }
-.chip:has(input:checked) { border-color: var(--ueberschrift); background: var(--ueberschrift); color: var(--hintergrund); }
+.chip:has(input:checked) { border-color: var(--anker); background: var(--anker); color: var(--hintergrund); }
 .chip:has(input:focus-visible) { outline: 3px solid var(--ueberschrift); outline-offset: 2px; }
 .chip:active { transform: scale(0.97); }
 @media (hover: hover) { .chip:hover { border-color: var(--ueberschrift); } }
@@ -249,7 +250,7 @@ fieldset > legend { font-size: 1.05rem; margin-bottom: 0.6rem; }
 .held-formular .einleitung { margin-bottom: 1.75rem; }
 .held-punkte { list-style: none; padding: 0; margin: 0 0 2rem; display: grid; gap: 0.85rem; }
 .held-punkte li { display: flex; align-items: center; gap: 0.85rem; font-size: 1.15rem; font-weight: 600; color: var(--ueberschrift); }
-.held-icon { flex: none; display: grid; place-items: center; width: 2.5rem; height: 2.5rem; border-radius: var(--r); background: var(--ueberschrift); }
+.held-icon { flex: none; display: grid; place-items: center; width: 2.5rem; height: 2.5rem; border-radius: var(--r); background: var(--anker); }
 .held-icon .symbol { width: 1.35rem; height: 1.35rem; color: var(--akzent); }
 /* Beispiel-Karte: füllt die Spalte unten und führt zum Rechner */
 .beispiel { display: flex; gap: 1rem; align-items: center; max-width: 30rem; padding: 1.1rem 1.25rem; background: var(--hintergrund); border: 0; border-radius: var(--r-gross); box-shadow: var(--schatten-karte); text-decoration: none; color: var(--text); transition: transform 200ms var(--ease-out), box-shadow 200ms var(--ease-out); }
