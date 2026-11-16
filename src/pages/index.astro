@@ -11,6 +11,8 @@ import NachfrageHinweis from '../components/NachfrageHinweis.astro';
 import WerkzeugeTeaser from '../components/WerkzeugeTeaser.astro';
 import Faq from '../components/Faq.astro';
 import Icon from '../components/Icon.astro';
+import { Image } from 'astro:assets';
+import vogel from '../assets/bilder/vogel.png';
 import { site, whatsappLink, emailHref } from '../config/site';
 import { link } from '../config/seiten';
 import { kategorien } from '../data/kategorien';
@@ -52,7 +54,7 @@ const orte = startorte.map((o) => ({ ort: o.ort, href: o.pfad ?? (such ? `${such
 
       <div class="buehne" aria-hidden="true">
         <div class="vogel-glut"></div>
-        <img class="vogel" src="/bilder/vogel.svg" alt="" width="600" height="760" loading="eager" decoding="async" />
+        <Image class="vogel" src={vogel} alt="" width={700} widths={[360, 560, 700]} sizes="(min-width: 60rem) 40vw, 80vw" loading="eager" />
 
         <div class="schwebe schwebe-oben">
           <span class="schwebe-icon warm"><Icon name="ort" /></span>
@@ -104,7 +106,7 @@ const orte = startorte.map((o) => ({ ort: o.ort, href: o.pfad ?? (such ? `${such
     </div>
   </section>
 
-  <section class="abschnitt abschnitt-grau" aria-labelledby="vorteile-titel">
+  <section class="abschnitt abschnitt-pfirsich" aria-labelledby="vorteile-titel">
     <div class="wrap">
       <div class="kopfzeile"><h2 id="vorteile-titel">Ihre Vorteile</h2></div>
       <Vorteile />
@@ -133,13 +135,13 @@ const orte = startorte.map((o) => ({ ort: o.ort, href: o.pfad ?? (such ? `${such
 
   <WerkzeugeTeaser />
 
-  <section class="abschnitt abschnitt-grau">
+  <section class="abschnitt abschnitt-pfirsich">
     <div class="wrap">
       <Faq seite="start"><p>Noch etwas offen? {site.ansprechpartner} per <a href={whatsappLink} rel="noopener">WhatsApp</a> oder <a href={emailHref}>E-Mail</a>.</p></Faq>
     </div>
   </section>
 
-  <section class="abschnitt zentriert abschluss">
+  <section class="abschnitt abschnitt-dunkel zentriert abschluss">
     <div class="wrap">
       <h2>Platz finden oder Platz anbieten?</h2>
       <p class="einleitung">Beides geht schnell und ist unverbindlich.</p>
@@ -149,48 +151,48 @@ const orte = startorte.map((o) => ({ ort: o.ort, href: o.pfad ?? (such ? `${such
 </Basis>
 <style>
   /* Hero: warmer Cremeton (aus Akzent abgeleitet), große enge Überschrift, Vogel mit schwebenden Karten */
-  :global(body) { --creme: color-mix(in srgb, var(--akzent) 9%, var(--hintergrund)); --warm: #e9785a; --gruen: #86a83f; }
-  :global(body .kopf.kopf) { background: var(--creme); border-bottom-color: transparent; }
-  .held { background: radial-gradient(ellipse 60% 70% at 78% 40%, color-mix(in srgb, var(--akzent) 16%, var(--creme)), var(--creme) 70%); padding-block: clamp(1.5rem, 5vw, 3.5rem) clamp(2.5rem, 6vw, 4rem); overflow: hidden; }
+  :global(body) { --creme: var(--flaeche); --warm: var(--koralle); --gruen: var(--salbei); }
+  :global(body .kopf.kopf) { border-bottom-color: transparent; }
+  .held { background: radial-gradient(ellipse 45% 55% at 82% 35%, var(--sekundaer), transparent 70%), radial-gradient(ellipse 40% 45% at 55% 85%, var(--pfirsich-hell), transparent 70%), var(--flaeche); padding-block: clamp(1.5rem, 5vw, 3.5rem) clamp(2.5rem, 6vw, 4rem); overflow: hidden; }
   .held-raster { display: grid; gap: 2.5rem; align-items: center; }
-  .held-pille { display: inline-block; margin: 0 0 1.5rem; padding: 0.35rem 1.1rem; border-radius: 999px; background: color-mix(in srgb, var(--akzent) 45%, var(--hintergrund)); border: 1.5px solid color-mix(in srgb, var(--akzent) 80%, var(--ueberschrift)); font-weight: 600; color: var(--ueberschrift); font-size: 1rem; }
+  .held-pille { display: inline-block; margin: 0 0 1.5rem; padding: 0.35rem 1.1rem; border-radius: 999px; background: var(--akzent-hell); border: 0; font-weight: 600; color: var(--ueberschrift); font-size: 1rem; }
   .held h1 { font-size: clamp(2.8rem, 6vw, 4.6rem); line-height: 1; letter-spacing: -0.055em; font-weight: 800; color: #14121f; }
-  .held .einleitung { margin: 1.5rem 0 0; color: color-mix(in srgb, var(--text) 80%, var(--hintergrund)); max-width: 34rem; }
+  .held .einleitung { margin: 1.5rem 0 0; color: var(--text-leise); max-width: 34rem; }
   .held-knoepfe { display: flex; flex-wrap: wrap; gap: 1rem; margin-top: 2.25rem; }
   .held-knoepfe .btn { border-radius: var(--r); }
-  .held-knoepfe .btn-primaer { box-shadow: 0 6px 18px color-mix(in srgb, var(--akzent) 45%, transparent); border-color: transparent; }
+  .held-knoepfe .btn-primaer { }
   .held-knoepfe .btn-rahmen { background: transparent; border-width: 2px; }
   .held-knoepfe :global(.symbol) { width: 1.3rem; height: 1.3rem; }
   .vertrauen { list-style: none; padding: 0; margin: 2.25rem 0 0; display: flex; flex-wrap: wrap; gap: 0.75rem 1.5rem; font-weight: 600; font-size: 1rem; color: var(--ueberschrift); }
   .vertrauen li { display: flex; align-items: center; gap: 0.55rem; }
-  .vertrauen-icon { display: grid; place-items: center; width: 2.25rem; height: 2.25rem; border-radius: var(--r-klein); background: var(--ueberschrift); }
-  .vertrauen-icon :global(.symbol) { color: var(--akzent); width: 1.25rem; height: 1.25rem; }
+  .vertrauen-icon { display: grid; place-items: center; width: 2.25rem; height: 2.25rem; border-radius: 50%; background: var(--tertiaer); }
+  .vertrauen-icon :global(.symbol) { color: var(--salbei-text); width: 1.25rem; height: 1.25rem; }
 
   /* Bühne: Vogel rechts, Karten darüber */
   .buehne { position: relative; min-height: 34rem; }
-  .vogel-glut { position: absolute; right: -20%; top: -2rem; width: 100%; aspect-ratio: 1; border-radius: 50%; background: radial-gradient(circle, rgb(255 255 255 / 0.7), transparent 65%); }
-  .vogel { position: absolute; right: -14%; top: -1rem; width: 92%; height: auto; filter: drop-shadow(0 30px 40px rgb(80 60 20 / 0.18)); }
-  .plan, .schwebe { position: absolute; background: var(--hintergrund); border-radius: var(--r-gross); box-shadow: 0 1px 2px rgb(40 30 10 / 0.06), 0 18px 40px rgb(40 30 10 / 0.12); }
-  .plan { left: 0; top: 15rem; width: min(26rem, 82%); padding: 1.5rem 1.5rem 1.25rem; }
+  .vogel-glut { position: absolute; right: -10%; top: 0; width: 80%; aspect-ratio: 1; border-radius: 50%; background: radial-gradient(circle, rgb(255 255 255 / 0.85), transparent 62%); }
+  .vogel { position: absolute; right: 0; top: 0; width: 60%; height: auto; filter: drop-shadow(0 24px 30px rgb(31 42 18 / 0.16)); }
+  .plan, .schwebe { position: absolute; background: var(--hintergrund); border-radius: var(--r-gross); box-shadow: var(--schatten-karte-hoch); }
+  .plan { left: 0; top: 19rem; width: min(25rem, 74%); padding: 1.5rem 1.5rem 1.25rem; }
   .plan-titel { font-size: 1.45rem; font-weight: 800; letter-spacing: -0.02em; color: #14121f; margin: 0 0 0.6rem; }
   .plan-zeile { display: flex; justify-content: space-between; font-size: 0.95rem; margin: 0 0 0.6rem; }
   .plan-balken { height: 0.6rem; border-radius: 999px; background: color-mix(in srgb, var(--ueberschrift) 8%, transparent); overflow: hidden; }
   .plan-balken span { display: block; width: 58%; height: 100%; border-radius: inherit; background: var(--gruen); }
   .plan-liste { list-style: none; margin: 1rem 0 0; padding: 0; font-size: 0.98rem; }
   .plan-liste li { display: flex; align-items: center; gap: 0.7rem; padding: 0.6rem 0; border-bottom: 1px solid var(--linie); font-weight: 600; color: var(--ueberschrift); }
-  .plan-liste em { margin-left: auto; font-style: normal; font-weight: 500; font-size: 0.85rem; color: color-mix(in srgb, var(--text) 70%, var(--hintergrund)); }
+  .plan-liste em { margin-left: auto; font-style: normal; font-weight: 500; font-size: 0.85rem; color: var(--text-leise); }
   .punkt { flex: none; width: 1.3rem; height: 1.3rem; border-radius: 50%; border: 2px solid var(--linie); }
-  .erledigt .txt { color: color-mix(in srgb, var(--text) 60%, var(--hintergrund)); text-decoration: line-through; text-decoration-color: color-mix(in srgb, var(--text) 40%, transparent); }
+  .erledigt .txt { color: var(--text-leise); text-decoration: line-through; text-decoration-color: color-mix(in srgb, var(--text) 40%, transparent); }
   .erledigt .punkt { border: 0; background: var(--gruen) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M6 12.5l4 4 8-9' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / 75% no-repeat; }
   .aktiv .punkt { border-color: var(--warm); }
-  .aktiv em { color: var(--warm); font-weight: 700; }
+  .aktiv em { color: var(--koralle-text); font-weight: 700; }
   .plan-fuss { display: flex; align-items: center; gap: 0.6rem; margin: 1rem 0 0; font-size: 0.95rem; font-weight: 600; color: var(--ueberschrift); }
   .haken-rund { display: grid; place-items: center; width: 1.3rem; height: 1.3rem; border-radius: 50%; background: var(--gruen); }
   .haken-rund :global(.symbol) { width: 0.85rem; height: 0.85rem; color: var(--hintergrund); stroke-width: 3; }
   .schwebe { display: flex; gap: 0.8rem; align-items: flex-start; padding: 1rem 1.15rem; width: 16rem; font-size: 0.9rem; line-height: 1.35; animation: schweben 5s ease-in-out infinite; }
   .schwebe strong { display: block; color: #14121f; font-size: 0.95rem; margin-bottom: 0.2rem; }
   .schwebe-oben { left: 2%; top: 3rem; }
-  .schwebe-rechts { right: -3%; top: 29rem; animation-delay: -2.5s; }
+  .schwebe-rechts { right: 0; top: 12.5rem; animation-delay: -2.5s; }
   .schwebe-icon { flex: none; display: grid; place-items: center; width: 2.25rem; height: 2.25rem; border-radius: 50%; background: var(--warm); }
   .schwebe-icon.warm { background: var(--akzent); }
   .schwebe-icon.warm :global(.symbol) { color: var(--ueberschrift); }
@@ -201,7 +203,7 @@ const orte = startorte.map((o) => ({ ort: o.ort, href: o.pfad ?? (such ? `${such
   /* Handy: Bühne kompakter, rechte Karte unter dem Plan */
   @media (max-width: 40rem) {
     .buehne { min-height: 37rem; }
-    .vogel { width: 95%; right: -30%; top: 0; }
+    .vogel { width: 58%; right: 0; top: 0; }
     .plan { left: 0; top: 11rem; width: 92%; }
     .schwebe { width: 14rem; }
     .schwebe-rechts { display: none; }
@@ -212,55 +214,14 @@ const orte = startorte.map((o) => ({ ort: o.ort, href: o.pfad ?? (such ? `${such
   }
 
   .such-band { background: var(--creme); padding-bottom: clamp(3rem, 7vw, 5rem); }
-  .such-band :global(.formular-karte) { border: 0; border-radius: 20px; box-shadow: 0 1px 2px rgb(40 30 10 / 0.05), 0 18px 40px rgb(40 30 10 / 0.1); }
-  .such-band :global(input), .such-band :global(select) { border-color: color-mix(in srgb, var(--ueberschrift) 22%, transparent); border-radius: var(--r); }
-  .such-band :global(.btn-primaer) { border-color: transparent; box-shadow: none; }
 
-  /* Rest der Startseite im selben Stil: Cremeflächen, weiße Karten mit weichem Schatten statt harter Rahmen */
-  :global(body) { background: var(--creme); --karte-schatten: 0 1px 2px rgb(40 30 10 / 0.05), 0 14px 34px rgb(40 30 10 / 0.08); --creme-tief: color-mix(in srgb, var(--akzent) 15%, var(--hintergrund)); }
-  :global(.nav-gross a[aria-current='page']), :global(.nav-gross a:hover) { background: var(--creme-tief) !important; }
-  :global(main .abschnitt) { background: var(--creme); }
-  :global(main .abschnitt-grau) { background: var(--creme-tief); }
-  :global(main .abschnitt h2) { letter-spacing: -0.045em; color: #14121f; }
-
-  /* Kacheln */
-  :global(main .kachel) { border: 0 !important; box-shadow: var(--karte-schatten) !important; border-radius: 20px; }
-  :global(main .kachel .illu) { background: radial-gradient(circle, rgb(120 90 20 / 0.14) 1px, transparent 1.5px) 0 0 / 14px 14px, var(--creme); border-bottom: 0; }
-  @media (hover: hover) { :global(main .kachel:has(a):hover) { transform: translateY(-4px) !important; box-shadow: 0 2px 4px rgb(40 30 10 / 0.06), 0 22px 44px rgb(40 30 10 / 0.12) !important; } }
-
-  /* Ablauf: Zahlen farbig wie im Plan */
-  :global(main .schritt-liste li) { border: 0 !important; box-shadow: var(--karte-schatten) !important; border-radius: 20px; }
-  :global(main .schritt-liste li)::before { color: var(--gruen) !important; font-weight: 800 !important; }
-  :global(main .schritt-liste li:nth-child(even))::before { color: var(--warm) !important; }
-  :global(main .umschalter) { background: rgb(40 30 10 / 0.07) !important; border-radius: 999px !important; }
-  :global(main .umschalter button) { border-radius: 999px !important; }
-
-  /* Vorteile, Werkzeuge, Nachfrage */
-  :global(main .vorteil-karte), :global(main .karte) { border: 0 !important; box-shadow: var(--karte-schatten) !important; border-radius: 20px; }
-  :global(main .werkzeug) { background: var(--hintergrund) !important; box-shadow: var(--karte-schatten); border-radius: 20px !important; }
-  :global(main .werkzeug-bild) { border-radius: 50% !important; background: var(--akzent) !important; }
-  :global(main .werkzeug-bild .symbol) { color: var(--ueberschrift) !important; }
-  :global(main .nachfrage-hinweis) { background: var(--hintergrund) !important; box-shadow: var(--karte-schatten); border-radius: 999px !important; padding-right: 1.75rem !important; }
-  :global(main .nachfrage-icon) { border-radius: 50% !important; background: var(--warm) !important; }
-  :global(main .nachfrage-icon .symbol) { color: var(--hintergrund) !important; }
-
-  /* Orte als weiche Pillen */
-  .orte .chip { border: 0; border-radius: 999px; background: var(--hintergrund); box-shadow: 0 1px 2px rgb(40 30 10 / 0.06), 0 6px 16px rgb(40 30 10 / 0.07); padding-inline: 1.25rem; }
-  @media (hover: hover) { .orte .chip:hover { background: color-mix(in srgb, var(--akzent) 45%, var(--hintergrund)); } }
-
-  /* FAQ als Karte */
-  :global(main details.klapp > summary) { letter-spacing: -0.02em; }
-
-  /* Abschluss: gelbe Fläche statt dunkel, wie der Haupt-Button */
-  .abschluss { background: var(--akzent); }
-  .abschluss :global(h2) { color: #14121f !important; }
-  .abschluss :global(p) { color: var(--ueberschrift) !important; }
-  .abschluss :global(.btn-primaer) { background: var(--ueberschrift); color: var(--hintergrund); box-shadow: none; }
-  .abschluss :global(.btn-rahmen) { background: transparent; border-color: var(--ueberschrift); border-width: 2px; }
+  .abschluss :global(.btn-rahmen) { border-color: var(--hintergrund); color: var(--hintergrund); }
+  .abschluss :global(.btn-rahmen:hover) { background: rgb(255 255 255 / 0.08); }
+  .abschluss :global(.unter-hinweis) { color: var(--sekundaer); }
+  .orte .chip { text-decoration: none; color: var(--ueberschrift); }
+  .orte { list-style: none; padding: 0; margin: 0; }
+  .alle-regionen { margin-left: 1.5rem; }
   .nachfrage-abschnitt { padding-block: clamp(2rem, 5vw, 3rem); }
   .nachfrage-abschnitt :global(.nachfrage-hinweis) { margin: 0 auto; }
-  .orte { list-style: none; padding: 0; margin: 0; }
-  .orte .chip { text-decoration: none; color: var(--ueberschrift); }
-  .alle-regionen { margin-left: 1.5rem; }
   .abschluss :global(.button-paar) { margin-inline: auto; }
 </style>
