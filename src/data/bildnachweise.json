@@ -40,5 +40,12 @@
     "lizenzUrl": "https://unsplash.com/de/lizenz",
     "quelle": "https://unsplash.com/photos/faijtX7QWSE",
     "titel": "Unsplash-Foto faijtX7QWSE"
+  },
+  "start-hero": {
+    "fotograf": "hellochemo",
+    "lizenz": "Pexels-Lizenz",
+    "lizenzUrl": "https://www.pexels.com/de-de/lizenz/",
+    "quelle": "https://www.pexels.com/photo/28960714/",
+    "titel": "Pexels-Foto 28960714 (gespiegelt)"
   }
 }

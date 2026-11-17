@@ -21,6 +21,7 @@ const gruppen = [
   {gruppen.map((g, gi) => (
     <div class="ablauf" id={`ablauf-${g.id}`} role="tabpanel" aria-labelledby={`tab-${g.id}`} data-gruppe={g.id} hidden={gi > 0 ? true : undefined}>
       <ol class="schritte">
+        <span class="fortschritt" aria-hidden="true"></span>
         {g.schritte.map((s, i) => (
           <li class:list={['schritt', { aktiv: i === 0 }]} data-schritt={i}>
             <button type="button" class="schritt-kopf" aria-expanded={i === 0 ? 'true' : 'false'}>
@@ -57,7 +58,7 @@ const gruppen = [
               )}
               {i === 3 && g.id === 'mieter' && (
                 <div class="ui-karte mock">
-                  <p class="mock-kopf"><strong>Mustervertrag</strong><span class="beispiel-label">Beispiel</span></p>
+                  <p class="mock-kopf"><strong>Mietvertrag</strong><span class="beispiel-label">Beispiel</span></p>
                   <div class="vertrag-zeilen"><span></span><span></span><span class="kurz"></span></div>
                   <div class="unterschrift">
                     <svg viewBox="0 0 160 40" aria-hidden="true"><path d="M6 28c10-14 18-20 22-14s-6 16 2 14 12-18 18-16-2 16 6 14 10-10 16-8 4 8 12 6 12-4 20-6" /></svg>
@@ -92,7 +93,7 @@ const gruppen = [
                   <p class="mock-kopf"><strong>Nachricht</strong><span class="beispiel-label">Beispiel</span></p>
                   <p class="blase blase-links">Wir würden den Platz gern am Samstag ansehen.</p>
                   <p class="bestaetigt"><span class="check" aria-hidden="true"></span>Besichtigung am Samstag, 10 Uhr bestätigt</p>
-                  <p class="bestaetigt"><span class="offen" aria-hidden="true"></span>Mustervertrag liegt bereit</p>
+                  <p class="bestaetigt"><span class="offen" aria-hidden="true"></span>Mietvertrag liegt zur Unterschrift bereit</p>
                 </div>
               )}
               {g.id === 'vermieter' && i === 3 && (
@@ -122,24 +123,42 @@ const gruppen = [
     const breit = window.matchMedia('(min-width: 56rem)');
     panels.forEach((panel) => {
       const schritte = [...panel.querySelectorAll<HTMLElement>('.schritt')];
-      const setze = (n: number) => schritte.forEach((s, j) => {
-        s.classList.toggle('aktiv', j === n);
-        s.querySelector('.schritt-kopf')?.setAttribute('aria-expanded', String(j === n));
-      });
-      schritte.forEach((s, j) => s.querySelector('.schritt-kopf')?.addEventListener('click', () => setze(j)));
+      const linie = panel.querySelector<HTMLElement>('.fortschritt');
+      let aktuell = 0, ziel = 0, takt = 0;
+      const setze = (n: number) => {
+        aktuell = n;
+        schritte.forEach((s, j) => {
+          s.classList.toggle('aktiv', j === n);
+          s.classList.toggle('erledigt', j < n);
+          s.querySelector('.schritt-kopf')?.setAttribute('aria-expanded', String(j === n));
+        });
+        linie?.style.setProperty('--hoehe', `${schritte[n].offsetTop}px`);
+      };
+      // Immer nur einen Schritt weiter, mit kurzer Pause: so wird beim schnellen Scrollen kein Punkt übersprungen
+      const laufe = () => {
+        if (takt || aktuell === ziel) return;
+        setze(aktuell + Math.sign(ziel - aktuell));
+        takt = window.setTimeout(() => { takt = 0; laufe(); }, 420);
+      };
+      const gehe = (n: number) => { ziel = n; laufe(); };
+      schritte.forEach((s, j) => s.querySelector('.schritt-kopf')?.addEventListener('click', () => gehe(j)));
       // Alle Karten auf Höhe des ersten Schritts ausrichten (sie hängen am jeweiligen Schritt)
-      const ausrichten = () => schritte.forEach((s) => s.style.setProperty('--oben', `${-s.offsetTop}px`));
+      const ausrichten = () => { schritte.forEach((s) => s.style.setProperty('--oben', `${-s.offsetTop}px`)); setze(aktuell); };
       ausrichten();
       window.addEventListener('resize', ausrichten);
-      wurzel.querySelectorAll('[role="tab"]').forEach((t) => t.addEventListener('click', () => requestAnimationFrame(ausrichten)));
-      // Beim Scrollen: der Schritt in der Bildschirmmitte wird aktiv (nur auf breiten Bildschirmen)
-      if ('IntersectionObserver' in window) {
-        const io = new IntersectionObserver((eintraege) => {
-          if (!breit.matches) return;
-          for (const e of eintraege) if (e.isIntersecting) setze(schritte.indexOf(e.target as HTMLElement));
-        }, { rootMargin: '-45% 0px -45% 0px' });
-        schritte.forEach((s) => io.observe(s));
-      }
+      wurzel.querySelectorAll('[role="tab"]').forEach((t) => t.addEventListener('click', () => requestAnimationFrame(() => { ausrichten(); pruefe(); })));
+      // Beim Scrollen: aktiv ist der letzte Schritt, dessen Kopf die Linie bei 55 % der Bildschirmhöhe passiert hat
+      let geplant = false;
+      const pruefe = () => {
+        geplant = false;
+        if (panel.hidden) return;
+        const mitte = window.innerHeight * 0.55;
+        let n = 0;
+        schritte.forEach((s, j) => { if (s.getBoundingClientRect().top < mitte) n = j; });
+        if (n !== ziel) gehe(n);
+      };
+      window.addEventListener('scroll', () => { if (!geplant) { geplant = true; requestAnimationFrame(pruefe); } }, { passive: true });
+      pruefe();
     });
   });
 </script>
@@ -160,7 +179,11 @@ const gruppen = [
   .nr { display: grid; place-items: center; flex: none; width: 2.5rem; height: 2.5rem; border-radius: 50%; border: 1.5px solid var(--linie); background: var(--flaeche); font-weight: 800; color: var(--text-leise); transition: background-color 250ms ease, color 250ms ease, border-color 250ms ease; }
   .schritt-titel { font-size: 1.25rem; font-weight: 750; letter-spacing: -0.02em; color: var(--text-leise); transition: color 250ms ease; }
   .schritt-text { margin: 0.4rem 0 0; color: var(--text-leise); max-width: 30rem; }
-  .aktiv .nr { background: var(--anker); border-color: var(--anker); color: var(--flaeche); }
+  /* Fortschritt: durchgezogene Linie wächst entlang der Route bis zum aktiven Schritt */
+  .fortschritt { position: absolute; left: calc(1.2rem - 1px); top: 1.25rem; width: 3px; height: var(--hoehe, 0); border-radius: 2px; background: var(--akzent); transition: height 420ms var(--ease-out); z-index: 1; }
+  .nr { position: relative; z-index: 2; transition: background-color 300ms ease, color 300ms ease, border-color 300ms ease, transform 400ms var(--ease-out), box-shadow 400ms var(--ease-out); }
+  .erledigt .nr { background: var(--akzent-hell); border-color: var(--akzent); color: var(--ueberschrift); }
+  .aktiv .nr { background: var(--anker); border-color: var(--anker); color: var(--flaeche); transform: scale(1.18); box-shadow: 0 0 0 6px rgb(244 147 90 / 0.25); }
   .aktiv .schritt-titel { color: var(--ueberschrift); }
   .aktiv .schritt-text { color: var(--text); }
   .schritt-karte { margin-top: 1.25rem; max-width: 24rem; }
@@ -169,11 +192,12 @@ const gruppen = [
   @media (min-width: 56rem) {
     :global(.js) .ablauf { position: relative; min-height: 26rem; }
     :global(.js) .schritte { width: 52%; }
-    :global(.js) .schritt-karte { position: absolute; top: var(--oben, 0); left: calc(100% + 4rem); width: min(24rem, 80%); margin: 0; opacity: 0; transform: translateY(10px); pointer-events: none; transition: opacity 350ms var(--ease-out), transform 350ms var(--ease-out); }
+    :global(.js) .schritt-karte { position: absolute; top: var(--oben, 0); left: calc(100% + 4rem); width: min(24rem, 80%); margin: 0; opacity: 0; pointer-events: none; transition: opacity 450ms var(--ease-out), transform 450ms var(--ease-out); transform: translateY(18px) scale(0.98); }
     :global(.js) .aktiv .schritt-karte { opacity: 1; transform: none; }
     :global(.js) .schritt:not(.aktiv) .schritt-text { color: var(--text-leise); }
+    :global(.js) .aktiv .schritt-karte { transition-delay: 120ms; }
   }
-  @media (prefers-reduced-motion: reduce) { .schritt-karte { transition: none !important; transform: none !important; } }
+  @media (prefers-reduced-motion: reduce) { .fortschritt, .nr { transition: none !important; } .aktiv .nr { transform: none; } .schritt-karte { transition: none !important; transform: none !important; } }
 
   /* Inhalte der UI-Karten */
   .mock { display: grid; gap: 0.6rem; }

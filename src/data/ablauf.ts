@@ -11,6 +11,6 @@ export const mieterSchritte = [
 export const vermieterSchritte = [
   { titel: 'Platz anbieten', text: 'In wenigen Schritten über unser Formular, mit ein paar Fotos.' },
   { titel: 'Prüfung und passende Mieter', text: 'Wir prüfen Ihre Angaben und schlagen Ihnen Interessenten vor. Sie entscheiden, wer einzieht.' },
-  { titel: 'Besichtigung und Vertrag', text: 'Sie lernen den Mieter kennen und unterschreiben den Mustervertrag.' },
+  { titel: 'Besichtigung und Vertrag', text: 'Sie lernen den Mieter kennen und unterschreiben den Mietvertrag.' },
   { titel: 'Miete erhalten', text: texte.vermieterSchritt4Text },
 ];
