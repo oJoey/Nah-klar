@@ -180,10 +180,10 @@ const gruppen = [
   .schritt-titel { font-size: 1.25rem; font-weight: 750; letter-spacing: -0.02em; color: var(--text-leise); transition: color 250ms ease; }
   .schritt-text { margin: 0.4rem 0 0; color: var(--text-leise); max-width: 30rem; }
   /* Fortschritt: durchgezogene Linie wächst entlang der Route bis zum aktiven Schritt */
-  .fortschritt { position: absolute; left: calc(1.2rem - 1px); top: 1.25rem; width: 3px; height: var(--hoehe, 0); border-radius: 2px; background: var(--akzent); transition: height 420ms var(--ease-out); z-index: 1; }
+  .fortschritt { position: absolute; left: calc(1.2rem - 1.5px); top: 1.25rem; width: 4px; height: var(--hoehe, 0); border-radius: 2px; background: var(--gold); transition: height 420ms var(--ease-out); z-index: 1; }
   .nr { position: relative; z-index: 2; transition: background-color 300ms ease, color 300ms ease, border-color 300ms ease, transform 400ms var(--ease-out), box-shadow 400ms var(--ease-out); }
-  .erledigt .nr { background: var(--akzent-hell); border-color: var(--akzent); color: var(--ueberschrift); }
-  .aktiv .nr { background: var(--anker); border-color: var(--anker); color: var(--flaeche); transform: scale(1.18); box-shadow: 0 0 0 6px rgb(244 147 90 / 0.25); }
+  .erledigt .nr { background: #fdf3d0; border-color: var(--gold); color: var(--ueberschrift); }
+  .aktiv .nr { background: var(--gold); border-color: var(--gold); color: var(--ueberschrift); transform: scale(1.18); box-shadow: 0 0 0 6px rgb(247 203 69 / 0.28); }
   .aktiv .schritt-titel { color: var(--ueberschrift); }
   .aktiv .schritt-text { color: var(--text); }
   .schritt-karte { margin-top: 1.25rem; max-width: 24rem; }
