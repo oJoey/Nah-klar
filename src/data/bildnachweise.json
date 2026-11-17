@@ -1,25 +1,4 @@
 {
-  "stellplatz": {
-    "fotograf": "Elgaard",
-    "lizenz": "CC BY 4.0",
-    "lizenzUrl": "https://creativecommons.org/licenses/by/4.0",
-    "quelle": "https://commons.wikimedia.org/wiki/File:Wohnmobil-Stellplatz_Sportzentrum_Ottersberg_02.jpg",
-    "titel": "Wohnmobil-Stellplatz Sportzentrum Ottersberg 02.jpg"
-  },
-  "garage": {
-    "fotograf": "TeWeBs",
-    "lizenz": "CC BY-SA 4.0",
-    "lizenzUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-    "quelle": "https://commons.wikimedia.org/wiki/File:BS_Doppelgarage.JPG",
-    "titel": "BS Doppelgarage.JPG"
-  },
-  "hof": {
-    "fotograf": "3268zauber",
-    "lizenz": "CC BY-SA 3.0",
-    "lizenzUrl": "https://creativecommons.org/licenses/by-sa/3.0",
-    "quelle": "https://commons.wikimedia.org/wiki/File:Hofeinfahrt_Landwirtschaft.JPG",
-    "titel": "Hofeinfahrt Landwirtschaft.JPG"
-  },
   "anhaenger": {
     "fotograf": "Johann Jaritz",
     "lizenz": "CC BY-SA 4.0",
@@ -27,25 +6,39 @@
     "quelle": "https://commons.wikimedia.org/wiki/File:P%C3%B6rtschach_10.-Oktober-Stra%C3%9Fe_Abstellplatz_f%C3%BCr_Bootsanh%C3%A4nger_Segelboot_26122022_3322.jpg",
     "titel": "Pörtschach 10.-Oktober-Straße Abstellplatz für Bootsanhänger Segelboot 26122022 3322.jpg"
   },
-  "garage-einfahrt": {
-    "fotograf": "Zapfbay",
-    "lizenz": "CC BY-SA 4.0",
-    "lizenzUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-    "quelle": "https://commons.wikimedia.org/wiki/File:ZAPF-Doppelgarage.jpg",
-    "titel": "ZAPF-Doppelgarage.jpg"
+  "garage": {
+    "fotograf": "pth686817",
+    "lizenz": "Pexels-Lizenz",
+    "lizenzUrl": "https://www.pexels.com/de-de/lizenz/",
+    "quelle": "https://www.pexels.com/photo/24524484/",
+    "titel": "Pexels-Foto 24524484"
   },
-  "wohnmobil": {
-    "fotograf": "Elgaard",
-    "lizenz": "CC0",
-    "lizenzUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
-    "quelle": "https://commons.wikimedia.org/wiki/File:Wohnmobil_Stellplatz_Seegraben-Aschersleben_tree.jpg",
-    "titel": "Wohnmobil Stellplatz Seegraben-Aschersleben tree.jpg"
+  "stellplatz": {
+    "fotograf": "strannik-sk",
+    "lizenz": "Pexels-Lizenz",
+    "lizenzUrl": "https://www.pexels.com/de-de/lizenz/",
+    "quelle": "https://www.pexels.com/photo/34602470/",
+    "titel": "Pexels-Foto 34602470"
+  },
+  "hof": {
+    "fotograf": "strannik-sk",
+    "lizenz": "Pexels-Lizenz",
+    "lizenzUrl": "https://www.pexels.com/de-de/lizenz/",
+    "quelle": "https://www.pexels.com/photo/36795874/",
+    "titel": "Pexels-Foto 36795874"
+  },
+  "garage-einfahrt": {
+    "fotograf": "strannik-sk",
+    "lizenz": "Pexels-Lizenz",
+    "lizenzUrl": "https://www.pexels.com/de-de/lizenz/",
+    "quelle": "https://www.pexels.com/photo/33117283/",
+    "titel": "Pexels-Foto 33117283"
   },
   "lager": {
-    "fotograf": "MoveON moving",
-    "lizenz": "CC BY-SA 4.0",
-    "lizenzUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-    "quelle": "https://commons.wikimedia.org/wiki/File:Moving-boxes.jpg",
-    "titel": "Moving-boxes.jpg"
+    "fotograf": "Tom Ru",
+    "lizenz": "Unsplash-Lizenz",
+    "lizenzUrl": "https://unsplash.com/de/lizenz",
+    "quelle": "https://unsplash.com/photos/faijtX7QWSE",
+    "titel": "Unsplash-Foto faijtX7QWSE"
   }
 }

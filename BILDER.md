@@ -1,5 +1,7 @@
 # Bilder für die Startseite
 
+Fotos bitte **nicht** nach `public/bilder/` legen (dort werden sie ungeprüft und in voller Größe ausgeliefert), sondern nach `src/assets/bilder/`.
+
 So funktioniert es: Foto mit dem genauen Dateinamen in `src/assets/bilder/` ablegen (JPG, PNG oder WebP). Beim nächsten Build ersetzt es automatisch den Platzhalter. Die Seite wandelt es selbst in moderne Formate (AVIF/WebP) um, schneidet es auf das Seitenverhältnis zu und gibt allen Fotos denselben leicht warmen Ton.
 
 Bitte nur Fotos mit Nutzungsrecht verwenden und den Nachweis in `src/data/bildnachweise.json` eintragen (erscheint im Impressum).

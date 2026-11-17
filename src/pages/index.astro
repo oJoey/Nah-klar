@@ -246,6 +246,7 @@ const [hauptBeitrag, ...weitere] = beitraege;
 
   .komposition { position: relative; display: grid; gap: 1rem; }
   .komposition :global(.komposition-foto) { width: 100%; aspect-ratio: 16 / 10; }
+  .komposition :global(.komposition-foto img) { object-position: 80% 60%; } /* Wohnwagen stehen rechts im Bild, links liegen die Karten */
   .komposition-route { display: none; }
   .k-naehe, .k-geprueft { display: flex; gap: 0.75rem; align-items: flex-start; }
   .k-naehe :global(.symbol) { width: 1.4rem; height: 1.4rem; color: var(--koralle-text); flex: none; margin-top: 0.1rem; }
