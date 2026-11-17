@@ -44,7 +44,7 @@ const fertig = !betreiber.name.includes('[');
       <p>{site.name} bringt Mieter und Vermieter von Stellplätzen, Garagen und Lagerflächen zusammen. Vertragspartner des Mietvertrags sind ausschließlich Mieter und Vermieter. Näheres regeln unsere <a href="/agb/">AGB</a>.</p>
 
       <h2 id="bildnachweise">Bildnachweise</h2>
-      <p>Die Fotos stammen von Wikimedia Commons. Sie wurden für diese Website verkleinert und zugeschnitten.</p>
+      <p>Ein Teil der Fotos ist eigenes Material, die übrigen stammen von Pexels, Unsplash und Wikimedia Commons. Sie wurden für diese Website verkleinert und zugeschnitten.</p>
       <ul>
         {alleNachweise.map(([, n]) => (
           <li><a href={n.quelle} rel="noopener">{n.titel}</a>, Foto: {n.fotograf}, Lizenz: <a href={n.lizenzUrl} rel="license noopener">{n.lizenz}</a></li>
