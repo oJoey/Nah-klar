@@ -27,8 +27,8 @@ export const texte = {
     : 'Wie und wann Sie zahlen, steht in Ihrem Mietvertrag.',
   mieterSchritt4: live ? 'Vertrag und Lastschrift' : 'Vertrag unterschreiben',
   mieterSchritt4Text: live
-    ? 'Sie unterschreiben den Mustervertrag und erteilen das Lastschriftmandat. Danach können Sie einziehen.'
-    : 'Sie unterschreiben den Mustervertrag, zahlen die Kaution direkt an den Vermieter und können einziehen.',
+    ? 'Sie unterschreiben den Mietvertrag und erteilen das Lastschriftmandat. Danach können Sie einziehen.'
+    : 'Sie unterschreiben den Mietvertrag, zahlen die Kaution direkt an den Vermieter und können einziehen.',
   vermieterSchritt4Text: live
     ? 'Die Kaution erhalten Sie direkt vom Mieter, die Miete kommt jeden Monat automatisch auf Ihr Konto.'
     : 'Die Kaution erhalten Sie direkt vom Mieter, die Miete jeden Monat wie im Vertrag vereinbart.',
